@@ -16,6 +16,8 @@ $ npm install --save-dev fable-import-react fable-import-react-native
 ```xml
   <ItemGroup>
     <Reference Include="node_modules/fable-core/Fable.Core.dll" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="node_modules/fable-import-react/Fable.Import.React.fs" />    
     <Compile Include="node_modules/fable-import-react/Fable.Helpers.React.fs" />
     <Compile Include="node_modules/fable-import-react-native/Fable.Import.ReactNative.fs" />
