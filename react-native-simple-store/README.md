@@ -7,20 +7,20 @@ Fable bindings for a simple React Native data store
 Install [fable-import-react-native](https://www.npmjs.com/package/fable-import-react-native) and follow the instructions for that package.
 
 ```sh
-$ npm install --save-dev react-native-simple-store
+$ npm install --save-dev fable-react-native-simple-store
 ```
 
 ## Usage
 
-### In a F# project (.fsproj)
+### In F# project (.fsproj)
 
 ```xml
   <ItemGroup>
-    <Compile Include="node_modules/fable-react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.fs" />        
+    <Compile Include="node_modules/fable-react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.fs" />
   </ItemGroup>
 ```
 
-### In a F# script (.fsx)
+### In F# script (.fsx)
 
 ```fsharp
 #load "node_modules/fable-react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.fs"
@@ -32,7 +32,5 @@ module RN = Fable.Import.ReactNative
 open RN.Props
 
 ...
-
-  
 
 ```
