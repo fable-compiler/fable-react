@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "fable-react",
+  "version": "1.0.0",
+  "description": "Fable bindings and helpers for React and React Native",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fable-compiler/fable-react.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fable-compiler/fable-react/issues"
+  },
+  "homepage": "https://github.com/fable-compiler/fable-react#readme",
+  "devDependencies": {
+    "fable-core": "^0.5.4"
+  }
+}
