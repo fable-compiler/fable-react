@@ -36,6 +36,14 @@ module Props =
     | Justify
 
     [<StringEnum; RequireQualifiedAccess>]
+    type JustifyContent =
+    | [<CompiledName("flex-start")>] FlexStart
+    | Center 
+    | [<CompiledName("flex-end")>] FlexEnd
+    | [<CompiledName("space-between")>] SpaceBetween
+    | [<CompiledName("space-around")>] SpaceAround
+
+    [<StringEnum; RequireQualifiedAccess>]
     type FlexDirection =
     | Row
     | [<CompiledName("row-reverse")>] RowReverse
@@ -114,7 +122,7 @@ module Props =
         | FlexDirection of string
         | FlexWrap of string
         | Height of float
-        | JustifyContent of string
+        | JustifyContent of JustifyContent
         | Left of float
         | Margin of float
         | MarginBottom of float
@@ -155,7 +163,7 @@ module Props =
         | FlexDirection of FlexDirection
         | FlexWrap of string
         | Height of float
-        | JustifyContent of Alignment
+        | JustifyContent of JustifyContent
         | Left of float
         | Margin of float
         | MarginBottom of float
@@ -324,7 +332,7 @@ module Props =
         | FlexDirection of FlexDirection
         | FlexWrap of string
         | Height of float
-        | JustifyContent of string
+        | JustifyContent of JustifyContent
         | Left of float
         | Margin of float
         | MarginBottom of float
@@ -382,7 +390,7 @@ module Props =
         | FlexDirection of string
         | FlexWrap of string
         | Height of float
-        | JustifyContent of string
+        | JustifyContent of JustifyContent
         | Left of float
         | Margin of float
         | MarginBottom of float
