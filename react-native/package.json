@@ -1,6 +1,6 @@
 {
   "name": "fable-import-react-native",
-  "version": "0.6.14",
+  "version": "0.6.16",
   "description": "Fable bindings for React Native",
   "repository": {
     "type": "git",
@@ -8,7 +8,9 @@
   },
   "license": "Apache-2.0",
   "author": "Krzysztof Cieślak",
-  "contributors": ["Steffen Forkmann"],
+  "contributors": [
+    "Steffen Forkmann"
+  ],
   "keywords": [
     "fable",
     "fable-compiler",
@@ -17,11 +19,11 @@
     "react-native",
     "F#"
   ],
-  "dependencies" :
-    { "react-native" : ">= 0.30.0"
-    },
-  "devDependencies" :
-    { "fable-import-react" : ">= 0.5.0"
-    },
+  "dependencies": {
+    "react-native": ">= 0.30.0"
+  },
+  "devDependencies": {
+    "fable-import-react": ">= 0.5.0"
+  },
   "homepage": "https://github.com/fable-compiler/Fable#readme"
 }
