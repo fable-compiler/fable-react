@@ -904,6 +904,11 @@ module ReactNative =
         abstract multiRemove: keys: ResizeArray<string> * ?callback: Func<ResizeArray<Error>, unit> -> Promise<string>
         abstract multiMerge: keyValuePairs: ResizeArray<ResizeArray<string>> * ?callback: Func<ResizeArray<Error>, unit> -> Promise<string>
 
+    and BackAndroidStatic =
+        abstract exitApp: unit -> unit
+        abstract addEventListener: eventName: string * handler: Func<unit, bool> -> unit
+        abstract removeEventListener: eventName: string * handler: Func<unit, bool> -> unit
+
     and CameraRollFetchParams =
         abstract first: float with get, set
         abstract after: string option with get, set
@@ -1088,6 +1093,9 @@ module ReactNative =
     and AsyncStorage =
         AsyncStorageStatic
 
+    and BackAndroid =
+        BackAndroidStatic
+
     and CameraRoll =
         CameraRollStatic
 
@@ -1141,6 +1149,7 @@ module ReactNative =
         [<Import("AlertIOS", "react-native")>] static member AlertIOS with get(): AlertIOSStatic = failwith "JS only" and set(v: AlertIOSStatic): unit = failwith "JS only"
         [<Import("AppState", "react-native")>] static member AppState with get(): AppStateStatic = failwith "JS only" and set(v: AppStateStatic): unit = failwith "JS only"
         [<Import("AsyncStorage", "react-native")>] static member AsyncStorage with get(): AsyncStorageStatic = failwith "JS only" and set(v: AsyncStorageStatic): unit = failwith "JS only"
+        [<Import("BackAndroid", "react-native")>] static member BackAndroid with get(): BackAndroidStatic = failwith "JS only" and set(v: BackAndroidStatic): unit = failwith "JS only"
         [<Import("CameraRoll", "react-native")>] static member CameraRoll with get(): CameraRollStatic = failwith "JS only" and set(v: CameraRollStatic): unit = failwith "JS only"
         [<Import("NetInfo", "react-native")>] static member NetInfo with get(): NetInfoStatic = failwith "JS only" and set(v: NetInfoStatic): unit = failwith "JS only"
         [<Import("PanResponder", "react-native")>] static member PanResponder with get(): PanResponderStatic = failwith "JS only" and set(v: PanResponderStatic): unit = failwith "JS only"
