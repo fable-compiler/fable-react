@@ -574,6 +574,7 @@ module Props =
     type ListViewProperties<'a> =
         // TODO: inherit ScrollViewProperties
         | DataSource of ListViewDataSource<'a>
+        | EnableEmptySections of bool
         | InitialListSize of float
         | OnChangeVisibleRows of Func<ResizeArray<obj>, ResizeArray<obj>, unit>
         | OnEndReached of (unit -> unit)
