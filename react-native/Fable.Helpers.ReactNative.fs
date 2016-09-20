@@ -67,6 +67,14 @@ module Props =
     | [<CompiledName("web-search")>] WebSearch
 
     [<StringEnum; RequireQualifiedAccess>]
+    type ResizeMode =
+    | Contain
+    | Cover
+    | Stretch
+    | Conter
+    | Repeat
+
+    [<StringEnum; RequireQualifiedAccess>]
     type ReturnKeyType =
     | Done
     | Go
@@ -362,7 +370,7 @@ module Props =
         | TranslateX of float
         | TranslateY of float
         // End TransformsStyle        
-        | ResizeMode of string
+        | ResizeMode of ResizeMode
         | BackgroundColor of string
         | BorderColor of string
         | BorderRadius of float
@@ -553,7 +561,7 @@ module Props =
         | OnLoadStart of (unit -> unit)
         | OnProgress of (unit -> unit)
         | OnLayout of (LayoutChangeEvent -> unit)
-        | ResizeMode of string 
+        | ResizeMode of ResizeMode
         | Style of ImageStyle list
         | TestID of string 
         interface IImageProperties
