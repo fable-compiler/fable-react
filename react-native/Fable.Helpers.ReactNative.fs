@@ -800,9 +800,10 @@ type Scene<'PropertyType,'StateType> (props) =
     inherit React.Component<'PropertyType,'StateType>(props)
     
     
-let Buffer = importMember<obj> "buffer"
+[<Import("Buffer","buffer")>]
+let Buffer = obj()
 
-let encodeBase64 (text: string) : string =
+let inline encodeBase64 (text: string) : string =
     (createNew Buffer text)?toString("base64") |> unbox
 
 module Storage =
