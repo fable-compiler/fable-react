@@ -798,6 +798,12 @@ let inline createRoute(routeId:string,index:int) =
 
 type Scene<'PropertyType,'StateType> (props) =
     inherit React.Component<'PropertyType,'StateType>(props)
+    
+    
+let Buffer = importMember<obj> "buffer"
+
+let encodeBase64 (text: string) : string =
+    (createNew Buffer text)?toString("base64") |> unbox
 
 module Storage =
     open Fable.Core.JsInterop
