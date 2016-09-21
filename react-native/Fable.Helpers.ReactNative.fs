@@ -803,8 +803,11 @@ type Scene<'PropertyType,'StateType> (props) =
 [<Import("Buffer","buffer")>]
 let Buffer = obj()
 
-let inline encodeBase64 (text: string) : string =
-    (createNew Buffer text)?toString("base64") |> unbox
+let inline encode (text: string, encoding:string) : string =
+    (createNew Buffer text)?toString(encoding) |> unbox
+
+let inline encodeBase64 (text: string) : string = encode(text,"base64")
+let inline encodeAscii (text: string) : string = encode(text,"ascii") 
 
 module Storage =
     open Fable.Core.JsInterop
