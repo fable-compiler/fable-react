@@ -720,3 +720,7 @@ let inline rect b c = svgEl "rect" b c
 let inline stop b c = svgEl "stop" b c
 let inline text b c = svgEl "text" b c
 let inline tspan b c = svgEl "tspan" b c
+
+// These functions just unbox elements accepted as React elements
+let inline str (s: string): React.ReactElement<obj> = unbox s
+let inline opt (o: React.ReactElement<obj> option): React.ReactElement<obj> = unbox o
