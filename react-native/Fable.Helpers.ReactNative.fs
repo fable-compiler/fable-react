@@ -812,8 +812,11 @@ let inline encodeAscii (text: string) : string = encode(text,"ascii")
 [<Import("DOMParser","xmldom")>]
 let DOMParser = obj()
 
-let inline parseXMLFromString (text: string, encoding:string) : string =
-    (createNew DOMParser)?parseFromString(text,encoding) |> unbox
+let inline parsDOMObjectFromString (text: string, encoding:string) : obj =
+    (createNew DOMParser)?parseFromString(text,encoding)
+
+let inline parsXMLFromString (text: string, encoding:string) : obj =
+    (createNew DOMParser)?parseFromString(text,"text/xml") |> obj
 
 module Storage =
     open Fable.Core.JsInterop
