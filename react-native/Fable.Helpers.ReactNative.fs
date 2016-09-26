@@ -814,13 +814,13 @@ let DOMParser = obj()
 
 
 let inline parseDOMObjectFromString (text: string, encoding:string) : obj =
-    (createNew DOMParser)?parseFromString(text,encoding)
+    (createNew DOMParser ())?parseFromString(text,encoding)
 
 let inline parseXMLFromString (text: string) : obj =
-    (createNew DOMParser)?parseFromString(text,"text/xml") 
+    (createNew DOMParser  ())?parseFromString(text,"text/xml") 
 
-let inline getElementsByTagName (doc:obj,tagName:string) =
-    doc?getElementsByTagName(tagName)
+let inline getElementsByTagName (doc:obj,tagName:string) : obj seq =
+    doc?getElementsByTagName(tagName) |> unbox
 
 module Storage =
     open Fable.Core.JsInterop
