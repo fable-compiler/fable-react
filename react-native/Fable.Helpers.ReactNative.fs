@@ -812,15 +812,14 @@ let inline encodeAscii (text: string) : string = encode(text,"ascii")
 [<Import("DOMParser","xmldom")>]
 let DOMParser = obj()
 
-type DOMDocument = Object
 
-let inline parseDOMObjectFromString (text: string, encoding:string) : DOMDocument =
+let inline parseDOMObjectFromString (text: string, encoding:string) : obj =
     (createNew DOMParser)?parseFromString(text,encoding)
 
-let inline parseXMLFromString (text: string) : DOMDocument =
+let inline parseXMLFromString (text: string) : obj =
     (createNew DOMParser)?parseFromString(text,"text/xml") 
 
-let inline getElementsByTagName (doc:DOMDocument,tagName:string) =
+let inline getElementsByTagName (doc:obj,tagName:string) =
     doc?getElementsByTagName(tagName)
 
 module Storage =
