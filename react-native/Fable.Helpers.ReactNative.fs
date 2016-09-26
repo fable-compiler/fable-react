@@ -819,7 +819,7 @@ let inline parseDOMObjectFromString (text: string, encoding:string) : obj =
 let inline parseXMLFromString (text: string) : obj =
     (createNew DOMParser  ())?parseFromString(text,"text/xml") 
 
-let inline getElementsByTagName (doc:obj,tagName:string) : obj seq =
+let inline getElementsByTagName (doc:obj,tagName:string) : obj [] =
     doc?getElementsByTagName(tagName) |> unbox
 
 module Storage =
