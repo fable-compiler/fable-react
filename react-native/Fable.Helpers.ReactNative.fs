@@ -809,19 +809,6 @@ let inline encode (text: string, encoding:string) : string =
 let inline encodeBase64 (text: string) : string = encode(text,"base64")
 let inline encodeAscii (text: string) : string = encode(text,"ascii") 
 
-[<Import("DOMParser","xmldom")>]
-let DOMParser = obj()
-
-
-let inline parseDOMObjectFromString (text: string, encoding:string) : obj =
-    (createNew DOMParser ())?parseFromString(text,encoding)
-
-let inline parseXMLFromString (text: string) : obj =
-    (createNew DOMParser  ())?parseFromString(text,"text/xml") 
-
-let inline getElementsByTagName (doc:obj,tagName:string) : obj [] =
-    doc?getElementsByTagName(tagName) |> unbox
-
 module Storage =
     open Fable.Core.JsInterop
 
