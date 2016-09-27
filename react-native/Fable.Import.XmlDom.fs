@@ -19,7 +19,7 @@ module XmlDom =
 
     and [<KeyValueList>] Options =
         | Locator of obj
-        | ErrorHandler of Func<string, obj>
+        | ErrorHandler of Func<string, obj, obj>
 
     let [<Import("DOMParser","xmldom")>] DOMParser: DOMParserStatic = failwith "JS only"
     let [<Import("XMLSerializer","xmldom")>] XMLSerializer: XMLSerializerStatic = failwith "JS only"
