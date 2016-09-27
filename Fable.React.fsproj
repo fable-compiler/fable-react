@@ -47,6 +47,7 @@
     <Compile Include="react/Fable.Import.React.fs" />
     <Compile Include="react-native/Fable.Import.ReactNative.fs" />
     <Compile Include="react-native/Fable.Helpers.ReactNative.fs" />
+    <Compile Include="react-native/Fable.Import.XmlDom.fs" />
     <Compile Include="react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs" />
     <Compile Include="react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs" />
     <Compile Include="react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.fs" />
