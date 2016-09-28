@@ -233,6 +233,7 @@ module Props =
         | TintColor of string
         | Value of bool
         | Style of ViewStyle list
+        interface ISwitchProperties
 
     [<KeyValueList>]
     type IWebViewProperties =
@@ -255,6 +256,7 @@ module Props =
         | StartInLoadingState of bool
         | Style of ViewStyle
         | Url of string
+        interface IWebViewProperties
 
     type RouteResult = {
         id: string 
