@@ -798,7 +798,12 @@ let inline createRoute(routeId:string,index:int) =
 
 type Scene<'PropertyType,'StateType> (props) =
     inherit React.Component<'PropertyType,'StateType>(props)
-    
+
+[<Import("BackAndroid","react-native")>]
+let BackAndroid = obj()
+
+let inline setAndroidBackButton (onHardwareBackPress: unit -> bool): unit =
+    BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore    
     
 [<Import("Buffer","buffer")>]
 let Buffer = obj()
