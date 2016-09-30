@@ -817,6 +817,14 @@ let inline removeOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool):
 let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
     BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
     
+[<Import("Linking","react-native")>]
+let Linking = obj()
+
+/// Opens the given URL
+let inline openUrl (url:string) : unit =
+    Linking?openUrl( url) |> ignore
+    
+
 module Storage =
     open Fable.Core.JsInterop
 
