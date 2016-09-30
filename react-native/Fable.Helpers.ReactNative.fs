@@ -1,3 +1,4 @@
+[<Fable.Core.Erase>]
 module internal Fable.Helpers.ReactNative
 
 open System
@@ -8,7 +9,6 @@ open Fable.Import
 
 type RN = ReactNative.Globals
 
-[<Fable.Core.Erase>]
 module Props =
 
     [<StringEnum; RequireQualifiedAccess>]
@@ -808,23 +808,15 @@ let inline encode (text: string, encoding:string) : string =
 let inline encodeBase64 (text: string) : string = encode(text,"base64")
 let inline encodeAscii (text: string) : string = encode(text,"ascii") 
 
-module BackButton =
-    [<Import("BackAndroid","react-native")>]
-    let BackAndroid = obj()
+[<Import("BackAndroid","react-native")>]
+let BackAndroid = obj()
 
-    let private onHardwareBackPressHandler : ((unit -> bool) option) ref = ref None
+let inline removeOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
+    BackAndroid?removeEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
 
-    let inline clearOnHardwareBackPressHandler (): unit =
-        match !onHardwareBackPressHandler with
-        | Some eventListener -> BackAndroid?removeEventListener("hardwareBackPress", eventListener) |> ignore
-        | None -> ()
-
-    let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
-        clearOnHardwareBackPressHandler()
-        onHardwareBackPressHandler := Some onHardwareBackPress
-        BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
+let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
+    BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
     
-[<Fable.Core.Erase>]
 module Storage =
     open Fable.Core.JsInterop
 
