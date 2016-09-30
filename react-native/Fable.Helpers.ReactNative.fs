@@ -808,20 +808,19 @@ let inline encode (text: string, encoding:string) : string =
 let inline encodeBase64 (text: string) : string = encode(text,"base64")
 let inline encodeAscii (text: string) : string = encode(text,"ascii") 
 
-module BackButton =
-    [<Import("BackAndroid","react-native")>]
-    let BackAndroid = obj()
-    let private eventListener = ref None
+[<Import("BackAndroid","react-native")>]
+let BackAndroid = obj()
+let private eventListener = ref None
 
-    let inline clearOnHardwareBackPressHandler (): unit =
-        match !eventListener with
-        | Some eventListener -> BackAndroid?removeEventListener("hardwareBackPress", eventListener) |> ignore
-        | None -> ()
+let inline clearOnHardwareBackPressHandler (): unit =
+    match !eventListener with
+    | Some eventListener -> BackAndroid?removeEventListener("hardwareBackPress", eventListener) |> ignore
+    | None -> ()
 
-    let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
-        clearOnHardwareBackPressHandler()
-        eventListener := Some onHardwareBackPress
-        BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
+let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
+    clearOnHardwareBackPressHandler()
+    eventListener := Some onHardwareBackPress
+    BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
     
 module Storage =
     open Fable.Core.JsInterop
