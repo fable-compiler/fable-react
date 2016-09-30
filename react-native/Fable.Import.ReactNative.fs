@@ -714,7 +714,7 @@ module ReactNative =
         [<Emit("new $0($1...)")>] abstract Create: onAsset: DataSourceAssetCallback -> ListViewDataSource<'a>
         abstract cloneWithRows: dataBlob: U2<ResizeArray<obj>, obj> * ?rowIdentities: ResizeArray<U2<string, float>> -> ListViewDataSource<'a>
         abstract cloneWithRowsAndSections: dataBlob: U2<ResizeArray<obj>, obj> * ?sectionIdentities: ResizeArray<U2<string, float>> * ?rowIdentities: ResizeArray<ResizeArray<U2<string, float>>> -> ListViewDataSource<'a>
-        abstract getRowCount: unit -> float
+        abstract getRowCount: unit -> int
         abstract getRowData: sectionIndex: float * rowIndex: float -> obj
         abstract getRowIDForFlatIndex: index: float -> string
         abstract getSectionIDForFlatIndex: index: float -> string
