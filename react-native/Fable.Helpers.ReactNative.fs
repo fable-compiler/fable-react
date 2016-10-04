@@ -818,7 +818,11 @@ let inline removeOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool):
 
 let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): unit =
     BackAndroid?addEventListener("hardwareBackPress", onHardwareBackPress) |> ignore
-    
+
+let inline exitApp (): unit =
+    BackAndroid?exitApp() |> ignore
+
+
 [<Import("Linking","react-native")>]
 let Linking = obj()
 
