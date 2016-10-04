@@ -35,3 +35,16 @@ open Props
 let inline showImagePicker (props: IImagePickerOptions list) f =
     IP.ImagePicker.showImagePicker(props |> unbox, f)
 
+let inline showImagePickerAsync (props: IImagePickerOptions list) =
+    Async.FromContinuations(fun (onSuccess, onError, _) ->
+        showImagePicker
+            props
+            (fun result ->
+                if not result.didCancel then
+                    if System.String.IsNullOrEmpty result.error then
+                        onSuccess (Some result.uri)
+                    else
+                        onError (System.Exception result.error)
+                else onSuccess None)
+    )
+
