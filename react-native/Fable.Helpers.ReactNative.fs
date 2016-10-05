@@ -831,6 +831,32 @@ let inline openUrl (url:string) : unit =
     Linking?openURL( url) |> ignore
     
 
+module Alert =
+    [<Import("Alert","react-native")>]
+    let Alert = obj()
+    
+    let inline private createButton(label:string,callback:unit -> unit) = 
+        createObj [
+            "text" ==> label
+            "onPress" ==> callback
+        ]
+
+    /// Shows an alert button with one button 
+    let inline alertWithOneButton (title:string,message:string,okText:string,onOk:unit -> unit) : unit =
+        Alert?alert( title, message, [| createButton(okText,onOk) |]) |> ignore
+
+    /// Shows an alert button with two buttons 
+    let inline alertWithTwoButtons (title:string,message:string,cancelText:string,onCancel:unit -> unit,okText:string,onOk:unit -> unit) : unit =
+        Alert?alert( title, message, [| createButton(cancelText,onCancel); createButton(okText,onOk) |]) |> ignore
+
+    let inline confirm (title:string,message:string,cancelText:string,okText:string) =
+        
+        Async.FromContinuations(fun (onSuccess, onError, _) ->
+            let onError() = onError(new Exception("Cancelled"))
+
+            alertWithTwoButtons (title,message,cancelText,onError,okText,onSuccess)
+        )
+
 module Storage =
     open Fable.Core.JsInterop
 
