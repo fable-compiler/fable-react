@@ -782,11 +782,14 @@ let inline viewPagerAndroid (props: IViewPagerAndroidProperties list) (children:
         props|> unbox,
         unbox(List.toArray children)) |> unbox
 
-let inline drawerLayoutAndroid (props: IDrawerLayoutAndroidProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
+let inline drawerLayoutAndroid (props: IDrawerLayoutAndroidProperties list) (renderNavigationView: unit -> React.ReactElement<obj>) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
     React.createElement(
-        RN.DrawerLayoutAndroid, 
-        props|> unbox,
-        unbox(List.toArray children)) |> unbox        
+        RN.DrawerLayoutAndroid,
+        JS.Object.assign(
+            createObj ["renderNavigationView" ==> renderNavigationView],
+            props)
+        |> unbox,
+        unbox(List.toArray children)) |> unbox     
 
 let inline mapView (props: IMapViewProperties list) : React.ReactElement<obj> =
     React.createElement(
