@@ -529,8 +529,21 @@ module ReactNative =
     and ViewPagerAndroidStatic =
         inherit React.ComponentClass<ViewPagerAndroidProperties>
 
+    and DrawerLayoutAndroidPosition =
+        interface end
+
+    and DrawerLayoutAndroidPositions =
+        abstract member Left: DrawerLayoutAndroidPosition
+        abstract member Right: DrawerLayoutAndroidPosition
+
     and DrawerLayoutAndroidStatic =
         inherit React.ComponentClass<DrawerLayoutAndroidProperties>
+        /// Specifies the side of the screen from which the drawer will slide in.
+        abstract positions: DrawerLayoutAndroidPositions        
+        /// Opens the drawer.
+        abstract openDrawer: unit -> unit
+        /// Closes the drawer.
+        abstract closeDrawer: unit -> unit
         
     and DrawerLayoutAndroidProperties =
         inherit React.Props<DrawerLayoutAndroidStatic>   

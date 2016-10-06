@@ -575,6 +575,7 @@ module Props =
         | OnDrawerClose of (unit -> unit)
         | OnDrawerOpen  of (unit -> unit)
         | OnDrawerSlide  of (unit -> unit)
+        | DrawerPosition of DrawerLayoutAndroidPosition
         interface IDrawerLayoutAndroidProperties
 
     [<KeyValueList>]
