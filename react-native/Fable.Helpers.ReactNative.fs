@@ -102,6 +102,12 @@ module Props =
     | None
     | [<CompiledName("on-drag")>] OnDrag
 
+    [<StringEnum; RequireQualifiedAccess>]
+    type DrawerLockMode =
+    | Unlocked
+    | [<CompiledName("locked-closed")>] LockedClosed
+    | [<CompiledName("locked-open")>] LockedOpen
+
     [<KeyValueList>]
     type ITransformsStyle =
         interface end
@@ -615,7 +621,8 @@ module Props =
     type DrawerLayoutAndroidProperties =
         | DrawerBackgroundColor of string
         | KeyboardDismissMode of KeyboardDismissMode
-        | StatusBarBackgroundColor  of string
+        | StatusBarBackgroundColor of string
+        | DrawerLockMode of DrawerLockMode
         | DrawerWidth  of float
         interface IDrawerLayoutAndroidProperties
 
