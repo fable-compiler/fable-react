@@ -523,6 +523,12 @@ module ReactNative =
         inherit React.ComponentClass<ListViewProperties<'a>>
         abstract DataSource: ListViewDataSource<'a> with get, set
 
+    and ViewPagerAndroidProperties =
+        inherit React.Props<ViewPagerAndroidStatic>   
+
+    and ViewPagerAndroidStatic =
+        inherit React.ComponentClass<ViewPagerAndroidProperties>
+
     and MapViewAnnotation =
         abstract latitude: float option with get, set
         abstract longitude: float option with get, set
@@ -1027,6 +1033,9 @@ module ReactNative =
     and ListView<'a> =
         ListViewStatic<'a>
 
+    and ViewPagerAndroid =
+        ViewPagerAndroidStatic
+
     and MapView =
         MapViewStatic
 
@@ -1128,6 +1137,7 @@ module ReactNative =
         [<Import("LayoutAnimation", "react-native")>] static member LayoutAnimation with get(): LayoutAnimationStatic = failwith "JS only" and set(v: LayoutAnimationStatic): unit = failwith "JS only"
         [<Import("ListView", "react-native")>] static member ListView with get(): ListViewStatic<obj> = failwith "JS only" and set(v: ListViewStatic<obj>): unit = failwith "JS only"
         [<Import("MapView", "react-native")>] static member MapView with get(): MapViewStatic = failwith "JS only" and set(v: MapViewStatic): unit = failwith "JS only"
+        [<Import("ViewPagerAndroid", "react-native")>] static member ViewPagerAndroid with get(): ViewPagerAndroidStatic = failwith "JS only" and set(v: ViewPagerAndroidStatic): unit = failwith "JS only"
         [<Import("Navigator", "react-native")>] static member Navigator with get(): NavigatorStatic = failwith "JS only" and set(v: NavigatorStatic): unit = failwith "JS only"
         [<Import("NavigatorIOS", "react-native")>] static member NavigatorIOS with get(): NavigatorIOSStatic = failwith "JS only" and set(v: NavigatorIOSStatic): unit = failwith "JS only"
         [<Import("PickerIOS", "react-native")>] static member PickerIOS with get(): PickerIOSStatic = failwith "JS only" and set(v: PickerIOSStatic): unit = failwith "JS only"

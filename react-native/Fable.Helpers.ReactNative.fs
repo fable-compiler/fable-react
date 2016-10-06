@@ -592,6 +592,15 @@ module Props =
         | ScrollRenderAheadDistance of float
         interface IListViewProperties<'a>
 
+    [<KeyValueList>]
+    type IViewPagerAndroidProperties =
+        interface end
+
+    [<KeyValueList>]
+    type ViewPagerAndroidProperties =
+        | InitialPage of int        
+        | Style of ViewStyle list
+        interface IViewPagerAndroidProperties
 
     [<KeyValueList>]
     type ITouchable =
@@ -749,6 +758,12 @@ let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: IListViewPro
             props)
         |> unbox,
         unbox [||]) |> unbox
+
+let inline viewPagerAndroid (props: IViewPagerAndroidProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
+    React.createElement(
+        RN.ViewPagerAndroid, 
+        props|> unbox,
+        unbox(List.toArray children)) |> unbox
 
 let inline mapView (props: IMapViewProperties list) : React.ReactElement<obj> =
     React.createElement(
