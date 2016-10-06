@@ -528,7 +528,54 @@ module Props =
         | OnPress of (unit -> unit)
         | OnPressIn of (unit -> unit)
         | OnPressOut of (unit -> unit)  
-        interface ITouchableHighlightProperties    
+        interface ITouchableHighlightProperties
+
+    [<KeyValueList>]
+    type IViewPagerAndroidProperties =
+        interface end
+
+    [<KeyValueList>]
+    type ViewPagerAndroidProperties =
+        // inherited from View        
+        | AccessibilityLabel of string
+        | Accessible of bool
+        | OnAcccessibilityTap of (unit -> unit)
+        | OnLayout of (LayoutChangeEvent -> unit)
+        | OnMagicTap of (unit -> unit)
+        | PointerEvents of string
+        | RemoveClippedSubviews of bool
+        | Style of ViewStyle list
+        | TestID of string
+        // END inherited from View
+        | InitialPage of int
+        interface IViewPagerAndroidProperties
+
+    [<KeyValueList>]
+    type IDrawerLayoutAndroidProperties =
+        interface end
+
+    [<KeyValueList>]
+    type DrawerLayoutAndroidProperties =
+        // inherited from View        
+        | AccessibilityLabel of string
+        | Accessible of bool
+        | OnAcccessibilityTap of (unit -> unit)
+        | OnLayout of (LayoutChangeEvent -> unit)
+        | OnMagicTap of (unit -> unit)
+        | PointerEvents of string
+        | RemoveClippedSubviews of bool
+        | Style of ViewStyle list
+        | TestID of string
+        // END inherited from View
+        | DrawerBackgroundColor of string
+        | KeyboardDismissMode of KeyboardDismissMode
+        | StatusBarBackgroundColor of string
+        | DrawerLockMode of DrawerLockMode
+        | DrawerWidth of float
+        | OnDrawerClose of (unit -> unit)
+        | OnDrawerOpen  of (unit -> unit)
+        | OnDrawerSlide  of (unit -> unit)
+        interface IDrawerLayoutAndroidProperties
 
     [<KeyValueList>]
     type IViewProperties =
@@ -602,29 +649,6 @@ module Props =
         | RenderSeparator of Func<U2<string, float>, U2<string, float>, bool, React.ReactElement<obj>>
         | ScrollRenderAheadDistance of float
         interface IListViewProperties<'a>
-
-    [<KeyValueList>]
-    type IViewPagerAndroidProperties =
-        interface end
-
-    [<KeyValueList>]
-    type ViewPagerAndroidProperties =
-        | InitialPage of int
-        | Style of ViewStyle list
-        interface IViewPagerAndroidProperties
-
-    [<KeyValueList>]
-    type IDrawerLayoutAndroidProperties =
-        interface end
-
-    [<KeyValueList>]
-    type DrawerLayoutAndroidProperties =
-        | DrawerBackgroundColor of string
-        | KeyboardDismissMode of KeyboardDismissMode
-        | StatusBarBackgroundColor of string
-        | DrawerLockMode of DrawerLockMode
-        | DrawerWidth  of float
-        interface IDrawerLayoutAndroidProperties
 
     [<KeyValueList>]
     type ITouchable =
