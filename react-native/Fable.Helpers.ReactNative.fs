@@ -96,7 +96,12 @@ module Props =
     | Sentences
     | Words
     | Characters
-    
+
+    [<StringEnum; RequireQualifiedAccess>]
+    type KeyboardDismissMode  =
+    | None
+    | [<CompiledName("on-drag")>] OnDrag
+
     [<KeyValueList>]
     type ITransformsStyle =
         interface end
@@ -598,9 +603,21 @@ module Props =
 
     [<KeyValueList>]
     type ViewPagerAndroidProperties =
-        | InitialPage of int        
+        | InitialPage of int
         | Style of ViewStyle list
         interface IViewPagerAndroidProperties
+
+    [<KeyValueList>]
+    type IDrawerLayoutAndroidProperties =
+        interface end
+
+    [<KeyValueList>]
+    type DrawerLayoutAndroidProperties =
+        | DrawerBackgroundColor of string
+        | KeyboardDismissMode of KeyboardDismissMode
+        | StatusBarBackgroundColor  of string
+        | DrawerWidth  of float
+        interface IDrawerLayoutAndroidProperties
 
     [<KeyValueList>]
     type ITouchable =
@@ -764,6 +781,12 @@ let inline viewPagerAndroid (props: IViewPagerAndroidProperties list) (children:
         RN.ViewPagerAndroid, 
         props|> unbox,
         unbox(List.toArray children)) |> unbox
+
+let inline drawerLayoutAndroid (props: IDrawerLayoutAndroidProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
+    React.createElement(
+        RN.DrawerLayoutAndroid, 
+        props|> unbox,
+        unbox(List.toArray children)) |> unbox        
 
 let inline mapView (props: IMapViewProperties list) : React.ReactElement<obj> =
     React.createElement(
