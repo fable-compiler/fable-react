@@ -25,4 +25,4 @@ let inline barcodeScanner (props:IBarcodeScannerProperties list) : React.ReactEl
     React.createElement(
       BCS.BarcodeScanner,
       unbox props,
-      unbox([|child|])) |> unbox
+      unbox([||])) |> unbox
