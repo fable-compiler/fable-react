@@ -18,10 +18,14 @@ module ReactNativeBarcodeScanner =
     | Front
     | Back
 
+    and BarcodeScannerProperties =
+        inherit React.Props<BarcodeScannerStatic>
+        
+    and BarcodeScannerStatic =
+        inherit React.ComponentClass<BarcodeScannerProperties>
 
     and BarcodeScanner =
         BarcodeScannerStatic
-
 
     type Globals =
         [<Import("BarcodeScanner", "react-native-barcodescanner")>] static member BarcodeScanner with get(): BarcodeScannerStatic = failwith "JS only" and set(v: BarcodeScannerStatic): unit = failwith "JS only"
