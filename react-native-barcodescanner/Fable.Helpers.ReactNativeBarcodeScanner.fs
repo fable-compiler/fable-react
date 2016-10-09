@@ -1,10 +1,10 @@
 [<Fable.Core.Erase>]
 module Fable.Helpers.ReactNativeBarcodeScanner
 
+open Fable.Core.JsInterop
 open Fable.Core
 open Fable.Import
 open Fable.Import.ReactNativeBarcodeScanner
-open Fable.Core.JsInterop
 type BCS = ReactNativeBarcodeScanner.Globals
 
 module Props =
@@ -14,6 +14,7 @@ module Props =
 
     [<KeyValueList>]
     type BarcodeScannerProperties =
+    | OnBarCodeRead : (obj -> unit)
     | TorchMode of TorchMode
     | CameraType of CameraType
         interface IBarcodeScannerProperties
@@ -21,11 +22,8 @@ module Props =
 open Props
 
 
-let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarCodeRead : obj -> unit) : React.ReactElement<obj> = 
+let inline barcodeScanner (props:IBarcodeScannerProperties list) : React.ReactElement<obj> = 
     React.createElement(
       BCS.BarcodeScanner,
-      JS.Object.assign(
-            createObj ["onBarCodeRead" ==> onBarCodeRead],
-            props)
-        |> unbox,
-      unbox([||])) |> unbox
+      props |> unbox,
+      unbox [||]) |> unbox

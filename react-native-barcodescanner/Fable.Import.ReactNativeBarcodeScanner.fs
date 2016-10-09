@@ -18,15 +18,21 @@ module ReactNativeBarcodeScanner =
     | Front
     | Back
 
+
+    // and BarcodeScannerResult =
+    //     abstract data: string with get, set
+    //     abstract type: string with get, set
+
     and BarcodeScannerProperties =
         inherit React.Props<BarcodeScannerStatic>
         
     and BarcodeScannerStatic =
         inherit React.ComponentClass<BarcodeScannerProperties>
+        
+        abstract OnBarCodeRead: (obj -> unit) with get, set
 
     and BarcodeScanner =
         BarcodeScannerStatic
-
 
     type Globals =
         [<Import("BarcodeScanner", "react-native-barcodescanner")>] static member BarcodeScanner with get(): BarcodeScannerStatic = failwith "JS only" and set(v: BarcodeScannerStatic): unit = failwith "JS only"
