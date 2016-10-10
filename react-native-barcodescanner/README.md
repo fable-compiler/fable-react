@@ -40,7 +40,7 @@ open Fable.Helpers.ReactNativeBarcodeScanner.Props
 
 ...
 
-// TODO: add sample
+barcodeScanner [BarcodeScannerProperties.OnBarCodeRead (fun result -> ... )] 
 
 
 ```
