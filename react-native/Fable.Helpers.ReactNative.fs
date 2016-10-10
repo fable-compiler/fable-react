@@ -655,9 +655,9 @@ module Props =
             | MaxLength of float
             | Multiline of bool
             | OnBlur of (unit->unit)
-            | OnChange of Func<obj, unit>
-            | OnChangeText of Func<string, unit>
-            | OnEndEditing of Func<obj, unit>
+            | OnChange of (obj -> unit)
+            | OnChangeText of (string -> unit)
+            | OnEndEditing of (obj -> unit)
             | OnFocus of (unit->unit)
             | OnLayout of Func<obj, unit>
             | OnSelectionChange of (unit->unit)
