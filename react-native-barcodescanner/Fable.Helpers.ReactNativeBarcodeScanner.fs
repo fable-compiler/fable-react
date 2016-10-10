@@ -34,4 +34,4 @@ let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead:
             createObj ["onBarCodeRead" ==> onBarcodeRead],
             props)
         |> unbox,
-      unbox [||]) |> unbox
+        unbox [||]) |> unbox
