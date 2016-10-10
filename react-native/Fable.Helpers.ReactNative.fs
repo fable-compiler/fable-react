@@ -1657,11 +1657,14 @@ let inline imageWithChild (props: IImageProperties list) (child: React.ReactElem
         unbox props,
         unbox([|child|])) |> unbox        
 
-let inline listView (props:IListViewProperties list) : React.ReactElement<obj> = 
+let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: ListViewProperties<'a> list)  : React.ReactElement<obj> =
     React.createElement(
-      RN.ListView,
-      unbox props,
-      unbox([||])) |> unbox
+        RN.ListView, 
+        JS.Object.assign(
+            createObj ["dataSource" ==> dataSource],
+            props)
+        |> unbox,
+        unbox [||]) |> unbox
 
 let inline mapView (props:IMapViewProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
     React.createElement(

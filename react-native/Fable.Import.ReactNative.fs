@@ -450,7 +450,7 @@ module ReactNative =
         abstract needsOffscreenAlphaCompositing: bool option with get, set
         abstract renderToHardwareTextureAndroid: bool option with get, set
 
-    and [<StringEnum>] PointerEvents =
+    and [<StringEnum; RequireQualifiedAccess>] PointerEvents =
         | ``Box-none`` | None | ``Box-only`` | AutoViewStyle
     
     and ViewProperties =
@@ -1207,7 +1207,7 @@ module ReactNative =
         [<Emit("new $0($1...)")>] abstract Create: onAsset: DataSourceAssetCallback -> ListViewDataSource<'a>
         abstract cloneWithRows: dataBlob: U2<ResizeArray<obj>, obj> * ?rowIdentities: ResizeArray<U2<string, float>> -> ListViewDataSource<'a>
         abstract cloneWithRowsAndSections: dataBlob: U2<ResizeArray<obj>, obj> * ?sectionIdentities: ResizeArray<U2<string, float>> * ?rowIdentities: ResizeArray<ResizeArray<U2<string, float>>> -> ListViewDataSource<'a>
-        abstract getRowCount: unit -> float
+        abstract getRowCount: unit -> int
         abstract getRowData: sectionIndex: float * rowIndex: float -> obj
         abstract getRowIDForFlatIndex: index: float -> string
         abstract getSectionIDForFlatIndex: index: float -> string
@@ -1564,7 +1564,7 @@ module ReactNative =
         abstract canOpenURL: url: string * callback: Func<bool, unit> -> unit
         abstract popInitialURL: unit -> string
 
-    and [<StringEnum>] NetInfoReturnType =
+    and [<StringEnum; RequireQualifiedAccess>] NetInfoReturnType =
         | None | Wifi | Cell | Unknown | [<CompiledName("NONE")>] NONE | [<CompiledName("MOBILE")>] MOBILE | [<CompiledName("WIFI")>] WIFI | [<CompiledName("MOBILE_MMS")>] MOBILE_MMS | [<CompiledName("MOBILE_SUPL")>] MOBILE_SUPL | [<CompiledName("MOBILE_DUN")>] MOBILE_DUN | [<CompiledName("MOBILE_HIPRI")>] MOBILE_HIPRI | [<CompiledName("WIMAX")>] WIMAX | [<CompiledName("BLUETOOTH")>] BLUETOOTH | [<CompiledName("DUMMY")>] DUMMY | [<CompiledName("ETHERNET")>] ETHERNET | [<CompiledName("MOBILE_FOTA")>] MOBILE_FOTA | [<CompiledName("MOBILE_IMS")>] MOBILE_IMS | [<CompiledName("MOBILE_CBS")>] MOBILE_CBS | [<CompiledName("WIFI_P2P")>] WIFI_P2P | [<CompiledName("MOBILE_IA")>] MOBILE_IA | [<CompiledName("MOBILE_EMERGENCY")>] MOBILE_EMERGENCY | [<CompiledName("PROXY")>] PROXY | [<CompiledName("VPN")>] VPN | [<CompiledName("UNKNOWN")>] UNKNOWN
 
     and NetInfoStatic =
@@ -1640,7 +1640,7 @@ module ReactNative =
     and [<StringEnum>] StatusBarStyle =
         | Default | ``Light-content``
 
-    and [<StringEnum>] StatusBarAnimation =
+    and [<StringEnum; RequireQualifiedAccess>] StatusBarAnimation =
         | None | Fade | Slide
 
     and StatusBarPropertiesIOS =
