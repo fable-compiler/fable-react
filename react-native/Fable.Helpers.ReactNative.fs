@@ -745,6 +745,7 @@ module Props =
         | OnPageScrollStateChanged of Func<ScrollState, unit>
         | KeyboardDismissMode of KeyboardDismissMode
         | PageMargin of float
+        | Style of ViewStyle list
         interface IViewPagerAndroidProperties
 
     [<KeyValueList>]
