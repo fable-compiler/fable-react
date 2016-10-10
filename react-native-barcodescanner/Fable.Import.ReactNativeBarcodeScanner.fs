@@ -35,5 +35,5 @@ module ReactNativeBarcodeScanner =
         BarcodeScannerStatic
 
     type Globals =
-        [<Import("BarcodeScanner", "react-native-barcodescanner")>] static member BarcodeScanner with get(): BarcodeScannerStatic = failwith "JS only" and set(v: BarcodeScannerStatic): unit = failwith "JS only"
+        [<Import("default", "react-native-barcodescanner")>] static member BarcodeScanner with get(): BarcodeScannerStatic = failwith "JS only" and set(v: BarcodeScannerStatic): unit = failwith "JS only"
 
