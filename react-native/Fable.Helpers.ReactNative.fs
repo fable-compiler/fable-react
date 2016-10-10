@@ -1058,11 +1058,21 @@ module Props =
         inherit IImagePropertiesIOS
 
     [<KeyValueList>]
+    type IImageSourceProperties =
+        interface end
+
+    [<KeyValueList>]
+    type ImageSourceProperties =
+        | Uri of string
+        | IsStatic of bool    
+        interface IImageSourceProperties
+
+    [<KeyValueList>]
     type ImagePropertiesIOS =
         | AccessibilityLabel of string
         | Accessible of bool
         | CapInsets of Insets
-        | DefaultSource of U2<obj, float>
+        | DefaultSource of IImageSourceProperties list
         | OnError of Func<obj, unit>
         | OnProgress of (unit->unit)
         interface IImagePropertiesIOS
@@ -1074,7 +1084,7 @@ module Props =
         | OnLoadEnd of (unit->unit)
         | OnLoadStart of (unit->unit)
         | ResizeMode of ResizeMode
-        | Source of U2<obj, string> // REQUIRED!
+        | Source of IImageSourceProperties list
         | Style of IStyle list
         | TestID of string
         interface IImageProperties
