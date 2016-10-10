@@ -407,29 +407,7 @@ module Props =
 
     [<KeyValueList>]
     type IViewPagerAndroidProperties =
-        inherit IViewPropertiesAndroid
-        inherit IViewPropertiesIOS
-        inherit IToolbarAndroidProperties
-        inherit IGestureResponderHandlers
-        inherit IKeyboardAvoidingViewProps
-        inherit IWebViewProperties
-        inherit ISegmentedControlIOSProperties
-        inherit IActivityIndicatorProperties
-        inherit IActivityIndicatorIOSProperties
-        inherit IDatePickerIOSProperties
-        inherit IDrawerLayoutAndroidProperties
-        inherit IPickerProperties
-        inherit IProgressBarAndroidProperties
-        inherit IProgressViewIOSProperties
-        inherit IRefreshControlProperties
-        inherit ISliderProperties 
-        inherit ISliderIOSProperties
-        inherit ITabBarItemProperties
-        inherit ITabBarIOSProperties
-        inherit IScrollViewProperties
-        inherit IStatusBarProperties
-        inherit ISwitchProperties
-        inherit IMapViewProperties 
+        interface end
 
     [<KeyValueList>]
     type IViewProperties =
@@ -766,8 +744,8 @@ module Props =
         | OnPageSelected of Func<NativeSyntheticEvent<ViewPagerAndroidOnPageSelectedEventData>, unit>
         | OnPageScrollStateChanged of Func<ScrollState, unit>
         | KeyboardDismissMode of KeyboardDismissMode
-        | PageMargin of float
-        | Style of ViewStyle list
+        | PageMargin of float        
+        | Style of IStyle list
         interface IViewPagerAndroidProperties
 
     [<KeyValueList>]
