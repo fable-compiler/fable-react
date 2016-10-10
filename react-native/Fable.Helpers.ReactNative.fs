@@ -1511,16 +1511,6 @@ module Props =
         | Style of IStyle list
         interface IBreadcrumbNavigationBarProperties
 
-    [<KeyValueList>]
-    type IImageSourceProperties =
-        interface end
-
-    [<KeyValueList>]
-    type ImageSourceProperties =
-        | Uri of string
-        | IsStatic of bool    
-        interface IImageSourceProperties
-
 open Props
 
 let inline localImage (path:string) : IImageSourceProperties list =
