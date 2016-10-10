@@ -407,7 +407,29 @@ module Props =
 
     [<KeyValueList>]
     type IViewPagerAndroidProperties =
-        interface end
+        inherit IViewPropertiesAndroid
+        inherit IViewPropertiesIOS
+        inherit IToolbarAndroidProperties
+        inherit IGestureResponderHandlers
+        inherit IKeyboardAvoidingViewProps
+        inherit IWebViewProperties
+        inherit ISegmentedControlIOSProperties
+        inherit IActivityIndicatorProperties
+        inherit IActivityIndicatorIOSProperties
+        inherit IDatePickerIOSProperties
+        inherit IDrawerLayoutAndroidProperties
+        inherit IPickerProperties
+        inherit IProgressBarAndroidProperties
+        inherit IProgressViewIOSProperties
+        inherit IRefreshControlProperties
+        inherit ISliderProperties 
+        inherit ISliderIOSProperties
+        inherit ITabBarItemProperties
+        inherit ITabBarIOSProperties
+        inherit IScrollViewProperties
+        inherit IStatusBarProperties
+        inherit ISwitchProperties
+        inherit IMapViewProperties 
 
     [<KeyValueList>]
     type IViewProperties =
