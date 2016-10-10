@@ -28,8 +28,6 @@ module ReactNativeBarcodeScanner =
         
     and BarcodeScannerStatic =
         inherit React.ComponentClass<BarcodeScannerProperties>
-        
-        abstract OnBarCodeRead: (obj -> unit) with get, set
 
     and BarcodeScanner =
         BarcodeScannerStatic

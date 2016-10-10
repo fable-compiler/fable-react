@@ -14,7 +14,7 @@ module Props =
 
     [<KeyValueList>]
     type BarcodeScannerProperties =
-    | OnBarCodeRead : (obj -> unit)
+    | OnBarCodeRead of (obj -> unit)
     | TorchMode of TorchMode
     | CameraType of CameraType
         interface IBarcodeScannerProperties
