@@ -9,6 +9,9 @@ open Fable.Import
 
 type RN = ReactNative.Globals
 
+
+type Ref<'t> = ('t -> unit)
+
 module Props =
 
     [<StringEnum; RequireQualifiedAccess>]
