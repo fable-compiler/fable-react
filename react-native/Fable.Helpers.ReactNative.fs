@@ -1534,18 +1534,19 @@ let inline textInput (props: ITextInputProperties list) (text:string): React.Rea
         unbox props,
         unbox text) |> unbox
 
-let inline createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) =
+let inline createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
     createObj [
         "title" ==> title
         "show" ==> showStatus
-    ]
+    ] |> unbox
     
-let inline  createToolbarActionWithIcon(title:string,icon: IImageSourceProperties list,showStatus:ToolbarActionShowStatus) =
+let inline  createToolbarActionWithIcon(title:string,icon: IImageSourceProperties list,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
     createObj [
         "title" ==> title
         "icon" ==> icon
         "show" ==> showStatus
-    ]
+    ] |> unbox
+
 let inline toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelected:int -> unit) : React.ReactElement<obj> = 
     React.createElement(
         RN.ToolbarAndroid,
