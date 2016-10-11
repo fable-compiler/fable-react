@@ -12,6 +12,12 @@ type RN = ReactNative.Globals
 module Props =
 
     [<StringEnum; RequireQualifiedAccess>]
+    type ToolbarActionShowStatus =
+    | IfRoom 
+    | Always 
+    | Never
+
+    [<StringEnum; RequireQualifiedAccess>]
     type Alignment =
     | Auto
     | [<CompiledName("flex-start")>] FlexStart
@@ -24,7 +30,7 @@ module Props =
     | [<CompiledName("flex-start")>] FlexStart
     | Center 
     | [<CompiledName("flex-end")>] FlexEnd
-    | Stretch    
+    | Stretch
     
     [<StringEnum; RequireQualifiedAccess>]
     type TextAlignment =
@@ -677,12 +683,11 @@ module Props =
     module Toolbar =
         [<KeyValueList>]
         type ToolbarAndroidProperties =
-            | Actions of ResizeArray<ToolbarAndroidAction>
+            | Actions of ToolbarAndroidAction []
             | ContentInsetEnd of float
             | ContentInsetStart of float
             | Logo of obj
             | NavIcon of obj
-            | OnActionSelected of Func<float, unit>
             | OnIconClicked of (unit->unit)
             | OverflowIcon of obj
             | Rtl of bool
@@ -1529,11 +1534,25 @@ let inline textInput (props: ITextInputProperties list) (text:string): React.Rea
         unbox props,
         unbox text) |> unbox
 
-let inline toolbarAndroid (props:IToolbarAndroidProperties list) : React.ReactElement<obj> = 
+let inline createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) =
+    createObj [
+        "title" ==> title
+        "show" ==> showStatus
+    ]
+    
+let inline  createToolbarActionWithIcon(title:string,icon: IImageSourceProperties list,showStatus:ToolbarActionShowStatus) =
+    createObj [
+        "title" ==> title
+        "icon" ==> icon
+        "show" ==> showStatus
+    ]
+let inline toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelected:int -> unit) : React.ReactElement<obj> = 
     React.createElement(
-      RN.ToolbarAndroid,
-      unbox props,
-      unbox([||])) |> unbox
+        RN.ToolbarAndroid,
+        JS.Object.assign(
+            createObj ["onActionSelected" ==> onActionSelected],
+            props) |> unbox,
+        unbox([||])) |> unbox
 
 let inline keyboardAvoidingView (props:IKeyboardAvoidingViewProps list) : React.ReactElement<obj> = 
     React.createElement(
