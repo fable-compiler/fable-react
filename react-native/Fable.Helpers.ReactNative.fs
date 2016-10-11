@@ -686,6 +686,7 @@ module Props =
             | OnIconClicked of (unit->unit)
             | OverflowIcon of obj
             | Rtl of bool
+            | Style of IStyle
             | Subtitle of string
             | SubtitleColor of string
             | TestID of string
