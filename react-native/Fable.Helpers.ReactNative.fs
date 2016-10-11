@@ -1585,13 +1585,13 @@ let inline drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (rend
         |> unbox,
         unbox(List.toArray children)) |> unbox
 
-let inline pickerIOSItem (props:PickerIOSItemProperties list) : React.ReactElement<obj> = 
+let inline pickerIOSItem (props:Picker.PickerIOSItemProperties list) : React.ReactElement<obj> = 
     React.createElement(
       RN.PickerIOSItem,
       unbox props,
       unbox([||])) |> unbox
 
-let inline pickerItem (props:PickerItemProperties list) : React.ReactElement<obj> = 
+let inline pickerItem (props:Picker.PickerItemProperties list) : React.ReactElement<obj> = 
     React.createElement(
       RN.PickerItem,
       unbox props,
@@ -1603,7 +1603,7 @@ let inline picker (props:IPickerProperties list) (children:React.ReactElement<ob
       unbox props,
       unbox children) |> unbox
 
-let inline pickerIOS (props:PickerIOSProperties list) (children:React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline pickerIOS (props:Picker.PickerIOSProperties list) (children:React.ReactElement<obj> list): React.ReactElement<obj> = 
     React.createElement(
       RN.PickerIOS,
       unbox props,
