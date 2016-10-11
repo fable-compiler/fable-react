@@ -61,7 +61,17 @@ module DB =
             let newModel : string = Array.append data model |> toJson
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
-        }        
+        }    
+
+
+    // Replaces all rows of a model
+    let inline replace<'a>(data:'a []) =
+        let key = modelsKey + typeof<'a>.FullName
+        async {
+            let newModel : string = data |> toJson
+            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            ()
+        }          
 
     // Gets a row from the model
     let inline get<'a>(index:int) = 
