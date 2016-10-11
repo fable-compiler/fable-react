@@ -1259,7 +1259,7 @@ module Props =
         | Navigator of Navigator
         | OnDidFocus of (unit->unit)
         | OnWillFocus of (unit->unit)
-        | RenderScene of Func<Route, Navigator, React.ReactElement<ViewProperties>>
+        | RenderScene of Func<Route, Navigator, React.ReactElement<obj>>
         | SceneStyle of ViewStyle list
         | DebugOverlay of bool
         interface INavigatorProperties
