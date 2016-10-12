@@ -6,11 +6,9 @@ open Fable.Import.JS
 open Fable.Import.Browser
 
 module ReactNative =
-    [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
     module JSX =
         type Element = obj // added after import
 
-    [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
     module NativeMethodsMixin =
         type MeasureOnSuccessCallback =
             Func<float, float, float, float, float, float, unit>
@@ -20,6 +18,139 @@ module ReactNative =
 
         and MeasureLayoutOnSuccessCallback =
             Func<float, float, float, float, unit>
+
+    module Animated =
+        type AnimatedValue =
+            Animated
+
+        and AnimatedValueXY =
+            ValueXY
+
+        and Base =
+            Animated
+
+        and [<Import("Animated.Animated","react-native")>] Animated() =
+            class end
+
+        and [<Import("Animated.AnimatedWithChildren","react-native")>] AnimatedWithChildren() =
+            inherit Animated()
+
+
+        and [<Import("Animated.AnimatedInterpolation","react-native")>] AnimatedInterpolation() =
+            inherit AnimatedWithChildren()
+            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = failwith "JS only"
+
+        and [<StringEnum>] ExtrapolateType =
+                | Extend | Identity | Clamp
+
+        and InterpolationConfigType =
+            obj
+
+        and ValueListenerCallback =
+            Func<obj, unit>
+
+        and [<Import("Animated.Value","react-native")>] Value(value: float) =
+            inherit AnimatedWithChildren()
+            member __.setValue(value: float): unit = failwith "JS only"
+            member __.setOffset(offset: float): unit = failwith "JS only"
+            member __.flattenOffset(): unit = failwith "JS only"
+            member __.addListener(callback: ValueListenerCallback): string = failwith "JS only"
+            member __.removeListener(id: string): unit = failwith "JS only"
+            member __.removeAllListeners(): unit = failwith "JS only"
+            member __.stopAnimation(?callback: Func<float, unit>): unit = failwith "JS only"
+            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = failwith "JS only"
+
+        and ValueXYListenerCallback =
+            Func<obj, unit>
+
+        and [<Import("Animated.ValueXY","react-native")>] ValueXY(?valueIn: obj) =
+            inherit AnimatedWithChildren()
+            member __.x with get(): AnimatedValue = failwith "JS only" and set(v: AnimatedValue): unit = failwith "JS only"
+            member __.y with get(): AnimatedValue = failwith "JS only" and set(v: AnimatedValue): unit = failwith "JS only"
+            member __.setValue(value: obj): unit = failwith "JS only"
+            member __.setOffset(offset: obj): unit = failwith "JS only"
+            member __.flattenOffset(): unit = failwith "JS only"
+            member __.stopAnimation(?callback: Func<float>): unit = failwith "JS only"
+            member __.addListener(callback: ValueXYListenerCallback): string = failwith "JS only"
+            member __.removeListener(id: string): unit = failwith "JS only"
+            member __.getLayout(): obj = failwith "JS only"
+            member __.getTranslateTransform(): ResizeArray<obj> = failwith "JS only"
+
+        and EndResult =
+            obj
+
+        and EndCallback =
+            Func<EndResult, unit>
+
+        and CompositeAnimation =
+            abstract start: Func<EndCallback, unit> with get, set
+            abstract stop: Func<unit> with get, set
+
+        and AnimationConfig =
+            abstract isInteraction: bool option with get, set
+            abstract useNativeDriver: bool option with get, set
+
+        and DecayAnimationConfig =
+            inherit AnimationConfig
+            abstract velocity: U2<float, obj> with get, set
+            abstract deceleration: float option with get, set
+
+        and TimingAnimationConfig =
+            inherit AnimationConfig
+            abstract toValue: U4<float, AnimatedValue, obj, AnimatedValueXY> with get, set
+            abstract easing: Func<float, float> option with get, set
+            abstract duration: float option with get, set
+            abstract delay: float option with get, set
+
+        and SpringAnimationConfig =
+            inherit AnimationConfig
+            abstract toValue: U4<float, AnimatedValue, obj, AnimatedValueXY> with get, set
+            abstract overshootClamping: bool option with get, set
+            abstract restDisplacementThreshold: float option with get, set
+            abstract restSpeedThreshold: float option with get, set
+            abstract velocity: U2<float, obj> option with get, set
+            abstract bounciness: float option with get, set
+            abstract speed: float option with get, set
+            abstract tension: float option with get, set
+            abstract friction: float option with get, set
+
+        and [<Import("Animated.AnimatedAddition","react-native")>] AnimatedAddition() =
+            inherit AnimatedInterpolation()
+
+
+        and [<Import("Animated.AnimatedMultiplication","react-native")>] AnimatedMultiplication() =
+            inherit AnimatedInterpolation()
+
+
+        and [<Import("Animated.AnimatedModulo","react-native")>] AnimatedModulo() =
+            inherit AnimatedInterpolation()
+
+
+        and ParallelConfig =
+            obj
+
+        and Mapping =
+            U2<obj, AnimatedValue>
+
+        and EventConfig =
+            abstract listener: Function option with get, set
+
+        type [<Import("Animated","react-native")>] Globals =
+            static member timing with get(): Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation>): unit = failwith "JS only"
+            static member spring with get(): Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation>): unit = failwith "JS only"
+            static member ``parallel`` with get(): Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation>): unit = failwith "JS only"
+            static member ``event`` with get(): Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>> = failwith "JS only" and set(v: Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>>): unit = failwith "JS only"
+            static member View with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
+            static member Image with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
+            static member Text with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
+            static member decay(value: U2<AnimatedValue, AnimatedValueXY>, config: DecayAnimationConfig): CompositeAnimation = failwith "JS only"
+            static member add(a: Animated, b: Animated): AnimatedAddition = failwith "JS only"
+            static member multiply(a: Animated, b: Animated): AnimatedMultiplication = failwith "JS only"
+            static member modulo(a: Animated, modulus: float): AnimatedModulo = failwith "JS only"
+            static member delay(time: float): CompositeAnimation = failwith "JS only"
+            static member sequence(animations: ResizeArray<CompositeAnimation>): CompositeAnimation = failwith "JS only"
+            static member stagger(time: float, animations: ResizeArray<CompositeAnimation>): CompositeAnimation = failwith "JS only"
+
 
     [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
     module NavigatorStatic =
@@ -1795,11 +1926,37 @@ module ReactNative =
 
     and NavigationRoute =
         abstract key: string with get, set
+        abstract title: string option with get, set // added by hand, according to JS sources
+
+    // added by hand, according to JS sources
+    and NavigationLayout =
+        abstract height: Animated.Value with get, set
+        abstract width: Animated.Value with get, set
+        abstract initHeight: float with get, set
+        abstract initWidth: float with get, set
+        abstract isMeasured: bool with get, set
 
     and NavigationState =
         inherit NavigationRoute
         abstract index: float with get, set
         abstract routes: ResizeArray<NavigationRoute> with get, set
+        abstract isMeasured: bool with get, set
+
+    and NavigationScene =
+        abstract key: string with get, set
+        abstract isActive: bool with get, set
+        abstract isStale: bool with get, set
+        abstract index: float with get, set
+        abstract route: NavigationRoute with get, set
+
+    and NavigationTransitionProps =
+        abstract layout: NavigationLayout with get,set
+        abstract navigationState: NavigationState with get,set
+        abstract position: Animated.Value with get,set
+        abstract progress: Animated.Value with get,set
+        abstract scenes: NavigationScene [] with get,set
+        abstract scene: NavigationScene with get,set
+        abstract gestureResponseDistance: float option with get,set
 
     and NavigationRenderer =
         Func<NavigationState, Func<NavigationAction, bool>, JSX.Element>
@@ -2085,9 +2242,7 @@ module ReactNative =
         [<Import("Navigator", "react-native")>] static member Navigator with get(): NavigatorStatic = failwith "JS only" and set(v: NavigatorStatic): unit = failwith "JS only"
         [<Import("NavigatorIOS", "react-native")>] static member NavigatorIOS with get(): NavigatorIOSStatic = failwith "JS only" and set(v: NavigatorIOSStatic): unit = failwith "JS only"
         [<Import("Picker", "react-native")>] static member Picker with get(): PickerStatic = failwith "JS only" and set(v: PickerStatic): unit = failwith "JS only"
-        [<Import("PickerItem", "react-native")>] static member PickerItem with get(): PickerItemStatic = failwith "JS only" and set(v: PickerItemStatic): unit = failwith "JS only"
         [<Import("PickerIOS", "react-native")>] static member PickerIOS with get(): PickerIOSStatic = failwith "JS only" and set(v: PickerIOSStatic): unit = failwith "JS only"
-        [<Import("PickerIOSItem", "react-native")>] static member PickerIOSItem with get(): PickerIOSItemStatic = failwith "JS only" and set(v: PickerIOSItemStatic): unit = failwith "JS only"
         [<Import("ProgressBarAndroid", "react-native")>] static member ProgressBarAndroid with get(): ProgressBarAndroidStatic = failwith "JS only" and set(v: ProgressBarAndroidStatic): unit = failwith "JS only"
         [<Import("ProgressViewIOS", "react-native")>] static member ProgressViewIOS with get(): ProgressViewIOSStatic = failwith "JS only" and set(v: ProgressViewIOSStatic): unit = failwith "JS only"
         [<Import("RefreshControl", "react-native")>] static member RefreshControl with get(): RefreshControlStatic = failwith "JS only" and set(v: RefreshControlStatic): unit = failwith "JS only"
@@ -2099,7 +2254,6 @@ module ReactNative =
         [<Import("SwipeableListView", "react-native")>] static member SwipeableListView with get(): SwipeableListViewStatic<obj> = failwith "JS only" and set(v: SwipeableListViewStatic<obj>): unit = failwith "JS only"
         [<Import("Switch", "react-native")>] static member Switch with get(): SwitchStatic = failwith "JS only" and set(v: SwitchStatic): unit = failwith "JS only"
         [<Import("SwitchIOS", "react-native")>] static member SwitchIOS with get(): SwitchIOSStatic = failwith "JS only" and set(v: SwitchIOSStatic): unit = failwith "JS only"
-        [<Import("TabBarItem", "react-native")>] static member TabBarItem with get(): TabBarItemStatic = failwith "JS only" and set(v: TabBarItemStatic): unit = failwith "JS only"
         [<Import("TabBarIOS", "react-native")>] static member TabBarIOS with get(): TabBarIOSStatic = failwith "JS only" and set(v: TabBarIOSStatic): unit = failwith "JS only"
         [<Import("Text", "react-native")>] static member Text with get(): TextStatic = failwith "JS only" and set(v: TextStatic): unit = failwith "JS only"
         [<Import("TextInput", "react-native")>] static member TextInput with get(): TextInputStatic = failwith "JS only" and set(v: TextInputStatic): unit = failwith "JS only"
@@ -2140,9 +2294,6 @@ module ReactNative =
         [<Import("NavigationContainer", "react-native")>] static member NavigationContainer with get(): NavigationContainerStatic = failwith "JS only" and set(v: NavigationContainerStatic): unit = failwith "JS only"
         [<Import("NavigationRootContainer", "react-native")>] static member NavigationRootContainer with get(): NavigationRootContainerStatic = failwith "JS only" and set(v: NavigationRootContainerStatic): unit = failwith "JS only"
         [<Import("NavigationReducer", "react-native")>] static member NavigationReducer with get(): NavigationReducerStatic = failwith "JS only" and set(v: NavigationReducerStatic): unit = failwith "JS only"
-        [<Import("NavigationAnimatedView", "react-native")>] static member NavigationAnimatedView with get(): NavigationAnimatedViewStatic = failwith "JS only" and set(v: NavigationAnimatedViewStatic): unit = failwith "JS only"
-        [<Import("NavigationHeader", "react-native")>] static member NavigationHeader with get(): NavigationHeaderStatic = failwith "JS only" and set(v: NavigationHeaderStatic): unit = failwith "JS only"
-        [<Import("NavigationCardStack", "react-native")>] static member NavigationCardStack with get(): NavigationCardStackStatic = failwith "JS only" and set(v: NavigationCardStackStatic): unit = failwith "JS only"
         [<Import("Easing", "react-native")>] static member Easing with get(): EasingStatic = failwith "JS only" and set(v: EasingStatic): unit = failwith "JS only"
         [<Import("NativeModules", "react-native")>] static member NativeModules with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
         [<Import("NativeAppEventEmitter", "react-native")>] static member NativeAppEventEmitter with get(): NativeAppEventEmitterStatic = failwith "JS only" and set(v: NativeAppEventEmitterStatic): unit = failwith "JS only"
@@ -2156,141 +2307,6 @@ module ReactNative =
         [<Import("createElement", "react-native")>] static member createElement(``type``: React.ReactType, props: 'P, [<ParamArray>] children: React.ReactNode[]): React.ReactElement<'P> = failwith "JS only"
         [<Import("requireNativeComponent", "react-native")>] static member requireNativeComponent(viewName: string, ?componentInterface: ComponentInterface<'P>, ?extraConfig: obj): React.ComponentClass<'P> = failwith "JS only"
         [<Import("___spread", "react-native")>] static member ___spread(target: obj, [<ParamArray>] sources: obj[]): obj = failwith "JS only"
-
-
-    module Animated =
-        type AnimatedValue =
-            Animated
-
-        and AnimatedValueXY =
-            ValueXY
-
-        and Base =
-            Animated
-
-        and [<Import("Animated.Animated","react-native")>] Animated() =
-            class end
-
-        and [<Import("Animated.AnimatedWithChildren","react-native")>] AnimatedWithChildren() =
-            inherit Animated()
-
-
-        and [<Import("Animated.AnimatedInterpolation","react-native")>] AnimatedInterpolation() =
-            inherit AnimatedWithChildren()
-            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = failwith "JS only"
-
-        and [<StringEnum>] ExtrapolateType =
-                | Extend | Identity | Clamp
-
-        and InterpolationConfigType =
-            obj
-
-        and ValueListenerCallback =
-            Func<obj, unit>
-
-        and [<Import("Animated.Value","react-native")>] Value(value: float) =
-            inherit AnimatedWithChildren()
-            member __.setValue(value: float): unit = failwith "JS only"
-            member __.setOffset(offset: float): unit = failwith "JS only"
-            member __.flattenOffset(): unit = failwith "JS only"
-            member __.addListener(callback: ValueListenerCallback): string = failwith "JS only"
-            member __.removeListener(id: string): unit = failwith "JS only"
-            member __.removeAllListeners(): unit = failwith "JS only"
-            member __.stopAnimation(?callback: Func<float, unit>): unit = failwith "JS only"
-            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = failwith "JS only"
-
-        and ValueXYListenerCallback =
-            Func<obj, unit>
-
-        and [<Import("Animated.ValueXY","react-native")>] ValueXY(?valueIn: obj) =
-            inherit AnimatedWithChildren()
-            member __.x with get(): AnimatedValue = failwith "JS only" and set(v: AnimatedValue): unit = failwith "JS only"
-            member __.y with get(): AnimatedValue = failwith "JS only" and set(v: AnimatedValue): unit = failwith "JS only"
-            member __.setValue(value: obj): unit = failwith "JS only"
-            member __.setOffset(offset: obj): unit = failwith "JS only"
-            member __.flattenOffset(): unit = failwith "JS only"
-            member __.stopAnimation(?callback: Func<float>): unit = failwith "JS only"
-            member __.addListener(callback: ValueXYListenerCallback): string = failwith "JS only"
-            member __.removeListener(id: string): unit = failwith "JS only"
-            member __.getLayout(): obj = failwith "JS only"
-            member __.getTranslateTransform(): ResizeArray<obj> = failwith "JS only"
-
-        and EndResult =
-            obj
-
-        and EndCallback =
-            Func<EndResult, unit>
-
-        and CompositeAnimation =
-            abstract start: Func<EndCallback, unit> with get, set
-            abstract stop: Func<unit> with get, set
-
-        and AnimationConfig =
-            abstract isInteraction: bool option with get, set
-            abstract useNativeDriver: bool option with get, set
-
-        and DecayAnimationConfig =
-            inherit AnimationConfig
-            abstract velocity: U2<float, obj> with get, set
-            abstract deceleration: float option with get, set
-
-        and TimingAnimationConfig =
-            inherit AnimationConfig
-            abstract toValue: U4<float, AnimatedValue, obj, AnimatedValueXY> with get, set
-            abstract easing: Func<float, float> option with get, set
-            abstract duration: float option with get, set
-            abstract delay: float option with get, set
-
-        and SpringAnimationConfig =
-            inherit AnimationConfig
-            abstract toValue: U4<float, AnimatedValue, obj, AnimatedValueXY> with get, set
-            abstract overshootClamping: bool option with get, set
-            abstract restDisplacementThreshold: float option with get, set
-            abstract restSpeedThreshold: float option with get, set
-            abstract velocity: U2<float, obj> option with get, set
-            abstract bounciness: float option with get, set
-            abstract speed: float option with get, set
-            abstract tension: float option with get, set
-            abstract friction: float option with get, set
-
-        and [<Import("Animated.AnimatedAddition","react-native")>] AnimatedAddition() =
-            inherit AnimatedInterpolation()
-
-
-        and [<Import("Animated.AnimatedMultiplication","react-native")>] AnimatedMultiplication() =
-            inherit AnimatedInterpolation()
-
-
-        and [<Import("Animated.AnimatedModulo","react-native")>] AnimatedModulo() =
-            inherit AnimatedInterpolation()
-
-
-        and ParallelConfig =
-            obj
-
-        and Mapping =
-            U2<obj, AnimatedValue>
-
-        and EventConfig =
-            abstract listener: Function option with get, set
-
-        type [<Import("Animated","react-native")>] Globals =
-            static member timing with get(): Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation>): unit = failwith "JS only"
-            static member spring with get(): Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation>): unit = failwith "JS only"
-            static member ``parallel`` with get(): Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation>): unit = failwith "JS only"
-            static member ``event`` with get(): Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>> = failwith "JS only" and set(v: Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>>): unit = failwith "JS only"
-            static member View with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-            static member Image with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-            static member Text with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-            static member decay(value: U2<AnimatedValue, AnimatedValueXY>, config: DecayAnimationConfig): CompositeAnimation = failwith "JS only"
-            static member add(a: Animated, b: Animated): AnimatedAddition = failwith "JS only"
-            static member multiply(a: Animated, b: Animated): AnimatedMultiplication = failwith "JS only"
-            static member modulo(a: Animated, modulus: float): AnimatedModulo = failwith "JS only"
-            static member delay(time: float): CompositeAnimation = failwith "JS only"
-            static member sequence(animations: ResizeArray<CompositeAnimation>): CompositeAnimation = failwith "JS only"
-            static member stagger(time: float, animations: ResizeArray<CompositeAnimation>): CompositeAnimation = failwith "JS only"
-
-
 
     module addons =
         type TestModuleStatic =

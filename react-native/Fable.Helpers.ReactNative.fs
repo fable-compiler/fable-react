@@ -1489,14 +1489,14 @@ module Props =
     type NavigationAnimatedViewProps =
         | Route of obj
         | Style of IStyle list
-        | RenderOverlay of (obj -> obj) //JSX.Element
+        | RenderOverlay of (obj -> React.ReactElement<obj>)
         | ApplyAnimation of (obj * obj -> unit)
-        | RenderScene of (obj -> obj) //JSX.Element
+        | RenderScene of (obj -> React.ReactElement<obj>)
 
 
     [<KeyValueList>]
     type NavigationHeaderProps =
-        | RenderTitleComponent of (obj -> obj) //JSX.Element
+        | RenderTitleComponent of (obj -> React.ReactElement<obj>)
         | OnNavigateBack of (unit -> unit)
 
 
@@ -1505,8 +1505,6 @@ module Props =
         | Direction of Direction
         | Style of IStyle list
         | Route of obj
-        | RenderScene of (obj -> obj) //JSX.Element, REQUIRED!
-        | OnNavigateBack of (unit -> unit) // REQUIRED!
 
     [<KeyValueList>]
     type IBreadcrumbNavigationBarProperties =
@@ -1611,13 +1609,13 @@ let inline drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (rend
 
 let inline pickerIOSItem (props:Picker.PickerIOSItemProperties list) : React.ReactElement<obj> = 
     React.createElement(
-      RN.PickerIOSItem,
+      RN.PickerIOS.Item,
       unbox props,
       unbox([||])) |> unbox
 
 let inline pickerItem (props:Picker.PickerItemProperties list) : React.ReactElement<obj> = 
     React.createElement(
-      RN.PickerItem,
+      RN.Picker.Item,
       unbox props,
       unbox([||])) |> unbox
 
@@ -1752,7 +1750,7 @@ let inline styleSheet (props:StyleSheetProperties list) : React.ReactElement<obj
 
 let inline tabBarItem (props:ITabBarItemProperties list) : React.ReactElement<obj> = 
     React.createElement(
-      RN.TabBarItem,
+      RN.TabBarIOS.Item,
       unbox props,
       unbox([||])) |> unbox
 
@@ -1786,22 +1784,34 @@ let inline switch (props:ISwitchProperties list) : React.ReactElement<obj> =
       unbox props,
       unbox([||])) |> unbox
 
-let inline navigationAnimatedView (props:NavigationAnimatedViewProps list) : React.ReactElement<obj> = 
-    React.createElement(
-      RN.NavigationAnimatedView,
-      unbox props,
-      unbox([||])) |> unbox
-
 let inline navigationHeader (props:NavigationHeaderProps list) : React.ReactElement<obj> = 
     React.createElement(
-      RN.NavigationHeader,
+      RN.NavigationExperimental.Header,
       unbox props,
       unbox([||])) |> unbox
 
-let inline navigationCardStack (props:NavigationCardStackProps list) : React.ReactElement<obj> = 
+let inline navigationState (index:int) (routes:NavigationRoute list) =
+    createObj ["index" ==> index
+               "routes" ==> Array.ofList routes]
+    |> unbox<NavigationState>
+
+let inline navigationRoute (key:string) (title:string option) =
+    createObj ["key" ==> key
+               "title" ==> title]
+    |> unbox<NavigationRoute>
+    
+let inline navigationCardStack (navigationState: NavigationState)
+                               (renderScene: NavigationTransitionProps -> React.ReactElement<obj>)
+                               (onNavigateBack: unit -> unit)
+                               (props:NavigationCardStackProps list): React.ReactElement<obj> = 
     React.createElement(
-      RN.NavigationCardStack,
-      unbox props,
+      RN.NavigationExperimental.CardStack,
+      JS.Object.assign(
+            createObj ["renderScene" ==> renderScene
+                       "navigationState" ==> navigationState
+                       "onNavigateBack" ==> onNavigateBack],
+            props)
+        |> unbox,
       unbox([||])) |> unbox
 
 let inline navigationContainer (props:NavigationContainerProps list) : React.ReactElement<obj> = 
