@@ -1870,7 +1870,7 @@ let Linking = obj()
 
 /// Opens the given URL
 let inline openUrl (url:string) : unit =
-    Linking?openUrl( url) |> ignore
+    Linking?openURL(url) |> ignore
 
 module Alert =
     [<Import("Alert","react-native")>]
