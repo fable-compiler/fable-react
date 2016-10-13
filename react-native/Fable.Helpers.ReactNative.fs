@@ -755,6 +755,7 @@ module Props =
         | KeyboardDismissMode of KeyboardDismissMode
         | PageMargin of float        
         | Style of IStyle list
+        | Ref of Ref<obj>
         interface IViewPagerAndroidProperties
 
     [<KeyValueList>]
