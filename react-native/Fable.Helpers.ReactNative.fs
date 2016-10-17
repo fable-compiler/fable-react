@@ -1909,6 +1909,15 @@ module Alert =
             alertWithTwoButtons (title,message,cancelText,onError,okText,onSuccess)
         )
 
+module NetInfo =
+    [<Import("NetInfo","react-native")>]
+    let NetInfo = obj()
+
+    let inline getConnectionType() : Async<string> = async {
+        let fetchPromise : Promise<string> = NetInfo?fetch() |> unbox
+        return! fetchPromise |> Async.AwaitPromise
+    }
+
    
 module Storage =
     open Fable.Core.JsInterop
