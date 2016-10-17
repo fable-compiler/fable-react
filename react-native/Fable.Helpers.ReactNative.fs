@@ -1928,6 +1928,9 @@ module NetInfo =
     [<Import("NetInfo","react-native")>]
     let NetInfo = obj()
 
+    open Fable.Import.JS
+    open Fable.Import.Browser
+
     let inline getConnectionType() : Async<string> = async {
         let fetchPromise : Promise<string> = NetInfo?fetch() |> unbox
         return! fetchPromise |> Async.AwaitPromise
