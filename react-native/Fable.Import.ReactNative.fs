@@ -1938,15 +1938,15 @@ module ReactNative =
 
     and NavigationState =
         inherit NavigationRoute
-        abstract index: float with get, set
-        abstract routes: ResizeArray<NavigationRoute> with get, set
+        abstract index: int with get, set
+        abstract routes: Array<NavigationRoute> with get, set
         abstract isMeasured: bool with get, set
 
     and NavigationScene =
         abstract key: string with get, set
         abstract isActive: bool with get, set
         abstract isStale: bool with get, set
-        abstract index: float with get, set
+        abstract index: int with get, set
         abstract route: NavigationRoute with get, set
 
     and NavigationTransitionProps =
@@ -1991,12 +1991,26 @@ module ReactNative =
     and NavigationCardStackStatic =
         inherit React.ComponentClass<NavigationCardStackProps>
 
+    // added by hand from JS sources
+    and NavigationStateUtilsStatic =
+        abstract get: state: NavigationState*key: string -> NavigationRoute option
+        abstract indexOf: state: NavigationState * key: string -> int
+        abstract has: state: NavigationState * key: string -> bool
+        abstract push: state: NavigationState * route: NavigationRoute -> NavigationState
+        abstract pop: state: NavigationState -> NavigationState
+        abstract jumpToIndex: state: NavigationState * index: int -> NavigationState
+        abstract jumpTo: state: NavigationState * key: string -> NavigationState
+        abstract forward: state: NavigationState -> NavigationState 
+        abstract replaceAt: state: NavigationState * key: string * route: NavigationRoute -> NavigationState
+        abstract replaceAtIndex: state: NavigationState * index: int * route: NavigationRoute -> NavigationState
+        abstract reset: state: NavigationState * routes: Array<NavigationRoute> * index: int option -> NavigationState
 
     and NavigationExperimentalStatic =
         abstract AnimatedView: NavigationAnimatedViewStatic with get, set
         abstract CardStack: NavigationCardStackStatic with get, set
         abstract Header: NavigationHeaderStatic with get, set
         abstract Reducer: NavigationReducerStatic with get, set
+        abstract StateUtils: NavigationStateUtilsStatic with get, set
 
     and NavigationContainerProps =
         abstract tabs: ResizeArray<NavigationTab> with get, set

@@ -597,12 +597,12 @@ module Props =
         interface ITextStyle
 
     [<KeyValueList>]
-    type ITextProperties =
+    type ITextPropertiesIOS =
         interface end
 
     [<KeyValueList>]
-    type ITextPropertiesIOS =
-        inherit ITextProperties
+    type ITextProperties =
+        inherit ITextPropertiesIOS
         
     [<KeyValueList>]
     type TextPropertiesIOS =
@@ -622,16 +622,17 @@ module Props =
         interface ITextProperties
 
     [<KeyValueList>]
-    type ITextInputProperties =
+    type ITextInputIOSProperties =
         interface end
 
     [<KeyValueList>]
-    type ITextInputIOSProperties =
-        inherit ITextInputProperties
+    type ITextInputAndroidProperties =
+        interface end
 
     [<KeyValueList>]
-    type ITextInputAndroidProperties =
-        inherit ITextInputProperties
+    type ITextInputProperties =
+        inherit ITextInputIOSProperties
+        inherit ITextInputAndroidProperties
 
     module TextInput = 
         [<KeyValueList>]
@@ -1496,16 +1497,32 @@ module Props =
 
 
     [<KeyValueList>]
-    type NavigationHeaderProps =
-        | RenderTitleComponent of (obj -> React.ReactElement<obj>)
-        | OnNavigateBack of (unit -> unit)
+    type INavigationHeaderProps =
+        interface end
 
+    [<KeyValueList>]
+    type NavigationHeaderProps =
+        | RenderTitleComponent of (NavigationTransitionProps -> React.ReactElement<obj>)
+        | RenderLeftComponent of (NavigationTransitionProps -> React.ReactElement<obj>)
+        | RenderRightComponent of (NavigationTransitionProps -> React.ReactElement<obj>)
+        | StatusBarHeight of U2<float,Animated.Value>
+        | OnNavigateBack of (unit -> unit)
+        interface INavigationHeaderProps
+
+    [<KeyValueList>]
+    type INavigationCardStackProps =
+        interface end
 
     [<KeyValueList>]
     type NavigationCardStackProps =
         | Direction of Direction
         | Style of IStyle list
-        | Route of obj
+        | EnableGestures of bool
+        | GestureResponseDistance of float
+        | CardStyle of IStyle list
+        | RenderHeader of (NavigationTransitionProps -> React.ReactElement<obj>)
+        | OnNavigateBack of (unit -> unit)
+        interface INavigationCardStackProps
 
     [<KeyValueList>]
     type IBreadcrumbNavigationBarProperties =
@@ -1680,7 +1697,7 @@ let inline imageWithChild (props: IImageProperties list) (child: React.ReactElem
         unbox props,
         unbox([|child|])) |> unbox        
 
-let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: ListViewProperties<'a> list)  : React.ReactElement<obj> =
+let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: IListViewProperties list)  : React.ReactElement<obj> =
     React.createElement(
         RN.ListView, 
         JS.Object.assign(
@@ -1701,11 +1718,11 @@ let inline modal (props:ModalProperties list) : React.ReactElement<obj> =
       unbox props,
       unbox([||])) |> unbox
 
-let inline touchableWithoutFeedback (props:ITouchableWithoutFeedbackProperties list) : React.ReactElement<obj> = 
+let inline touchableWithoutFeedback (props:ITouchableWithoutFeedbackProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
     React.createElement(
       RN.TouchableWithoutFeedback,
       unbox props,
-      unbox([||])) |> unbox
+      unbox(List.toArray children)) |> unbox
 
 let inline touchableHighlight (props:ITouchableHighlightProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> = 
     React.createElement(
@@ -1719,17 +1736,17 @@ let inline touchableHighlightWithChild (props:ITouchableHighlightProperties list
       unbox props,
       unbox([|child|])) |> unbox
 
-let inline touchableOpacity (props:ITouchableOpacityProperties list) : React.ReactElement<obj> = 
+let inline touchableOpacity (props:ITouchableOpacityProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
     React.createElement(
       RN.TouchableOpacity,
       unbox props,
-      unbox([||])) |> unbox
+      unbox(List.toArray children)) |> unbox
 
-let inline touchableNativeFeedback (props:TouchableNativeFeedbackProperties list) : React.ReactElement<obj> = 
+let inline touchableNativeFeedback (props:ITouchableNativeFeedbackProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
     React.createElement(
       RN.TouchableNativeFeedback,
       unbox props,
-      unbox([||])) |> unbox
+      unbox(List.toArray children)) |> unbox
 
 let inline viewPagerAndroid (props: IViewPagerAndroidProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
     React.createElement(
@@ -1785,10 +1802,10 @@ let inline switch (props:ISwitchProperties list) : React.ReactElement<obj> =
       unbox props,
       unbox([||])) |> unbox
 
-let inline navigationHeader (props:NavigationHeaderProps list) : React.ReactElement<obj> = 
+let inline navigationHeader (props:INavigationHeaderProps list) (rendererProps:NavigationTransitionProps): React.ReactElement<obj> =
     React.createElement(
       RN.NavigationExperimental.Header,
-      unbox props,
+      JS.Object.assign(props,rendererProps) |> unbox,
       unbox([||])) |> unbox
 
 let inline navigationState (index:int) (routes:NavigationRoute list) =
@@ -1803,14 +1820,12 @@ let inline navigationRoute (key:string) (title:string option) =
     
 let inline navigationCardStack (navigationState: NavigationState)
                                (renderScene: NavigationTransitionProps -> React.ReactElement<obj>)
-                               (onNavigateBack: unit -> unit)
-                               (props:NavigationCardStackProps list): React.ReactElement<obj> = 
+                               (props:INavigationCardStackProps list): React.ReactElement<obj> = 
     React.createElement(
       RN.NavigationExperimental.CardStack,
       JS.Object.assign(
             createObj ["renderScene" ==> renderScene
-                       "navigationState" ==> navigationState
-                       "onNavigateBack" ==> onNavigateBack],
+                       "navigationState" ==> navigationState],
             props)
         |> unbox,
       unbox([||])) |> unbox
