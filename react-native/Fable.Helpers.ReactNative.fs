@@ -1937,8 +1937,8 @@ module NetInfo =
     }
 
 module ImageStore =
-    [<Import("ImageStore ","react-native")>]
-    let ImageStore  = obj()
+    [<Import("ImageStore","react-native")>]
+    let ImageStore = obj()
 
     open Fable.Import.JS
     open Fable.Import.Browser
