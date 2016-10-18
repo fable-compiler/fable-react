@@ -16,45 +16,45 @@ module Props =
 
     [<StringEnum; RequireQualifiedAccess>]
     type ToolbarActionShowStatus =
-    | IfRoom 
-    | Always 
+    | IfRoom
+    | Always
     | Never
 
     [<StringEnum; RequireQualifiedAccess>]
     type Alignment =
     | Auto
     | [<CompiledName("flex-start")>] FlexStart
-    | Center 
+    | Center
     | [<CompiledName("flex-end")>] FlexEnd
     | Stretch
-    
+
     [<StringEnum; RequireQualifiedAccess>]
     type ItemAlignment =
     | [<CompiledName("flex-start")>] FlexStart
-    | Center 
+    | Center
     | [<CompiledName("flex-end")>] FlexEnd
     | Stretch
-    
+
     [<StringEnum; RequireQualifiedAccess>]
     type TextAlignment =
     | Auto
     | Default
     | Left
-    | Center 
+    | Center
     | Right
     | Justify
 
     [<StringEnum; RequireQualifiedAccess>]
     type TextAlignVertical =
-    | Auto 
-    | Top 
-    | Bottom 
+    | Auto
+    | Top
+    | Bottom
     | Center
 
     [<StringEnum; RequireQualifiedAccess>]
     type JustifyContent =
     | [<CompiledName("flex-start")>] FlexStart
-    | Center 
+    | Center
     | [<CompiledName("flex-end")>] FlexEnd
     | [<CompiledName("space-between")>] SpaceBetween
     | [<CompiledName("space-around")>] SpaceAround
@@ -80,7 +80,7 @@ module Props =
     | Numeric
     | [<CompiledName("phone-pad")>] PhonePad
     /// only iOS
-    | [<CompiledName("ascii-capable")>] AsciiCapable 
+    | [<CompiledName("ascii-capable")>] AsciiCapable
     | [<CompiledName("numbers-and-punctuation")>] NumbersAndPunctuation
     | [<CompiledName("url")>] Url
     | [<CompiledName("number-pad")>] NumberPad
@@ -126,7 +126,7 @@ module Props =
     | Sentences
     | Words
     | Characters
-    
+
     [<StringEnum; RequireQualifiedAccess>]
     type KeyboardDismissMode  =
     | None
@@ -140,130 +140,130 @@ module Props =
 
     [<StringEnum; RequireQualifiedAccess>]
     type AlignSelf =
-        | Auto 
+        | Auto
 
     [<StringEnum; RequireQualifiedAccess>]
-    type TextDecorationStyle = 
+    type TextDecorationStyle =
         | Solid | Double | Dotted | Dashed
 
     [<StringEnum; RequireQualifiedAccess>]
-    type FontStyle = 
-        | Normal | Italic 
-        
-    [<StringEnum; RequireQualifiedAccess>]
-    type WritingDirection =
-        | Auto | Ltr | Rtl 
+    type FontStyle =
+        | Normal | Italic
 
     [<StringEnum; RequireQualifiedAccess>]
-    type ScrollState = 
+    type WritingDirection =
+        | Auto | Ltr | Rtl
+
+    [<StringEnum; RequireQualifiedAccess>]
+    type ScrollState =
         Idle | Dragging | Settling
 
     [<StringEnum; RequireQualifiedAccess>]
     type FontWeight =
-        | Normal 
-        | Bold 
-        | [<CompiledName("100")>] F100 
-        | [<CompiledName("200")>] F200 
-        | [<CompiledName("300")>] F300 
-        | [<CompiledName("400")>] F400 
-        | [<CompiledName("500")>] F500 
-        | [<CompiledName("600")>] F600 
-        | [<CompiledName("700")>] F700 
-        | [<CompiledName("800")>] F800 
+        | Normal
+        | Bold
+        | [<CompiledName("100")>] F100
+        | [<CompiledName("200")>] F200
+        | [<CompiledName("300")>] F300
+        | [<CompiledName("400")>] F400
+        | [<CompiledName("500")>] F500
+        | [<CompiledName("600")>] F600
+        | [<CompiledName("700")>] F700
+        | [<CompiledName("800")>] F800
         | [<CompiledName("900")>] F900
 
     [<StringEnum; RequireQualifiedAccess>]
     type TextDecorationLine =
-        | None | Underline 
-        | ``Line-through`` 
+        | None | Underline
+        | ``Line-through``
         | ``Underline line-through``
 
     [<StringEnum; RequireQualifiedAccess>]
-    type LineBreakMode = 
+    type LineBreakMode =
         | Head | Middle | Tail | Clip
 
     [<StringEnum; RequireQualifiedAccess>]
-    type AutoCapitalize = 
+    type AutoCapitalize =
         | None | Sentences | Words | Characters
 
     [<StringEnum; RequireQualifiedAccess>]
-    type BackfaceVisibility = 
+    type BackfaceVisibility =
         | Visible | Hidden
 
     [<StringEnum; RequireQualifiedAccess>]
-    type BorderStyle = 
+    type BorderStyle =
         | Solid | Dotted | Dashed
 
     [<StringEnum; RequireQualifiedAccess>]
-    type Overflow = 
+    type Overflow =
         | Visible | Hidden
 
     [<StringEnum; RequireQualifiedAccess>]
-    type Behavior = 
+    type Behavior =
         | Height | Position | Padding
 
     [<StringEnum; RequireQualifiedAccess>]
-    type NavigationType = 
+    type NavigationType =
         | Other | Click
 
     [<StringEnum; RequireQualifiedAccess>]
-    type Size = 
+    type Size =
         | Small | Large
 
     [<StringEnum; RequireQualifiedAccess>]
-    type Mode = 
+    type Mode =
         | Date | Time | Datetime
 
     [<StringEnum; RequireQualifiedAccess>]
-    type DatePickerIOSMode = 
+    type DatePickerIOSMode =
         | Dialog | Dropdown
 
     [<StringEnum; RequireQualifiedAccess>]
-    type StyleAttr = 
+    type StyleAttr =
         | Horizontal | Normal | Small | Large | Inverse | SmallInverse | LargeInverse
 
     [<StringEnum; RequireQualifiedAccess>]
-    type ProgressViewStyle = 
+    type ProgressViewStyle =
         | Default | Bar
 
     [<StringEnum; RequireQualifiedAccess>]
-    type AnimationType = 
+    type AnimationType =
         | None | Slide | Fade
 
     [<StringEnum; RequireQualifiedAccess>]
-    type SystemIcon = 
+    type SystemIcon =
         | Bookmarks | Contacts | Downloads | Favorites | Featured | History | More | ``Most-recent`` | ``Most-viewed`` | Recents | Search | ``Top-rated``
 
     [<StringEnum; RequireQualifiedAccess>]
-    type Dim = 
+    type Dim =
         | Window | Screen
 
     [<StringEnum; RequireQualifiedAccess>]
-    type IndicatorStyle = 
+    type IndicatorStyle =
         | Default | Black | White
 
     [<StringEnum; RequireQualifiedAccess>]
-    type DecelerationRate = 
-        | Fast | Normal 
+    type DecelerationRate =
+        | Fast | Normal
 
     [<StringEnum; RequireQualifiedAccess>]
-    type AlertButtonStyle =  
+    type AlertButtonStyle =
         | Default | Cancel | Destructive
 
     [<StringEnum; RequireQualifiedAccess>]
-    type GroupTypes = 
+    type GroupTypes =
         | Album | All | Event | Faces | Library | PhotoStream | SavedPhotos
 
     [<StringEnum; RequireQualifiedAccess>]
-    type AssetType = 
+    type AssetType =
         | All | Videos | Photos
 
     [<StringEnum; RequireQualifiedAccess>]
-    type ShowHideTransition = 
+    type ShowHideTransition =
         | Fade | Slide
 
     [<StringEnum; RequireQualifiedAccess>]
-    type Direction = 
+    type Direction =
         | Horizontal | Vertical
 
     [<KeyValueList>]
@@ -293,7 +293,7 @@ module Props =
     [<KeyValueList>]
     type IImageStyle =
         inherit IStyle
-    
+
     [<KeyValueList>]
     type ITransformsStyle =
         inherit IStyle
@@ -436,20 +436,20 @@ module Props =
         inherit IProgressBarAndroidProperties
         inherit IProgressViewIOSProperties
         inherit IRefreshControlProperties
-        inherit ISliderProperties 
+        inherit ISliderProperties
         inherit ISliderIOSProperties
         inherit ITabBarItemProperties
         inherit ITabBarIOSProperties
         inherit IScrollViewProperties
         inherit IStatusBarProperties
         inherit ISwitchProperties
-        inherit IMapViewProperties 
+        inherit IMapViewProperties
 
     [<KeyValueList>]
     type ITouchable =
         inherit IScrollViewProperties
-        inherit IMapViewProperties 
-        inherit IViewProperties 
+        inherit IMapViewProperties
+        inherit IViewProperties
 
     [<KeyValueList>]
     type TransformsStyle =
@@ -603,7 +603,7 @@ module Props =
     [<KeyValueList>]
     type ITextProperties =
         inherit ITextPropertiesIOS
-        
+
     [<KeyValueList>]
     type TextPropertiesIOS =
         | AllowFontScaling of bool // REQUIRED!
@@ -634,7 +634,7 @@ module Props =
         inherit ITextInputIOSProperties
         inherit ITextInputAndroidProperties
 
-    module TextInput = 
+    module TextInput =
         [<KeyValueList>]
         type TextInputIOSProperties =
             | ClearButtonMode of string
@@ -731,7 +731,7 @@ module Props =
         | NeedsOffscreenAlphaCompositing of bool
         | RenderToHardwareTextureAndroid of bool
         interface IViewPropertiesAndroid
-    
+
     [<KeyValueList>]
     type ViewProperties =
         | AccessibilityLabel of string
@@ -754,7 +754,7 @@ module Props =
         | OnPageSelected of Func<NativeSyntheticEvent<ViewPagerAndroidOnPageSelectedEventData>, unit>
         | OnPageScrollStateChanged of Func<ScrollState, unit>
         | KeyboardDismissMode of KeyboardDismissMode
-        | PageMargin of float        
+        | PageMargin of float
         | Style of IStyle list
         | Ref of Ref<obj>
         interface IViewPagerAndroidProperties
@@ -880,7 +880,7 @@ module Props =
     [<KeyValueList>]
     type DrawerLayoutAndroidProperties =
         | DrawerBackgroundColor of string
-        | DrawerLockMode of DrawerLockMode 
+        | DrawerLockMode of DrawerLockMode
         | DrawerPosition of DrawerLayoutAndroidPosition
         | DrawerWidth of float
         | KeyboardDismissMode of KeyboardDismissMode
@@ -892,7 +892,7 @@ module Props =
         | StatusBarBackgroundColor of obj
         | Ref of Ref<obj>
         interface IDrawerLayoutAndroidProperties
-    
+
     module Picker =
         [<KeyValueList>]
         type PickerIOSItemProperties =
@@ -907,7 +907,7 @@ module Props =
             | Color of string
             | TestID of string
 
-    
+
         [<KeyValueList>]
         type PickerPropertiesIOS =
             | ItemStyle of IStyle list
@@ -936,7 +936,7 @@ module Props =
             | ItemStyle of ViewStyle list
             interface IPickerProperties
 
-    module ProgressBar = 
+    module ProgressBar =
         [<KeyValueList>]
         type ProgressBarAndroidProperties =
             | Style of IStyle list
@@ -967,7 +967,7 @@ module Props =
         | TitleColor of string
         | Ref of Ref<obj>
         interface IRefreshControlProperties
-        
+
 
     [<KeyValueList>]
     type RefreshControlPropertiesAndroid =
@@ -1075,7 +1075,7 @@ module Props =
     [<KeyValueList>]
     type ImageSourceProperties =
         | Uri of string
-        | IsStatic of bool    
+        | IsStatic of bool
         interface IImageSourceProperties
 
     [<KeyValueList>]
@@ -1246,7 +1246,7 @@ module Props =
 
     [<KeyValueList>]
     type NavigationBarRouteMapper =
-        | Title of Func<Route, Navigator, float, NavState, React.ReactElement<obj>> 
+        | Title of Func<Route, Navigator, float, NavState, React.ReactElement<obj>>
         | LeftButton of Func<Route, Navigator, float, NavState, React.ReactElement<obj>>
         | RightButton of Func<Route, Navigator, float, NavState, React.ReactElement<obj>>
 
@@ -1254,7 +1254,7 @@ module Props =
     type NavigationBarProperties =
         | Navigator of Navigator
         | RouteMapper of NavigationBarRouteMapper
-        | NavState of NavState 
+        | NavState of NavState
         | Style of IStyle list
 
     [<KeyValueList>]
@@ -1274,7 +1274,7 @@ module Props =
         | SceneStyle of ViewStyle list
         | DebugOverlay of bool
         interface INavigatorProperties
-    
+
     module ToolBar =
         [<KeyValueList>]
         type TabBarItemProperties =
@@ -1386,7 +1386,7 @@ module Props =
         | Ref of Ref<ScrollView>
         interface IScrollViewProperties
 
- 
+
     [<KeyValueList>]
     type ListViewProperties<'a>  =
         | DataSource of ListViewDataSource<'a>
@@ -1541,7 +1541,7 @@ open Props
 let inline localImage (path:string) : IImageSourceProperties list =
     Node.require.Invoke(path) |> unbox
 
-let inline text (props:TextProperties list) (text:string): React.ReactElement<obj> = 
+let inline text (props:TextProperties list) (text:string): React.ReactElement<obj> =
     React.createElement(
       RN.Text,
       unbox props,
@@ -1549,7 +1549,7 @@ let inline text (props:TextProperties list) (text:string): React.ReactElement<ob
 
 let inline textInput (props: ITextInputProperties list) (text:string): React.ReactElement<obj> =
     React.createElement(
-        RN.TextInput, 
+        RN.TextInput,
         unbox props,
         unbox text) |> unbox
 
@@ -1558,7 +1558,7 @@ let inline createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) 
         "title" ==> title
         "show" ==> showStatus
     ] |> unbox
-    
+
 let inline  createToolbarActionWithIcon(title:string,icon: IImageSourceProperties list,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
     createObj [
         "title" ==> title
@@ -1566,7 +1566,7 @@ let inline  createToolbarActionWithIcon(title:string,icon: IImageSourcePropertie
         "show" ==> showStatus
     ] |> unbox
 
-let inline toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelected:int -> unit) : React.ReactElement<obj> = 
+let inline toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelected:int -> unit) : React.ReactElement<obj> =
     React.createElement(
         RN.ToolbarAndroid,
         JS.Object.assign(
@@ -1582,41 +1582,41 @@ let inline keyboardAvoidingView (props:IKeyboardAvoidingViewProps list) (childre
 
 let inline view (props: IViewProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
-        RN.View, 
+        RN.View,
         unbox props,
         unbox(List.toArray children)) |> unbox
 
-let inline webView (props:IWebViewProperties list) : React.ReactElement<obj> = 
+let inline webView (props:IWebViewProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.WebView,
       unbox props,
       unbox([||])) |> unbox
 
-let inline segmentedControlIOS (props:ISegmentedControlIOSProperties list) : React.ReactElement<obj> = 
+let inline segmentedControlIOS (props:ISegmentedControlIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.SegmentedControlIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline activityIndicator (props:IActivityIndicatorProperties list) : React.ReactElement<obj> = 
+let inline activityIndicator (props:IActivityIndicatorProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.ActivityIndicator,
       unbox props,
       unbox([||])) |> unbox
 
-let inline activityIndicatorIOS (props:IActivityIndicatorIOSProperties list) : React.ReactElement<obj> = 
+let inline activityIndicatorIOS (props:IActivityIndicatorIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.ActivityIndicatorIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline datePickerIOS (props:IDatePickerIOSProperties list) : React.ReactElement<obj> = 
+let inline datePickerIOS (props:IDatePickerIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.DatePickerIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (renderNavigationView: unit -> React.ReactElement<obj>) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (renderNavigationView: unit -> React.ReactElement<obj>) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.DrawerLayoutAndroid,
       JS.Object.assign(
@@ -1625,67 +1625,67 @@ let inline drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (rend
         |> unbox,
         unbox(List.toArray children)) |> unbox
 
-let inline pickerIOSItem (props:Picker.PickerIOSItemProperties list) : React.ReactElement<obj> = 
+let inline pickerIOSItem (props:Picker.PickerIOSItemProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.PickerIOS.Item,
       unbox props,
       unbox([||])) |> unbox
 
-let inline pickerItem (props:Picker.PickerItemProperties list) : React.ReactElement<obj> = 
+let inline pickerItem (props:Picker.PickerItemProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.Picker.Item,
       unbox props,
       unbox([||])) |> unbox
 
-let inline picker (props:IPickerProperties list) (children:React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline picker (props:IPickerProperties list) (children:React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.Picker,
       unbox props,
       unbox children) |> unbox
 
-let inline pickerIOS (props:Picker.PickerIOSProperties list) (children:React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline pickerIOS (props:Picker.PickerIOSProperties list) (children:React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.PickerIOS,
       unbox props,
       unbox children) |> unbox
 
-let inline progressBarAndroid (props:IProgressBarAndroidProperties list) : React.ReactElement<obj> = 
+let inline progressBarAndroid (props:IProgressBarAndroidProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.ProgressBarAndroid,
       unbox props,
       unbox([||])) |> unbox
 
-let inline progressViewIOS (props:IProgressViewIOSProperties list) : React.ReactElement<obj> = 
+let inline progressViewIOS (props:IProgressViewIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.ProgressViewIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline refreshControl (props:IRefreshControlProperties list) : React.ReactElement<obj> = 
+let inline refreshControl (props:IRefreshControlProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.RefreshControl,
       unbox props,
       unbox([||])) |> unbox
 
-let inline slider (props:ISliderProperties list) : React.ReactElement<obj> = 
+let inline slider (props:ISliderProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.Slider,
       unbox props,
       unbox([||])) |> unbox
 
-let inline sliderIOS (props:ISliderIOSProperties list) : React.ReactElement<obj> = 
+let inline sliderIOS (props:ISliderIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.SliderIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline switchIOS (props:SwitchIOSProperties list) : React.ReactElement<obj> = 
+let inline switchIOS (props:SwitchIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.SwitchIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline image (props:IImageProperties list) : React.ReactElement<obj> = 
+let inline image (props:IImageProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.Image,
       unbox props,
@@ -1693,56 +1693,56 @@ let inline image (props:IImageProperties list) : React.ReactElement<obj> =
 
 let inline imageWithChild (props: IImageProperties list) (child: React.ReactElement<obj>) : React.ReactElement<obj> =
     React.createElement(
-        RN.Image, 
+        RN.Image,
         unbox props,
-        unbox([|child|])) |> unbox        
+        unbox([|child|])) |> unbox
 
 let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: IListViewProperties list)  : React.ReactElement<obj> =
     React.createElement(
-        RN.ListView, 
+        RN.ListView,
         JS.Object.assign(
             createObj ["dataSource" ==> dataSource],
             props)
         |> unbox,
         unbox [||]) |> unbox
 
-let inline mapView (props:IMapViewProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline mapView (props:IMapViewProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.MapView,
       unbox props,
       unbox(List.toArray children)) |> unbox
 
-let inline modal (props:ModalProperties list) : React.ReactElement<obj> = 
+let inline modal (props:ModalProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.Modal,
       unbox props,
       unbox([||])) |> unbox
 
-let inline touchableWithoutFeedback (props:ITouchableWithoutFeedbackProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline touchableWithoutFeedback (props:ITouchableWithoutFeedbackProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.TouchableWithoutFeedback,
       unbox props,
       unbox(List.toArray children)) |> unbox
 
-let inline touchableHighlight (props:ITouchableHighlightProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> = 
+let inline touchableHighlight (props:ITouchableHighlightProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
     React.createElement(
       RN.TouchableHighlight,
       unbox props,
       unbox (Array.ofList children)) |> unbox
 
-let inline touchableHighlightWithChild (props:ITouchableHighlightProperties list) (child: React.ReactElement<obj>): React.ReactElement<obj> = 
+let inline touchableHighlightWithChild (props:ITouchableHighlightProperties list) (child: React.ReactElement<obj>): React.ReactElement<obj> =
     React.createElement(
       RN.TouchableHighlight,
       unbox props,
       unbox([|child|])) |> unbox
 
-let inline touchableOpacity (props:ITouchableOpacityProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline touchableOpacity (props:ITouchableOpacityProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.TouchableOpacity,
       unbox props,
       unbox(List.toArray children)) |> unbox
 
-let inline touchableNativeFeedback (props:ITouchableNativeFeedbackProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
+let inline touchableNativeFeedback (props:ITouchableNativeFeedbackProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.TouchableNativeFeedback,
       unbox props,
@@ -1750,53 +1750,53 @@ let inline touchableNativeFeedback (props:ITouchableNativeFeedbackProperties lis
 
 let inline viewPagerAndroid (props: IViewPagerAndroidProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
     React.createElement(
-        RN.ViewPagerAndroid, 
+        RN.ViewPagerAndroid,
         props|> unbox,
         unbox(List.toArray children)) |> unbox
 
-let inline navigator (props:INavigatorProperties list) : React.ReactElement<obj> = 
+let inline navigator (props:INavigatorProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.Navigator,
       unbox props,
       unbox([||])) |> unbox
 
-let inline styleSheet (props:StyleSheetProperties list) : React.ReactElement<obj> = 
+let inline styleSheet (props:StyleSheetProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.StyleSheet,
       unbox props,
       unbox([||])) |> unbox
 
-let inline tabBarItem (props:ITabBarItemProperties list) : React.ReactElement<obj> = 
+let inline tabBarItem (props:ITabBarItemProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.TabBarIOS.Item,
       unbox props,
       unbox([||])) |> unbox
 
-let inline tabBarIOS (props:ITabBarIOSProperties list) : React.ReactElement<obj> = 
+let inline tabBarIOS (props:ITabBarIOSProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.TabBarIOS,
       unbox props,
       unbox([||])) |> unbox
 
-let inline scrollView (props:IScrollViewProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> = 
+let inline scrollView (props:IScrollViewProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> =
     React.createElement(
       RN.ScrollView,
       unbox props,
       unbox(List.toArray children)) |> unbox
 
-let inline swipeableListView (props:SwipeableListViewProps<_> list) : React.ReactElement<obj> = 
+let inline swipeableListView (props:SwipeableListViewProps<_> list) : React.ReactElement<obj> =
     React.createElement(
       RN.SwipeableListView,
       unbox props,
       unbox([||])) |> unbox
 
-let inline statusBar (props:IStatusBarProperties list) : React.ReactElement<obj> = 
+let inline statusBar (props:IStatusBarProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.StatusBar,
       unbox props,
       unbox([||])) |> unbox
 
-let inline switch (props:ISwitchProperties list) : React.ReactElement<obj> = 
+let inline switch (props:ISwitchProperties list) : React.ReactElement<obj> =
     React.createElement(
       RN.Switch,
       unbox props,
@@ -1817,10 +1817,10 @@ let inline navigationRoute (key:string) (title:string option) =
     createObj ["key" ==> key
                "title" ==> title]
     |> unbox<NavigationRoute>
-    
+
 let inline navigationCardStack (navigationState: NavigationState)
                                (renderScene: NavigationTransitionProps -> React.ReactElement<obj>)
-                               (props:INavigationCardStackProps list): React.ReactElement<obj> = 
+                               (props:INavigationCardStackProps list): React.ReactElement<obj> =
     React.createElement(
       RN.NavigationExperimental.CardStack,
       JS.Object.assign(
@@ -1830,25 +1830,25 @@ let inline navigationCardStack (navigationState: NavigationState)
         |> unbox,
       unbox([||])) |> unbox
 
-let inline navigationContainer (props:NavigationContainerProps list) : React.ReactElement<obj> = 
+let inline navigationContainer (props:NavigationContainerProps list) : React.ReactElement<obj> =
     React.createElement(
       RN.NavigationContainer,
       unbox props,
       unbox([||])) |> unbox
 
-let inline navigationRootContainer (props:NavigationRootContainerProps list) : React.ReactElement<obj> = 
+let inline navigationRootContainer (props:NavigationRootContainerProps list) : React.ReactElement<obj> =
     React.createElement(
       RN.NavigationRootContainer,
       unbox props,
       unbox([||])) |> unbox
 
-let inline navigationBar (props:NavigationBarProperties list) : React.ReactElement<obj> = 
+let inline navigationBar (props:NavigationBarProperties list) : React.ReactElement<obj> =
     React.createElement(
       NavigatorStatic.Globals.NavigationBar,
       unbox props,
       unbox([||])) |> unbox
 
-let inline breadcrumbNavigationBar (props:IBreadcrumbNavigationBarProperties list) : React.ReactElement<obj> = 
+let inline breadcrumbNavigationBar (props:IBreadcrumbNavigationBarProperties list) : React.ReactElement<obj> =
     React.createElement(
       NavigatorStatic.Globals.BreadcrumbNavigationBar,
       unbox props,
@@ -1860,7 +1860,7 @@ let emptyDataSource<'a>() : ListViewDataSource<'a> = failwith "JS only"
 let inline newDataSource<'a> (elements:'a []) =
     emptyDataSource<'a>().cloneWithRows(unbox elements)
 
-let inline updateDataSource<'a> (data:'a []) (dataSource : ListViewDataSource<'a>) : ListViewDataSource<'a> = 
+let inline updateDataSource<'a> (data:'a []) (dataSource : ListViewDataSource<'a>) : ListViewDataSource<'a> =
     dataSource.cloneWithRows (unbox data) |> unbox
 
 let inline createComponent<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
@@ -1877,7 +1877,7 @@ let inline encode (text: string, encoding:string) : string =
     Buffer?from(text)?toString(encoding) |> unbox
 
 let inline encodeBase64 (text: string) : string = encode(text,"base64")
-let inline encodeAscii (text: string) : string = encode(text,"ascii") 
+let inline encodeAscii (text: string) : string = encode(text,"ascii")
 
 [<Import("BackAndroid","react-native")>]
 let BackAndroid = obj()
@@ -1890,7 +1890,7 @@ let inline setOnHardwareBackPressHandler (onHardwareBackPress: unit -> bool): un
 
 let inline exitApp (): unit =
     BackAndroid?exitApp() |> ignore
-    
+
 [<Import("Linking","react-native")>]
 let Linking = obj()
 
@@ -1901,23 +1901,23 @@ let inline openUrl (url:string) : unit =
 module Alert =
     [<Import("Alert","react-native")>]
     let Alert = obj()
-    
-    let inline private createButton(label:string,callback:unit -> unit) = 
+
+    let inline private createButton(label:string,callback:unit -> unit) =
         createObj [
             "text" ==> label
             "onPress" ==> callback
         ]
 
-    /// Shows an alert button with one button 
+    /// Shows an alert button with one button
     let inline alertWithOneButton (title:string,message:string,okText:string,onOk:unit -> unit) : unit =
         Alert?alert( title, message, [| createButton(okText,onOk) |]) |> ignore
 
-    /// Shows an alert button with two buttons 
+    /// Shows an alert button with two buttons
     let inline alertWithTwoButtons (title:string,message:string,cancelText:string,onCancel:unit -> unit,okText:string,onOk:unit -> unit) : unit =
         Alert?alert( title, message, [| createButton(cancelText,onCancel); createButton(okText,onOk) |]) |> ignore
 
     let inline confirm (title:string,message:string,cancelText:string,okText:string) =
-        
+
         Async.FromContinuations(fun (onSuccess, onError, _) ->
             let onError() = onError(new Exception("Cancelled"))
 
@@ -1943,7 +1943,7 @@ module ImageStore =
     open Fable.Import.JS
     open Fable.Import.Browser
 
-    let inline getBase64ForTag uri : Async<string> = 
+    let inline getBase64ForTag uri : Async<string> =
         Async.FromContinuations(fun (onSuccess, onError, _) ->
             ImageStore?getBase64ForTag( uri, onSuccess, onError) |> ignore
         )
@@ -1953,11 +1953,11 @@ module Toast =
     let Toast = obj()
 
     /// Shows a toast with short duration
-    let inline showShort (message:string) : unit = 
+    let inline showShort (message:string) : unit =
         Toast?show(message,Toast?SHORT) |> unbox
 
     /// Shows a toast with long duration
-    let inline showLong (message:string) : unit = 
+    let inline showLong (message:string) : unit =
         Toast?show(message,Toast?LONG) |> unbox
 
 module Storage =
@@ -1976,7 +1976,7 @@ module Storage =
         let! v = Globals.AsyncStorage.getItem key |> Async.AwaitPromise
         match v with
         | null -> return Option.None
-        | _ -> return Some (ofJson v)
+        | _ -> return Some (Serialize.ofJson v)
     }
 
     /// Saves a value with the given key to the local device storage.
@@ -1987,7 +1987,7 @@ module Storage =
 
     /// Saves a value with the given key to the local device storage.
     let inline save<'a> (k:string) (v:'a) = async {
-        let s:string = toJson v
+        let s:string = Serialize.toJson v
         let! v = Globals.AsyncStorage.setItem(k,s) |> Async.AwaitPromise
         ()
-    }    
+    }

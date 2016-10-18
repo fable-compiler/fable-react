@@ -17,12 +17,11 @@
     "react-native",
     "F#"
   ],
-  "dependencies" :
-    { "react-native" : ">= 0.30.0"
-    },
-  "devDependencies" :
-    { "fable-import-react" : ">= 0.5.0",
-      "fable-import-react-native" : ">= 0.6.0"
-    },
+  "peerDependencies": {
+    "react-native" : ">= 0.30.0",
+    "fable-import-react" : ">= 0.5.0",
+    "fable-import-react-native" : "^0.10.0-alpha.1",
+    "fable-core": "^0.7.5-alpha.2"
+  },
   "homepage": "https://github.com/fable-compiler/Fable#readme"
 }

@@ -18,7 +18,7 @@
     "url": "https://github.com/fable-compiler/fable-react/issues"
   },
   "homepage": "https://github.com/fable-compiler/fable-react#readme",
-  "devDependencies": {
-    "fable-core": "^0.5.4"
+  "dependencies": {
+    "fable-core": "^0.7.5-alpha.2"
   }
 }

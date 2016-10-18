@@ -18,6 +18,7 @@ module KeyValueStore =
                                 else
                                     success (unbox keys))) |> ignore)
 
+[<RequireQualifiedAccess>]
 module DB =
     [<Literal>]
     let private modelsKey = "models/"
@@ -27,7 +28,7 @@ module DB =
     let inline clear<'a>() =
        let key = modelsKey + typeof<'a>.FullName
        async {
-            let s:string = [||] |> toJson
+            let s:string = [||] |> Serialize.toJson
             let! _ = Globals.AsyncStorage.setItem(key,s) |> Async.AwaitPromise
             ()
        }
@@ -37,7 +38,7 @@ module DB =
         let! v = Globals.AsyncStorage.getItem (key) |> Async.AwaitPromise
         match v with
         | null -> return [||]
-        | _ -> return ofJson v
+        | _ -> return Serialize.ofJson v
     }
 
     /// Adds a row to a model
@@ -46,7 +47,7 @@ module DB =
         async {
             let! model = getModel<'a> key
 
-            let newModel : string = Array.append [|unbox data|] model |> toJson
+            let newModel : string = Array.append [|unbox data|] model |> Serialize.toJson
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
         }
@@ -57,7 +58,7 @@ module DB =
         async {
             let! model = getModel<'a> key
             model.[index] <- unbox data
-            let newModel : string =  toJson model
+            let newModel : string = Serialize.toJson model
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
         }
@@ -118,7 +119,7 @@ module DB =
         async {
             let! model = getModel<'a> key
 
-            let newModel : string = Array.append data model |> toJson
+            let newModel : string = Array.append data model |> Serialize.toJson
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
         }    
