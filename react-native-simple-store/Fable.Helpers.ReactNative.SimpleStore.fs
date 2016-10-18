@@ -9,10 +9,10 @@ open Fable.Import
 
 module KeyValueStore =
     /// Retrieves all keys from the AsyncStorage.
-    let inline getAllKeys() : Async<string []> = 
-        Async.FromContinuations(fun (success,fail,_) -> 
-            Globals.AsyncStorage.getAllKeys 
-                (Func<_,_,_>(fun err keys -> 
+    let inline getAllKeys() : Async<string []> =
+        Async.FromContinuations(fun (success,fail,_) ->
+            Globals.AsyncStorage.getAllKeys
+                (Func<_,_,_>(fun err keys ->
                                 if err <> null && err.message <> null then
                                     fail (unbox err)
                                 else
@@ -42,7 +42,7 @@ module DB =
     }
 
     /// Adds a row to a model
-    let inline add<'a>(data:'a) = 
+    let inline add<'a>(data:'a) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
@@ -53,7 +53,7 @@ module DB =
         }
 
     /// Updates a row in a model
-    let inline update<'a>(index, data:'a) = 
+    let inline update<'a>(index, data:'a) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
@@ -64,7 +64,7 @@ module DB =
         }
 
     /// Deletes a row from a model
-    let inline delete<'a>(index) = 
+    let inline delete<'a>(index) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
@@ -72,46 +72,46 @@ module DB =
             let newModel : string =  toJson model
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
-        }        
+        }
 
     /// Updates multiple rows in a model
-    let inline updateMultiple<'a>(values) = 
+    let inline updateMultiple<'a>(values) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
             for index, data:'a in values do
                 model.[index] <- unbox data
-                
+
             let newModel : string =  toJson model
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
         }
 
     ///  Update data by an update function.
-    let inline updateWithFunction<'a>(updateF: 'a[] -> 'a[]) = 
+    let inline updateWithFunction<'a>(updateF: 'a[] -> 'a[]) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
 
             let updated = updateF model
-                
+
             let newModel : string = toJson updated
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
         }
 
     ///  Update data by an update function.
-    let inline updateWithFunctionAndKey<'a>(updateF: 'a[] -> 'a[],key) = 
+    let inline updateWithFunctionAndKey<'a>(updateF: 'a[] -> 'a[],key) =
         let key = modelsKey + typeof<'a>.FullName + "/" + key
         async {
             let! model = getModel<'a> key
 
             let updated = updateF model
-                
+
             let newModel : string = toJson updated
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
-        }        
+        }
 
     /// Adds multiple rows to a model
     let inline addMultiple<'a>(data:'a []) =
@@ -122,7 +122,7 @@ module DB =
             let newModel : string = Array.append data model |> Serialize.toJson
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
-        }    
+        }
 
     /// Replaces all rows of a model
     let inline replaceWithKey<'a>(key,data:'a []) =
@@ -143,7 +143,7 @@ module DB =
         }
 
     /// Gets a row from the model
-    let inline get<'a>(index:int) = 
+    let inline get<'a>(index:int) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
@@ -162,7 +162,7 @@ module DB =
         getModel<'a> key
 
     /// Gets the row count from the model
-    let inline count<'a>() = 
+    let inline count<'a>() =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
