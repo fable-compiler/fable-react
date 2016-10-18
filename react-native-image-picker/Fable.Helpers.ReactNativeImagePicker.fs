@@ -48,3 +48,9 @@ let inline showImagePickerAsync (props: IImagePickerOptions list) =
                 else onSuccess None)
     )
 
+let inline launchCamera (props: IImagePickerOptions list) f =
+    IP.ImagePicker.launchCamera(props |> unbox, f)
+
+
+let inline launchImageLibrary (props: IImagePickerOptions list) f =
+    IP.ImagePicker.launchImageLibrary(props |> unbox, f)
