@@ -1936,6 +1936,17 @@ module NetInfo =
         return! fetchPromise |> Async.AwaitPromise
     }
 
+module ImageStore =
+    [<Import("ImageStore ","react-native")>]
+    let ImageStore  = obj()
+
+    open Fable.Import.JS
+    open Fable.Import.Browser
+
+    let inline getBase64ForTag uri : Async<string> = 
+        Async.FromContinuations(fun (onSuccess, onError, _) ->
+            ImageStore?getBase64ForTag( uri, onSuccess, onError) |> ignore
+        )
    
 module Storage =
     open Fable.Core.JsInterop
