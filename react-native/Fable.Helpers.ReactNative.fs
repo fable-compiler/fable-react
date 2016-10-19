@@ -6,6 +6,7 @@ open Fable.Import.ReactNative
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
+open Fable.PowerPack
 
 type RN = ReactNative.Globals
 
@@ -1922,7 +1923,7 @@ module Alert =
             let onError() = onError(new Exception("Cancelled"))
 
             alertWithTwoButtons (title,message,cancelText,onError,okText,onSuccess)
-        )
+        ) |> Async.StartAsPromise
 
 module NetInfo =
     [<Import("NetInfo","react-native")>]
@@ -1931,9 +1932,9 @@ module NetInfo =
     open Fable.Import.JS
     open Fable.Import.Browser
 
-    let inline getConnectionType() : Async<string> = async {
+    let inline getConnectionType() : Promise<string> = promise {
         let fetchPromise : Promise<string> = NetInfo?fetch() |> unbox
-        return! fetchPromise |> Async.AwaitPromise
+        return! fetchPromise
     }
 
 module ImageStore =
@@ -1942,11 +1943,10 @@ module ImageStore =
 
     open Fable.Import.JS
     open Fable.Import.Browser
-
-    let inline getBase64ForTag uri : Async<string> =
+    let inline getBase64ForTag uri : Promise<string> =
         Async.FromContinuations(fun (onSuccess, onError, _) ->
             ImageStore?getBase64ForTag( uri, onSuccess, onError) |> ignore
-        )
+        ) |> Async.StartAsPromise
 
 module Toast =
     [<Import("ToastAndroid","react-native")>]
@@ -1964,30 +1964,30 @@ module Storage =
     open Fable.Core.JsInterop
 
     /// Loads a value as string with the given key from the local device storage. Returns None if the key is not found.
-    let inline getItem (key:string) : Async<Option<_>> = async {
-        let! v = Globals.AsyncStorage.getItem key |> Async.AwaitPromise
+    let inline getItem (key:string) : Promise<Option<_>> = promise {
+        let! v = Globals.AsyncStorage.getItem key
         match v with
         | null -> return Option.None
         | _ -> return Some v
     }
 
     /// Loads a value with the given key from the local device storage. Returns None if the key is not found.
-    let inline load<'a> (key:string) : Async<'a option> = async {
-        let! v = Globals.AsyncStorage.getItem key |> Async.AwaitPromise
+    let inline load<'a> (key:string) : Promise<'a option> = promise {
+        let! v = Globals.AsyncStorage.getItem key
         match v with
         | null -> return Option.None
         | _ -> return Some (Serialize.ofJson v)
     }
 
     /// Saves a value with the given key to the local device storage.
-    let inline setItem (k:string) (v:string) = async {
-        let! v = Globals.AsyncStorage.setItem(k,v) |> Async.AwaitPromise
+    let inline setItem (k:string) (v:string) = promise {
+        let! v = Globals.AsyncStorage.setItem(k,v)
         ()
     }
 
     /// Saves a value with the given key to the local device storage.
-    let inline save<'a> (k:string) (v:'a) = async {
+    let inline save<'a> (k:string) (v:'a) = promise {
         let s:string = Serialize.toJson v
-        let! v = Globals.AsyncStorage.setItem(k,s) |> Async.AwaitPromise
+        let! v = Globals.AsyncStorage.setItem(k,s)
         ()
     }
