@@ -1,6 +1,6 @@
 {
   "name": "fable-import-react-native-image-picker",
-  "version": "0.1.4",
+  "version": "0.7.0-alpha.1",
   "description": "Fable bindings for React Native Image Picker",
   "repository": {
     "type": "git",
