@@ -1937,15 +1937,25 @@ module NetInfo =
         return! fetchPromise
     }
 
+/// ImageStore contains functions which help to deal with image data on the device.
 module ImageStore =
     [<Import("ImageStore","react-native")>]
     let ImageStore = obj()
 
     open Fable.Import.JS
     open Fable.Import.Browser
+
+    /// Retrieves the base64-encoded data for an image in the ImageStore. If the specified URI does not match an image in the store, an exception will be raised.
     let inline getBase64ForTag uri : Promise<string> =
         Async.FromContinuations(fun (onSuccess, onError, _) ->
-            ImageStore?getBase64ForTag( uri, onSuccess, onError) |> ignore
+            ImageStore?getBase64ForTag(uri, onSuccess, onError) |> ignore
+        ) |> Async.StartAsPromise
+
+    /// Stores a base64-encoded image in the ImageStore, and returns a URI that can be used to access or display the image later.
+    /// Images are stored in memory only, and must be manually deleted when you are finished with them by calling removeImageForTag().
+    let inline addImageFromBase64 imageData : Promise<string> =
+        Async.FromContinuations(fun (onSuccess, onError, _) ->
+            ImageStore?addImageFromBase64(imageData, onSuccess, onError) |> ignore
         ) |> Async.StartAsPromise
 
 module Toast =
