@@ -3,6 +3,7 @@ module Fable.Helpers.ReactNativeImagePicker
 
 open Fable.Core
 open Fable.Import
+open Fable.PowerPack
 open Fable.Import.ReactNativeImagePicker
 type IP = ReactNativeImagePicker.Globals
 
@@ -34,6 +35,13 @@ open Props
 
 let inline showImagePicker (props: IImagePickerOptions list) f =
     IP.ImagePicker.showImagePicker(props |> unbox, f)
+    
+let inline launchCamera (props: IImagePickerOptions list) f =
+    IP.ImagePicker.launchCamera(props |> unbox, f)
+
+
+let inline launchImageLibrary (props: IImagePickerOptions list) f =
+    IP.ImagePicker.launchImageLibrary(props |> unbox, f)
 
 let inline showImagePickerAsync (props: IImagePickerOptions list) =
     Async.FromContinuations(fun (onSuccess, onError, _) ->
@@ -47,10 +55,7 @@ let inline showImagePickerAsync (props: IImagePickerOptions list) =
                         onError (System.Exception result.error)
                 else onSuccess None)
     )
+    
+let inline showImagePickerAsPromise (props: IImagePickerOptions list) =
+    showImagePickerAsync (props: IImagePickerOptions list) |> Async.StartAsPromise 
 
-let inline launchCamera (props: IImagePickerOptions list) f =
-    IP.ImagePicker.launchCamera(props |> unbox, f)
-
-
-let inline launchImageLibrary (props: IImagePickerOptions list) f =
-    IP.ImagePicker.launchImageLibrary(props |> unbox, f)
