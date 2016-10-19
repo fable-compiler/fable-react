@@ -6,17 +6,8 @@ open Fable.Import.ReactNative
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
-
-module KeyValueStore =
-    /// Retrieves all keys from the AsyncStorage.
-    let inline getAllKeys() : Async<string []> =
-        Async.FromContinuations(fun (success,fail,_) ->
-            Globals.AsyncStorage.getAllKeys
-                (Func<_,_,_>(fun err keys ->
-                                if err <> null && err.message <> null then
-                                    fail (unbox err)
-                                else
-                                    success (unbox keys))) |> ignore)
+open Fable.PowerPack
+open Fable.Core.JsInterop
 
 [<RequireQualifiedAccess>]
 module DB =
@@ -27,15 +18,15 @@ module DB =
     /// Removes all rows from the model.
     let inline clear<'a>() =
        let key = modelsKey + typeof<'a>.FullName
-       async {
+       promise {
             let s:string = [||] |> Serialize.toJson
-            let! _ = Globals.AsyncStorage.setItem(key,s) |> Async.AwaitPromise
+            let! _ = Globals.AsyncStorage.setItem(key,s)
             ()
        }
 
-    /// Gets or creates a new model.
-    let inline private getModel<'a> (key) : Async<Table<'a>> = async {
-        let! v = Globals.AsyncStorage.getItem (key) |> Async.AwaitPromise
+    /// Creates a new model.
+    let inline private getModel<'a> (key) : Promise<Table<'a>> = promise {
+        let! v = Globals.AsyncStorage.getItem (key)
         match v with
         | null -> return [||]
         | _ -> return Serialize.ofJson v
@@ -44,22 +35,22 @@ module DB =
     /// Adds a row to a model
     let inline add<'a>(data:'a) =
         let key = modelsKey + typeof<'a>.FullName
-        async {
+        promise {
             let! model = getModel<'a> key
 
             let newModel : string = Array.append [|unbox data|] model |> Serialize.toJson
-            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            let! _ = Globals.AsyncStorage.setItem(key,newModel)
             ()
         }
 
     /// Updates a row in a model
     let inline update<'a>(index, data:'a) =
         let key = modelsKey + typeof<'a>.FullName
-        async {
+        promise {
             let! model = getModel<'a> key
             model.[index] <- unbox data
             let newModel : string = Serialize.toJson model
-            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            let! _ = Globals.AsyncStorage.setItem(key,newModel)
             ()
         }
 
@@ -116,11 +107,11 @@ module DB =
     /// Adds multiple rows to a model
     let inline addMultiple<'a>(data:'a []) =
         let key = modelsKey + typeof<'a>.FullName
-        async {
+        promise {
             let! model = getModel<'a> key
 
             let newModel : string = Array.append data model |> Serialize.toJson
-            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            let! _ = Globals.AsyncStorage.setItem(key,newModel)
             ()
         }
 
@@ -135,17 +126,17 @@ module DB =
 
     /// Replaces all rows of a model
     let inline replace<'a>(data:'a []) =
-        let modelKey = modelsKey + typeof<'a>.FullName
-        async {
-            let newModel : string = data |> toJson
-            let! _ = Globals.AsyncStorage.setItem(modelKey,newModel) |> Async.AwaitPromise
+        let key = modelsKey + typeof<'a>.FullName
+        promise {
+            let newModel : string = data |> Serialize.toJson
+            let! _ = Globals.AsyncStorage.setItem(key,newModel)
             ()
         }
 
     /// Gets a row from the model
     let inline get<'a>(index:int) =
         let key = modelsKey + typeof<'a>.FullName
-        async {
+        promise {
             let! model = getModel<'a> key
             return model.[index]
         }
@@ -164,7 +155,7 @@ module DB =
     /// Gets the row count from the model
     let inline count<'a>() =
         let key = modelsKey + typeof<'a>.FullName
-        async {
+        promise {
             let! model = getModel<'a> key
             return model.Length
         }
