@@ -570,12 +570,12 @@ module Props =
         | TextDecorationColor of string
         | TextDecorationStyle of TextDecorationStyle
         | WritingDirection of WritingDirection
-        interface ITextStyleAndroid
         interface ITextStyleIOS
 
     [<KeyValueList>]
     type TextStyleAndroid =
         | TextAlignVertical of TextAlignVertical
+        interface ITextStyleAndroid
 
     [<KeyValueList>]
     type TextStyle =
@@ -1778,11 +1778,11 @@ let inline tabBarIOS (props:ITabBarIOSProperties list) : React.ReactElement<obj>
       unbox props,
       unbox([||])) |> unbox
 
-let inline scrollView (props:IScrollViewProperties list) : React.ReactElement<obj> = 
+let inline scrollView (props:IScrollViewProperties list) (children: React.ReactElement<obj> list) : React.ReactElement<obj> = 
     React.createElement(
       RN.ScrollView,
       unbox props,
-      unbox([||])) |> unbox
+      unbox(List.toArray children)) |> unbox
 
 let inline swipeableListView (props:SwipeableListViewProps<_> list) : React.ReactElement<obj> = 
     React.createElement(
