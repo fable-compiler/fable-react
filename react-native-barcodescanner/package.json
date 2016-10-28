@@ -1,6 +1,6 @@
 {
   "name": "fable-import-react-native-barcodescanner",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Fable bindings for React Native Barcode Scanner",
   "repository": {
     "type": "git",
