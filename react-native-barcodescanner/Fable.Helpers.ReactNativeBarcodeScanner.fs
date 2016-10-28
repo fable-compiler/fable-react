@@ -28,8 +28,9 @@ module Props =
 open Props
 
 type Barcode =
-    abstract [<CompiledName("data")>] Data: string with get, set
-    abstract [<CompiledName("type")>] Type: string with get, set
+    abstract data: string with get, set
+    abstract ``type``: string with get, set
+
 
 /// Creates a BarcodeScanner element
 let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead: Barcode -> unit) : React.ReactElement<obj> = 
