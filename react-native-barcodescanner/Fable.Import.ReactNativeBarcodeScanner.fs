@@ -17,12 +17,6 @@ module ReactNativeBarcodeScanner =
     type CameraType =
     | Front
     | Back
-
-
-    // and BarcodeScannerResult =
-    //     abstract data: string with get, set
-    //     abstract type: string with get, set
-
     and BarcodeScannerProperties =
         inherit React.Props<BarcodeScannerStatic>
         

@@ -24,10 +24,16 @@ module Props =
     | Style of BarcodeScannerStyle list
         interface IBarcodeScannerProperties
 
+
 open Props
 
+type Barcode =
+    abstract data: string with get, set
+    abstract ``type``: string with get, set
+
+
 /// Creates a BarcodeScanner element
-let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead: obj -> unit) : React.ReactElement<obj> = 
+let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead: Barcode -> unit) : React.ReactElement<obj> = 
     React.createElement(
       BCS.BarcodeScanner,
         JS.Object.assign(
