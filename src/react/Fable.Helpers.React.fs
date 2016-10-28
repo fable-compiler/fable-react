@@ -1,5 +1,4 @@
-[<Fable.Core.Erase>]
-module internal Fable.Helpers.React
+module Fable.Helpers.React
 
 open Fable.Core
 open Fable.Core.JsInterop
@@ -284,7 +283,7 @@ module Props =
         | WrapOption of obj
         | WritingMode of obj
         interface ICSSProp
-        
+
     [<KeyValueList>]
     type IProp =
         interface end
@@ -292,7 +291,7 @@ module Props =
     [<KeyValueList>]
     type IHTMLProp =
         inherit IProp
-    
+
     [<KeyValueList>]
     type Prop =
         | Key of string
@@ -573,154 +572,156 @@ module Props =
 
 open Props
 
-let inline fn (f: 'Props -> #React.ReactElement<obj>) (props: 'Props) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
+let fn (f: 'Props -> #React.ReactElement<obj>) (props: 'Props) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     unbox(React.createElement(U2.Case1(unbox f), toPlainJsObj props, unbox(List.toArray children)))
 
-let inline com<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
+[<PassGenerics>]
+let com<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     unbox(React.createElement(U2.Case1(unbox typeof<'T>), toPlainJsObj props, unbox(List.toArray children)))
 
-let inline from<'P> (com: React.ComponentClass<'P>) (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
+let from<'P> (com: React.ComponentClass<'P>) (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     unbox(React.createElement(U2.Case1 com, unbox<'P>(toPlainJsObj props), unbox(List.toArray children)))
 
-let inline domEl (tag: string) (props: IHTMLProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
+let domEl (tag: string) (props: IHTMLProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     unbox(React.createElement(tag, props, unbox(List.toArray children)))
 
-let inline svgEl (tag: string) (props: #IProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
+let svgEl (tag: string) (props: #IProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     unbox(React.createElement(tag, props, unbox(List.toArray children)))
 
-let inline a b c = domEl "a" b c
-let inline abbr b c = domEl "abbr" b c
-let inline address b c = domEl "address" b c
-let inline area b c = domEl "area" b c
-let inline article b c = domEl "article" b c
-let inline aside b c = domEl "aside" b c
-let inline audio b c = domEl "audio" b c
-let inline b b' c = domEl "b" b' c
-let inline ``base`` b c = domEl "base" b c
-let inline bdi b c = domEl "bdi" b c
-let inline bdo b c = domEl "bdo" b c
-let inline big b c = domEl "big" b c
-let inline blockquote b c = domEl "blockquote" b c
-let inline body b c = domEl "body" b c
-let inline br b c = domEl "br" b c
-let inline button b c = domEl "button" b c
-let inline canvas b c = domEl "canvas" b c
-let inline caption b c = domEl "caption" b c
-let inline cite b c = domEl "cite" b c
-let inline code b c = domEl "code" b c
-let inline col b c = domEl "col" b c
-let inline colgroup b c = domEl "colgroup" b c
-let inline data b c = domEl "data" b c
-let inline datalist b c = domEl "datalist" b c
-let inline dd b c = domEl "dd" b c
-let inline del b c = domEl "del" b c
-let inline details b c = domEl "details" b c
-let inline dfn b c = domEl "dfn" b c
-let inline dialog b c = domEl "dialog" b c
-let inline div b c = domEl "div" b c
-let inline dl b c = domEl "dl" b c
-let inline dt b c = domEl "dt" b c
-let inline em b c = domEl "em" b c
-let inline embed b c = domEl "embed" b c
-let inline fieldset b c = domEl "fieldset" b c
-let inline figcaption b c = domEl "figcaption" b c
-let inline figure b c = domEl "figure" b c
-let inline footer b c = domEl "footer" b c
-let inline form b c = domEl "form" b c
-let inline h1 b c = domEl "h1" b c
-let inline h2 b c = domEl "h2" b c
-let inline h3 b c = domEl "h3" b c
-let inline h4 b c = domEl "h4" b c
-let inline h5 b c = domEl "h5" b c
-let inline h6 b c = domEl "h6" b c
-let inline head b c = domEl "head" b c
-let inline header b c = domEl "header" b c
-let inline hgroup b c = domEl "hgroup" b c
-let inline hr b c = domEl "hr" b c
-let inline html b c = domEl "html" b c
-let inline i b c = domEl "i" b c
-let inline iframe b c = domEl "iframe" b c
-let inline img b c = domEl "img" b c
-let inline input b c = domEl "input" b c
-let inline ins b c = domEl "ins" b c
-let inline kbd b c = domEl "kbd" b c
-let inline keygen b c = domEl "keygen" b c
-let inline label b c = domEl "label" b c
-let inline legend b c = domEl "legend" b c
-let inline li b c = domEl "li" b c
-let inline link b c = domEl "link" b c
-let inline main b c = domEl "main" b c
-let inline map b c = domEl "map" b c
-let inline mark b c = domEl "mark" b c
-let inline menu b c = domEl "menu" b c
-let inline menuitem b c = domEl "menuitem" b c
-let inline meta b c = domEl "meta" b c
-let inline meter b c = domEl "meter" b c
-let inline nav b c = domEl "nav" b c
-let inline noscript b c = domEl "noscript" b c
-let inline ``object`` b c = domEl "object" b c
-let inline ol b c = domEl "ol" b c
-let inline optgroup b c = domEl "optgroup" b c
-let inline option b c = domEl "option" b c
-let inline output b c = domEl "output" b c
-let inline p b c = domEl "p" b c
-let inline param b c = domEl "param" b c
-let inline picture b c = domEl "picture" b c
-let inline pre b c = domEl "pre" b c
-let inline progress b c = domEl "progress" b c
-let inline q b c = domEl "q" b c
-let inline rp b c = domEl "rp" b c
-let inline rt b c = domEl "rt" b c
-let inline ruby b c = domEl "ruby" b c
-let inline s b c = domEl "s" b c
-let inline samp b c = domEl "samp" b c
-let inline script b c = domEl "script" b c
-let inline section b c = domEl "section" b c
-let inline select b c = domEl "select" b c
-let inline small b c = domEl "small" b c
-let inline source b c = domEl "source" b c
-let inline span b c = domEl "span" b c
-let inline strong b c = domEl "strong" b c
-let inline style b c = domEl "style" b c
-let inline sub b c = domEl "sub" b c
-let inline summary b c = domEl "summary" b c
-let inline sup b c = domEl "sup" b c
-let inline table b c = domEl "table" b c
-let inline tbody b c = domEl "tbody" b c
-let inline td b c = domEl "td" b c
-let inline textarea b c = domEl "textarea" b c
-let inline tfoot b c = domEl "tfoot" b c
-let inline th b c = domEl "th" b c
-let inline thead b c = domEl "thead" b c
-let inline time b c = domEl "time" b c
-let inline title b c = domEl "title" b c
-let inline tr b c = domEl "tr" b c
-let inline track b c = domEl "track" b c
-let inline u b c = domEl "u" b c
-let inline ul b c = domEl "ul" b c
-let inline var b c = domEl "var" b c
-let inline video b c = domEl "video" b c
-let inline wbr b c = domEl "wbr" b c
-let inline svg b c = svgEl "svg" b c
-let inline circle b c = svgEl "circle" b c
-let inline clipPath b c = svgEl "clipPath" b c
-let inline defs b c = svgEl "defs" b c
-let inline ellipse b c = svgEl "ellipse" b c
-let inline g b c = svgEl "g" b c
-let inline image b c = svgEl "image" b c
-let inline line b c = svgEl "line" b c
-let inline linearGradient b c = svgEl "linearGradient" b c
-let inline mask b c = svgEl "mask" b c
-let inline path b c = svgEl "path" b c
-let inline pattern b c = svgEl "pattern" b c
-let inline polygon b c = svgEl "polygon" b c
-let inline polyline b c = svgEl "polyline" b c
-let inline radialGradient b c = svgEl "radialGradient" b c
-let inline rect b c = svgEl "rect" b c
-let inline stop b c = svgEl "stop" b c
-let inline text b c = svgEl "text" b c
-let inline tspan b c = svgEl "tspan" b c
+let a b c = domEl "a" b c
+let abbr b c = domEl "abbr" b c
+let address b c = domEl "address" b c
+let area b c = domEl "area" b c
+let article b c = domEl "article" b c
+let aside b c = domEl "aside" b c
+let audio b c = domEl "audio" b c
+let b b' c = domEl "b" b' c
+let ``base`` b c = domEl "base" b c
+let bdi b c = domEl "bdi" b c
+let bdo b c = domEl "bdo" b c
+let big b c = domEl "big" b c
+let blockquote b c = domEl "blockquote" b c
+let body b c = domEl "body" b c
+let br b c = domEl "br" b c
+let button b c = domEl "button" b c
+let canvas b c = domEl "canvas" b c
+let caption b c = domEl "caption" b c
+let cite b c = domEl "cite" b c
+let code b c = domEl "code" b c
+let col b c = domEl "col" b c
+let colgroup b c = domEl "colgroup" b c
+let data b c = domEl "data" b c
+let datalist b c = domEl "datalist" b c
+let dd b c = domEl "dd" b c
+let del b c = domEl "del" b c
+let details b c = domEl "details" b c
+let dfn b c = domEl "dfn" b c
+let dialog b c = domEl "dialog" b c
+let div b c = domEl "div" b c
+let dl b c = domEl "dl" b c
+let dt b c = domEl "dt" b c
+let em b c = domEl "em" b c
+let embed b c = domEl "embed" b c
+let fieldset b c = domEl "fieldset" b c
+let figcaption b c = domEl "figcaption" b c
+let figure b c = domEl "figure" b c
+let footer b c = domEl "footer" b c
+let form b c = domEl "form" b c
+let h1 b c = domEl "h1" b c
+let h2 b c = domEl "h2" b c
+let h3 b c = domEl "h3" b c
+let h4 b c = domEl "h4" b c
+let h5 b c = domEl "h5" b c
+let h6 b c = domEl "h6" b c
+let head b c = domEl "head" b c
+let header b c = domEl "header" b c
+let hgroup b c = domEl "hgroup" b c
+let hr b c = domEl "hr" b c
+let html b c = domEl "html" b c
+let i b c = domEl "i" b c
+let iframe b c = domEl "iframe" b c
+let img b c = domEl "img" b c
+let input b c = domEl "input" b c
+let ins b c = domEl "ins" b c
+let kbd b c = domEl "kbd" b c
+let keygen b c = domEl "keygen" b c
+let label b c = domEl "label" b c
+let legend b c = domEl "legend" b c
+let li b c = domEl "li" b c
+let link b c = domEl "link" b c
+let main b c = domEl "main" b c
+let map b c = domEl "map" b c
+let mark b c = domEl "mark" b c
+let menu b c = domEl "menu" b c
+let menuitem b c = domEl "menuitem" b c
+let meta b c = domEl "meta" b c
+let meter b c = domEl "meter" b c
+let nav b c = domEl "nav" b c
+let noscript b c = domEl "noscript" b c
+let ``object`` b c = domEl "object" b c
+let ol b c = domEl "ol" b c
+let optgroup b c = domEl "optgroup" b c
+let option b c = domEl "option" b c
+let output b c = domEl "output" b c
+let p b c = domEl "p" b c
+let param b c = domEl "param" b c
+let picture b c = domEl "picture" b c
+let pre b c = domEl "pre" b c
+let progress b c = domEl "progress" b c
+let q b c = domEl "q" b c
+let rp b c = domEl "rp" b c
+let rt b c = domEl "rt" b c
+let ruby b c = domEl "ruby" b c
+let s b c = domEl "s" b c
+let samp b c = domEl "samp" b c
+let script b c = domEl "script" b c
+let section b c = domEl "section" b c
+let select b c = domEl "select" b c
+let small b c = domEl "small" b c
+let source b c = domEl "source" b c
+let span b c = domEl "span" b c
+let strong b c = domEl "strong" b c
+let style b c = domEl "style" b c
+let sub b c = domEl "sub" b c
+let summary b c = domEl "summary" b c
+let sup b c = domEl "sup" b c
+let table b c = domEl "table" b c
+let tbody b c = domEl "tbody" b c
+let td b c = domEl "td" b c
+let textarea b c = domEl "textarea" b c
+let tfoot b c = domEl "tfoot" b c
+let th b c = domEl "th" b c
+let thead b c = domEl "thead" b c
+let time b c = domEl "time" b c
+let title b c = domEl "title" b c
+let tr b c = domEl "tr" b c
+let track b c = domEl "track" b c
+let u b c = domEl "u" b c
+let ul b c = domEl "ul" b c
+let var b c = domEl "var" b c
+let video b c = domEl "video" b c
+let wbr b c = domEl "wbr" b c
+let svg b c = svgEl "svg" b c
+let circle b c = svgEl "circle" b c
+let clipPath b c = svgEl "clipPath" b c
+let defs b c = svgEl "defs" b c
+let ellipse b c = svgEl "ellipse" b c
+let g b c = svgEl "g" b c
+let image b c = svgEl "image" b c
+let line b c = svgEl "line" b c
+let linearGradient b c = svgEl "linearGradient" b c
+let mask b c = svgEl "mask" b c
+let path b c = svgEl "path" b c
+let pattern b c = svgEl "pattern" b c
+let polygon b c = svgEl "polygon" b c
+let polyline b c = svgEl "polyline" b c
+let radialGradient b c = svgEl "radialGradient" b c
+let rect b c = svgEl "rect" b c
+let stop b c = svgEl "stop" b c
+let text b c = svgEl "text" b c
+let tspan b c = svgEl "tspan" b c
 
-// These functions just unbox elements accepted as React elements
-let inline str (s: string): React.ReactElement<obj> = unbox s
-let inline opt (o: React.ReactElement<obj> option): React.ReactElement<obj> = unbox o
+/// Cast a string to a React element (erased in runtime)
+let [<Emit("$0")>] str (s: string): React.ReactElement<obj> = unbox s
+/// Cast an option value to a React element (erased in runtime)
+let [<Emit("$0")>] opt (o: React.ReactElement<obj> option): React.ReactElement<obj> = unbox o

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doc>
+<assembly><name>Fable.React</name></assembly>
+<members>
+<member name="M:Fable.Helpers.React.opt(Microsoft.FSharp.Core.FSharpOption{Fable.Import.React.ReactElement{System.Object}})">
+<summary>
+ Cast an option value to a React element (erased in runtime)
+</summary>
+</member>
+<member name="M:Fable.Helpers.React.str(System.String)">
+<summary>
+ Cast a string to a React element (erased in runtime)
+</summary>
+</member>
+</members>
+</doc>

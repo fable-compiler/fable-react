@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "fable-react",
-  "version": "0.0.0",
+  "version": "0.7.0-alpha.1",
   "description": "Fable bindings and helpers for React and React Native",
   "scripts": {
     "build": "node build",

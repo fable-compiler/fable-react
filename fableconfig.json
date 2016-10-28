@@ -1,0 +1,6 @@
+{
+    "projFile": "src/Fable.React.fsproj",
+    "outDir": "npm",
+    "dll": true,
+    "sourceMaps": true
+}

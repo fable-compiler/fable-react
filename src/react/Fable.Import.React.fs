@@ -4,6 +4,7 @@ open Fable.Core
 open Fable.Import.JS
 open Fable.Import.Browser
 
+[<Erase>]
 module React =
     type ReactType =
         U3<string, ComponentClass<obj>, StatelessComponent<obj>>
@@ -1029,7 +1030,8 @@ module React =
         member __.cloneElement(element: ReactElement<'P>, props: 'P, [<ParamArray>] children: ReactNode[]): ReactElement<'P> = failwith "JS only"
         member __.isValidElement(``object``: obj): bool = failwith "JS only"
 
-        
+
+[<Erase>]
 module ReactDom =
     open React
 
@@ -1054,7 +1056,7 @@ module ReactDom =
         member __.unstable_renderSubtreeIntoContainer(parentComponent: Component<obj, obj>, nextElement: ReactElement<'P>, container: Element, ?callback: Func<Component<'P, 'S>, obj>): Component<'P, 'S> = failwith "JS only"
 
 
-[<AutoOpen>]
+[<AutoOpen; Erase>]
 module React_Extensions =
     let [<Import("*","react")>] React: React.Globals = failwith "JS only"
     let [<Import("*","react-dom")>] ReactDom: ReactDom.Globals = failwith "JS only"
