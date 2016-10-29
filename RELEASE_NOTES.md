@@ -1,3 +1,7 @@
+### 0.7.0-alpha.3
+
+* Import `fable-core` modules with `.js` extension
+
 ### 0.7.0-alpha.2
 
 * Distribute also with `umd` modules
