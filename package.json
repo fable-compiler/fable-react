@@ -1,5 +1,4 @@
 {
-  "private": true,
   "name": "fable-react",
   "version": "0.0.0",
   "description": "Fable bindings and helpers for React and React Native",
