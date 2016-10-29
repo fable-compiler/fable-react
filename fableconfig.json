@@ -2,5 +2,11 @@
     "projFile": "src/Fable.React.fsproj",
     "outDir": "npm",
     "dll": true,
-    "sourceMaps": true
+    "sourceMaps": true,
+    "targets": {
+        "umd": {
+            "module": "umd",
+            "outDir": "npm/umd"
+        }
+    }
 }

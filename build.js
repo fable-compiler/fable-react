@@ -6,6 +6,7 @@ var targets = {
     all() {
         return fable.promise(fs.remove, "npm")
             .then(_ => fable.compile())
+            .then(_ => fable.compile({target: "umd"}))
             .then(_ => fable.promise(fs.copy, "package.json", "npm/package.json"))
             .then(_ => fable.promise(fs.copy, "README.md", "npm/README.md"))
             .then(_ => fable.promise(fs.readFile, "RELEASE_NOTES.md"))
@@ -18,5 +19,5 @@ var targets = {
 
 targets[process.argv[2] || "all"]().catch(err => {
     console.log("[ERROR] " + err);
-    proccess.exit(-1);
+    process.exit(-1);
 });
