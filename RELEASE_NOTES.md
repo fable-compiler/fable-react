@@ -1,3 +1,7 @@
+### 0.7.0-alpha.4
+
+* Recompile with latest Fable alpha
+
 ### 0.7.0-alpha.3
 
 * Import `fable-core` modules with `.js` extension
