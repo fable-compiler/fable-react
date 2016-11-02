@@ -53,6 +53,7 @@ module Props =
 
     [<KeyValueList>]
     type MenuOptionProperties =
+        | Value of int
         | Text of string
         interface IMenuOptionProperties
 open Props
@@ -79,16 +80,14 @@ let inline menu (props:IMenuProperties list) (onSelect: obj -> unit) (children: 
         
 
 /// Creates a MenuTrigger element
-let inline menuTrigger (props:IMenuProperties list) (onPress: unit -> unit) : React.ReactElement<obj> = 
+let inline menuTrigger (props:IMenuTriggerProperties list) (onPress: unit -> unit) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
     React.createElement(
       BPM.MenuTrigger,
         JS.Object.assign(
             createObj ["onPress" ==> onPress],
             props)
         |> unbox,
-        unbox [||]) |> unbox
-        
-
+        unbox(List.toArray children)) |> unbox
 
 /// Creates a MenuOptions element
 let inline menuOptions (props:IMenuOptionsProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = 
@@ -103,5 +102,5 @@ let inline menuOption (props:IMenuOptionProperties list) : React.ReactElement<ob
     React.createElement(
       BPM.MenuOption,
         props |> unbox,
-        unbox [||]) |> unbox        
+        unbox [||]) |> unbox
         

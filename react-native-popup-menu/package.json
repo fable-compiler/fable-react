@@ -1,6 +1,6 @@
 {
   "name": "fable-import-react-native-popup-menu",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Fable bindings for react-native-popup-menu",
   "repository": {
     "type": "git",
