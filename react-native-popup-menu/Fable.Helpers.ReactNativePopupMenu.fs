@@ -1,36 +1,55 @@
 [<Fable.Core.Erase>]
-module Fable.Helpers.ReactNativePopupMenu
+module internal Fable.Helpers.ReactNativePopupMenu
 
 open Fable.Core.JsInterop
 open Fable.Core
 open Fable.Import
+open Fable.Import.ReactNative
+open Fable.Helpers.ReactNative.Props
+open Fable.Helpers.ReactNative
 open Fable.Import.ReactNativePopupMenu
-type BCS = ReactNativePopupMenu.Globals
+type BPM = ReactNativePopupMenu.Globals
 
 module Props =
 
-    [<KeyValueList; RequireQualifiedAccess>]
-    type MenuContextStyle =
-        | Flex of int
-
     [<KeyValueList>]
     type IMenuContextProperties =
+        inherit IViewProperties
+
+    [<KeyValueList>]
+    type MenuContextProperties =
+        | Style of IStyle list
+        interface IMenuContextProperties
+
+    [<KeyValueList>]
+    type IMenuProperties =
         interface end
 
-    [<KeyValueList; RequireQualifiedAccess>]
-    type MenuContextProperties =
-    | Style of MenuContextStyle list
-        interface IMenuContextProperties
+    [<KeyValueList>]
+    type MenuProperties =
+        | Opened of bool
+        interface IMenuProperties
 
 
 open Props
 
 /// Creates a MenuContext element
-let inline menuContext (props:IMenuContextProperties list) (onBackdropPress: unit -> unit) : React.ReactElement<obj> = 
+let inline menuContext (props:IMenuContextProperties list) (onBackdropPress: unit -> unit) children : React.ReactElement<obj> = 
     React.createElement(
-      BCS.MenuContext,
+      BPM.MenuContext,
         JS.Object.assign(
             createObj ["onBackdropPress" ==> onBackdropPress],
             props)
         |> unbox,
-        unbox [||]) |> unbox
+        unbox children) |> unbox
+
+/// Creates a Menu element
+let inline menu (props:IMenuProperties list) (onSelect: obj -> unit) children : React.ReactElement<obj> = 
+    React.createElement(
+      BPM.Menu,
+        JS.Object.assign(
+            createObj ["onSelect" ==> onSelect],
+            props)
+        |> unbox,
+        unbox children) |> unbox
+        
