@@ -56,7 +56,7 @@ module ReactNativePopupMenu =
 
     type Globals =
         [<Import("MenuContext", "react-native-popup-menu")>] static member MenuContext with get(): MenuContextStatic = failwith "JS only" and set(v: MenuContextStatic): unit = failwith "JS only"
-        [<Import("Menu", "react-native-popup-menu")>] static member Menu with get(): MenuStatic = failwith "JS only" and set(v: MenuStatic): unit = failwith "JS only"
+        [<Import("default", "react-native-popup-menu")>] static member Menu with get(): MenuStatic = failwith "JS only" and set(v: MenuStatic): unit = failwith "JS only"
         [<Import("MenuTrigger", "react-native-popup-menu")>] static member MenuTrigger with get(): MenuTriggerStatic = failwith "JS only" and set(v: MenuTriggerStatic): unit = failwith "JS only"
         [<Import("MenuOptions", "react-native-popup-menu")>] static member MenuOptions with get(): MenuOptionsStatic = failwith "JS only" and set(v: MenuOptionsStatic): unit = failwith "JS only"
 
