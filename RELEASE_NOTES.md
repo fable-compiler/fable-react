@@ -1,3 +1,7 @@
+### 0.7.0-alpha.5
+
+* Inline helpers
+
 ### 0.7.0-alpha.4
 
 * Recompile with latest Fable alpha
