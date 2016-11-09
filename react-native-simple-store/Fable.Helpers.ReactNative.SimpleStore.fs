@@ -15,7 +15,7 @@ module KeyValueStore =
             Globals.AsyncStorage.getAllKeys 
                 (Func<_,_,_>(fun err keys -> 
                                 if err <> null && err.message <> null then
-                                    failwithf "%s" err.message
+                                    fail (unbox err)
                                 else
                                     success (unbox keys))) |> ignore)
 
