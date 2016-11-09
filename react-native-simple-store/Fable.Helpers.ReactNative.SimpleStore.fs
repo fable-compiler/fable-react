@@ -100,13 +100,21 @@ module DB =
             ()
         }    
 
+    /// Replaces all rows of a model
+    let inline replaceWithKey<'a>(key,data:'a []) =
+        let modelKey = modelsKey + typeof<'a>.FullName
+        async {
+            let newModel : string = data |> toJson
+            let! _ = Globals.AsyncStorage.setItem(modelKey + "/" + key,newModel) |> Async.AwaitPromise
+            ()
+        }
 
     /// Replaces all rows of a model
     let inline replace<'a>(data:'a []) =
-        let key = modelsKey + typeof<'a>.FullName
+        let modelKey = modelsKey + typeof<'a>.FullName
         async {
             let newModel : string = data |> toJson
-            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            let! _ = Globals.AsyncStorage.setItem(modelKey,newModel) |> Async.AwaitPromise
             ()
         }
 
@@ -121,6 +129,13 @@ module DB =
     /// Gets all rows from the model
     let inline getAll<'a>() =
         let key = modelsKey + typeof<'a>.FullName
+        getModel<'a> key
+
+
+
+    /// Gets all rows from the model
+    let inline getAllWithKey<'a>(key) =
+        let key = modelsKey + typeof<'a>.FullName + "/" + key
         getModel<'a> key
 
     /// Gets the row count from the model
