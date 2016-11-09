@@ -19,36 +19,6 @@ module KeyValueStore =
                                 else
                                     success (unbox keys))) |> ignore)
 
-    /// Retrieves multiple values from the AsyncStorage.
-    let inline multiGet(keys:string[]) =
-        Async.FromContinuations(fun (success,fail,_) -> 
-            Globals.AsyncStorage.multiGet 
-                (unbox keys,Func<_,_,_>(fun errs stores -> 
-                                if errs <> null && errs.Count >0 then
-                                    fail (unbox errs.[0])
-                                else
-                                    stores
-                                    |> unbox
-                                    |> Array.map (fun (r,i,s:string[][]) -> s.[i].[0],s.[i].[1])
-                                    |> success)) |> ignore)
-
-    /// Stores multiple values in the AsyncStorage.
-    let inline multiSet(kvPairs:string[][]) =
-        Async.FromContinuations(fun (success,fail,_) -> 
-            Globals.AsyncStorage.multiSet 
-                (unbox kvPairs,Func<_,_>(fun errs -> 
-                                if errs <> null && errs.Count >0 then
-                                    fail (unbox errs.[0])
-                                else
-                                    ())) |> ignore)
-
-    /// Stores multiple values in the AsyncStorage.
-    let inline multiSetWithPairs(kvPairs:(string*string)[]) =
-        kvPairs
-        |> Array.map (fun (k,v) -> [|k; v|])
-        |> multiSet
-
-
 module DB =
     [<Literal>]
     let private modelsKey = "models/"
