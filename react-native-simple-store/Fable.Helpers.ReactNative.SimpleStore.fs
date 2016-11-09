@@ -162,7 +162,8 @@ module DB =
         }
 
 module ShardedDB =
-    let private modelsKey = "models/"
+    [<Literal>]
+    let private modelsKey = "sharded/"
     type Table<'a> = 'a[]
 
 
