@@ -6,7 +6,6 @@ open Fable.Import.ReactNative
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
-open Fable.Core.JsInterop
 
 module KeyValueStore =
 
@@ -55,7 +54,7 @@ module DB =
     let private modelsKey = "models/"
     type Table<'a> = 'a[]
 
-    // Removes all rows from the model.
+    /// Removes all rows from the model.
     let inline clear<'a>() =
        let key = modelsKey + typeof<'a>.FullName
        async {
@@ -72,7 +71,7 @@ module DB =
         | _ -> return ofJson v
     }
 
-    // Adds a row to a model
+    /// Adds a row to a model
     let inline add<'a>(data:'a) = 
         let key = modelsKey + typeof<'a>.FullName
         async {
@@ -83,7 +82,7 @@ module DB =
             ()
         }
 
-    // Updates a row in a model
+    /// Updates a row in a model
     let inline update<'a>(index, data:'a) = 
         let key = modelsKey + typeof<'a>.FullName
         async {
@@ -94,7 +93,7 @@ module DB =
             ()
         }
 
-    // Updates multiple rows in a model
+    /// Updates multiple rows in a model
     let inline updateMultiple<'a>(values) = 
         let key = modelsKey + typeof<'a>.FullName
         async {
@@ -107,6 +106,7 @@ module DB =
             ()
         }
 
+    ///  Update data by an update function.
     let inline updateWithFunction<'a>(updateF: 'a[] -> 'a[]) = 
         let key = modelsKey + typeof<'a>.FullName
         async {
@@ -119,7 +119,7 @@ module DB =
             ()
         }
 
-    // Adds multiple rows to a model
+    /// Adds multiple rows to a model
     let inline addMultiple<'a>(data:'a []) =
         let key = modelsKey + typeof<'a>.FullName
         async {
@@ -131,16 +131,16 @@ module DB =
         }    
 
 
-    // Replaces all rows of a model
+    /// Replaces all rows of a model
     let inline replace<'a>(data:'a []) =
         let key = modelsKey + typeof<'a>.FullName
         async {
             let newModel : string = data |> toJson
             let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
             ()
-        }          
+        }
 
-    // Gets a row from the model
+    /// Gets a row from the model
     let inline get<'a>(index:int) = 
         let key = modelsKey + typeof<'a>.FullName
         async {
@@ -148,15 +148,32 @@ module DB =
             return model.[index]
         }
 
-    // Gets all rows from the model
+    /// Gets all rows from the model
     let inline getAll<'a>() =
         let key = modelsKey + typeof<'a>.FullName
         getModel<'a> key
 
-    // Gets the row count from the model
+    /// Gets the row count from the model
     let inline count<'a>() = 
         let key = modelsKey + typeof<'a>.FullName
         async {
             let! model = getModel<'a> key
             return model.Length
+        }
+
+module ShardedDB =
+    let private modelsKey = "models/"
+    type Table<'a> = 'a[]
+
+
+    /// Replaces all rows of a model
+    let inline replace<'a>(shardFunction:'a -> int,data:'a []) =
+        let key = modelsKey + typeof<'a>.FullName
+        async {
+            let shards = data |> Array.groupBy shardFunction
+            
+            for shard,data in shards do
+                let newModel : string = data |> Fable.Core.JsInterop.toJson
+                let! _ = Globals.AsyncStorage.setItem(key + "/" + shard.ToString(),newModel) |> Async.AwaitPromise
+                ()
         }
