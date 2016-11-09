@@ -8,6 +8,17 @@ open Fable.Core.JsInterop
 open Fable.Import
 open Fable.Core.JsInterop
 
+module KeyValueStore =
+
+    let getAllKeys() : Async<string []> = 
+        Async.FromContinuations(fun (success,fail,_) -> 
+            Globals.AsyncStorage.getAllKeys 
+                (Func<_,_,_>(fun err keys -> 
+                                if err <> null && err.message <> null then
+                                    failwithf "%s" err.message
+                                else
+                                    success (unbox keys))) |> ignore)
+
 module DB =
     [<Literal>]    
     let private modelsKey = "models/"
