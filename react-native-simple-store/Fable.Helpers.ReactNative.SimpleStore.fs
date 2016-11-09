@@ -10,7 +10,7 @@ open Fable.Core.JsInterop
 
 module KeyValueStore =
 
-    let getAllKeys() : Async<string []> = 
+    let inline getAllKeys() : Async<string []> = 
         Async.FromContinuations(fun (success,fail,_) -> 
             Globals.AsyncStorage.getAllKeys 
                 (Func<_,_,_>(fun err keys -> 
