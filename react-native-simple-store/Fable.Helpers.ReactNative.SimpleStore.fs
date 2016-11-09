@@ -63,7 +63,7 @@ module DB =
             ()
        }
 
-    /// Creates a new model.
+    /// Gets or creates a new model.
     let inline private getModel<'a> (key) : Async<Table<'a>> = async {
         let! v = Globals.AsyncStorage.getItem (key) |> Async.AwaitPromise
         match v with
@@ -177,4 +177,23 @@ module ShardedDB =
                 let newModel : string = data |> Fable.Core.JsInterop.toJson
                 let! _ = Globals.AsyncStorage.setItem(key + "/" + shard.ToString(),newModel) |> Async.AwaitPromise
                 ()
+        }
+
+    /// Gets or creates a new model.
+    let inline private getModel<'a> (key) : Async<Table<'a>> = async {
+        let! v = Globals.AsyncStorage.getItem (key) |> Async.AwaitPromise
+        match v with
+        | null -> return [||]
+        | _ -> return ofJson v
+    }        
+
+    /// Gets all rows from the model
+    let inline getAll<'a>(shardSize) =
+        async {
+            let result = ref [||]
+            for shard in 1..shardSize-1 do
+                let key = modelsKey + typeof<'a>.FullName + "/" + shard.ToString()
+                let! shardData = getModel<'a> key
+                result := Array.append shardData !result
+            return !result
         }
