@@ -52,6 +52,19 @@ module DB =
             ()
         }
 
+    // Updates multiple rows in a model
+    let inline updateMultiple<'a>(values) = 
+        let key = modelsKey + typeof<'a>.FullName
+        async {
+            let! model = getModel<'a> key
+            for index, data:'a in values do
+                model.[index] <- unbox data
+                
+            let newModel : string =  toJson model
+            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            ()
+        }
+
     // Adds multiple rows to a model
     let inline addMultiple<'a>(data:'a []) =
         let key = modelsKey + typeof<'a>.FullName
