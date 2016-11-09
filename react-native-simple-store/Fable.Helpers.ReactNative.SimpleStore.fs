@@ -65,6 +65,18 @@ module DB =
             ()
         }
 
+    let inline updateWithFunction<'a>(updateF: 'a[] -> 'a[]) = 
+        let key = modelsKey + typeof<'a>.FullName
+        async {
+            let! model = getModel<'a> key
+
+            let updated = updateF model
+                
+            let newModel : string = toJson updated
+            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            ()
+        }
+
     // Adds multiple rows to a model
     let inline addMultiple<'a>(data:'a []) =
         let key = modelsKey + typeof<'a>.FullName
