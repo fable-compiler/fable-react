@@ -41,6 +41,8 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="../node_modules/fable-core/Fable.Core.dll" />
   </ItemGroup>
   <ItemGroup>

@@ -1,10 +1,11 @@
+[<Fable.Core.Erase>]
 module Fable.Helpers.React
 
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 
-let [<Erase; Literal>] private React = "react"
+let [<Literal>] private React = "react"
 
 module Props =
     [<KeyValueList>]
@@ -574,294 +575,342 @@ module Props =
 
 open Props
 
-/// Instantiate a stateless component from a function
-[<Import("createElement", from=React)>]
-[<Emit("$0($1, $replace:Fable.Core.JsInterop.toPlainJsObj($2), $replace:Hack.toArrayNonEmpty($3))")>]
-let fn (f: 'Props -> #React.ReactElement<obj>) (props: 'Props) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+open Fable.AST
+open Fable.AST.Fable.Util
+
+type Emitter() =
+    let createEl = makeImport "createElement" React
+    let toPlainJsObj (expr: Fable.Expr) =
+        CoreLibCall("Util", Some "toPlainJsObj", false, [expr])
+        |> makeCall expr.Range expr.Type
+    let (|CoreMeth|_|) coreMod meth = function
+        | Fable.Value(Fable.ImportRef(meth', coreMod', Fable.CoreLib))
+            when meth' = meth && coreMod' = coreMod -> Some CoreMeth
+        | _ -> None
+    let toArrayNonEmpty = function
+        | Fable.Apply(CoreMeth "List" "default",[],_,_,_) ->
+            Fable.Value Fable.Null
+        | Fable.Apply(CoreMeth "List" "ofArray", [arr], Fable.ApplyMeth,_,_) -> arr
+        | expr ->
+            GlobalCall ("Array", Some "from", false, [expr])
+            |> makeCall expr.Range (Fable.Array Fable.Any)
+
+    member x.Com(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
+        let args =
+            match i.args with
+            | [props; children] ->
+                let com = makeNonGenTypeRef i.methodTypeArgs.Head
+                [com; toPlainJsObj props; toArrayNonEmpty children]
+            | _ -> failwith "Unexpected arguments"
+        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
+    member x.From(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
+        let args =
+            match i.args with
+            | [com; props; children] ->
+                [com; toPlainJsObj props; toArrayNonEmpty children]
+            | _ -> failwith "Unexpected arguments"
+        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
+
+    member x.DomEl(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
+        let args =
+            match i.args with
+            | [tag; props; children] ->
+                [tag; props; toArrayNonEmpty children]
+            | _ -> failwith "Unexpected arguments"
+        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
+
+    member x.Tagged(_com: Fable.ICompiler, i: Fable.ApplyInfo, tag: string) =
+        let args =
+            match i.args with
+            | [props; children] ->
+                let tag = Fable.Value(Fable.StringConst tag)
+                [tag; props; toArrayNonEmpty children]
+            | _ -> failwith "Unexpected arguments"
+        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
 
 /// Instantiate a React component from a type inheriting React.Component<>
-[<Import("createElement", from=React)>]
-[<Emit("$0($'T, $replace:Fable.Core.JsInterop.toPlainJsObj($1), $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Com")>]
 let com<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+/// Instantiate a stateless component from a function
+
+[<Emit(typeof<Emitter>, "From")>]
+let fn (f: 'Props -> #React.ReactElement<obj>) (props: 'Props) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
 
 /// Instantiate an imported React component
-[<Import("createElement", from=React)>]
-[<Emit("$0($1, $replace:Fable.Core.JsInterop.toPlainJsObj($2), $replace:Hack.toArrayNonEmpty($3))")>]
+[<Emit(typeof<Emitter>, "From")>]
 let from<'P> (com: React.ComponentClass<'P>) (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
 
 /// Instantiate a DOM React element
-[<Import("createElement", from=React)>]
-[<Emit("$0($1, $2, $replace:Hack.toArrayNonEmpty($3))")>]
+[<Emit(typeof<Emitter>, "DomEl")>]
 let domEl (tag: string) (props: IHTMLProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
 
 /// Instantiate an SVG React element
-[<Import("createElement", from=React)>]
-[<Emit("$0($1, $2, $replace:Hack.toArrayNonEmpty($3))")>]
+[<Emit(typeof<Emitter>, "DomEl")>]
 let svgEl (tag: string) (props: #IProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
 
-[<Import("createElement", from=React); Emit("$0('a', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "a")>]
 let a b c = domEl "a" b c
-[<Import("createElement", from=React); Emit("$0('abbr', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "abbr")>]
 let abbr b c = domEl "abbr" b c
-[<Import("createElement", from=React); Emit("$0('address', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "address")>]
 let address b c = domEl "address" b c
-[<Import("createElement", from=React); Emit("$0('area', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "area")>]
 let area b c = domEl "area" b c
-[<Import("createElement", from=React); Emit("$0('article', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "article")>]
 let article b c = domEl "article" b c
-[<Import("createElement", from=React); Emit("$0('aside', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "aside")>]
 let aside b c = domEl "aside" b c
-[<Import("createElement", from=React); Emit("$0('audio', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "audio")>]
 let audio b c = domEl "audio" b c
-[<Import("createElement", from=React); Emit("$0('b', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "b")>]
 let b b' c = domEl "b" b' c
-[<Import("createElement", from=React); Emit("$0('base', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "base")>]
 let ``base`` b c = domEl "base" b c
-[<Import("createElement", from=React); Emit("$0('bdi', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "bdi")>]
 let bdi b c = domEl "bdi" b c
-[<Import("createElement", from=React); Emit("$0('bdo', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "bdo")>]
 let bdo b c = domEl "bdo" b c
-[<Import("createElement", from=React); Emit("$0('big', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "big")>]
 let big b c = domEl "big" b c
-[<Import("createElement", from=React); Emit("$0('blockquote', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "blockquote")>]
 let blockquote b c = domEl "blockquote" b c
-[<Import("createElement", from=React); Emit("$0('body', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "body")>]
 let body b c = domEl "body" b c
-[<Import("createElement", from=React); Emit("$0('br', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "br")>]
 let br b c = domEl "br" b c
-[<Import("createElement", from=React); Emit("$0('button', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "button")>]
 let button b c = domEl "button" b c
-[<Import("createElement", from=React); Emit("$0('canvas', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "canvas")>]
 let canvas b c = domEl "canvas" b c
-[<Import("createElement", from=React); Emit("$0('caption', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "caption")>]
 let caption b c = domEl "caption" b c
-[<Import("createElement", from=React); Emit("$0('cite', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "cite")>]
 let cite b c = domEl "cite" b c
-[<Import("createElement", from=React); Emit("$0('code', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "code")>]
 let code b c = domEl "code" b c
-[<Import("createElement", from=React); Emit("$0('col', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "col")>]
 let col b c = domEl "col" b c
-[<Import("createElement", from=React); Emit("$0('colgroup', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "colgroup")>]
 let colgroup b c = domEl "colgroup" b c
-[<Import("createElement", from=React); Emit("$0('data', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "data")>]
 let data b c = domEl "data" b c
-[<Import("createElement", from=React); Emit("$0('datalist', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "datalist")>]
 let datalist b c = domEl "datalist" b c
-[<Import("createElement", from=React); Emit("$0('dd', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "dd")>]
 let dd b c = domEl "dd" b c
-[<Import("createElement", from=React); Emit("$0('del', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "del")>]
 let del b c = domEl "del" b c
-[<Import("createElement", from=React); Emit("$0('details', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "details")>]
 let details b c = domEl "details" b c
-[<Import("createElement", from=React); Emit("$0('dfn', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "dfn")>]
 let dfn b c = domEl "dfn" b c
-[<Import("createElement", from=React); Emit("$0('dialog', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "dialog")>]
 let dialog b c = domEl "dialog" b c
-[<Import("createElement", from=React); Emit("$0('div', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "div")>]
 let div b c = domEl "div" b c
-[<Import("createElement", from=React); Emit("$0('dl', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "dl")>]
 let dl b c = domEl "dl" b c
-[<Import("createElement", from=React); Emit("$0('dt', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "dt")>]
 let dt b c = domEl "dt" b c
-[<Import("createElement", from=React); Emit("$0('em', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "em")>]
 let em b c = domEl "em" b c
-[<Import("createElement", from=React); Emit("$0('embed', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "embed")>]
 let embed b c = domEl "embed" b c
-[<Import("createElement", from=React); Emit("$0('fieldset', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "fieldset")>]
 let fieldset b c = domEl "fieldset" b c
-[<Import("createElement", from=React); Emit("$0('figcaption', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "figcaption")>]
 let figcaption b c = domEl "figcaption" b c
-[<Import("createElement", from=React); Emit("$0('figure', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "figure")>]
 let figure b c = domEl "figure" b c
-[<Import("createElement", from=React); Emit("$0('footer', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "footer")>]
 let footer b c = domEl "footer" b c
-[<Import("createElement", from=React); Emit("$0('form', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "form")>]
 let form b c = domEl "form" b c
-[<Import("createElement", from=React); Emit("$0('h1', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "h1")>]
 let h1 b c = domEl "h1" b c
-[<Import("createElement", from=React); Emit("$0('h2', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "h2")>]
 let h2 b c = domEl "h2" b c
-[<Import("createElement", from=React); Emit("$0('h3', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "h3")>]
 let h3 b c = domEl "h3" b c
-[<Import("createElement", from=React); Emit("$0('h4', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "h4")>]
 let h4 b c = domEl "h4" b c
-[<Import("createElement", from=React); Emit("$0('h5', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "h5")>]
 let h5 b c = domEl "h5" b c
-[<Import("createElement", from=React); Emit("$0('h6', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "h6")>]
 let h6 b c = domEl "h6" b c
-[<Import("createElement", from=React); Emit("$0('head', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "head")>]
 let head b c = domEl "head" b c
-[<Import("createElement", from=React); Emit("$0('header', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "header")>]
 let header b c = domEl "header" b c
-[<Import("createElement", from=React); Emit("$0('hgroup', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "hgroup")>]
 let hgroup b c = domEl "hgroup" b c
-[<Import("createElement", from=React); Emit("$0('hr', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "hr")>]
 let hr b c = domEl "hr" b c
-[<Import("createElement", from=React); Emit("$0('html', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "html")>]
 let html b c = domEl "html" b c
-[<Import("createElement", from=React); Emit("$0('i', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "i")>]
 let i b c = domEl "i" b c
-[<Import("createElement", from=React); Emit("$0('iframe', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "iframe")>]
 let iframe b c = domEl "iframe" b c
-[<Import("createElement", from=React); Emit("$0('img', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "img")>]
 let img b c = domEl "img" b c
-[<Import("createElement", from=React); Emit("$0('input', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "input")>]
 let input b c = domEl "input" b c
-[<Import("createElement", from=React); Emit("$0('ins', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "ins")>]
 let ins b c = domEl "ins" b c
-[<Import("createElement", from=React); Emit("$0('kbd', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "kbd")>]
 let kbd b c = domEl "kbd" b c
-[<Import("createElement", from=React); Emit("$0('keygen', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "keygen")>]
 let keygen b c = domEl "keygen" b c
-[<Import("createElement", from=React); Emit("$0('label', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "label")>]
 let label b c = domEl "label" b c
-[<Import("createElement", from=React); Emit("$0('legend', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "legend")>]
 let legend b c = domEl "legend" b c
-[<Import("createElement", from=React); Emit("$0('li', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "li")>]
 let li b c = domEl "li" b c
-[<Import("createElement", from=React); Emit("$0('link', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "link")>]
 let link b c = domEl "link" b c
-[<Import("createElement", from=React); Emit("$0('main', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "main")>]
 let main b c = domEl "main" b c
-[<Import("createElement", from=React); Emit("$0('map', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "map")>]
 let map b c = domEl "map" b c
-[<Import("createElement", from=React); Emit("$0('mark', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "mark")>]
 let mark b c = domEl "mark" b c
-[<Import("createElement", from=React); Emit("$0('menu', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "menu")>]
 let menu b c = domEl "menu" b c
-[<Import("createElement", from=React); Emit("$0('menuitem', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "menuitem")>]
 let menuitem b c = domEl "menuitem" b c
-[<Import("createElement", from=React); Emit("$0('meta', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "meta")>]
 let meta b c = domEl "meta" b c
-[<Import("createElement", from=React); Emit("$0('meter', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "meter")>]
 let meter b c = domEl "meter" b c
-[<Import("createElement", from=React); Emit("$0('nav', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "nav")>]
 let nav b c = domEl "nav" b c
-[<Import("createElement", from=React); Emit("$0('noscript', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "noscript")>]
 let noscript b c = domEl "noscript" b c
-[<Import("createElement", from=React); Emit("$0('object', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "object")>]
 let ``object`` b c = domEl "object" b c
-[<Import("createElement", from=React); Emit("$0('ol', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "ol")>]
 let ol b c = domEl "ol" b c
-[<Import("createElement", from=React); Emit("$0('optgroup', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "optgroup")>]
 let optgroup b c = domEl "optgroup" b c
-[<Import("createElement", from=React); Emit("$0('option', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "option")>]
 let option b c = domEl "option" b c
-[<Import("createElement", from=React); Emit("$0('output', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "output")>]
 let output b c = domEl "output" b c
-[<Import("createElement", from=React); Emit("$0('p', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "p")>]
 let p b c = domEl "p" b c
-[<Import("createElement", from=React); Emit("$0('param', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "param")>]
 let param b c = domEl "param" b c
-[<Import("createElement", from=React); Emit("$0('picture', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "picture")>]
 let picture b c = domEl "picture" b c
-[<Import("createElement", from=React); Emit("$0('pre', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "pre")>]
 let pre b c = domEl "pre" b c
-[<Import("createElement", from=React); Emit("$0('progress', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "progress")>]
 let progress b c = domEl "progress" b c
-[<Import("createElement", from=React); Emit("$0('q', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "q")>]
 let q b c = domEl "q" b c
-[<Import("createElement", from=React); Emit("$0('rp', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "rp")>]
 let rp b c = domEl "rp" b c
-[<Import("createElement", from=React); Emit("$0('rt', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "rt")>]
 let rt b c = domEl "rt" b c
-[<Import("createElement", from=React); Emit("$0('ruby', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "ruby")>]
 let ruby b c = domEl "ruby" b c
-[<Import("createElement", from=React); Emit("$0('s', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "s")>]
 let s b c = domEl "s" b c
-[<Import("createElement", from=React); Emit("$0('samp', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "samp")>]
 let samp b c = domEl "samp" b c
-[<Import("createElement", from=React); Emit("$0('script', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "script")>]
 let script b c = domEl "script" b c
-[<Import("createElement", from=React); Emit("$0('section', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "section")>]
 let section b c = domEl "section" b c
-[<Import("createElement", from=React); Emit("$0('select', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "select")>]
 let select b c = domEl "select" b c
-[<Import("createElement", from=React); Emit("$0('small', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "small")>]
 let small b c = domEl "small" b c
-[<Import("createElement", from=React); Emit("$0('source', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "source")>]
 let source b c = domEl "source" b c
-[<Import("createElement", from=React); Emit("$0('span', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "span")>]
 let span b c = domEl "span" b c
-[<Import("createElement", from=React); Emit("$0('strong', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "strong")>]
 let strong b c = domEl "strong" b c
-[<Import("createElement", from=React); Emit("$0('style', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "style")>]
 let style b c = domEl "style" b c
-[<Import("createElement", from=React); Emit("$0('sub', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "sub")>]
 let sub b c = domEl "sub" b c
-[<Import("createElement", from=React); Emit("$0('summary', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "summary")>]
 let summary b c = domEl "summary" b c
-[<Import("createElement", from=React); Emit("$0('sup', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "sup")>]
 let sup b c = domEl "sup" b c
-[<Import("createElement", from=React); Emit("$0('table', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "table")>]
 let table b c = domEl "table" b c
-[<Import("createElement", from=React); Emit("$0('tbody', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "tbody")>]
 let tbody b c = domEl "tbody" b c
-[<Import("createElement", from=React); Emit("$0('td', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "td")>]
 let td b c = domEl "td" b c
-[<Import("createElement", from=React); Emit("$0('textarea', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "textarea")>]
 let textarea b c = domEl "textarea" b c
-[<Import("createElement", from=React); Emit("$0('tfoot', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "tfoot")>]
 let tfoot b c = domEl "tfoot" b c
-[<Import("createElement", from=React); Emit("$0('th', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "th")>]
 let th b c = domEl "th" b c
-[<Import("createElement", from=React); Emit("$0('thead', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "thead")>]
 let thead b c = domEl "thead" b c
-[<Import("createElement", from=React); Emit("$0('time', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "time")>]
 let time b c = domEl "time" b c
-[<Import("createElement", from=React); Emit("$0('title', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "title")>]
 let title b c = domEl "title" b c
-[<Import("createElement", from=React); Emit("$0('tr', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "tr")>]
 let tr b c = domEl "tr" b c
-[<Import("createElement", from=React); Emit("$0('track', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "track")>]
 let track b c = domEl "track" b c
-[<Import("createElement", from=React); Emit("$0('u', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "u")>]
 let u b c = domEl "u" b c
-[<Import("createElement", from=React); Emit("$0('ul', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "ul")>]
 let ul b c = domEl "ul" b c
-[<Import("createElement", from=React); Emit("$0('var', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "var")>]
 let var b c = domEl "var" b c
-[<Import("createElement", from=React); Emit("$0('video', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "video")>]
 let video b c = domEl "video" b c
-[<Import("createElement", from=React); Emit("$0('wbr', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "wbr")>]
 let wbr b c = domEl "wbr" b c
-[<Import("createElement", from=React); Emit("$0('svg', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "svg")>]
 let svg b c = svgEl "svg" b c
-[<Import("createElement", from=React); Emit("$0('circle', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "circle")>]
 let circle b c = svgEl "circle" b c
-[<Import("createElement", from=React); Emit("$0('clipPath', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "clipPath")>]
 let clipPath b c = svgEl "clipPath" b c
-[<Import("createElement", from=React); Emit("$0('defs', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "defs")>]
 let defs b c = svgEl "defs" b c
-[<Import("createElement", from=React); Emit("$0('ellipse', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "ellipse")>]
 let ellipse b c = svgEl "ellipse" b c
-[<Import("createElement", from=React); Emit("$0('g', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "g")>]
 let g b c = svgEl "g" b c
-[<Import("createElement", from=React); Emit("$0('image', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "image")>]
 let image b c = svgEl "image" b c
-[<Import("createElement", from=React); Emit("$0('line', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "line")>]
 let line b c = svgEl "line" b c
-[<Import("createElement", from=React); Emit("$0('linearGradient', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "linearGradient")>]
 let linearGradient b c = svgEl "linearGradient" b c
-[<Import("createElement", from=React); Emit("$0('mask', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "mask")>]
 let mask b c = svgEl "mask" b c
-[<Import("createElement", from=React); Emit("$0('path', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "path")>]
 let path b c = svgEl "path" b c
-[<Import("createElement", from=React); Emit("$0('pattern', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "pattern")>]
 let pattern b c = svgEl "pattern" b c
-[<Import("createElement", from=React); Emit("$0('polygon', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "polygon")>]
 let polygon b c = svgEl "polygon" b c
-[<Import("createElement", from=React); Emit("$0('polyline', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "polyline")>]
 let polyline b c = svgEl "polyline" b c
-[<Import("createElement", from=React); Emit("$0('radialGradient', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "radialGradient")>]
 let radialGradient b c = svgEl "radialGradient" b c
-[<Import("createElement", from=React); Emit("$0('rect', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "rect")>]
 let rect b c = svgEl "rect" b c
-[<Import("createElement", from=React); Emit("$0('stop', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "stop")>]
 let stop b c = svgEl "stop" b c
-[<Import("createElement", from=React); Emit("$0('text', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "text")>]
 let text b c = svgEl "text" b c
-[<Import("createElement", from=React); Emit("$0('tspan', $1, $replace:Hack.toArrayNonEmpty($2))")>]
+[<Emit(typeof<Emitter>, "Tagged", "tspan")>]
 let tspan b c = svgEl "tspan" b c
 
 /// Cast a string to a React element (erased in runtime)

@@ -1,11 +1,12 @@
 var path = require("path");
 var fs = require("fs-extra");
 var fable = require("fable-compiler");
+// var fable = require("../Fable/build/fable");
 
 var targets = {
     all() {
         return fable.promisify(fs.remove, "npm")
-            .then(_ => fable.compile())
+            .then(_ => fable.compile({ verbose: true }))
             // .then(_ => fable.compile({target: "umd"}))
             .then(_ => fable.promisify(fs.copy, "package.json", "npm/package.json"))
             .then(_ => fable.promisify(fs.copy, "README.md", "npm/README.md"))
