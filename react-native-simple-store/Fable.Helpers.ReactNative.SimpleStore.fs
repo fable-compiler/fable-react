@@ -8,7 +8,6 @@ open Fable.Core.JsInterop
 open Fable.Import
 
 module KeyValueStore =
-
     /// Retrieves all keys from the AsyncStorage.
     let inline getAllKeys() : Async<string []> = 
         Async.FromContinuations(fun (success,fail,_) -> 
@@ -63,6 +62,17 @@ module DB =
             ()
         }
 
+    /// Deletes a row from a model
+    let inline delete<'a>(index) = 
+        let key = modelsKey + typeof<'a>.FullName
+        async {
+            let! model = getModel<'a> key
+            let model : 'a[] = model |> Array.mapi (fun i x -> i,x) |> Array.filter (fun (i,_) -> i <> index) |> Array.map snd
+            let newModel : string =  toJson model
+            let! _ = Globals.AsyncStorage.setItem(key,newModel) |> Async.AwaitPromise
+            ()
+        }        
+
     /// Updates multiple rows in a model
     let inline updateMultiple<'a>(values) = 
         let key = modelsKey + typeof<'a>.FullName
@@ -115,10 +125,10 @@ module DB =
 
     /// Replaces all rows of a model
     let inline replaceWithKey<'a>(key,data:'a []) =
-        let modelKey = modelsKey + typeof<'a>.FullName
+        let modelKey = modelsKey + typeof<'a>.FullName + "/" + key
         async {
             let newModel : string = data |> toJson
-            let! _ = Globals.AsyncStorage.setItem(modelKey + "/" + key,newModel) |> Async.AwaitPromise
+            let! _ = Globals.AsyncStorage.setItem(modelKey,newModel) |> Async.AwaitPromise
             ()
         }
 
@@ -143,7 +153,6 @@ module DB =
     let inline getAll<'a>() =
         let key = modelsKey + typeof<'a>.FullName
         getModel<'a> key
-
 
 
     /// Gets all rows from the model
