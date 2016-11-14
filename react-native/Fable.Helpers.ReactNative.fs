@@ -1957,7 +1957,7 @@ module Toast =
         Toast?show(message,Toast?SHORT) |> unbox
 
     /// Shows a toast with long duration
-    let inline showShort (message:string) : unit = 
+    let inline showLong (message:string) : unit = 
         Toast?show(message,Toast?LONG) |> unbox
 
 module Storage =
