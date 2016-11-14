@@ -1815,6 +1815,7 @@ module ReactNative =
         abstract SHORT: float with get, set
         abstract LONG: float with get, set
         abstract show: message: string * duration: float -> unit
+        abstract showWithGravity: message: string * duration: float * gravity: float -> unit
 
     and SwitchPropertiesIOS =
         inherit ViewProperties
@@ -2333,5 +2334,3 @@ module ReactNative =
 
         type [<Import("addons","react-native")>] Globals =
             static member TestModule with get(): TestModuleStatic = failwith "JS only" and set(v: TestModuleStatic): unit = failwith "JS only"
-
-

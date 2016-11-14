@@ -1947,7 +1947,19 @@ module ImageStore =
         Async.FromContinuations(fun (onSuccess, onError, _) ->
             ImageStore?getBase64ForTag( uri, onSuccess, onError) |> ignore
         )
-   
+
+module Toast =
+    [<Import("ToastAndroid","react-native")>]
+    let Toast = obj()
+
+    /// Shows a toast with short duration
+    let inline showShort (message:string) : unit = 
+        Toast?show(message,Toast?SHORT) |> unbox
+
+    /// Shows a toast with long duration
+    let inline showShort (message:string) : unit = 
+        Toast?show(message,Toast?LONG) |> unbox
+
 module Storage =
     open Fable.Core.JsInterop
 
