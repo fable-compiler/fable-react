@@ -1574,11 +1574,11 @@ let inline toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelect
             props) |> unbox,
         unbox([||])) |> unbox
 
-let inline keyboardAvoidingView (props:IKeyboardAvoidingViewProps list) : React.ReactElement<obj> = 
+let inline keyboardAvoidingView (props:IKeyboardAvoidingViewProps list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
       RN.KeyboardAvoidingView,
       unbox props,
-      unbox([||])) |> unbox
+        unbox(List.toArray children)) |> unbox
 
 let inline view (props: IViewProperties list) (children: React.ReactElement<obj> list): React.ReactElement<obj> =
     React.createElement(
