@@ -1874,7 +1874,7 @@ let inline createScene<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) :
 let Buffer = obj()
 
 let inline encode (text: string, encoding:string) : string =
-    (createNew Buffer text)?toString(encoding) |> unbox
+    Buffer?from(text)?toString(encoding) |> unbox
 
 let inline encodeBase64 (text: string) : string = encode(text,"base64")
 let inline encodeAscii (text: string) : string = encode(text,"ascii") 
