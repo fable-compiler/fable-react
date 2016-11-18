@@ -20,15 +20,15 @@ Follow instructions for [react-native-push-notification](https://github.com/zo0r
 
 ```xml
   <ItemGroup>
-    <Compile Include="node_modules/able-import-react-native-push-notification/Fable.Import.ReactNativePushNotification.fs" />
-    <Compile Include="node_modules/able-import-react-native-push-notification/Fable.Helpers.ReactNativePushNotification.fs" />
+    <Compile Include="node_modules/fable-import-react-native-push-notification/Fable.Import.ReactNativePushNotification.fs" />
+    <Compile Include="node_modules/fable-import-react-native-push-notification/Fable.Helpers.ReactNativePushNotification.fs" />
   </ItemGroup>
 ```
 
 ### In F# script (.fsx)
 
 ```fsharp
-#load "node_modules/able-import-react-native-push-notification/Fable.Import.ReactNativePushNotification.fs"
-#load "node_modules/able-import-react-native-push-notification/Fable.Helpers.ReactNativePushNotification.fs"
+#load "node_modules/fable-import-react-native-push-notification/Fable.Import.ReactNativePushNotification.fs"
+#load "node_modules/fable-import-react-native-push-notification/Fable.Helpers.ReactNativePushNotification.fs"
 
 ...

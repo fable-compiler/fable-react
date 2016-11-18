@@ -20,16 +20,16 @@ Follow instructions for [react-native-image-picker](https://github.com/marcshill
 
 ```xml
   <ItemGroup>
-    <Compile Include="node_modules/able-import-react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs" />
-    <Compile Include="node_modules/able-import-react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs" />
+    <Compile Include="node_modules/fable-import-react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs" />
+    <Compile Include="node_modules/fable-import-react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs" />
   </ItemGroup>
 ```
 
 ### In F# script (.fsx)
 
 ```fsharp
-#load "node_modules/able-import-react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs"
-#load "node_modules/able-import-react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs"
+#load "node_modules/fable-import-react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs"
+#load "node_modules/fable-import-react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs"
 
 open Fable.Core
 open Fable.Import

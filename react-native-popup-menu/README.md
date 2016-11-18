@@ -20,16 +20,16 @@ Follow instructions for [react-native-barcodescanner](https://github.com/instea/
 
 ```xml
   <ItemGroup>
-    <Compile Include="node_modules/able-import-react-native-popup-menu/Fable.Import.ReactNativePopupMenu.fs" />
-    <Compile Include="node_modules/able-import-react-native-popup-menu/Fable.Helpers.ReactNativePopupMenu.fs" />
+    <Compile Include="node_modules/fable-import-react-native-popup-menu/Fable.Import.ReactNativePopupMenu.fs" />
+    <Compile Include="node_modules/fable-import-react-native-popup-menu/Fable.Helpers.ReactNativePopupMenu.fs" />
   </ItemGroup>
 ```
 
 ### In F# script (.fsx)
 
 ```fsharp
-#load "node_modules/able-import-react-native-popup-menu/Fable.Import.ReactNativePopupMenu.fs"
-#load "node_modules/able-import-react-native-popup-menu/Fable.Helpers.ReactNativePopupMenu.fs"
+#load "node_modules/fable-import-react-native-popup-menu/Fable.Import.ReactNativePopupMenu.fs"
+#load "node_modules/fable-import-react-native-popup-menu/Fable.Helpers.ReactNativePopupMenu.fs"
 
 open Fable.Core
 open Fable.Import

@@ -20,16 +20,16 @@ Follow instructions for [react-native-barcodescanner](https://github.com/ideacre
 
 ```xml
   <ItemGroup>
-    <Compile Include="node_modules/able-import-react-native-barcodescanner/Fable.Import.ReactNativeBarcodeScanner.fs" />
-    <Compile Include="node_modules/able-import-react-native-barcodescanner/Fable.Helpers.ReactNativeBarcodeScanner.fs" />
+    <Compile Include="node_modules/fable-import-react-native-barcodescanner/Fable.Import.ReactNativeBarcodeScanner.fs" />
+    <Compile Include="node_modules/fable-import-react-native-barcodescanner/Fable.Helpers.ReactNativeBarcodeScanner.fs" />
   </ItemGroup>
 ```
 
 ### In F# script (.fsx)
 
 ```fsharp
-#load "node_modules/able-import-react-native-barcodescanner/Fable.Import.ReactNativeBarcodeScanner.fs"
-#load "node_modules/able-import-react-native-barcodescanner/Fable.Helpers.ReactNativeBarcodeScanner.fs"
+#load "node_modules/fable-import-react-native-barcodescanner/Fable.Import.ReactNativeBarcodeScanner.fs"
+#load "node_modules/fable-import-react-native-barcodescanner/Fable.Helpers.ReactNativeBarcodeScanner.fs"
 
 open Fable.Core
 open Fable.Import
