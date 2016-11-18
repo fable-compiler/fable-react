@@ -12,7 +12,7 @@ module ReactNativePushNotification =
         abstract member configure: PushNotificationOptions -> unit
 
     and PushNotificationOptions =
-        abstract onRegister: object -> unit   
+        abstract onRegister: obj -> unit   
 
     type Globals =
         [<Import("PushNotification", from="react-native-push-notification")>]

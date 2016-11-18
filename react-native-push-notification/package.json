@@ -1,6 +1,6 @@
 {
   "name": "fable-import-react-native-push-notification",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Fable bindings for React Native Push Notifications",
   "repository": {
     "type": "git",
