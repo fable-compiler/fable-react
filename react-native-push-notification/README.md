@@ -1,6 +1,6 @@
 # fable-import-react-native-push-notification
 
-Fable bindings for React Native Image Picker
+Fable bindings for React Native Push Notification
 
 ## Installation
 
