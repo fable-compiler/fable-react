@@ -15,5 +15,5 @@ module ReactNativePushNotification =
         abstract onRegister: obj -> unit   
 
     type Globals =
-        [<Import("PushNotification", from="react-native-push-notification")>]
+        [<Import("default", from="react-native-push-notification")>]
         static member PushNotification with get(): PushNotification = failwith "JS only" and set(v: PushNotification): unit = failwith "JS only"
