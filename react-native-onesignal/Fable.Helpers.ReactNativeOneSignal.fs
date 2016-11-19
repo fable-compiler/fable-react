@@ -13,11 +13,6 @@ open Fable.Core.JsInterop
 module Props =
 
     [<KeyValueList>]
-    type OneSignalID =
-    | UserId of string
-    | PushToke of string
-
-    [<KeyValueList>]
     type IOneSignalOptions =
         interface end
 

@@ -12,7 +12,11 @@ module ReactNativeOneSignal =
         abstract member configure:OneSignalOptions -> unit
 
     and OneSignalOptions =
-        abstract onIdsAvailable: obj -> unit   
+        abstract onIdsAvailable: obj -> unit
+
+    and OneSignalID =
+        abstract userId: string      
+        abstract pushToken: string      
 
     type Globals =
         [<Import("OneSignal", from="react-native-onesignal")>]
