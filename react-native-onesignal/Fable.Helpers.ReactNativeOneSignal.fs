@@ -34,7 +34,14 @@ module OneSignal =
 
     /// Enables In-App Alert Notifications.
     /// By default this is false and notifications will not be shown when the user is in the app, instead the OneSignalHandleNotificationBlock is fired. 
-    // If set to true notifications will be shown as native alert boxes if a notification is received when the user is in your app. 
-    // The OneSignalHandleNotificationBlock is then fired after the alert box is closed.
-    let inline enableInAppAlertNotification (enabled:bool) =
-        ReactNativeOneSignal.Globals.OneSignal?enableInAppAlertNotification(enabled) |> ignore
+    /// If set to true notifications will be shown as native alert boxes if a notification is received when the user is in your app. 
+    /// The OneSignalHandleNotificationBlock is then fired after the alert box is closed.
+    let inline enableInAppAlertNotification () =
+        ReactNativeOneSignal.Globals.OneSignal?enableInAppAlertNotification(true) |> ignore
+
+    /// Disables In-App Alert Notifications.
+    /// By default this is false and notifications will not be shown when the user is in the app, instead the OneSignalHandleNotificationBlock is fired. 
+    /// If set to true notifications will be shown as native alert boxes if a notification is received when the user is in your app. 
+    /// The OneSignalHandleNotificationBlock is then fired after the alert box is closed.
+    let inline disableInAppAlertNotification () =
+        ReactNativeOneSignal.Globals.OneSignal?enableInAppAlertNotification(false) |> ignore        
