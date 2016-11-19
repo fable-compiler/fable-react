@@ -66,7 +66,7 @@ module PushNotification =
         PN.PushNotification?configure(props |> unbox) |> ignore
 
     /// Sends a local push notification.
-    let inline localNotification(props: ILocalPushNotificationProperties list, message: string) =
+    let inline localNotification(props: ILocalPushNotificationProperties list) (message: string) =
         PN.PushNotification?localNotification(
             JS.Object.assign(
                 createObj ["message" ==> message],
@@ -74,7 +74,7 @@ module PushNotification =
         |> ignore        
 
     /// Schedules a local push notification.
-    let inline localNotificationSchedule(props: ILocalPushNotificationProperties list, message: string, date:System.DateTime) =
+    let inline localNotificationSchedule(props: ILocalPushNotificationProperties list) (date:System.DateTime) (message: string) =
         PN.PushNotification?localNotificationSchedule(
             JS.Object.assign(
                 createObj  ["message" ==> message 
