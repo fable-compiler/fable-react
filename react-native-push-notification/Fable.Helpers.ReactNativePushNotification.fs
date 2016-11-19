@@ -1,4 +1,5 @@
 [<Fable.Core.Erase>]
+/// Contains functions for push notifications.
 module Fable.Helpers.ReactNativePushNotification
 
 open Fable.Core
@@ -9,7 +10,7 @@ open Fable.Core.JsInterop
 
 type PN = ReactNativePushNotification.Globals
 
-
+/// Contains properties for push notifications.
 module Props =
     [<KeyValueList>]
     type IPushNotificationOptions =
@@ -47,7 +48,6 @@ module Props =
     | OnGoing of bool
     // Android and iOS
     | Title of string
-    | Message of string
     | PlaySound of bool
     | SoundName of string
     | Number of string
@@ -58,11 +58,26 @@ module Props =
 
 open Props
 
+/// Contains functions for push notifications.
 module PushNotification =
 
+    /// Configures the push notification system.
     let inline configure (props: IPushNotificationOptions list) =
         PN.PushNotification?configure(props |> unbox) |> ignore
 
+    /// Sends a local push notification.
+    let inline localNotification(props: ILocalPushNotificationProperties list, message: string) =
+        PN.PushNotification?localNotification(
+            JS.Object.assign(
+                createObj ["message" ==> message],
+                props)) 
+        |> ignore        
 
-    let inline localNotification(props: ILocalPushNotificationProperties list) =
-        PN.PushNotification?localNotification(props |> unbox) |> ignore 
+    /// Schedules a local push notification.
+    let inline localNotificationSchedule(props: ILocalPushNotificationProperties list, message: string, date:System.DateTime) =
+        PN.PushNotification?localNotificationSchedule(
+            JS.Object.assign(
+                createObj  ["message" ==> message 
+                            "date" ==> date],
+                props)) 
+        |> ignore
