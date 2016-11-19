@@ -19,5 +19,5 @@ module ReactNativeOneSignal =
         abstract pushToken: string      
 
     type Globals =
-        [<Import("OneSignal", from="react-native-onesignal")>]
+        [<Import("default", from="react-native-onesignal")>]
         static member OneSignal with get(): OneSignal = failwith "JS only" and set(v: OneSignal): unit = failwith "JS only"
