@@ -2,6 +2,7 @@
 /// Contains functions for push notifications via OneSignal.
 module Fable.Helpers.ReactNativeOneSignal
 
+open System
 open Fable.Core
 open Fable.Import
 open Fable.Import.ReactNativeOneSignal
