@@ -1,3 +1,11 @@
+### 0.7.0-alpha.9
+
+* React.Component type arguments must have PojoAttribute
+
+### 0.7.0-alpha.8
+
+* Compile children list as spread arguments
+
 ### 0.7.0-alpha.6
 
 * Compile with latest Fable alpha

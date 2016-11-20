@@ -298,7 +298,7 @@ module Props =
     [<KeyValueList>]
     type Prop =
         | Key of string
-        | Ref of (obj->unit)
+        | Ref of (Browser.Element->unit)
         interface IHTMLProp
 
     [<KeyValueList>]
@@ -578,36 +578,36 @@ open Props
 open Fable.AST
 open Fable.AST.Fable.Util
 
+/// Only used internally to emit inline Fable AST
 type Emitter() =
     let createEl = makeImport "createElement" React
-    let toPlainJsObj (expr: Fable.Expr) =
-        CoreLibCall("Util", Some "toPlainJsObj", false, [expr])
-        |> makeCall expr.Range expr.Type
-    let (|CoreMeth|_|) coreMod meth = function
-        | Fable.Value(Fable.ImportRef(meth', coreMod', Fable.CoreLib))
-            when meth' = meth && coreMod' = coreMod -> Some CoreMeth
-        | _ -> None
-    let toArrayNonEmpty = function
-        | Fable.Apply(CoreMeth "List" "default",[],_,_,_) ->
-            Fable.Value Fable.Null
-        | Fable.Apply(CoreMeth "List" "ofArray", [arr], Fable.ApplyMeth,_,_) -> arr
-        | expr ->
-            GlobalCall ("Array", Some "from", false, [expr])
-            |> makeCall expr.Range (Fable.Array Fable.Any)
+    let spread args =
+        let inline (|CoreMeth|_|) coreMod meth = function
+            | Fable.Value(Fable.ImportRef(meth', coreMod', Fable.CoreLib))
+                when meth' = meth && coreMod' = coreMod -> Some CoreMeth
+            | _ -> None
+        let inline (|ArrayConst|_|) e =
+            match e with
+            | Fable.Value(Fable.ArrayConst(Fable.ArrayValues vals, _)) -> Some vals
+            | _ -> None
+        match args with
+        | Fable.Apply(CoreMeth "List" "default",[],_,_,_) -> []
+        | Fable.Apply(CoreMeth "List" "ofArray", [ArrayConst vals], Fable.ApplyMeth,_,_) -> vals
+        | expr -> [Fable.Value(Fable.Spread expr)]
 
     member x.Com(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
         let args =
             match i.args with
             | [props; children] ->
                 let com = makeNonGenTypeRef i.methodTypeArgs.Head
-                [com; toPlainJsObj props; toArrayNonEmpty children]
+                [com; props] @ spread children
             | _ -> failwith "Unexpected arguments"
         Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
     member x.From(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
         let args =
             match i.args with
             | [com; props; children] ->
-                [com; toPlainJsObj props; toArrayNonEmpty children]
+                [com; props] @ spread children
             | _ -> failwith "Unexpected arguments"
         Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
 
@@ -615,7 +615,7 @@ type Emitter() =
         let args =
             match i.args with
             | [tag; props; children] ->
-                [tag; props; toArrayNonEmpty children]
+                [tag; props] @ spread children
             | _ -> failwith "Unexpected arguments"
         Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
 
@@ -624,29 +624,31 @@ type Emitter() =
             match i.args with
             | [props; children] ->
                 let tag = Fable.Value(Fable.StringConst tag)
-                [tag; props; toArrayNonEmpty children]
+                [tag; props] @ spread children
             | _ -> failwith "Unexpected arguments"
         Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
 
+open Fable.Import.React
+
 /// Instantiate a React component from a type inheriting React.Component<>
 [<Emit(typeof<Emitter>, "Com")>]
-let com<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+let com<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement = jsNative
 /// Instantiate a stateless component from a function
 
 [<Emit(typeof<Emitter>, "From")>]
-let fn (f: 'Props -> #React.ReactElement<obj>) (props: 'Props) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+let fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement = jsNative
 
 /// Instantiate an imported React component
 [<Emit(typeof<Emitter>, "From")>]
-let from<'P> (com: React.ComponentClass<'P>) (props: 'P) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+let from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement = jsNative
 
 /// Instantiate a DOM React element
 [<Emit(typeof<Emitter>, "DomEl")>]
-let domEl (tag: string) (props: IHTMLProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+let domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement = jsNative
 
 /// Instantiate an SVG React element
 [<Emit(typeof<Emitter>, "DomEl")>]
-let svgEl (tag: string) (props: #IProp list) (children: React.ReactElement<obj> list): React.ReactElement<obj> = jsNative
+let svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement = jsNative
 
 [<Emit(typeof<Emitter>, "Tagged", "a")>]
 let a b c = domEl "a" b c
@@ -914,6 +916,6 @@ let text b c = svgEl "text" b c
 let tspan b c = svgEl "tspan" b c
 
 /// Cast a string to a React element (erased in runtime)
-let [<Emit("$0")>] str (s: string): React.ReactElement<obj> = unbox s
+let [<Emit("$0")>] str (s: string): ReactElement = unbox s
 /// Cast an option value to a React element (erased in runtime)
-let [<Emit("$0")>] opt (o: React.ReactElement<obj> option): React.ReactElement<obj> = unbox o
+let [<Emit("$0")>] opt (o: ReactElement option): ReactElement = unbox o

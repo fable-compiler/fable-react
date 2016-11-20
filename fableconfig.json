@@ -5,8 +5,10 @@
     "sourceMaps": true,
     "targets": {
         "umd": {
+            "dll": false,
             "module": "umd",
-            "outDir": "npm/umd"
+            "outDir": "npm/umd",
+            "refs": { "Fable.Core": "fable-core/umd" }
         }
     }
 }
