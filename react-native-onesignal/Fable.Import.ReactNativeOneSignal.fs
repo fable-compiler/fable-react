@@ -16,7 +16,10 @@ module ReactNativeOneSignal =
 
     and OneSignalID =
         abstract userId: string      
-        abstract pushToken: string      
+        abstract pushToken: string
+
+    and OneSignalNotificationData =
+        abstract p2p_notification: string []
 
     type Globals =
         [<Import("default", from="react-native-onesignal")>]
