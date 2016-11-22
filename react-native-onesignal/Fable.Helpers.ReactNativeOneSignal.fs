@@ -112,5 +112,5 @@ module OneSignal =
 
     /// Post Peer-to-Peer-Notfication.
     /// Allows you to send notifications from user to user or schedule ones in the future to be delivered to the current device.
-    let inline postP2PNotification(message: string, data: OneSignalNotificationData, userId: string) : unit =
+    let inline postP2PNotification(message, data, userId: string) : unit =
         ReactNativeOneSignal.Globals.OneSignal?postNotification(message |> unbox, data |> unbox, userId |> unbox) |> ignore
