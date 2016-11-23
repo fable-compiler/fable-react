@@ -12,7 +12,6 @@ open Fable.Core.JsInterop
 module ImageResizer =
 
     /// Creates a scaled version of a local images.
-    let inline createResizedImage (path, maxWidth, maxHeight, compressFormat, quality, rotation, outputPath) =
-        let p:Promise<string> = ReactNativeImageResizer.Globals.ImageResizer?createResizedImage(path, maxWidth, maxHeight, compressFormat, quality, rotation, outputPath) |> unbox
-        Async.AwaitPromise p
-
+    let inline createResizedImage (path, maxWidth, maxHeight, compressFormat, quality, rotation, outputPath) : Async<string> =
+        ReactNativeImageResizer.Globals.ImageResizer?createResizedImage(path, maxWidth, maxHeight, compressFormat, quality, rotation, outputPath) |> unbox
+        |> Async.AwaitPromise
