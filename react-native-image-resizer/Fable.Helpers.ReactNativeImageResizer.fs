@@ -17,8 +17,6 @@ module ImageResizer =
     /// <param name="maxHeight">Image max height (ratio is preserved)</param>
     /// <param name="compressFormat">Can be either JPEG, PNG or WEBP (Android only).</param>
     /// <param name="quality">A number between 0 and 100. Used for the JPEG compression.</param>
-    /// <param name="rotation">Rotation to apply to the image, in degrees, for android. On iOS, rotation is limited (and rounded) to multiples of 90 degrees.</param>
-    /// <param name="outputPath">The resized image path. If null, resized image will be stored in cache folder.</param>  
-    let inline createResizedImage (path: string, maxWidth: int, maxHeight: int, compressFormat: string, quality: int, rotation, outputPath) : Async<string> =
-        ReactNativeImageResizer.Globals.ImageResizer?createResizedImage(path, maxWidth, maxHeight, compressFormat, quality, rotation, outputPath) |> unbox
+    let inline createResizedImage (path: string, maxWidth: int, maxHeight: int, compressFormat: string, quality: int) : Async<string> =
+        ReactNativeImageResizer.Globals.ImageResizer?createResizedImage(path, maxWidth, maxHeight, compressFormat, quality) |> unbox
         |> Async.AwaitPromise
