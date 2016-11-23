@@ -8,10 +8,8 @@ open Fable.Import.Browser
 
 module ReactNativeImageResizer =
 
-
-
     type ImagePicker =
-        abstract member createResizedImage: ImagePickerOptions * (ImagePickerResult -> unit) -> unit
+        abstract member createResizedImage: string -> int -> int -> string -> float -> float -> strong -> Promise<obj>
 
     type Globals =
         [<Import("default", from="react-native-image-resizer")>]
