@@ -20,7 +20,7 @@ let clear<'a>() =
     }
 
 /// Gets or creates a new model.
-let private getModel<'a> (key) : Async<Table<'a>> = async {
+let [<PassGenerics>] getModel<'a> (key) : Async<Table<'a>> = async {
     let! v = Globals.AsyncStorage.getItem (key) |> Async.AwaitPromise
     match v with
     | null -> return [||]
@@ -28,7 +28,7 @@ let private getModel<'a> (key) : Async<Table<'a>> = async {
 }
 
 /// Adds a row to a model
-let add<'a>(data:'a) =
+let [<PassGenerics>] add<'a>(data:'a) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -39,7 +39,7 @@ let add<'a>(data:'a) =
     }
 
 /// Updates a row in a model
-let update<'a>(index, data:'a) =
+let [<PassGenerics>] update<'a>(index, data:'a) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -50,7 +50,7 @@ let update<'a>(index, data:'a) =
     }
 
 /// Deletes a row from a model
-let delete<'a>(index) =
+let [<PassGenerics>] delete<'a>(index) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -61,7 +61,7 @@ let delete<'a>(index) =
     }
 
 /// Updates multiple rows in a model
-let updateMultiple<'a>(values) =
+let [<PassGenerics>] updateMultiple<'a>(values) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -74,7 +74,7 @@ let updateMultiple<'a>(values) =
     }
 
 ///  Update data by an update function.
-let updateWithFunction<'a>(updateF: 'a[] -> 'a[]) =
+let [<PassGenerics>] updateWithFunction<'a>(updateF: 'a[] -> 'a[]) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -87,7 +87,7 @@ let updateWithFunction<'a>(updateF: 'a[] -> 'a[]) =
     }
 
 ///  Update data by an update function.
-let updateWithFunctionAndKey<'a>(updateF: 'a[] -> 'a[],key) =
+let [<PassGenerics>] updateWithFunctionAndKey<'a>(updateF: 'a[] -> 'a[],key) =
     let key = modelsKey + typeof<'a>.FullName + "/" + key
     async {
         let! model = getModel<'a> key
@@ -100,7 +100,7 @@ let updateWithFunctionAndKey<'a>(updateF: 'a[] -> 'a[],key) =
     }
 
 /// Adds multiple rows to a model
-let addMultiple<'a>(data:'a []) =
+let [<PassGenerics>] addMultiple<'a>(data:'a []) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -129,7 +129,7 @@ let replace<'a>(data:'a []) =
     }
 
 /// Gets a row from the model
-let get<'a>(index:int) =
+let [<PassGenerics>] get<'a>(index:int) =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key
@@ -137,18 +137,18 @@ let get<'a>(index:int) =
     }
 
 /// Gets all rows from the model
-let getAll<'a>() =
+let [<PassGenerics>] getAll<'a>() =
     let key = modelsKey + typeof<'a>.FullName
     getModel<'a> key
 
 
 /// Gets all rows from the model
-let getAllWithKey<'a>(key) =
+let [<PassGenerics>] getAllWithKey<'a>(key) =
     let key = modelsKey + typeof<'a>.FullName + "/" + key
     getModel<'a> key
 
 /// Gets the row count from the model
-let count<'a>() =
+let [<PassGenerics>] count<'a>() =
     let key = modelsKey + typeof<'a>.FullName
     async {
         let! model = getModel<'a> key

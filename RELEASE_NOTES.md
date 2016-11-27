@@ -1,3 +1,7 @@
+### 0.7.4
+
+* Pass generics to react-native-simple-store methods
+
 ### 0.7.2
 
 * Fix `React.Component` definition
