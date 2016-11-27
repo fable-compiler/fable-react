@@ -62,23 +62,19 @@ module React =
     and ReactInstance =
         U2<Component<obj, obj>, Element>
 
-    and [<Import("Component","react")>] Component<'P, 'S>(?props: 'P, ?context: obj) =
-        interface ComponentLifecycle<'P, 'S> with
-            member __.componentWillMount(): unit = jsNative
-            member __.componentDidMount(): unit = jsNative
-            member __.componentWillReceiveProps(nextProps: 'P, nextContext: obj): unit = jsNative
-            member __.shouldComponentUpdate(nextProps: 'P, nextState: 'S, nextContext: obj): bool = jsNative
-            member __.componentWillUpdate(nextProps: 'P, nextState: 'S, nextContext: obj): unit = jsNative
-            member __.componentDidUpdate(prevProps: 'P, prevState: 'S, prevContext: obj): unit = jsNative
-            member __.componentWillUnmount(): unit = jsNative
-        member __.props with get(): 'P = jsNative and set(v: 'P): unit = jsNative
-        member __.state with get(): 'S = jsNative and set(v: 'S): unit = jsNative
-        member __.context with get(): obj = jsNative and set(v: obj): unit = jsNative
-        member __.refs with get(): obj = jsNative and set(v: obj): unit = jsNative
-        member __.setState(f: Func<'S, 'P, 'S>, ?callback: Func<unit, obj>): unit = jsNative
-        member __.setState(state: 'S, ?callback: Func<unit, obj>): unit = jsNative
-        member __.forceUpdate(?callBack: Func<unit, obj>): unit = jsNative
-        member __.render(): ReactElement = jsNative
+    and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
+        [<Emit("$0.props")>]
+        member __.props: 'P = jsNative
+        [<Emit("$0.props.children")>]
+        member __.children: ReactElement array = jsNative
+        [<Emit("$0.state")>]
+        member __.state: 'S = jsNative
+        [<Emit("$0.setState($1)")>]
+        member __.setState(value: 'S): unit = jsNative
+        [<Emit("this.state = $1")>]
+        /// This method can only be called in the constructor
+        member __.setInitState(value: 'S): unit = jsNative
+        interface ReactElement
 
     and ClassicComponent<'P, 'S> =
         abstract props: 'P with get, set

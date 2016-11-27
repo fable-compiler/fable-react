@@ -1,3 +1,7 @@
+### 0.7.2
+
+* Fix `React.Component` definition
+
 ### 0.7.1
 
 * Add React Native helpers
