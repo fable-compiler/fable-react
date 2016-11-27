@@ -44,15 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="../node_modules/fable-core/Fable.Core.dll" />
-    <!--<Reference Include="../../Fable/build/fable-core/Fable.Core.dll" />-->
+    <Reference Include="../node_modules/fable-powerpack/Fable.PowerPack.dll" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="react/Fable.React.Internal.fs" />
     <Compile Include="react/Fable.Import.React.fs" />
     <Compile Include="react/Fable.Helpers.React.fs" />
-    <!--<Compile Include="react-native/Fable.Import.ReactNative.fs" />
+    <Compile Include="react-native/Fable.Import.ReactNative.fs" />
     <Compile Include="react-native/Fable.Helpers.ReactNative.fs" />
     <Compile Include="react-native/Fable.Import.XmlDom.fs" />
-    <Compile Include="react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs" />
+    <!--<Compile Include="react-native-image-picker/Fable.Import.ReactNativeImagePicker.fs" />
     <Compile Include="react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs" />
     <Compile Include="react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.fs" />-->
   </ItemGroup>

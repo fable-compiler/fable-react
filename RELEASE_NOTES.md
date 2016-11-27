@@ -1,3 +1,11 @@
+### 0.7.1
+
+* Add React Native helpers
+
+### 0.7.0
+
+* Bump version
+
 ### 0.7.0-alpha.9
 
 * React.Component type arguments must have PojoAttribute

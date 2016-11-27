@@ -21,5 +21,5 @@ module XmlDom =
         | Locator of obj
         | ErrorHandler of Func<string, obj, obj>
 
-    let [<Import("DOMParser","xmldom")>] DOMParser: DOMParserStatic = failwith "JS only"
-    let [<Import("XMLSerializer","xmldom")>] XMLSerializer: XMLSerializerStatic = failwith "JS only"
+    let [<Import("DOMParser","xmldom")>] DOMParser: DOMParserStatic = jsNative
+    let [<Import("XMLSerializer","xmldom")>] XMLSerializer: XMLSerializerStatic = jsNative

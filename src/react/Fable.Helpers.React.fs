@@ -574,61 +574,8 @@ module Props =
         interface IProp
 
 open Props
-
-open Fable.AST
-open Fable.AST.Fable.Util
-
-/// Only used internally to emit inline Fable AST
-type Emitter() =
-    let createEl = makeImport "createElement" React
-    let spread args =
-        let inline (|CoreMeth|_|) coreMod meth = function
-            | Fable.Value(Fable.ImportRef(meth', coreMod', Fable.CoreLib))
-                when meth' = meth && coreMod' = coreMod -> Some CoreMeth
-            | _ -> None
-        let inline (|ArrayConst|_|) e =
-            match e with
-            | Fable.Value(Fable.ArrayConst(Fable.ArrayValues vals, _)) -> Some vals
-            | _ -> None
-        match args with
-        | Fable.Apply(CoreMeth "List" "default",[],_,_,_) -> []
-        | Fable.Apply(CoreMeth "List" "ofArray", [ArrayConst vals], Fable.ApplyMeth,_,_) -> vals
-        | expr -> [Fable.Value(Fable.Spread expr)]
-
-    member x.Com(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
-        let args =
-            match i.args with
-            | [props; children] ->
-                let com = makeNonGenTypeRef i.methodTypeArgs.Head
-                [com; props] @ spread children
-            | _ -> failwith "Unexpected arguments"
-        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
-    member x.From(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
-        let args =
-            match i.args with
-            | [com; props; children] ->
-                [com; props] @ spread children
-            | _ -> failwith "Unexpected arguments"
-        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
-
-    member x.DomEl(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
-        let args =
-            match i.args with
-            | [tag; props; children] ->
-                [tag; props] @ spread children
-            | _ -> failwith "Unexpected arguments"
-        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
-
-    member x.Tagged(_com: Fable.ICompiler, i: Fable.ApplyInfo, tag: string) =
-        let args =
-            match i.args with
-            | [props; children] ->
-                let tag = Fable.Value(Fable.StringConst tag)
-                [tag; props] @ spread children
-            | _ -> failwith "Unexpected arguments"
-        Fable.Apply(createEl, args, Fable.ApplyMeth, i.returnType, i.range)
-
 open Fable.Import.React
+open Fable.React.Internal
 
 /// Instantiate a React component from a type inheriting React.Component<>
 [<Emit(typeof<Emitter>, "Com")>]
@@ -640,14 +587,14 @@ let fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement l
 
 /// Instantiate an imported React component
 [<Emit(typeof<Emitter>, "From")>]
-let from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement = jsNative
+let from<'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement = jsNative
 
 /// Instantiate a DOM React element
-[<Emit(typeof<Emitter>, "DomEl")>]
+[<Emit(typeof<Emitter>, "From")>]
 let domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement = jsNative
 
 /// Instantiate an SVG React element
-[<Emit(typeof<Emitter>, "DomEl")>]
+[<Emit(typeof<Emitter>, "From")>]
 let svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement = jsNative
 
 [<Emit(typeof<Emitter>, "Tagged", "a")>]

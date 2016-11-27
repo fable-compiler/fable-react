@@ -5,6 +5,7 @@ open Fable.Core
 open Fable.Import.JS
 open Fable.Import.Browser
 
+[<Erase>]
 module ReactNative =
     module JSX =
         type Element = obj // added after import
@@ -38,7 +39,7 @@ module ReactNative =
 
         and [<Import("Animated.AnimatedInterpolation","react-native")>] AnimatedInterpolation() =
             inherit AnimatedWithChildren()
-            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = failwith "JS only"
+            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = jsNative
 
         and [<StringEnum>] ExtrapolateType =
                 | Extend | Identity | Clamp
@@ -51,30 +52,30 @@ module ReactNative =
 
         and [<Import("Animated.Value","react-native")>] Value(value: float) =
             inherit AnimatedWithChildren()
-            member __.setValue(value: float): unit = failwith "JS only"
-            member __.setOffset(offset: float): unit = failwith "JS only"
-            member __.flattenOffset(): unit = failwith "JS only"
-            member __.addListener(callback: ValueListenerCallback): string = failwith "JS only"
-            member __.removeListener(id: string): unit = failwith "JS only"
-            member __.removeAllListeners(): unit = failwith "JS only"
-            member __.stopAnimation(?callback: Func<float, unit>): unit = failwith "JS only"
-            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = failwith "JS only"
+            member __.setValue(value: float): unit = jsNative
+            member __.setOffset(offset: float): unit = jsNative
+            member __.flattenOffset(): unit = jsNative
+            member __.addListener(callback: ValueListenerCallback): string = jsNative
+            member __.removeListener(id: string): unit = jsNative
+            member __.removeAllListeners(): unit = jsNative
+            member __.stopAnimation(?callback: Func<float, unit>): unit = jsNative
+            member __.interpolate(config: InterpolationConfigType): AnimatedInterpolation = jsNative
 
         and ValueXYListenerCallback =
             Func<obj, unit>
 
         and [<Import("Animated.ValueXY","react-native")>] ValueXY(?valueIn: obj) =
             inherit AnimatedWithChildren()
-            member __.x with get(): AnimatedValue = failwith "JS only" and set(v: AnimatedValue): unit = failwith "JS only"
-            member __.y with get(): AnimatedValue = failwith "JS only" and set(v: AnimatedValue): unit = failwith "JS only"
-            member __.setValue(value: obj): unit = failwith "JS only"
-            member __.setOffset(offset: obj): unit = failwith "JS only"
-            member __.flattenOffset(): unit = failwith "JS only"
-            member __.stopAnimation(?callback: Func<float>): unit = failwith "JS only"
-            member __.addListener(callback: ValueXYListenerCallback): string = failwith "JS only"
-            member __.removeListener(id: string): unit = failwith "JS only"
-            member __.getLayout(): obj = failwith "JS only"
-            member __.getTranslateTransform(): ResizeArray<obj> = failwith "JS only"
+            member __.x with get(): AnimatedValue = jsNative and set(v: AnimatedValue): unit = jsNative
+            member __.y with get(): AnimatedValue = jsNative and set(v: AnimatedValue): unit = jsNative
+            member __.setValue(value: obj): unit = jsNative
+            member __.setOffset(offset: obj): unit = jsNative
+            member __.flattenOffset(): unit = jsNative
+            member __.stopAnimation(?callback: Func<float>): unit = jsNative
+            member __.addListener(callback: ValueXYListenerCallback): string = jsNative
+            member __.removeListener(id: string): unit = jsNative
+            member __.getLayout(): obj = jsNative
+            member __.getTranslateTransform(): ResizeArray<obj> = jsNative
 
         and EndResult =
             obj
@@ -136,20 +137,20 @@ module ReactNative =
             abstract listener: Function option with get, set
 
         type [<Import("Animated","react-native")>] Globals =
-            static member timing with get(): Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation>): unit = failwith "JS only"
-            static member spring with get(): Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation>): unit = failwith "JS only"
-            static member ``parallel`` with get(): Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation> = failwith "JS only" and set(v: Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation>): unit = failwith "JS only"
-            static member ``event`` with get(): Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>> = failwith "JS only" and set(v: Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>>): unit = failwith "JS only"
-            static member View with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-            static member Image with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-            static member Text with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-            static member decay(value: U2<AnimatedValue, AnimatedValueXY>, config: DecayAnimationConfig): CompositeAnimation = failwith "JS only"
-            static member add(a: Animated, b: Animated): AnimatedAddition = failwith "JS only"
-            static member multiply(a: Animated, b: Animated): AnimatedMultiplication = failwith "JS only"
-            static member modulo(a: Animated, modulus: float): AnimatedModulo = failwith "JS only"
-            static member delay(time: float): CompositeAnimation = failwith "JS only"
-            static member sequence(animations: ResizeArray<CompositeAnimation>): CompositeAnimation = failwith "JS only"
-            static member stagger(time: float, animations: ResizeArray<CompositeAnimation>): CompositeAnimation = failwith "JS only"
+            static member timing with get(): Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation> = jsNative and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, TimingAnimationConfig, CompositeAnimation>): unit = jsNative
+            static member spring with get(): Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation> = jsNative and set(v: Func<U2<AnimatedValue, AnimatedValueXY>, SpringAnimationConfig, CompositeAnimation>): unit = jsNative
+            static member ``parallel`` with get(): Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation> = jsNative and set(v: Func<ResizeArray<CompositeAnimation>, ParallelConfig, CompositeAnimation>): unit = jsNative
+            static member ``event`` with get(): Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>> = jsNative and set(v: Func<ResizeArray<Mapping>, EventConfig, Func<obj, unit>>): unit = jsNative
+            static member View with get(): obj = jsNative and set(v: obj): unit = jsNative
+            static member Image with get(): obj = jsNative and set(v: obj): unit = jsNative
+            static member Text with get(): obj = jsNative and set(v: obj): unit = jsNative
+            static member decay(value: U2<AnimatedValue, AnimatedValueXY>, config: DecayAnimationConfig): CompositeAnimation = jsNative
+            static member add(a: Animated, b: Animated): AnimatedAddition = jsNative
+            static member multiply(a: Animated, b: Animated): AnimatedMultiplication = jsNative
+            static member modulo(a: Animated, modulus: float): AnimatedModulo = jsNative
+            static member delay(time: float): CompositeAnimation = jsNative
+            static member sequence(animations: ResizeArray<CompositeAnimation>): CompositeAnimation = jsNative
+            static member stagger(time: float, animations: ResizeArray<CompositeAnimation>): CompositeAnimation = jsNative
 
 
     [<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
@@ -166,9 +167,9 @@ module ReactNative =
             interface end
 
         and NavigationBarRouteMapper =
-            abstract Title: Func<Route, Navigator, float, NavState, React.ReactElement<obj>> with get, set
-            abstract LeftButton: Func<Route, Navigator, float, NavState, React.ReactElement<obj>> with get, set
-            abstract RightButton: Func<Route, Navigator, float, NavState, React.ReactElement<obj>> with get, set
+            abstract Title: Func<Route, Navigator, float, NavState, React.ReactElement> with get, set
+            abstract LeftButton: Func<Route, Navigator, float, NavState, React.ReactElement> with get, set
+            abstract RightButton: Func<Route, Navigator, float, NavState, React.ReactElement> with get, set
 
         and NavigationBarProperties =
             inherit React.Props<NavigationBarStatic>
@@ -188,10 +189,10 @@ module ReactNative =
             interface end
 
         and BreadcrumbNavigationBarRouteMapper =
-            abstract rightContentForRoute: Func<Route, Navigator, React.ReactElement<obj>> with get, set
-            abstract titleContentForRoute: Func<Route, Navigator, React.ReactElement<obj>> with get, set
-            abstract iconForRoute: Func<Route, Navigator, React.ReactElement<obj>> with get, set
-            abstract separatorForRoute: Func<Route, Navigator, React.ReactElement<obj>> with get, set
+            abstract rightContentForRoute: Func<Route, Navigator, React.ReactElement> with get, set
+            abstract titleContentForRoute: Func<Route, Navigator, React.ReactElement> with get, set
+            abstract iconForRoute: Func<Route, Navigator, React.ReactElement> with get, set
+            abstract separatorForRoute: Func<Route, Navigator, React.ReactElement> with get, set
 
         and BreadcrumbNavigationBarProperties =
             inherit React.Props<BreadcrumbNavigationBarStatic>
@@ -206,10 +207,10 @@ module ReactNative =
 
         and BreadcrumbNavigationBar =
             BreadcrumbNavigationBarStatic
-       
+
         type [<Import("NavigatorStatic","react-native")>] Globals =
-            static member NavigationBar with get(): NavigationBarStatic = failwith "JS only" and set(v: NavigationBarStatic): unit = failwith "JS only"
-            static member BreadcrumbNavigationBar with get(): BreadcrumbNavigationBarStatic = failwith "JS only" and set(v: BreadcrumbNavigationBarStatic): unit = failwith "JS only"
+            static member NavigationBar with get(): NavigationBarStatic = jsNative and set(v: NavigationBarStatic): unit = jsNative
+            static member BreadcrumbNavigationBar with get(): BreadcrumbNavigationBarStatic = jsNative and set(v: BreadcrumbNavigationBarStatic): unit = jsNative
 
 
     type NativeComponent =
@@ -277,12 +278,12 @@ module ReactNative =
         obj
 
     and [<Import("AppRegistry","react-native")>] AppRegistry() =
-        static member registerConfig(config: ResizeArray<AppConfig>): unit = failwith "JS only"
-        static member registerComponent(appKey: string, getComponentFunc: Func<React.ComponentClass<obj>>): string = failwith "JS only"
-        static member registerRunnable(appKey: string, func: Runnable): string = failwith "JS only"
-        static member getAppKeys(): ResizeArray<string> = failwith "JS only"
-        static member unmountApplicationComponentAtRootTag(rootTag: float): unit = failwith "JS only"
-        static member runApplication(appKey: string, appParameters: obj): unit = failwith "JS only"
+        static member registerConfig(config: ResizeArray<AppConfig>): unit = jsNative
+        static member registerComponent(appKey: string, getComponentFunc: Func<React.ComponentClass<obj>>): string = jsNative
+        static member registerRunnable(appKey: string, func: Runnable): string = jsNative
+        static member getAppKeys(): ResizeArray<string> = jsNative
+        static member unmountApplicationComponentAtRootTag(rootTag: float): unit = jsNative
+        static member runApplication(appKey: string, appParameters: obj): unit = jsNative
 
     and LayoutAnimationTypes =
         abstract spring: string with get, set
@@ -583,7 +584,7 @@ module ReactNative =
 
     and [<StringEnum; RequireQualifiedAccess>] PointerEvents =
         | ``Box-none`` | None | ``Box-only`` | AutoViewStyle
-    
+
     and ViewProperties =
         inherit ViewPropertiesAndroid
         inherit ViewPropertiesIOS
@@ -695,8 +696,8 @@ module ReactNative =
         abstract onLoadStart: Func<NavState, unit> option with get, set
         abstract onNavigationStateChange: Func<NavState, unit> option with get, set
         abstract onShouldStartLoadWithRequest: Func<bool> option with get, set
-        abstract renderError: Func<React.ReactElement<ViewProperties>> option with get, set
-        abstract renderLoading: Func<React.ReactElement<ViewProperties>> option with get, set
+        abstract renderError: Func<React.ReactElement> option with get, set
+        abstract renderLoading: Func<React.ReactElement> option with get, set
         abstract scrollEnabled: bool option with get, set
         abstract startInLoadingState: bool option with get, set
         abstract style: ViewStyle option with get, set
@@ -1084,12 +1085,12 @@ module ReactNative =
         abstract onEndReachedThreshold: float option with get, set
         abstract pageSize: float option with get, set
         abstract removeClippedSubviews: bool option with get, set
-        abstract renderFooter: Func<React.ReactElement<obj>> option with get, set
-        abstract renderHeader: Func<React.ReactElement<obj>> option with get, set
-        abstract renderRow: Func<obj, U2<string, float>, U2<string, float>, bool, React.ReactElement<obj>> option with get, set
-        abstract renderScrollComponent: Func<ScrollViewProperties, React.ReactElement<ScrollViewProperties>> option with get, set
-        abstract renderSectionHeader: Func<obj, U2<string, float>, React.ReactElement<obj>> option with get, set
-        abstract renderSeparator: Func<U2<string, float>, U2<string, float>, bool, React.ReactElement<obj>> option with get, set
+        abstract renderFooter: Func<React.ReactElement> option with get, set
+        abstract renderHeader: Func<React.ReactElement> option with get, set
+        abstract renderRow: Func<obj, U2<string, float>, U2<string, float>, bool, React.ReactElement> option with get, set
+        abstract renderScrollComponent: Func<ScrollViewProperties, React.ReactElement> option with get, set
+        abstract renderSectionHeader: Func<obj, U2<string, float>, React.ReactElement> option with get, set
+        abstract renderSeparator: Func<U2<string, float>, U2<string, float>, bool, React.ReactElement> option with get, set
         abstract scrollRenderAheadDistance: float option with get, set
         abstract ref: Ref<obj> option with get, set
 
@@ -1281,11 +1282,11 @@ module ReactNative =
         abstract configureScene: Func<Route, ResizeArray<Route>, SceneConfig> option with get, set
         abstract initialRoute: Route option with get, set
         abstract initialRouteStack: ResizeArray<Route> option with get, set
-        abstract navigationBar: React.ReactElement<NavigatorStatic.NavigationBarProperties> option with get, set
+        abstract navigationBar: React.ReactElement option with get, set
         abstract navigator: Navigator option with get, set
         abstract onDidFocus: Function option with get, set
         abstract onWillFocus: Function option with get, set
-        abstract renderScene: Func<Route, Navigator, React.ReactElement<ViewProperties>> option with get, set
+        abstract renderScene: Func<Route, Navigator, React.ReactElement> option with get, set
         abstract sceneStyle: ViewStyle option with get, set
         abstract debugOverlay: bool option with get, set
 
@@ -1495,7 +1496,7 @@ module ReactNative =
         abstract showsHorizontalScrollIndicator: bool option with get, set
         abstract showsVerticalScrollIndicator: bool option with get, set
         abstract style: ScrollViewStyle option with get, set
-        abstract refreshControl: React.ReactElement<RefreshControlProperties> option with get, set
+        abstract refreshControl: React.ReactElement option with get, set
         abstract ref: Ref<obj> option with get, set
 
     and ScrollViewProps =
@@ -1542,8 +1543,8 @@ module ReactNative =
         inherit React.Props<SwipeableListViewStatic<'a>>
         abstract dataSource: SwipeableListViewDataSource<'a> with get, set
         abstract maxSwipeDistance: float option with get, set
-        abstract renderRow: Func<obj, U2<string, float>, U2<string, float>, bool, React.ReactElement<obj>> with get, set
-        abstract renderQuickActions: rowData: obj * sectionID: string * rowID: string -> React.ReactElement<obj>
+        abstract renderRow: Func<obj, U2<string, float>, U2<string, float>, bool, React.ReactElement> with get, set
+        abstract renderQuickActions: rowData: obj * sectionID: string * rowID: string -> React.ReactElement
 
     and SwipeableListViewStatic<'a> =
         inherit React.ComponentClass<SwipeableListViewProps<'a>>
@@ -2001,7 +2002,7 @@ module ReactNative =
         abstract pop: state: NavigationState -> NavigationState
         abstract jumpToIndex: state: NavigationState * index: int -> NavigationState
         abstract jumpTo: state: NavigationState * key: string -> NavigationState
-        abstract forward: state: NavigationState -> NavigationState 
+        abstract forward: state: NavigationState -> NavigationState
         abstract replaceAt: state: NavigationState * key: string * route: NavigationRoute -> NavigationState
         abstract replaceAtIndex: state: NavigationState * index: int * route: NavigationRoute -> NavigationState
         abstract reset: state: NavigationState * routes: Array<NavigationRoute> * index: int option -> NavigationState
@@ -2245,83 +2246,83 @@ module ReactNative =
         abstract requestAnimationFrame: fn: Func<unit> -> unit
 
     type Globals =
-        [<Import("ActivityIndicator", "react-native")>] static member ActivityIndicator with get(): ActivityIndicatorStatic = failwith "JS only" and set(v: ActivityIndicatorStatic): unit = failwith "JS only"
-        [<Import("ActivityIndicatorIOS", "react-native")>] static member ActivityIndicatorIOS with get(): ActivityIndicatorIOSStatic = failwith "JS only" and set(v: ActivityIndicatorIOSStatic): unit = failwith "JS only"
-        [<Import("DatePickerIOS", "react-native")>] static member DatePickerIOS with get(): DatePickerIOSStatic = failwith "JS only" and set(v: DatePickerIOSStatic): unit = failwith "JS only"
-        [<Import("DrawerLayoutAndroid", "react-native")>] static member DrawerLayoutAndroid with get(): DrawerLayoutAndroidStatic = failwith "JS only" and set(v: DrawerLayoutAndroidStatic): unit = failwith "JS only"
-        [<Import("Image", "react-native")>] static member Image with get(): ImageStatic = failwith "JS only" and set(v: ImageStatic): unit = failwith "JS only"
-        [<Import("LayoutAnimation", "react-native")>] static member LayoutAnimation with get(): LayoutAnimationStatic = failwith "JS only" and set(v: LayoutAnimationStatic): unit = failwith "JS only"
-        [<Import("ListView", "react-native")>] static member ListView with get(): ListViewStatic<obj> = failwith "JS only" and set(v: ListViewStatic<obj>): unit = failwith "JS only"
-        [<Import("MapView", "react-native")>] static member MapView with get(): MapViewStatic = failwith "JS only" and set(v: MapViewStatic): unit = failwith "JS only"
-        [<Import("Modal", "react-native")>] static member Modal with get(): ModalStatic = failwith "JS only" and set(v: ModalStatic): unit = failwith "JS only"
-        [<Import("Navigator", "react-native")>] static member Navigator with get(): NavigatorStatic = failwith "JS only" and set(v: NavigatorStatic): unit = failwith "JS only"
-        [<Import("NavigatorIOS", "react-native")>] static member NavigatorIOS with get(): NavigatorIOSStatic = failwith "JS only" and set(v: NavigatorIOSStatic): unit = failwith "JS only"
-        [<Import("Picker", "react-native")>] static member Picker with get(): PickerStatic = failwith "JS only" and set(v: PickerStatic): unit = failwith "JS only"
-        [<Import("PickerIOS", "react-native")>] static member PickerIOS with get(): PickerIOSStatic = failwith "JS only" and set(v: PickerIOSStatic): unit = failwith "JS only"
-        [<Import("ProgressBarAndroid", "react-native")>] static member ProgressBarAndroid with get(): ProgressBarAndroidStatic = failwith "JS only" and set(v: ProgressBarAndroidStatic): unit = failwith "JS only"
-        [<Import("ProgressViewIOS", "react-native")>] static member ProgressViewIOS with get(): ProgressViewIOSStatic = failwith "JS only" and set(v: ProgressViewIOSStatic): unit = failwith "JS only"
-        [<Import("RefreshControl", "react-native")>] static member RefreshControl with get(): RefreshControlStatic = failwith "JS only" and set(v: RefreshControlStatic): unit = failwith "JS only"
-        [<Import("Slider", "react-native")>] static member Slider with get(): SliderIOS = failwith "JS only" and set(v: SliderIOS): unit = failwith "JS only"
-        [<Import("SliderIOS", "react-native")>] static member SliderIOS with get(): SliderIOSStatic = failwith "JS only" and set(v: SliderIOSStatic): unit = failwith "JS only"
-        [<Import("StatusBar", "react-native")>] static member StatusBar with get(): StatusBarStatic = failwith "JS only" and set(v: StatusBarStatic): unit = failwith "JS only"
-        [<Import("ScrollView", "react-native")>] static member ScrollView with get(): ScrollViewStatic = failwith "JS only" and set(v: ScrollViewStatic): unit = failwith "JS only"
-        [<Import("StyleSheet", "react-native")>] static member StyleSheet with get(): StyleSheetStatic = failwith "JS only" and set(v: StyleSheetStatic): unit = failwith "JS only"
-        [<Import("SwipeableListView", "react-native")>] static member SwipeableListView with get(): SwipeableListViewStatic<obj> = failwith "JS only" and set(v: SwipeableListViewStatic<obj>): unit = failwith "JS only"
-        [<Import("Switch", "react-native")>] static member Switch with get(): SwitchStatic = failwith "JS only" and set(v: SwitchStatic): unit = failwith "JS only"
-        [<Import("SwitchIOS", "react-native")>] static member SwitchIOS with get(): SwitchIOSStatic = failwith "JS only" and set(v: SwitchIOSStatic): unit = failwith "JS only"
-        [<Import("TabBarIOS", "react-native")>] static member TabBarIOS with get(): TabBarIOSStatic = failwith "JS only" and set(v: TabBarIOSStatic): unit = failwith "JS only"
-        [<Import("Text", "react-native")>] static member Text with get(): TextStatic = failwith "JS only" and set(v: TextStatic): unit = failwith "JS only"
-        [<Import("TextInput", "react-native")>] static member TextInput with get(): TextInputStatic = failwith "JS only" and set(v: TextInputStatic): unit = failwith "JS only"
-        [<Import("ToolbarAndroid", "react-native")>] static member ToolbarAndroid with get(): ToolbarAndroidStatic = failwith "JS only" and set(v: ToolbarAndroidStatic): unit = failwith "JS only"
-        [<Import("TouchableHighlight", "react-native")>] static member TouchableHighlight with get(): TouchableHighlightStatic = failwith "JS only" and set(v: TouchableHighlightStatic): unit = failwith "JS only"
-        [<Import("TouchableNativeFeedback", "react-native")>] static member TouchableNativeFeedback with get(): TouchableNativeFeedbackStatic = failwith "JS only" and set(v: TouchableNativeFeedbackStatic): unit = failwith "JS only"
-        [<Import("TouchableOpacity", "react-native")>] static member TouchableOpacity with get(): TouchableOpacityStatic = failwith "JS only" and set(v: TouchableOpacityStatic): unit = failwith "JS only"
-        [<Import("TouchableWithoutFeedback", "react-native")>] static member TouchableWithoutFeedback with get(): TouchableWithoutFeedbackStatic = failwith "JS only" and set(v: TouchableWithoutFeedbackStatic): unit = failwith "JS only"
-        [<Import("View", "react-native")>] static member View with get(): ViewStatic = failwith "JS only" and set(v: ViewStatic): unit = failwith "JS only"
-        [<Import("ViewPagerAndroid", "react-native")>] static member ViewPagerAndroid with get(): ViewPagerAndroidStatic = failwith "JS only" and set(v: ViewPagerAndroidStatic): unit = failwith "JS only"
-        [<Import("WebView", "react-native")>] static member WebView with get(): WebViewStatic = failwith "JS only" and set(v: WebViewStatic): unit = failwith "JS only"
-        [<Import("ActionSheetIOS", "react-native")>] static member ActionSheetIOS with get(): ActionSheetIOSStatic = failwith "JS only" and set(v: ActionSheetIOSStatic): unit = failwith "JS only"
-        [<Import("AdSupportIOS", "react-native")>] static member AdSupportIOS with get(): AdSupportIOSStatic = failwith "JS only" and set(v: AdSupportIOSStatic): unit = failwith "JS only"
-        [<Import("Alert", "react-native")>] static member Alert with get(): AlertStatic = failwith "JS only" and set(v: AlertStatic): unit = failwith "JS only"
-        [<Import("AlertIOS", "react-native")>] static member AlertIOS with get(): AlertIOSStatic = failwith "JS only" and set(v: AlertIOSStatic): unit = failwith "JS only"
-        [<Import("AppState", "react-native")>] static member AppState with get(): AppStateStatic = failwith "JS only" and set(v: AppStateStatic): unit = failwith "JS only"
-        [<Import("AppStateIOS", "react-native")>] static member AppStateIOS with get(): AppStateStatic = failwith "JS only" and set(v: AppStateStatic): unit = failwith "JS only"
-        [<Import("AsyncStorage", "react-native")>] static member AsyncStorage with get(): AsyncStorageStatic = failwith "JS only" and set(v: AsyncStorageStatic): unit = failwith "JS only"
-        [<Import("BackAndroid", "react-native")>] static member BackAndroid with get(): BackAndroidStatic = failwith "JS only" and set(v: BackAndroidStatic): unit = failwith "JS only"
-        [<Import("CameraRoll", "react-native")>] static member CameraRoll with get(): CameraRollStatic = failwith "JS only" and set(v: CameraRollStatic): unit = failwith "JS only"
-        [<Import("Clipboard", "react-native")>] static member Clipboard with get(): ClipboardStatic = failwith "JS only" and set(v: ClipboardStatic): unit = failwith "JS only"
-        [<Import("DatePickerAndroid", "react-native")>] static member DatePickerAndroid with get(): DatePickerAndroidStatic = failwith "JS only" and set(v: DatePickerAndroidStatic): unit = failwith "JS only"
-        [<Import("IntentAndroid", "react-native")>] static member IntentAndroid with get(): IntentAndroidStatic = failwith "JS only" and set(v: IntentAndroidStatic): unit = failwith "JS only"
-        [<Import("KeyboardAvoidingView", "react-native")>] static member KeyboardAvoidingView with get(): KeyboardAvoidingViewStatic = failwith "JS only" and set(v: KeyboardAvoidingViewStatic): unit = failwith "JS only"
-        [<Import("Linking", "react-native")>] static member Linking with get(): LinkingStatic = failwith "JS only" and set(v: LinkingStatic): unit = failwith "JS only"
-        [<Import("LinkingIOS", "react-native")>] static member LinkingIOS with get(): LinkingIOSStatic = failwith "JS only" and set(v: LinkingIOSStatic): unit = failwith "JS only"
-        [<Import("NetInfo", "react-native")>] static member NetInfo with get(): NetInfoStatic = failwith "JS only" and set(v: NetInfoStatic): unit = failwith "JS only"
-        [<Import("PanResponder", "react-native")>] static member PanResponder with get(): PanResponderStatic = failwith "JS only" and set(v: PanResponderStatic): unit = failwith "JS only"
-        [<Import("PushNotificationIOS", "react-native")>] static member PushNotificationIOS with get(): PushNotificationIOSStatic = failwith "JS only" and set(v: PushNotificationIOSStatic): unit = failwith "JS only"
-        [<Import("StatusBarIOS", "react-native")>] static member StatusBarIOS with get(): StatusBarIOSStatic = failwith "JS only" and set(v: StatusBarIOSStatic): unit = failwith "JS only"
-        [<Import("TimePickerAndroid", "react-native")>] static member TimePickerAndroid with get(): TimePickerAndroidStatic = failwith "JS only" and set(v: TimePickerAndroidStatic): unit = failwith "JS only"
-        [<Import("ToastAndroid", "react-native")>] static member ToastAndroid with get(): ToastAndroidStatic = failwith "JS only" and set(v: ToastAndroidStatic): unit = failwith "JS only"
-        [<Import("VibrationIOS", "react-native")>] static member VibrationIOS with get(): VibrationIOSStatic = failwith "JS only" and set(v: VibrationIOSStatic): unit = failwith "JS only"
-        [<Import("Vibration", "react-native")>] static member Vibration with get(): VibrationStatic = failwith "JS only" and set(v: VibrationStatic): unit = failwith "JS only"
-        [<Import("Dimensions", "react-native")>] static member Dimensions with get(): Dimensions = failwith "JS only" and set(v: Dimensions): unit = failwith "JS only"
-        [<Import("ShadowPropTypesIOS", "react-native")>] static member ShadowPropTypesIOS with get(): ShadowPropTypesIOSStatic = failwith "JS only" and set(v: ShadowPropTypesIOSStatic): unit = failwith "JS only"
-        [<Import("NavigationExperimental", "react-native")>] static member NavigationExperimental with get(): NavigationExperimentalStatic = failwith "JS only" and set(v: NavigationExperimentalStatic): unit = failwith "JS only"
-        [<Import("NavigationContainer", "react-native")>] static member NavigationContainer with get(): NavigationContainerStatic = failwith "JS only" and set(v: NavigationContainerStatic): unit = failwith "JS only"
-        [<Import("NavigationRootContainer", "react-native")>] static member NavigationRootContainer with get(): NavigationRootContainerStatic = failwith "JS only" and set(v: NavigationRootContainerStatic): unit = failwith "JS only"
-        [<Import("NavigationReducer", "react-native")>] static member NavigationReducer with get(): NavigationReducerStatic = failwith "JS only" and set(v: NavigationReducerStatic): unit = failwith "JS only"
-        [<Import("Easing", "react-native")>] static member Easing with get(): EasingStatic = failwith "JS only" and set(v: EasingStatic): unit = failwith "JS only"
-        [<Import("NativeModules", "react-native")>] static member NativeModules with get(): obj = failwith "JS only" and set(v: obj): unit = failwith "JS only"
-        [<Import("NativeAppEventEmitter", "react-native")>] static member NativeAppEventEmitter with get(): NativeAppEventEmitterStatic = failwith "JS only" and set(v: NativeAppEventEmitterStatic): unit = failwith "JS only"
-        [<Import("SegmentedControlIOS", "react-native")>] static member SegmentedControlIOS with get(): SegmentedControlIOSStatic = failwith "JS only" and set(v: SegmentedControlIOSStatic): unit = failwith "JS only"
-        [<Import("PixelRatio", "react-native")>] static member PixelRatio with get(): PixelRatioStatic = failwith "JS only" and set(v: PixelRatioStatic): unit = failwith "JS only"
-        [<Import("Platform", "react-native")>] static member Platform with get(): PlatformStatic = failwith "JS only" and set(v: PlatformStatic): unit = failwith "JS only"
-        [<Import("DeviceEventEmitter", "react-native")>] static member DeviceEventEmitter with get(): DeviceEventEmitterStatic = failwith "JS only" and set(v: DeviceEventEmitterStatic): unit = failwith "JS only"
-        [<Import("DeviceEventSubscription", "react-native")>] static member DeviceEventSubscription with get(): DeviceEventSubscriptionStatic = failwith "JS only" and set(v: DeviceEventSubscriptionStatic): unit = failwith "JS only"
-        [<Import("InteractionManager", "react-native")>] static member InteractionManager with get(): InteractionManagerStatic = failwith "JS only" and set(v: InteractionManagerStatic): unit = failwith "JS only"
-        [<Import("Geolocation", "react-native")>] static member Geolocation with get(): GeolocationStatic = failwith "JS only" and set(v: GeolocationStatic): unit = failwith "JS only"
-        [<Import("createElement", "react-native")>] static member createElement(``type``: React.ReactType, props: 'P, [<ParamArray>] children: React.ReactNode[]): React.ReactElement<'P> = failwith "JS only"
-        [<Import("requireNativeComponent", "react-native")>] static member requireNativeComponent(viewName: string, ?componentInterface: ComponentInterface<'P>, ?extraConfig: obj): React.ComponentClass<'P> = failwith "JS only"
-        [<Import("___spread", "react-native")>] static member ___spread(target: obj, [<ParamArray>] sources: obj[]): obj = failwith "JS only"
+        [<Import("ActivityIndicator", "react-native")>] static member ActivityIndicator with get(): ActivityIndicatorStatic = jsNative and set(v: ActivityIndicatorStatic): unit = jsNative
+        [<Import("ActivityIndicatorIOS", "react-native")>] static member ActivityIndicatorIOS with get(): ActivityIndicatorIOSStatic = jsNative and set(v: ActivityIndicatorIOSStatic): unit = jsNative
+        [<Import("DatePickerIOS", "react-native")>] static member DatePickerIOS with get(): DatePickerIOSStatic = jsNative and set(v: DatePickerIOSStatic): unit = jsNative
+        [<Import("DrawerLayoutAndroid", "react-native")>] static member DrawerLayoutAndroid with get(): DrawerLayoutAndroidStatic = jsNative and set(v: DrawerLayoutAndroidStatic): unit = jsNative
+        [<Import("Image", "react-native")>] static member Image with get(): ImageStatic = jsNative and set(v: ImageStatic): unit = jsNative
+        [<Import("LayoutAnimation", "react-native")>] static member LayoutAnimation with get(): LayoutAnimationStatic = jsNative and set(v: LayoutAnimationStatic): unit = jsNative
+        [<Import("ListView", "react-native")>] static member ListView with get(): ListViewStatic<obj> = jsNative and set(v: ListViewStatic<obj>): unit = jsNative
+        [<Import("MapView", "react-native")>] static member MapView with get(): MapViewStatic = jsNative and set(v: MapViewStatic): unit = jsNative
+        [<Import("Modal", "react-native")>] static member Modal with get(): ModalStatic = jsNative and set(v: ModalStatic): unit = jsNative
+        [<Import("Navigator", "react-native")>] static member Navigator with get(): NavigatorStatic = jsNative and set(v: NavigatorStatic): unit = jsNative
+        [<Import("NavigatorIOS", "react-native")>] static member NavigatorIOS with get(): NavigatorIOSStatic = jsNative and set(v: NavigatorIOSStatic): unit = jsNative
+        [<Import("Picker", "react-native")>] static member Picker with get(): PickerStatic = jsNative and set(v: PickerStatic): unit = jsNative
+        [<Import("PickerIOS", "react-native")>] static member PickerIOS with get(): PickerIOSStatic = jsNative and set(v: PickerIOSStatic): unit = jsNative
+        [<Import("ProgressBarAndroid", "react-native")>] static member ProgressBarAndroid with get(): ProgressBarAndroidStatic = jsNative and set(v: ProgressBarAndroidStatic): unit = jsNative
+        [<Import("ProgressViewIOS", "react-native")>] static member ProgressViewIOS with get(): ProgressViewIOSStatic = jsNative and set(v: ProgressViewIOSStatic): unit = jsNative
+        [<Import("RefreshControl", "react-native")>] static member RefreshControl with get(): RefreshControlStatic = jsNative and set(v: RefreshControlStatic): unit = jsNative
+        [<Import("Slider", "react-native")>] static member Slider with get(): SliderIOS = jsNative and set(v: SliderIOS): unit = jsNative
+        [<Import("SliderIOS", "react-native")>] static member SliderIOS with get(): SliderIOSStatic = jsNative and set(v: SliderIOSStatic): unit = jsNative
+        [<Import("StatusBar", "react-native")>] static member StatusBar with get(): StatusBarStatic = jsNative and set(v: StatusBarStatic): unit = jsNative
+        [<Import("ScrollView", "react-native")>] static member ScrollView with get(): ScrollViewStatic = jsNative and set(v: ScrollViewStatic): unit = jsNative
+        [<Import("StyleSheet", "react-native")>] static member StyleSheet with get(): StyleSheetStatic = jsNative and set(v: StyleSheetStatic): unit = jsNative
+        [<Import("SwipeableListView", "react-native")>] static member SwipeableListView with get(): SwipeableListViewStatic<obj> = jsNative and set(v: SwipeableListViewStatic<obj>): unit = jsNative
+        [<Import("Switch", "react-native")>] static member Switch with get(): SwitchStatic = jsNative and set(v: SwitchStatic): unit = jsNative
+        [<Import("SwitchIOS", "react-native")>] static member SwitchIOS with get(): SwitchIOSStatic = jsNative and set(v: SwitchIOSStatic): unit = jsNative
+        [<Import("TabBarIOS", "react-native")>] static member TabBarIOS with get(): TabBarIOSStatic = jsNative and set(v: TabBarIOSStatic): unit = jsNative
+        [<Import("Text", "react-native")>] static member Text with get(): TextStatic = jsNative and set(v: TextStatic): unit = jsNative
+        [<Import("TextInput", "react-native")>] static member TextInput with get(): TextInputStatic = jsNative and set(v: TextInputStatic): unit = jsNative
+        [<Import("ToolbarAndroid", "react-native")>] static member ToolbarAndroid with get(): ToolbarAndroidStatic = jsNative and set(v: ToolbarAndroidStatic): unit = jsNative
+        [<Import("TouchableHighlight", "react-native")>] static member TouchableHighlight with get(): TouchableHighlightStatic = jsNative and set(v: TouchableHighlightStatic): unit = jsNative
+        [<Import("TouchableNativeFeedback", "react-native")>] static member TouchableNativeFeedback with get(): TouchableNativeFeedbackStatic = jsNative and set(v: TouchableNativeFeedbackStatic): unit = jsNative
+        [<Import("TouchableOpacity", "react-native")>] static member TouchableOpacity with get(): TouchableOpacityStatic = jsNative and set(v: TouchableOpacityStatic): unit = jsNative
+        [<Import("TouchableWithoutFeedback", "react-native")>] static member TouchableWithoutFeedback with get(): TouchableWithoutFeedbackStatic = jsNative and set(v: TouchableWithoutFeedbackStatic): unit = jsNative
+        [<Import("View", "react-native")>] static member View with get(): ViewStatic = jsNative and set(v: ViewStatic): unit = jsNative
+        [<Import("ViewPagerAndroid", "react-native")>] static member ViewPagerAndroid with get(): ViewPagerAndroidStatic = jsNative and set(v: ViewPagerAndroidStatic): unit = jsNative
+        [<Import("WebView", "react-native")>] static member WebView with get(): WebViewStatic = jsNative and set(v: WebViewStatic): unit = jsNative
+        [<Import("ActionSheetIOS", "react-native")>] static member ActionSheetIOS with get(): ActionSheetIOSStatic = jsNative and set(v: ActionSheetIOSStatic): unit = jsNative
+        [<Import("AdSupportIOS", "react-native")>] static member AdSupportIOS with get(): AdSupportIOSStatic = jsNative and set(v: AdSupportIOSStatic): unit = jsNative
+        [<Import("Alert", "react-native")>] static member Alert with get(): AlertStatic = jsNative and set(v: AlertStatic): unit = jsNative
+        [<Import("AlertIOS", "react-native")>] static member AlertIOS with get(): AlertIOSStatic = jsNative and set(v: AlertIOSStatic): unit = jsNative
+        [<Import("AppState", "react-native")>] static member AppState with get(): AppStateStatic = jsNative and set(v: AppStateStatic): unit = jsNative
+        [<Import("AppStateIOS", "react-native")>] static member AppStateIOS with get(): AppStateStatic = jsNative and set(v: AppStateStatic): unit = jsNative
+        [<Import("AsyncStorage", "react-native")>] static member AsyncStorage with get(): AsyncStorageStatic = jsNative and set(v: AsyncStorageStatic): unit = jsNative
+        [<Import("BackAndroid", "react-native")>] static member BackAndroid with get(): BackAndroidStatic = jsNative and set(v: BackAndroidStatic): unit = jsNative
+        [<Import("CameraRoll", "react-native")>] static member CameraRoll with get(): CameraRollStatic = jsNative and set(v: CameraRollStatic): unit = jsNative
+        [<Import("Clipboard", "react-native")>] static member Clipboard with get(): ClipboardStatic = jsNative and set(v: ClipboardStatic): unit = jsNative
+        [<Import("DatePickerAndroid", "react-native")>] static member DatePickerAndroid with get(): DatePickerAndroidStatic = jsNative and set(v: DatePickerAndroidStatic): unit = jsNative
+        [<Import("IntentAndroid", "react-native")>] static member IntentAndroid with get(): IntentAndroidStatic = jsNative and set(v: IntentAndroidStatic): unit = jsNative
+        [<Import("KeyboardAvoidingView", "react-native")>] static member KeyboardAvoidingView with get(): KeyboardAvoidingViewStatic = jsNative and set(v: KeyboardAvoidingViewStatic): unit = jsNative
+        [<Import("Linking", "react-native")>] static member Linking with get(): LinkingStatic = jsNative and set(v: LinkingStatic): unit = jsNative
+        [<Import("LinkingIOS", "react-native")>] static member LinkingIOS with get(): LinkingIOSStatic = jsNative and set(v: LinkingIOSStatic): unit = jsNative
+        [<Import("NetInfo", "react-native")>] static member NetInfo with get(): NetInfoStatic = jsNative and set(v: NetInfoStatic): unit = jsNative
+        [<Import("PanResponder", "react-native")>] static member PanResponder with get(): PanResponderStatic = jsNative and set(v: PanResponderStatic): unit = jsNative
+        [<Import("PushNotificationIOS", "react-native")>] static member PushNotificationIOS with get(): PushNotificationIOSStatic = jsNative and set(v: PushNotificationIOSStatic): unit = jsNative
+        [<Import("StatusBarIOS", "react-native")>] static member StatusBarIOS with get(): StatusBarIOSStatic = jsNative and set(v: StatusBarIOSStatic): unit = jsNative
+        [<Import("TimePickerAndroid", "react-native")>] static member TimePickerAndroid with get(): TimePickerAndroidStatic = jsNative and set(v: TimePickerAndroidStatic): unit = jsNative
+        [<Import("ToastAndroid", "react-native")>] static member ToastAndroid with get(): ToastAndroidStatic = jsNative and set(v: ToastAndroidStatic): unit = jsNative
+        [<Import("VibrationIOS", "react-native")>] static member VibrationIOS with get(): VibrationIOSStatic = jsNative and set(v: VibrationIOSStatic): unit = jsNative
+        [<Import("Vibration", "react-native")>] static member Vibration with get(): VibrationStatic = jsNative and set(v: VibrationStatic): unit = jsNative
+        [<Import("Dimensions", "react-native")>] static member Dimensions with get(): Dimensions = jsNative and set(v: Dimensions): unit = jsNative
+        [<Import("ShadowPropTypesIOS", "react-native")>] static member ShadowPropTypesIOS with get(): ShadowPropTypesIOSStatic = jsNative and set(v: ShadowPropTypesIOSStatic): unit = jsNative
+        [<Import("NavigationExperimental", "react-native")>] static member NavigationExperimental with get(): NavigationExperimentalStatic = jsNative and set(v: NavigationExperimentalStatic): unit = jsNative
+        [<Import("NavigationContainer", "react-native")>] static member NavigationContainer with get(): NavigationContainerStatic = jsNative and set(v: NavigationContainerStatic): unit = jsNative
+        [<Import("NavigationRootContainer", "react-native")>] static member NavigationRootContainer with get(): NavigationRootContainerStatic = jsNative and set(v: NavigationRootContainerStatic): unit = jsNative
+        [<Import("NavigationReducer", "react-native")>] static member NavigationReducer with get(): NavigationReducerStatic = jsNative and set(v: NavigationReducerStatic): unit = jsNative
+        [<Import("Easing", "react-native")>] static member Easing with get(): EasingStatic = jsNative and set(v: EasingStatic): unit = jsNative
+        [<Import("NativeModules", "react-native")>] static member NativeModules with get(): obj = jsNative and set(v: obj): unit = jsNative
+        [<Import("NativeAppEventEmitter", "react-native")>] static member NativeAppEventEmitter with get(): NativeAppEventEmitterStatic = jsNative and set(v: NativeAppEventEmitterStatic): unit = jsNative
+        [<Import("SegmentedControlIOS", "react-native")>] static member SegmentedControlIOS with get(): SegmentedControlIOSStatic = jsNative and set(v: SegmentedControlIOSStatic): unit = jsNative
+        [<Import("PixelRatio", "react-native")>] static member PixelRatio with get(): PixelRatioStatic = jsNative and set(v: PixelRatioStatic): unit = jsNative
+        [<Import("Platform", "react-native")>] static member Platform with get(): PlatformStatic = jsNative and set(v: PlatformStatic): unit = jsNative
+        [<Import("DeviceEventEmitter", "react-native")>] static member DeviceEventEmitter with get(): DeviceEventEmitterStatic = jsNative and set(v: DeviceEventEmitterStatic): unit = jsNative
+        [<Import("DeviceEventSubscription", "react-native")>] static member DeviceEventSubscription with get(): DeviceEventSubscriptionStatic = jsNative and set(v: DeviceEventSubscriptionStatic): unit = jsNative
+        [<Import("InteractionManager", "react-native")>] static member InteractionManager with get(): InteractionManagerStatic = jsNative and set(v: InteractionManagerStatic): unit = jsNative
+        [<Import("Geolocation", "react-native")>] static member Geolocation with get(): GeolocationStatic = jsNative and set(v: GeolocationStatic): unit = jsNative
+        [<Import("createElement", "react-native")>] static member createElement(``type``: React.ReactType, props: 'P, [<ParamArray>] children: React.ReactNode[]): React.ReactElement = jsNative
+        [<Import("requireNativeComponent", "react-native")>] static member requireNativeComponent(viewName: string, ?componentInterface: ComponentInterface<'P>, ?extraConfig: obj): React.ComponentClass<'P> = jsNative
+        [<Import("___spread", "react-native")>] static member ___spread(target: obj, [<ParamArray>] sources: obj[]): obj = jsNative
 
     module addons =
         type TestModuleStatic =
@@ -2333,4 +2334,4 @@ module ReactNative =
             TestModuleStatic
 
         type [<Import("addons","react-native")>] Globals =
-            static member TestModule with get(): TestModuleStatic = failwith "JS only" and set(v: TestModuleStatic): unit = failwith "JS only"
+            static member TestModule with get(): TestModuleStatic = jsNative and set(v: TestModuleStatic): unit = jsNative

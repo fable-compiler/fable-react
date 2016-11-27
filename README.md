@@ -5,8 +5,7 @@ Fable bindings for React
 ## Installation
 
 ```sh
-$ npm install --save react react-dom fable-core
-$ npm install --save-dev fable-react
+$ npm install --save react react-dom fable-core fable-powerpack fable-react
 ```
 
 ## Usage
@@ -16,6 +15,7 @@ $ npm install --save-dev fable-react
 ```xml
   <ItemGroup>
     <Reference Include="node_modules/fable-core/Fable.Core.dll" />
+    <Reference Include="node_modules/fable-powerpack/Fable.PowerPack.dll" />
     <Reference Include="node_modules/fable-react/Fable.React.dll" />
   </ItemGroup>
 ```
@@ -24,6 +24,7 @@ $ npm install --save-dev fable-react
 
 ```fsharp
 #r "node_modules/fable-core/Fable.Core.dll"
+#r "node_modules/fable-powerpack/Fable.PowerPack.dll"
 #r "node_modules/fable-react/Fable.React.dll"
 
 open Fable.Core
