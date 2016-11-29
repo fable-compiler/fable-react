@@ -15,7 +15,7 @@ let inline private setItem(key, s): JS.Promise<unit> =
     unbox(Globals.AsyncStorage.setItem(key,s))
 
 /// Removes all rows from the model.
-let clear<'a>() =
+let [<PassGenerics>] clear<'a>() =
     let key = modelsKey + typeof<'a>.FullName
     let s:string = [||] |> toJson
     setItem(key,s)
@@ -94,13 +94,13 @@ let [<PassGenerics>] addMultiple<'a>(data:'a []) =
         setItem(key,newModel))
 
 /// Replaces all rows of a model
-let replaceWithKey<'a>(key,data:'a []) =
+let [<PassGenerics>] replaceWithKey<'a>(key,data:'a []) =
     let modelKey = modelsKey + typeof<'a>.FullName + "/" + key
     let newModel : string = data |> toJson
     setItem(modelKey,newModel)
 
 /// Replaces all rows of a model
-let replace<'a>(data:'a []) =
+let [<PassGenerics>] replace<'a>(data:'a []) =
     let modelKey = modelsKey + typeof<'a>.FullName
     let newModel : string = data |> toJson
     setItem(modelKey,newModel)

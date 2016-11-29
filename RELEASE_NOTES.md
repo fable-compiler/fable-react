@@ -1,3 +1,7 @@
+### 0.7.6
+
+* Add `PassGenericsAttribute` to methods missing it
+
 ### 0.7.5
 
 * Update libraries

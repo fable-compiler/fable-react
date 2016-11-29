@@ -8,8 +8,7 @@
         "umd": {
             "dll": false,
             "module": "umd",
-            "outDir": "./npm/umd",
-            "refs": { "Fable.Core": "fable-core/umd" }
+            "outDir": "./npm/umd"
         }
     }
 }
