@@ -61,6 +61,12 @@
     <Compile Include="react-native-image-resizer/Fable.Helpers.ReactNativeImageResizer.fs" />
     <Compile Include="react-native-onesignal/Fable.Import.ReactNativeOneSignal.fs" />
     <Compile Include="react-native-onesignal/Fable.Helpers.ReactNativeOneSignal.fs" />
+    <Compile Include="react-native-barcodescanner/Fable.Import.ReactNativeBarcodeScanner.fs" />
+    <Compile Include="react-native-barcodescanner/Fable.Helpers.ReactNativeBarcodeScanner.fs" />
+    <Compile Include="react-native-popup-menu/Fable.Import.ReactNativePopupMenu.fs" />
+    <Compile Include="react-native-popup-menu/Fable.Helpers.ReactNativePopupMenu.fs" />
+    <Compile Include="react-native-push-notification/Fable.Import.ReactNativePushNotification.fs" />
+    <Compile Include="react-native-push-notification/Fable.Helpers.ReactNativePushNotification.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">14</MinimumVisualStudioVersion>

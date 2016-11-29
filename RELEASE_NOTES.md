@@ -1,3 +1,7 @@
+### 0.7.8
+
+* Add missing react-native modules
+
 ### 0.7.7
 
 * Add react-native image-resizer and onesignal modules
