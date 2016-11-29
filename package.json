@@ -18,11 +18,9 @@
   },
   "homepage": "https://github.com/fable-compiler/fable-react#readme",
   "devDependencies": {
-    "fable-compiler": "^0.7.11",
-    "fable-core": "^0.7.9",
+    "fable-compiler": "^0.7.14",
+    "fable-core": "^0.7.11",
+    "fable-powerpack": "^0.0.16",
     "fs-extra": "^1.0.0"
-  },
-  "peerDependencies": {
-    "fable-powerpack": "^0.0.14"
   }
 }

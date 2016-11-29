@@ -35,7 +35,7 @@ let showImagePicker (props: IImagePickerOptions list) f =
     IP.ImagePicker.showImagePicker(props |> unbox, f)
 
 let showImagePickerAsync (props: IImagePickerOptions list) =
-    Async.FromContinuations(fun (onSuccess, onError, _) ->
+    Fable.PowerPack.Promise.create(fun onSuccess onError ->
         showImagePicker
             props
             (fun result ->

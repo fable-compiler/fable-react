@@ -1,3 +1,8 @@
+### 0.7.5
+
+* Update libraries
+* Unify the API by always returning Promise
+
 ### 0.7.4
 
 * Pass generics to react-native-simple-store methods

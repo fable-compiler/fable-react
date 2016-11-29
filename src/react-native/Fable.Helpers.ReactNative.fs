@@ -1901,7 +1901,6 @@ module ImageStore =
     [<Import("ImageStore","react-native")>]
     let private ImageStore = obj()
 
-
     /// Retrieves the base64-encoded data for an image in the ImageStore. If the specified URI does not match an image in the store, an exception will be raised.
     let getBase64ForTag uri : JS.Promise<string> =
         Promise.create(fun onSuccess onError ->
@@ -1947,10 +1946,10 @@ module Storage =
             | v -> Some (ofJson v))
 
     /// Saves a value with the given key to the local device storage.
-    let setItem (k:string) (v:string) =
-        Globals.AsyncStorage.setItem(k,v)
+    let setItem (k:string) (v:string): JS.Promise<unit> =
+        unbox(Globals.AsyncStorage.setItem(k,v))
 
     /// Saves a value with the given key to the local device storage.
-    let [<PassGenerics>] save<'a> (k:string) (v:'a) =
-        Globals.AsyncStorage.setItem(k,toJson v)
+    let [<PassGenerics>] save<'a> (k:string) (v:'a): JS.Promise<unit> =
+        unbox(Globals.AsyncStorage.setItem(k, toJson v))
 
