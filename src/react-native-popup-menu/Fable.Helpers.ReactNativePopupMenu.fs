@@ -58,7 +58,7 @@ module Props =
 open Props
 
 /// Creates a MenuContext element
-let inline menuContext (props:IMenuContextProperties list) (onBackdropPress: unit -> unit) (children: React.ReactElement list): React.ReactElement =
+let menuContext (props:IMenuContextProperties list) (onBackdropPress: unit -> unit) (children: React.ReactElement list): React.ReactElement =
     createElement(
         BPM.MenuContext,
         JS.Object.assign(
@@ -67,7 +67,7 @@ let inline menuContext (props:IMenuContextProperties list) (onBackdropPress: uni
         children)
 
 /// Creates a Menu element
-let inline menu (props:IMenuProperties list) (onSelect: obj -> unit) (children: React.ReactElement list): React.ReactElement =
+let menu (props:IMenuProperties list) (onSelect: obj -> unit) (children: React.ReactElement list): React.ReactElement =
     createElement(
         BPM.Menu,
         JS.Object.assign(
@@ -77,7 +77,7 @@ let inline menu (props:IMenuProperties list) (onSelect: obj -> unit) (children: 
 
 
 /// Creates a MenuTrigger element
-let inline menuTrigger (props:IMenuTriggerProperties list) (onPress: unit -> unit) (children: React.ReactElement list): React.ReactElement =
+let menuTrigger (props:IMenuTriggerProperties list) (onPress: unit -> unit) (children: React.ReactElement list): React.ReactElement =
     createElement(
         BPM.MenuTrigger,
         JS.Object.assign(
@@ -86,9 +86,9 @@ let inline menuTrigger (props:IMenuTriggerProperties list) (onPress: unit -> uni
         children)
 
 /// Creates a MenuOptions element
-let inline menuOptions (props:IMenuOptionsProperties list) (children: React.ReactElement list): React.ReactElement =
+let menuOptions (props:IMenuOptionsProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(BPM.MenuOptions, props, children)
 
 /// Creates a MenuOption element
-let inline menuOption (props:IMenuOptionProperties list) : React.ReactElement =
+let menuOption (props:IMenuOptionProperties list) : React.ReactElement =
     createElement(BPM.MenuOption, props, [])

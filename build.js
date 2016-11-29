@@ -15,6 +15,10 @@ var targets = {
                 var version = /\d[^\s]*/.exec(line)[0];
                 return fable.runCommand("npm", "npm version " + version);
             });
+    },
+    publish() {
+        return this.all()
+            .then(_ => fable.runCommand("npm", "npm publish"))
     }
 }
 

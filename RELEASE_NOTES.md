@@ -1,3 +1,7 @@
+### 0.7.9
+
+* Remove `inline` from popup-menu methods
+
 ### 0.7.8
 
 * Add missing react-native modules
