@@ -1,3 +1,7 @@
+### 0.7.7
+
+* Add react-native image-resizer and onesignal modules
+
 ### 0.7.6
 
 * Add `PassGenericsAttribute` to methods missing it

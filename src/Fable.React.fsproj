@@ -57,6 +57,10 @@
     <Compile Include="react-native-image-picker/Fable.Helpers.ReactNativeImagePicker.fs" />
     <Compile Include="react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.KeyValueStore.fs" />
     <Compile Include="react-native-simple-store/Fable.Helpers.ReactNative.SimpleStore.DB.fs" />
+    <Compile Include="react-native-image-resizer/Fable.Import.ReactNativeImageResizer.fs" />
+    <Compile Include="react-native-image-resizer/Fable.Helpers.ReactNativeImageResizer.fs" />
+    <Compile Include="react-native-onesignal/Fable.Import.ReactNativeOneSignal.fs" />
+    <Compile Include="react-native-onesignal/Fable.Helpers.ReactNativeOneSignal.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">14</MinimumVisualStudioVersion>
