@@ -1,3 +1,7 @@
+### 0.7.10
+
+* Change `createResizedImage` to Promise
+
 ### 0.7.9
 
 * Remove `inline` from popup-menu methods

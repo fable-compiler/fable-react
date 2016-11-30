@@ -16,6 +16,5 @@ module ImageResizer =
     /// <param name="maxHeight">Image max height (ratio is preserved)</param>
     /// <param name="compressFormat">Can be either JPEG, PNG or WEBP (Android only).</param>
     /// <param name="quality">A number between 0 and 100. Used for the JPEG compression.</param>
-    let createResizedImage (path: string, maxWidth: int, maxHeight: int, compressFormat: string, quality: int) : Async<string> =
+    let createResizedImage (path: string, maxWidth: int, maxHeight: int, compressFormat: string, quality: int) : JS.Promise<string> =
         ReactNativeImageResizer.Globals.ImageResizer?createResizedImage(path, maxWidth, maxHeight, compressFormat, quality) |> unbox
-        |> Async.AwaitPromise

@@ -1,5 +1,6 @@
 npm/
 .vscode/
+.DS_Store
 
 src/plugins/Replacer.dll
 
