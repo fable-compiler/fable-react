@@ -1,3 +1,7 @@
+### 0.7.11
+
+* BUGFIX: use ofJsonWithTypeInfo in react native simple store to keep backwards compat
+
 ### 0.7.10
 
 * Change `createResizedImage` to Promise

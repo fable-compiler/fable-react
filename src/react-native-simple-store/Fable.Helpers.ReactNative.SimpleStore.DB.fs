@@ -17,7 +17,7 @@ let inline private setItem(key, s): JS.Promise<unit> =
 /// Removes all rows from the model.
 let [<PassGenerics>] clear<'a>() =
     let key = modelsKey + typeof<'a>.FullName
-    let s:string = [||] |> toJson
+    let s:string = [||] |> toJsonWithTypeInfo
     setItem(key,s)
 
 /// Gets or creates a new model.
@@ -25,14 +25,14 @@ let [<PassGenerics>] private getModel<'a> (key) : JS.Promise<Table<'a>> =
     Globals.AsyncStorage.getItem (key)
     |> Promise.map (function
         | null -> [||]
-        | v -> ofJson v)
+        | v -> ofJsonWithTypeInfo v)
 
 /// Adds a row to a model
 let [<PassGenerics>] add<'a>(data:'a) =
     let key = modelsKey + typeof<'a>.FullName
     getModel<'a> key
     |> Promise.bind (fun model ->
-        let newModel : string = Array.append [|unbox data|] model |> toJson
+        let newModel : string = Array.append [|unbox data|] model |> toJsonWithTypeInfo
         setItem(key,newModel))
 
 /// Updates a row in a model
@@ -41,7 +41,7 @@ let [<PassGenerics>] update<'a>(index, data:'a) =
     getModel<'a> key
     |> Promise.bind (fun model ->
         model.[index] <- unbox data
-        let newModel : string =  toJson model
+        let newModel : string =  toJsonWithTypeInfo model
         setItem(key,newModel))
 
 /// Deletes a row from a model
@@ -54,7 +54,7 @@ let [<PassGenerics>] delete<'a>(index) =
             |> Array.mapi (fun i x -> i,x)
             |> Array.filter (fun (i,_) -> i <> index)
             |> Array.map snd
-        let newModel : string =  toJson model
+        let newModel : string =  toJsonWithTypeInfo model
         setItem(key,newModel))
 
 /// Updates multiple rows in a model
@@ -64,7 +64,7 @@ let [<PassGenerics>] updateMultiple<'a>(values) =
     |> Promise.bind (fun model ->
         for index, data:'a in values do
             model.[index] <- unbox data
-        let newModel : string =  toJson model
+        let newModel : string =  toJsonWithTypeInfo model
         setItem(key,newModel))
 
 ///  Update data by an update function.
@@ -73,7 +73,7 @@ let [<PassGenerics>] updateWithFunction<'a>(updateF: 'a[] -> 'a[]) =
     getModel<'a> key
     |> Promise.bind (fun model ->
         let updated = updateF model
-        let newModel : string = toJson updated
+        let newModel : string = toJsonWithTypeInfo updated
         setItem(key,newModel))
 
 ///  Update data by an update function.
@@ -82,7 +82,7 @@ let [<PassGenerics>] updateWithFunctionAndKey<'a>(updateF: 'a[] -> 'a[],key) =
     getModel<'a> key
     |> Promise.bind (fun model ->
         let updated = updateF model
-        let newModel : string = toJson updated
+        let newModel : string = toJsonWithTypeInfo updated
         setItem(key,newModel))
 
 /// Adds multiple rows to a model
@@ -90,19 +90,19 @@ let [<PassGenerics>] addMultiple<'a>(data:'a []) =
     let key = modelsKey + typeof<'a>.FullName
     getModel<'a> key
     |> Promise.bind (fun model ->
-        let newModel : string = Array.append data model |> toJson
+        let newModel : string = Array.append data model |> toJsonWithTypeInfo
         setItem(key,newModel))
 
 /// Replaces all rows of a model
 let [<PassGenerics>] replaceWithKey<'a>(key,data:'a []) =
     let modelKey = modelsKey + typeof<'a>.FullName + "/" + key
-    let newModel : string = data |> toJson
+    let newModel : string = data |> toJsonWithTypeInfo
     setItem(modelKey,newModel)
 
 /// Replaces all rows of a model
 let [<PassGenerics>] replace<'a>(data:'a []) =
     let modelKey = modelsKey + typeof<'a>.FullName
-    let newModel : string = data |> toJson
+    let newModel : string = data |> toJsonWithTypeInfo
     setItem(modelKey,newModel)
 
 /// Gets a row from the model
