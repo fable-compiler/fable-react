@@ -1872,13 +1872,17 @@ module Alert =
             "onPress" ==> callback
         ]
 
+    /// Shows an alert with many buttons
+    let alert (title:string,message:string,buttons: (string * (unit -> unit)) seq) : unit =
+        Alert?alert( title, message, Seq.map createButton buttons |> Seq.toArray ) |> ignore        
+
     /// Shows an alert button with one button
     let alertWithOneButton (title:string,message:string,okText:string,onOk:unit -> unit) : unit =
-        Alert?alert( title, message, [| createButton(okText,onOk) |]) |> ignore
+        alert( title, message, [ okText,onOk ]) |> ignore
 
     /// Shows an alert button with two buttons
     let alertWithTwoButtons (title:string,message:string,cancelText:string,onCancel:unit -> unit,okText:string,onOk:unit -> unit) : unit =
-        Alert?alert( title, message, [| createButton(cancelText,onCancel); createButton(okText,onOk) |]) |> ignore
+        alert( title, message, [ (cancelText,onCancel); (okText,onOk) ]) |> ignore
 
     let confirm (title:string,message:string,cancelText:string,okText:string) =
         Promise.create(fun onSuccess onError ->

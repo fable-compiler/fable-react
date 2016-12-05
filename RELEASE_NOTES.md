@@ -1,3 +1,7 @@
+### 0.7.12
+
+* BUGFIX: More alert options
+
 ### 0.7.11
 
 * BUGFIX: use ofJsonWithTypeInfo in react native simple store to keep backwards compat
