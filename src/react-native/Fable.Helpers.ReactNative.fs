@@ -1479,7 +1479,6 @@ module Props =
     [<KeyValueList>]
     type SwitchProperties =
         | Disabled of bool
-        | OnValueChange of Func<bool, unit>
         | TestID of string
         | Value of bool
         | Style of IStyle list
@@ -1769,10 +1768,12 @@ let statusBar (props:IStatusBarProperties list) : React.ReactElement =
       RN.StatusBar,
       props, [])
 
-let switch (props:ISwitchProperties list) : React.ReactElement =
+let switch (props:ISwitchProperties list) (onValueChange: bool -> unit) : React.ReactElement =
     createElement(
       RN.Switch,
-      props, [])
+      JS.Object.assign(
+            createObj ["onValueChange" ==> onValueChange],
+            props), [])
 
 let navigationHeader (props:INavigationHeaderProps list) (rendererProps:NavigationTransitionProps): React.ReactElement =
     createElement(

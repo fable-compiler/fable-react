@@ -1,3 +1,7 @@
+### 0.7.13
+
+* BUGFIX: Make it easier to use switches
+
 ### 0.7.12
 
 * BUGFIX: More alert options
