@@ -62,7 +62,7 @@ module React =
     and ReactInstance =
         U2<Component<obj, obj>, Element>
 
-    and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
+    and [<AbstractClass; Import("Component", "react")>] Component<'P, 'S>(props: 'P) =
         [<Emit("$0.props")>]
         member __.props: 'P = jsNative
         [<Emit("$0.props.children")>]
