@@ -22,7 +22,7 @@ type Emitter() =
 
     member x.Com(_com: Fable.ICompiler, i: Fable.ApplyInfo) =
         let args =
-            let com = makeNonGenTypeRef i.methodTypeArgs.Head
+            let com = makeNonGenTypeRef _com i.methodTypeArgs.Head
             match i.args with
             | [props; children] -> [com; props] @ spread children
             | [props] -> [com; props]
