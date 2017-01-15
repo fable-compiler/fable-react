@@ -1,3 +1,7 @@
+### 0.8.0
+
+* BUGFIX: Build with latest fable
+
 ### 0.7.14
 
 * BUGFIX: Make it easier to use switches
