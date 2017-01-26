@@ -1,3 +1,7 @@
+### 0.8.1
+
+* Adding flexbox css properties: PR #18
+
 ### 0.8.0
 
 * BUGFIX: Build with latest fable
