@@ -444,6 +444,7 @@ module React =
         abstract flexItemAlign: obj option with get, set
         abstract flexLinePack: obj option with get, set
         abstract flexOrder: obj option with get, set
+        abstract flexWrap: obj option with get, set
         abstract float: obj option with get, set
         abstract flowFrom: obj option with get, set
         abstract font: obj option with get, set
@@ -472,6 +473,7 @@ module React =
         abstract hyphenateLimitZone: obj option with get, set
         abstract hyphens: obj option with get, set
         abstract imeMode: obj option with get, set
+        abstract justifyContent: obj option with get, set
         abstract layoutGrid: obj option with get, set
         abstract layoutGridChar: obj option with get, set
         abstract layoutGridLine: obj option with get, set
