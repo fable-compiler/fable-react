@@ -118,6 +118,7 @@ module Props =
         | FlexItemAlign of obj
         | FlexLinePack of obj
         | FlexOrder of obj
+        | FlexWrap of obj
         | Float of obj
         | FlowFrom of obj
         | Font of obj
@@ -146,6 +147,7 @@ module Props =
         | HyphenateLimitZone of obj
         | Hyphens of obj
         | ImeMode of obj
+        | JustifyContent of obj
         | LayoutGrid of obj
         | LayoutGridChar of obj
         | LayoutGridLine of obj
