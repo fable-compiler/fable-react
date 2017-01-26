@@ -382,6 +382,8 @@ module Props =
         | AllowFullScreen of bool
         | AllowTransparency of bool
         | Alt of string
+        | [<CompiledName("aria-haspopup")>] AriaHaspopup of bool
+        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
         | Async of bool
         | AutoComplete of string
         | AutoFocus of bool

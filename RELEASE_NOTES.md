@@ -1,6 +1,6 @@
-### 0.8.2
+### 0.8.3
 
-* Adding data-toggle to html properties
+* Adding data-toggle, aria-haspopup, aria-expanded to html properties
 
 ### 0.8.1
 
