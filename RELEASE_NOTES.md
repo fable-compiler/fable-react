@@ -1,3 +1,7 @@
+### 0.8.2
+
+* Adding data-toggle to html properties
+
 ### 0.8.1
 
 * Adding flexbox css properties: PR #18
