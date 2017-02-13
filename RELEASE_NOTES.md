@@ -1,3 +1,7 @@
+### 0.8.5
+
+* Adding Keyboard.dismiss
+
 ### 0.8.4
 
 * Adding data-toggle, aria-haspopup, aria-expanded to html properties

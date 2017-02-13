@@ -1863,6 +1863,15 @@ let private Linking = obj()
 let openUrl (url:string) : unit =
     Linking?openURL(url) |> ignore
 
+
+module Keyboard =
+    [<Import("Keyboard","react-native")>]
+    let private Keyboard = obj()
+
+    /// Dismisses the keyboard
+    let dismiss() : unit =
+        Keyboard?dismiss() |> ignore    
+
 module Alert =
     [<Import("Alert","react-native")>]
     let private Alert = obj()
