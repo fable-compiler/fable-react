@@ -1,7 +1,7 @@
 {
   "name": "fable-react",
-  "version": "0.0.0",
-  "description": "Fable bindings and helpers for React and React Native",
+  "version": "1.0.0-narumi-1",
+  "description": "Fable bindings and helpers for React",
   "scripts": {
     "build": "node build",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -16,11 +16,5 @@
   "bugs": {
     "url": "https://github.com/fable-compiler/fable-react/issues"
   },
-  "homepage": "https://github.com/fable-compiler/fable-react#readme",
-  "devDependencies": {
-    "fable-compiler": "^0.7.38",
-    "fable-core": "^0.7.26",
-    "fable-powerpack": "^0.0.19",
-    "fs-extra": "^1.0.0"
-  }
+  "homepage": "https://github.com/fable-compiler/fable-react#readme"
 }
