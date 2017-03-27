@@ -476,7 +476,6 @@ module Props =
         | SrcSet of string
         | Start of float
         | Step of U2<float, string>
-        | Style of ICSSProp list
         | Summary of string
         | TabIndex of float
         | Target of string
@@ -508,6 +507,9 @@ module Props =
         | Security of string
         | Unselectable of bool
         interface IHTMLProp
+
+    let inline Style (css: ICSSProp list): HTMLAttr =
+        !!("style", keyValueList CaseRules.LowerFirst css)
 
     type SVGAttr =
         | ClipPath of string

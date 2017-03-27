@@ -1,6 +1,6 @@
 {
   "name": "fable-react",
-  "version": "1.0.0-narumi-2",
+  "version": "1.0.0-narumi-4",
   "description": "Fable bindings and helpers for React",
   "scripts": {
     "build": "node build",
