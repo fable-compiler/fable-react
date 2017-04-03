@@ -10,7 +10,7 @@ open Fable.Import.Browser
 module ReactNativeSignaturePad =
 
     type SignaturePadStatic =
-        inherit React.ComponentClass<SignaturePadProperties>
+        inherit React.ComponentClass<ReactNative.ViewProperties>
 
 
     and SignaturePad =

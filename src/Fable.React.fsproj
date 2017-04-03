@@ -67,6 +67,8 @@
     <Compile Include="react-native-popup-menu/Fable.Helpers.ReactNativePopupMenu.fs" />
     <Compile Include="react-native-push-notification/Fable.Import.ReactNativePushNotification.fs" />
     <Compile Include="react-native-push-notification/Fable.Helpers.ReactNativePushNotification.fs" />
+    <Compile Include="react-native-signature-pad/Fable.Import.ReactNativeSignaturePad.fs" />
+    <Compile Include="react-native-signature-pad/Fable.Helpers.ReactNativeSignaturePad.fs" />
   </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">14</MinimumVisualStudioVersion>
