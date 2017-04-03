@@ -1,3 +1,7 @@
+### 0.8.6
+
+* Adding SignaturePad
+
 ### 0.8.5
 
 * Adding Keyboard.dismiss
