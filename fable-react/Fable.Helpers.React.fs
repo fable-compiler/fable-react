@@ -592,31 +592,32 @@ let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: Rea
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
     applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
 
+/// Instantiate a DOM React element (void)
+let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
+    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props)
+
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement =
     applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
 
+// Standard element
 let inline a b c = domEl "a" b c
 let inline abbr b c = domEl "abbr" b c
 let inline address b c = domEl "address" b c
-let inline area b c = domEl "area" b c
 let inline article b c = domEl "article" b c
 let inline aside b c = domEl "aside" b c
 let inline audio b c = domEl "audio" b c
 let inline b b' c = domEl "b" b' c
-let inline ``base`` b c = domEl "base" b c
 let inline bdi b c = domEl "bdi" b c
 let inline bdo b c = domEl "bdo" b c
 let inline big b c = domEl "big" b c
 let inline blockquote b c = domEl "blockquote" b c
 let inline body b c = domEl "body" b c
-let inline br b c = domEl "br" b c
 let inline button b c = domEl "button" b c
 let inline canvas b c = domEl "canvas" b c
 let inline caption b c = domEl "caption" b c
 let inline cite b c = domEl "cite" b c
 let inline code b c = domEl "code" b c
-let inline col b c = domEl "col" b c
 let inline colgroup b c = domEl "colgroup" b c
 let inline data b c = domEl "data" b c
 let inline datalist b c = domEl "datalist" b c
@@ -629,7 +630,6 @@ let inline div b c = domEl "div" b c
 let inline dl b c = domEl "dl" b c
 let inline dt b c = domEl "dt" b c
 let inline em b c = domEl "em" b c
-let inline embed b c = domEl "embed" b c
 let inline fieldset b c = domEl "fieldset" b c
 let inline figcaption b c = domEl "figcaption" b c
 let inline figure b c = domEl "figure" b c
@@ -644,25 +644,18 @@ let inline h6 b c = domEl "h6" b c
 let inline head b c = domEl "head" b c
 let inline header b c = domEl "header" b c
 let inline hgroup b c = domEl "hgroup" b c
-let inline hr b c = domEl "hr" b c
 let inline html b c = domEl "html" b c
 let inline i b c = domEl "i" b c
 let inline iframe b c = domEl "iframe" b c
-let inline img b c = domEl "img" b c
-let inline input b c = domEl "input" b c
 let inline ins b c = domEl "ins" b c
 let inline kbd b c = domEl "kbd" b c
-let inline keygen b c = domEl "keygen" b c
 let inline label b c = domEl "label" b c
 let inline legend b c = domEl "legend" b c
 let inline li b c = domEl "li" b c
-let inline link b c = domEl "link" b c
 let inline main b c = domEl "main" b c
 let inline map b c = domEl "map" b c
 let inline mark b c = domEl "mark" b c
 let inline menu b c = domEl "menu" b c
-let inline menuitem b c = domEl "menuitem" b c
-let inline meta b c = domEl "meta" b c
 let inline meter b c = domEl "meter" b c
 let inline nav b c = domEl "nav" b c
 let inline noscript b c = domEl "noscript" b c
@@ -672,7 +665,6 @@ let inline optgroup b c = domEl "optgroup" b c
 let inline option b c = domEl "option" b c
 let inline output b c = domEl "output" b c
 let inline p b c = domEl "p" b c
-let inline param b c = domEl "param" b c
 let inline picture b c = domEl "picture" b c
 let inline pre b c = domEl "pre" b c
 let inline progress b c = domEl "progress" b c
@@ -686,7 +678,6 @@ let inline script b c = domEl "script" b c
 let inline section b c = domEl "section" b c
 let inline select b c = domEl "select" b c
 let inline small b c = domEl "small" b c
-let inline source b c = domEl "source" b c
 let inline span b c = domEl "span" b c
 let inline strong b c = domEl "strong" b c
 let inline style b c = domEl "style" b c
@@ -703,12 +694,30 @@ let inline thead b c = domEl "thead" b c
 let inline time b c = domEl "time" b c
 let inline title b c = domEl "title" b c
 let inline tr b c = domEl "tr" b c
-let inline track b c = domEl "track" b c
 let inline u b c = domEl "u" b c
 let inline ul b c = domEl "ul" b c
 let inline var b c = domEl "var" b c
 let inline video b c = domEl "video" b c
-let inline wbr b c = domEl "wbr" b c
+
+// Void element
+let inline area b = voidEl "area" b
+let inline ``base`` b = voidEl "base" b
+let inline br b = voidEl "br" b
+let inline col b = voidEl "col" b
+let inline embed b = voidEl "embed" b
+let inline hr b = voidEl "hr" b
+let inline img b = voidEl "img" b
+let inline input b = voidEl "input" b
+let inline keygen b = voidEl "keygen" b
+let inline link b = voidEl "link" b
+let inline menuitem b = voidEl "menuitem" b
+let inline meta b = voidEl "meta" b
+let inline param b = voidEl "param" b
+let inline source b = voidEl "source" b
+let inline track b = voidEl "track" b
+let inline wbr b = voidEl "wbr" b
+
+// SVG elements
 let inline svg b c = svgEl "svg" b c
 let inline circle b c = svgEl "circle" b c
 let inline clipPath b c = svgEl "clipPath" b c
