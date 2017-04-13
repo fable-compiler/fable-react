@@ -560,6 +560,7 @@ module Props =
         | Transform of string
         | Version of string
         | ViewBox of string
+        | Width of U2<float, string>
         | X1 of U2<float, string>
         | X2 of U2<float, string>
         | X of U2<float, string>
