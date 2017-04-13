@@ -1546,8 +1546,8 @@ let inline internal createElement(c: React.ComponentClass<'T>, props: obj, child
 let text (props:TextProperties list) (text:string): React.ReactElement =
     createElement(RN.Text, props, [React.str text])
 
-let textInput (props: ITextInputProperties list) (text:string): React.ReactElement =
-    createElement(RN.TextInput, props, [R.str text])
+let textInput (props: ITextInputProperties list) : React.ReactElement =
+    createElement(RN.TextInput, props, [])
 
 let createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
     createObj [
