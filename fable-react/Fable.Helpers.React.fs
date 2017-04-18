@@ -742,3 +742,11 @@ let inline tspan b c = svgEl "tspan" b c
 let [<Emit("$0")>] str (s: string): ReactElement = unbox s
 /// Cast an option value to a React element (erased in runtime)
 let [<Emit("$0")>] opt (o: ReactElement option): ReactElement = unbox o
+
+// Class list helpers
+let classBaseList std classes =
+    classes
+    |> List.fold (fun complete -> function | (name,true) -> complete + " " + name | _ -> complete) std
+    |> ClassName
+
+let classList classes = classBaseList "" classes
