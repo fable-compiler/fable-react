@@ -1,16 +1,15 @@
 module Fable.Helpers.ReactNativeImagePicker
 
 open Fable.Core
+open Fable.Core.JsInterop
 open Fable.Import
 open Fable.Import.ReactNativeImagePicker
 type IP = ReactNativeImagePicker.Globals
 
 module Props =
-    [<KeyValueList>]
     type IImagePickerOptions =
         interface end
 
-    [<KeyValueList>]
     type ImagePickerOptions =
     | Title of string
     | CancelButtonTitle of string
@@ -31,13 +30,13 @@ module Props =
 
 open Props
 
-let showImagePicker (props: IImagePickerOptions list) f =
-    IP.ImagePicker.showImagePicker(props |> unbox, f)
+let inline showImagePicker (props: IImagePickerOptions list) f =
+    IP.ImagePicker.showImagePicker(!!(keyValueList CaseRules.LowerFirst props), f)
 
 let showImagePickerAsync (props: IImagePickerOptions list) =
     Fable.PowerPack.Promise.create(fun onSuccess onError ->
         showImagePicker
-            props
+            !!(keyValueList CaseRules.LowerFirst props)
             (fun result ->
                 if not result.didCancel then
                     if System.String.IsNullOrEmpty result.error then
@@ -47,9 +46,9 @@ let showImagePickerAsync (props: IImagePickerOptions list) =
                 else onSuccess None)
     )
 
-let launchCamera (props: IImagePickerOptions list) f =
-    IP.ImagePicker.launchCamera(props |> unbox, f)
+let inline launchCamera (props: IImagePickerOptions list) f =
+    IP.ImagePicker.launchCamera(!!(keyValueList CaseRules.LowerFirst props), f)
 
 
-let launchImageLibrary (props: IImagePickerOptions list) f =
-    IP.ImagePicker.launchImageLibrary(props |> unbox, f)
+let inline launchImageLibrary (props: IImagePickerOptions list) f =
+    IP.ImagePicker.launchImageLibrary(!!(keyValueList CaseRules.LowerFirst props), f)

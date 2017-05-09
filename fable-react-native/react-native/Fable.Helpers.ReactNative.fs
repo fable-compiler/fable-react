@@ -265,159 +265,120 @@ module Props =
     type Direction =
         | Horizontal | Vertical
 
-    [<KeyValueList>]
     type IStyle =
         interface end
 
-    [<KeyValueList>]
     type IScrollViewStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type ISwitchIOSStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type ITextStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type ITextStyleIOS =
         inherit IStyle
 
-    [<KeyValueList>]
     type ITextStyleAndroid =
         inherit IStyle
 
-    [<KeyValueList>]
     type IImageStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type ITransformsStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type IViewStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type IFlexStyle =
         inherit IStyle
 
-    [<KeyValueList>]
     type IGestureResponderHandlers =
         interface end
 
-    [<KeyValueList>]
     type IToolbarAndroidProperties =
         interface end
 
-    [<KeyValueList>]
     type ISegmentedControlIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type IWebViewProperties =
         interface end
 
-    [<KeyValueList>]
     type IWebViewPropertiesAndroid =
         inherit IWebViewProperties
 
-    [<KeyValueList>]
     type IWebViewPropertiesIOS =
         inherit IWebViewProperties
 
-    [<KeyValueList>]
     type IDatePickerIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type IDrawerLayoutAndroidProperties =
         interface end
 
-    [<KeyValueList>]
     type IPickerProperties =
         interface end
 
-    [<KeyValueList>]
     type IProgressBarAndroidProperties =
         interface end
 
-    [<KeyValueList>]
     type IProgressViewIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type IRefreshControlProperties =
         interface end
 
-    [<KeyValueList>]
     type ISliderProperties =
         interface end
 
-    [<KeyValueList>]
     type ISliderIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type ITabBarItemProperties =
         interface end
 
-    [<KeyValueList>]
     type ITabBarIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type IListViewProperties =
         interface end
 
-    [<KeyValueList>]
     type IScrollViewProperties =
         inherit IListViewProperties
 
-    [<KeyValueList>]
     type IStatusBarProperties =
         interface end
 
-    [<KeyValueList>]
     type ISwitchProperties =
         interface end
 
-    [<KeyValueList>]
     type IKeyboardAvoidingViewProps =
         interface end
 
-    [<KeyValueList>]
     type IActivityIndicatorProperties =
         interface end
 
-    [<KeyValueList>]
     type IActivityIndicatorIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type IMapViewProperties  =
         interface end
 
-    [<KeyValueList>]
     type IMapViewPropertiesAndroid  =
         inherit IMapViewProperties
 
-    [<KeyValueList>]
     type IViewPropertiesIOS =
         interface end
 
-    [<KeyValueList>]
     type IViewPropertiesAndroid =
         interface end
 
-    [<KeyValueList>]
     type IViewPagerAndroidProperties =
         interface end
 
-    [<KeyValueList>]
     type IViewProperties =
         inherit IViewPropertiesAndroid
         inherit IViewPropertiesIOS
@@ -444,13 +405,11 @@ module Props =
         inherit ISwitchProperties
         inherit IMapViewProperties
 
-    [<KeyValueList>]
     type ITouchable =
         inherit IScrollViewProperties
         inherit IMapViewProperties
         inherit IViewProperties
 
-    [<KeyValueList>]
     type TransformsStyle =
         | Transform of obj * obj * obj * obj * obj * obj * obj * obj * obj * obj * obj * obj
         | TransformMatrix of ResizeArray<float>
@@ -461,7 +420,6 @@ module Props =
         | TranslateY of float
         interface ITransformsStyle
 
-    [<KeyValueList>]
     type FlexStyle =
         | AlignItems of ItemAlignment
         | AlignSelf of Alignment
@@ -503,7 +461,6 @@ module Props =
         interface IFlexStyle
 
 
-    [<KeyValueList>]
     type ViewStyle =
         | BackfaceVisibility of string
         | BackgroundColor of string
@@ -531,14 +488,12 @@ module Props =
         | TestID of string
         interface IViewStyle
 
-    [<KeyValueList>]
     type Insets =
         | Top of float
         | Left of float
         | Bottom of float
         | Right of float
 
-    [<KeyValueList>]
     type Touchable =
         | OnTouchStart of (GestureResponderEvent -> unit)
         | OnTouchMove of (GestureResponderEvent -> unit)
@@ -547,7 +502,6 @@ module Props =
         | OnTouchEndCapture of (GestureResponderEvent -> unit)
         interface ITouchable
 
-    [<KeyValueList>]
     type LayoutAnimationAnim =
         | Duration of float
         | Delay of float
@@ -556,14 +510,12 @@ module Props =
         | Type of string
         | Property of string
 
-    [<KeyValueList>]
     type LayoutAnimationConfig =
         | Delay of float //REQUIRED!
         | Create of LayoutAnimationAnim
         | Update of LayoutAnimationAnim
         | Delete of LayoutAnimationAnim
 
-    [<KeyValueList>]
     type TextStyleIOS =
         | LetterSpacing of float
         | TextDecorationColor of string
@@ -571,12 +523,10 @@ module Props =
         | WritingDirection of WritingDirection
         interface ITextStyleIOS
 
-    [<KeyValueList>]
     type TextStyleAndroid =
         | TextAlignVertical of TextAlignVertical
         interface ITextStyleAndroid
 
-    [<KeyValueList>]
     type TextStyle =
         | Color of string
         | FontFamily of string
@@ -595,21 +545,17 @@ module Props =
         | TestID of string
         interface ITextStyle
 
-    [<KeyValueList>]
     type ITextPropertiesIOS =
         interface end
 
-    [<KeyValueList>]
     type ITextProperties =
         inherit ITextPropertiesIOS
 
-    [<KeyValueList>]
     type TextPropertiesIOS =
         | AllowFontScaling of bool // REQUIRED!
         | SuppressHighlighting of bool
         interface ITextPropertiesIOS
 
-    [<KeyValueList>]
     type TextProperties =
         | AllowFontScaling of bool
         | LineBreakMode of LineBreakMode
@@ -620,21 +566,17 @@ module Props =
         | TestID of string
         interface ITextProperties
 
-    [<KeyValueList>]
     type ITextInputIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type ITextInputAndroidProperties =
         interface end
 
-    [<KeyValueList>]
     type ITextInputProperties =
         inherit ITextInputIOSProperties
         inherit ITextInputAndroidProperties
 
     module TextInput =
-        [<KeyValueList>]
         type TextInputIOSProperties =
             | ClearButtonMode of string
             | ClearTextOnFocus of bool
@@ -643,7 +585,6 @@ module Props =
             | SelectionState of obj
             interface ITextInputIOSProperties
 
-        [<KeyValueList>]
         type TextInputAndroidProperties =
             | NumberOfLines of float
             | ReturnKeyLabel of string
@@ -652,7 +593,6 @@ module Props =
             | UnderlineColorAndroid of string
             interface ITextInputAndroidProperties
 
-        [<KeyValueList>]
         type TextInputProperties =
             | AutoCapitalize of AutoCapitalize
             | AutoCorrect of bool
@@ -684,7 +624,6 @@ module Props =
             interface ITextInputProperties
 
     module Toolbar =
-        [<KeyValueList>]
         type ToolbarAndroidProperties =
             | Actions of ToolbarAndroidAction []
             | ContentInsetEnd of float
@@ -703,7 +642,6 @@ module Props =
             | Ref of Ref<ToolbarAndroid>
             interface IToolbarAndroidProperties
 
-    [<KeyValueList>]
     type GestureResponderHandlers =
         | OnStartShouldSetResponder of Func<GestureResponderEvent, bool>
         | OnMoveShouldSetResponder of Func<GestureResponderEvent, bool>
@@ -731,7 +669,6 @@ module Props =
         | RenderToHardwareTextureAndroid of bool
         interface IViewPropertiesAndroid
 
-    [<KeyValueList>]
     type ViewProperties =
         | AccessibilityLabel of string
         | Accessible of bool
@@ -745,7 +682,6 @@ module Props =
         | TestID of string
         interface IViewProperties
 
-    [<KeyValueList>]
     type ViewPagerAndroidProperties =
         | InitialPage of float
         | ScrollEnabled of bool
@@ -758,20 +694,17 @@ module Props =
         | Ref of Ref<obj>
         interface IViewPagerAndroidProperties
 
-    [<KeyValueList>]
     type KeyboardAvoidingViewProps =
         | Behavior of Behavior
         | KeyboardVerticalOffset of float // REQUIRED!
         | Ref of Ref<obj>
         interface IKeyboardAvoidingViewProps
 
-    [<KeyValueList>]
     type WebViewPropertiesAndroid =
         | JavaScriptEnabled of bool
         | DomStorageEnabled of bool
         interface IWebViewPropertiesAndroid
 
-    [<KeyValueList>]
     type WebViewPropertiesIOS =
         | AllowsInlineMediaPlayback of bool
         | Bounces of bool
@@ -780,19 +713,16 @@ module Props =
         | ScrollEnabled of bool
         interface IWebViewPropertiesIOS
 
-    [<KeyValueList>]
     type WebViewUriSource =
         | Uri of string
         | Method of string
         | Headers of obj
         | Body of string
 
-    [<KeyValueList>]
     type WebViewHtmlSource =
         | Html of string // REQUIRED!
         | BaseUrl of string
 
-    [<KeyValueList>]
     type WebViewProperties =
         | AutomaticallyAdjustContentInsets of bool
         | Bounces of bool
@@ -817,7 +747,6 @@ module Props =
         | Ref of Ref<obj>
         interface IWebViewProperties
 
-    [<KeyValueList>]
     type SegmentedControlIOSProperties =
         | Enabled of bool
         | Momentary of bool
@@ -829,7 +758,6 @@ module Props =
         | Ref of Ref<SegmentedControlIOS>
         interface ISegmentedControlIOSProperties
 
-    [<KeyValueList>]
     type NavigatorIOSProperties =
         | BarTintColor of string
         | InitialRoute of Route
@@ -842,7 +770,6 @@ module Props =
         | Style of IStyle list
 
     module ActivityIndicator =
-        [<KeyValueList>]
         type ActivityIndicatorProperties =
             | Animating of bool
             | Color of string
@@ -853,7 +780,6 @@ module Props =
             interface IViewProperties
 
 
-        [<KeyValueList>]
         type ActivityIndicatorIOSProperties =
             | Animating of bool
             | Color of string
@@ -864,7 +790,6 @@ module Props =
             | Ref of Ref<ActivityIndicatorIOS>
             interface IViewProperties
 
-    [<KeyValueList>]
     type DatePickerIOSProperties =
         | Date of DateTime
         | MaximumDate of DateTime
@@ -876,7 +801,6 @@ module Props =
         | Ref of Ref<DatePickerIOS>
         interface IDatePickerIOSProperties
 
-    [<KeyValueList>]
     type DrawerLayoutAndroidProperties =
         | DrawerBackgroundColor of string
         | DrawerLockMode of DrawerLockMode
@@ -893,13 +817,11 @@ module Props =
         interface IDrawerLayoutAndroidProperties
 
     module Picker =
-        [<KeyValueList>]
         type PickerIOSItemProperties =
             | Value of U2<string, float>
             | Label of string
 
 
-        [<KeyValueList>]
         type PickerItemProperties =
             | Label of string // REQUIRED!
             | Value of obj
@@ -907,13 +829,11 @@ module Props =
             | TestID of string
 
 
-        [<KeyValueList>]
         type PickerPropertiesIOS =
             | ItemStyle of IStyle list
             | Ref of Ref<obj>
             interface IPickerProperties
 
-        [<KeyValueList>]
         type PickerPropertiesAndroid =
             | Enabled of bool
             | Mode of Mode
@@ -921,7 +841,6 @@ module Props =
             | Ref of Ref<obj>
             interface IPickerProperties
 
-        [<KeyValueList>]
         type PickerProperties =
             | OnValueChange of Func<obj, float, unit>
             | SelectedValue of obj
@@ -930,13 +849,11 @@ module Props =
             | Ref of Ref<Picker>
             interface IPickerProperties
 
-        [<KeyValueList>]
         type PickerIOSProperties =
             | ItemStyle of ViewStyle list
             interface IPickerProperties
 
     module ProgressBar =
-        [<KeyValueList>]
         type ProgressBarAndroidProperties =
             | Style of IStyle list
             | StyleAttr of StyleAttr
@@ -947,7 +864,6 @@ module Props =
             | Ref of Ref<ProgressBarAndroid>
             interface IProgressBarAndroidProperties
 
-        [<KeyValueList>]
         type ProgressViewIOSProperties =
             | Style of IStyle list
             | ProgressViewStyle of ProgressViewStyle
@@ -959,7 +875,6 @@ module Props =
             | Ref of Ref<ProgressViewIOS>
             interface IProgressViewIOSProperties
 
-    [<KeyValueList>]
     type RefreshControlPropertiesIOS =
         | TintColor of string
         | Title of string
@@ -968,7 +883,6 @@ module Props =
         interface IRefreshControlProperties
 
 
-    [<KeyValueList>]
     type RefreshControlPropertiesAndroid =
         | Colors of ResizeArray<string>
         | Enabled of bool
@@ -978,14 +892,12 @@ module Props =
         | Ref of Ref<obj>
         interface IRefreshControlProperties
 
-    [<KeyValueList>]
     type RefreshControlProperties =
         | OnRefresh of (unit->unit)
         | Refreshing of bool
         | Ref of Ref<RefreshControl>
         interface IRefreshControlProperties
 
-    [<KeyValueList>]
     type SliderPropertiesIOS =
         | MaximumTrackImage of obj
         | MaximumTrackTintColor of string
@@ -996,7 +908,6 @@ module Props =
         | Ref of Ref<Slider>
         interface ISliderProperties
 
-    [<KeyValueList>]
     type SliderProperties =
         | Disabled of bool
         | MaximumValue of float
@@ -1009,7 +920,6 @@ module Props =
         | Value of float
         interface ISliderProperties
 
-    [<KeyValueList>]
     type SliderIOSProperties =
         | Disabled of bool
         | MaximumValue of float
@@ -1025,13 +935,11 @@ module Props =
         | Ref of Ref<SliderIOS>
         interface ISliderIOSProperties
 
-    [<KeyValueList>]
     type SwitchIOSStyle =
         | Height of float
         | Width of float
         interface ISwitchIOSStyle
 
-    [<KeyValueList>]
     type SwitchIOSProperties =
         | Disabled of bool
         | OnTintColor of string
@@ -1041,7 +949,6 @@ module Props =
         | Value of bool
         | Style of IStyle list
 
-    [<KeyValueList>]
     type ImageStyle =
         | ResizeMode of string
         | BackfaceVisibility of BackfaceVisibility
@@ -1059,25 +966,20 @@ module Props =
         | Opacity of float
         interface IImageStyle
 
-    [<KeyValueList>]
     type IImagePropertiesIOS =
         interface end
 
-    [<KeyValueList>]
     type IImageProperties =
         inherit IImagePropertiesIOS
 
-    [<KeyValueList>]
     type IImageSourceProperties =
         interface end
 
-    [<KeyValueList>]
     type ImageSourceProperties =
         | Uri of string
         | IsStatic of bool
         interface IImageSourceProperties
 
-    [<KeyValueList>]
     type ImagePropertiesIOS =
         | AccessibilityLabel of string
         | Accessible of bool
@@ -1087,7 +989,6 @@ module Props =
         | OnProgress of (unit->unit)
         interface IImagePropertiesIOS
 
-    [<KeyValueList>]
     type ImageProperties =
         | OnLayout of Func<LayoutChangeEvent, unit>
         | OnLoad of (unit->unit)
@@ -1100,7 +1001,6 @@ module Props =
         interface IImageProperties
 
 
-    [<KeyValueList>]
     type MapViewAnnotation =
         | Latitude of float
         | Longitude of float
@@ -1119,7 +1019,6 @@ module Props =
         | LatitudeDelta of float
         | LongitudeDelta of float
 
-    [<KeyValueList>]
     type MapViewOverlay =
         | Coordinates of ResizeArray<obj>
         | LineWidth of float
@@ -1127,7 +1026,6 @@ module Props =
         | FillColor of obj
         | Id of string
 
-    [<KeyValueList>]
     type MapViewPropertiesIOS =
         | ShowsPointsOfInterest of bool
         | Annotations of ResizeArray<MapViewAnnotation>
@@ -1139,12 +1037,10 @@ module Props =
         | Overlays of ResizeArray<MapViewOverlay>
         | ShowsCompass of bool
 
-    [<KeyValueList>]
     type MapViewPropertiesAndroid =
         | Active of bool
         interface IMapViewPropertiesAndroid
 
-    [<KeyValueList>]
     type MapViewProperties =
         | OnAnnotationPress of (unit->unit)
         | OnRegionChange of Func<MapViewRegion, unit>
@@ -1159,7 +1055,6 @@ module Props =
         | Ref of Ref<obj>
         interface IMapViewProperties
 
-    [<KeyValueList>]
     type ModalProperties =
         | Animated of bool
         | AnimationType of AnimationType
@@ -1168,27 +1063,21 @@ module Props =
         | OnRequestClose of (unit->unit)
         | OnShow of Func<NativeSyntheticEvent<obj>, unit>
 
-    [<KeyValueList>]
     type ITouchableHighlightProperties =
         interface end
 
-    [<KeyValueList>]
     type ITouchableOpacityProperties =
         interface end
 
-    [<KeyValueList>]
     type ITouchableNativeFeedbackProperties =
         interface end
 
-    [<KeyValueList>]
     type ITouchableWithoutFeedbackIOSProperties =
         interface end
 
-    [<KeyValueList>]
     type ITouchableWithoutFeedbackAndroidProperties =
         interface end
 
-    [<KeyValueList>]
     type ITouchableWithoutFeedbackProperties =
         inherit ITouchableWithoutFeedbackAndroidProperties
         inherit ITouchableWithoutFeedbackIOSProperties
@@ -1196,17 +1085,14 @@ module Props =
         inherit ITouchableOpacityProperties
         inherit ITouchableHighlightProperties
 
-    [<KeyValueList>]
     type TouchableWithoutFeedbackAndroidProperties =
         | AccessibilityComponentType of string
         interface ITouchableWithoutFeedbackAndroidProperties
 
-    [<KeyValueList>]
     type TouchableWithoutFeedbackIOSProperties =
         | AccessibilityTraits of U2<string, ResizeArray<string>>
         interface ITouchableWithoutFeedbackIOSProperties
 
-    [<KeyValueList>]
     type TouchableWithoutFeedbackProperties =
         | Accessible of bool
         | DelayLongPress of float
@@ -1223,7 +1109,6 @@ module Props =
         | PressRetentionOffset of obj
         interface ITouchableWithoutFeedbackProperties
 
-    [<KeyValueList>]
     type TouchableHighlightProperties =
         | ActiveOpacity of float
         | OnHideUnderlay of (unit->unit)
@@ -1232,35 +1117,29 @@ module Props =
         | UnderlayColor of string
         interface ITouchableHighlightProperties
 
-    [<KeyValueList>]
     type TouchableOpacityProperties =
         | ActiveOpacity of float
         interface ITouchableOpacityProperties
 
 
-    [<KeyValueList>]
     type TouchableNativeFeedbackProperties =
         | Background of obj
         interface ITouchableNativeFeedbackProperties
 
-    [<KeyValueList>]
     type NavigationBarRouteMapper =
         | Title of Func<Route, Navigator, float, NavState, React.ReactElement>
         | LeftButton of Func<Route, Navigator, float, NavState, React.ReactElement>
         | RightButton of Func<Route, Navigator, float, NavState, React.ReactElement>
 
-    [<KeyValueList>]
     type NavigationBarProperties =
         | Navigator of Navigator
         | RouteMapper of NavigationBarRouteMapper
         | NavState of NavState
         | Style of IStyle list
 
-    [<KeyValueList>]
     type INavigatorProperties =
         interface end
 
-    [<KeyValueList>]
     type NavigatorProperties =
         | ConfigureScene of Func<Route, ResizeArray<Route>, SceneConfig>
         | InitialRoute of Route
@@ -1275,7 +1154,6 @@ module Props =
         interface INavigatorProperties
 
     module ToolBar =
-        [<KeyValueList>]
         type TabBarItemProperties =
             | Badge of U2<string, float>
             | Icon of U2<obj, string>
@@ -1288,7 +1166,6 @@ module Props =
             | Ref of Ref<obj>
             interface IViewProperties
 
-        [<KeyValueList>]
         type TabBarIOSProperties =
             | BarTintColor of string
             | Style of IStyle list
@@ -1298,7 +1175,6 @@ module Props =
             | Ref of Ref<obj>
             interface IViewProperties
 
-    [<KeyValueList>]
     type ScrollViewStyle =
         | BackfaceVisibility of BackfaceVisibility
         | BackgroundColor of string
@@ -1327,11 +1203,9 @@ module Props =
         | Elevation of float
         interface IScrollViewStyle
 
-    [<KeyValueList>]
     type IScrollViewPropertiesIOS =
         inherit IScrollViewProperties
 
-    [<KeyValueList>]
     type ScrollViewPropertiesIOS =
         | AlwaysBounceHorizontal of bool
         | AlwaysBounceVertical of bool
@@ -1359,17 +1233,14 @@ module Props =
         | ZoomScale of float
         interface IScrollViewPropertiesIOS
 
-    [<KeyValueList>]
     type IScrollViewPropertiesAndroid =
         inherit IScrollViewProperties
 
-    [<KeyValueList>]
     type ScrollViewPropertiesAndroid =
         | EndFillColor of string
         | ScrollPerfTag of string
         interface IScrollViewPropertiesAndroid
 
-    [<KeyValueList>]
     type ScrollViewProperties =
         | ContentContainerStyle of ViewStyle list
         | Horizontal of bool
@@ -1386,7 +1257,6 @@ module Props =
         interface IScrollViewProperties
 
 
-    [<KeyValueList>]
     type ListViewProperties<'a>  =
         | DataSource of ListViewDataSource<'a>
         | EnableEmptySections of bool
@@ -1406,14 +1276,12 @@ module Props =
         | Ref of Ref<obj>
         interface IListViewProperties
 
-    [<KeyValueList>]
     type SwipeableListViewProps<'a> =
         | DataSource of SwipeableListViewDataSource<'a> // REQUIRED!
         | MaxSwipeDistance of float
         | RenderRow of Func<'a, U2<string, float>, U2<string, float>, bool, React.ReactElement> // REQUIRED!
         | RenderQuickActions of Func<'a, string, string, React.ReactElement> // REQUIRED!
 
-    [<KeyValueList>]
     type ActionSheetIOSOptions =
         | Title of string
         | Options of ResizeArray<string>
@@ -1421,19 +1289,16 @@ module Props =
         | DestructiveButtonIndex of float
         | Message of string
 
-    [<KeyValueList>]
     type ShareActionSheetIOSOptions =
         | Message of string
         | Url of string
 
 
-    [<KeyValueList>]
     type DatePickerAndroidOpenOption =
         | Date of U2<DateTime, float>
         | MinDate of U2<DateTime, float>
         | MaxDate of U2<DateTime, float>
 
-    [<KeyValueList>]
     type PanResponderCallbacks =
         | OnMoveShouldSetPanResponder of Func<GestureResponderEvent, PanResponderGestureState, bool>
         | OnStartShouldSetPanResponder of Func<GestureResponderEvent, PanResponderGestureState, unit>
@@ -1449,26 +1314,22 @@ module Props =
         | OnPanResponderTerminationRequest of Func<GestureResponderEvent, PanResponderGestureState, bool>
 
     module StatusBar =
-        [<KeyValueList>]
         type StatusBarPropertiesIOS =
             | BarStyle of StatusBarStyle list
             | NetworkActivityIndicatorVisible of bool
             | ShowHideTransition of ShowHideTransition
             interface IStatusBarProperties
 
-        [<KeyValueList>]
         type StatusBarPropertiesAndroid =
             | BackgroundColor of obj
             | Translucent of bool
             interface IStatusBarProperties
 
-    [<KeyValueList>]
     type StatusBarProperties =
         | Animated of bool
         | Hidden of bool
         interface IStatusBarProperties
 
-    [<KeyValueList>]
     type SwitchPropertiesIOS =
         | OnTintColor of string
         | ThumbTintColor of string
@@ -1476,7 +1337,6 @@ module Props =
         | Ref of Ref<Switch>
         interface ISwitchProperties
 
-    [<KeyValueList>]
     type SwitchProperties =
         | Disabled of bool
         | TestID of string
@@ -1484,7 +1344,6 @@ module Props =
         | Ref of Ref<Switch>
         interface ISwitchProperties
 
-    [<KeyValueList>]
     type NavigationAnimatedViewProps =
         | Route of obj
         | Style of IStyle list
@@ -1493,11 +1352,9 @@ module Props =
         | RenderScene of (obj -> React.ReactElement)
 
 
-    [<KeyValueList>]
     type INavigationHeaderProps =
         interface end
 
-    [<KeyValueList>]
     type NavigationHeaderProps =
         | RenderTitleComponent of (NavigationTransitionProps -> React.ReactElement)
         | RenderLeftComponent of (NavigationTransitionProps -> React.ReactElement)
@@ -1506,11 +1363,9 @@ module Props =
         | OnNavigateBack of (unit -> unit)
         interface INavigationHeaderProps
 
-    [<KeyValueList>]
     type INavigationCardStackProps =
         interface end
 
-    [<KeyValueList>]
     type NavigationCardStackProps =
         | Direction of Direction
         | Style of IStyle list
@@ -1521,11 +1376,9 @@ module Props =
         | OnNavigateBack of (unit -> unit)
         interface INavigationCardStackProps
 
-    [<KeyValueList>]
     type IBreadcrumbNavigationBarProperties =
         interface end
 
-    [<KeyValueList>]
     type BreadcrumbNavigationBarProperties =
         | Navigator of Navigator
         | RouteMapper of NavigatorStatic.BreadcrumbNavigationBarRouteMapper
@@ -1540,296 +1393,295 @@ module R = Fable.Helpers.React
 // Use `require` to load a local image
 let localImage (path:string) : IImageSourceProperties list = jsNative
 
-let inline internal createElement(c: React.ComponentClass<'T>, props: obj, children: React.ReactElement list) =
-    R.from c (unbox props) children
+let inline internal createElement(c: React.ComponentClass<'T>, props: 'P list, children: React.ReactElement list) =
+    R.from c !!(keyValueList CaseRules.LowerFirst props) children
 
-let text (props:TextProperties list) (text:string): React.ReactElement =
+let inline text (props:TextProperties list) (text:string): React.ReactElement =
     createElement(RN.Text, props, [React.str text])
 
-let textInput (props: ITextInputProperties list) (text:string): React.ReactElement =
+let inline textInput (props: ITextInputProperties list) (text:string): React.ReactElement =
     createElement(RN.TextInput, props, [R.str text])
 
-let createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
+let inline createToolbarAction(title:string,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
     createObj [
         "title" ==> title
         "show" ==> showStatus
     ]
 
-let createToolbarActionWithIcon(title:string,icon: IImageSourceProperties list,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
+let inline createToolbarActionWithIcon(title:string,icon: IImageSourceProperties list,showStatus:ToolbarActionShowStatus) : ToolbarAndroidAction =
     createObj [
         "title" ==> title
         "icon" ==> icon
         "show" ==> showStatus
     ]
 
-let toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelected:int -> unit) : React.ReactElement =
+let inline toolbarAndroid (props:IToolbarAndroidProperties list) (onActionSelected:int -> unit) : React.ReactElement =
     createElement(
         RN.ToolbarAndroid,
-        JS.Object.assign(
+        !!JS.Object.assign(
             createObj ["onActionSelected" ==> onActionSelected],
-            props), [])
+            keyValueList CaseRules.LowerFirst props), [])
 
-let keyboardAvoidingView (props:IKeyboardAvoidingViewProps list) (children: React.ReactElement list): React.ReactElement =
+let inline keyboardAvoidingView (props:IKeyboardAvoidingViewProps list) (children: React.ReactElement list): React.ReactElement =
     createElement(
       RN.KeyboardAvoidingView,
       props,
       children)
 
-let view (props: IViewProperties list) (children: React.ReactElement list): React.ReactElement =
+let inline view (props: IViewProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(
         RN.View,
         props,
         children)
 
-let webView (props:IWebViewProperties list) : React.ReactElement =
+let inline webView (props:IWebViewProperties list) : React.ReactElement =
     createElement(
       RN.WebView,
       props, [])
 
-let segmentedControlIOS (props:ISegmentedControlIOSProperties list) : React.ReactElement =
+let inline segmentedControlIOS (props:ISegmentedControlIOSProperties list) : React.ReactElement =
     createElement(
       RN.SegmentedControlIOS,
       props, [])
 
-let activityIndicator (props:IActivityIndicatorProperties list) : React.ReactElement =
+let inline activityIndicator (props:IActivityIndicatorProperties list) : React.ReactElement =
     createElement(
       RN.ActivityIndicator,
       props, [])
 
-let activityIndicatorIOS (props:IActivityIndicatorIOSProperties list) : React.ReactElement =
+let inline activityIndicatorIOS (props:IActivityIndicatorIOSProperties list) : React.ReactElement =
     createElement(
       RN.ActivityIndicatorIOS,
       props, [])
 
-let datePickerIOS (props:IDatePickerIOSProperties list) : React.ReactElement =
+let inline datePickerIOS (props:IDatePickerIOSProperties list) : React.ReactElement =
     createElement(
       RN.DatePickerIOS,
       props, [])
 
-let drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (renderNavigationView: unit -> React.ReactElement) (children: React.ReactElement list): React.ReactElement =
+let inline drawerLayoutAndroid (props:IDrawerLayoutAndroidProperties list) (renderNavigationView: unit -> React.ReactElement) (children: React.ReactElement list): React.ReactElement =
     createElement(
       RN.DrawerLayoutAndroid,
-      JS.Object.assign(
+      !!JS.Object.assign(
             createObj ["renderNavigationView" ==> renderNavigationView],
-            props),
+            keyValueList CaseRules.LowerFirst props),
       children)
 
-let pickerIOSItem (props:Picker.PickerIOSItemProperties list) : React.ReactElement =
+let inline pickerIOSItem (props:Picker.PickerIOSItemProperties list) : React.ReactElement =
     createElement(
       RN.PickerIOS.Item,
       props, [])
 
-let pickerItem (props:Picker.PickerItemProperties list) : React.ReactElement =
+let inline pickerItem (props:Picker.PickerItemProperties list) : React.ReactElement =
     createElement(
       RN.Picker.Item,
       props, [])
 
-let picker (props:IPickerProperties list) (children:React.ReactElement list): React.ReactElement =
+let inline picker (props:IPickerProperties list) (children:React.ReactElement list): React.ReactElement =
     createElement(
       RN.Picker,
       props,
       children)
 
-let pickerIOS (props:Picker.PickerIOSProperties list) (children:React.ReactElement list): React.ReactElement =
+let inline pickerIOS (props:Picker.PickerIOSProperties list) (children:React.ReactElement list): React.ReactElement =
     createElement(
       RN.PickerIOS,
       props,
       children)
 
-let progressBarAndroid (props:IProgressBarAndroidProperties list) : React.ReactElement =
+let inline progressBarAndroid (props:IProgressBarAndroidProperties list) : React.ReactElement =
     createElement(
       RN.ProgressBarAndroid,
       props, [])
 
-let progressViewIOS (props:IProgressViewIOSProperties list) : React.ReactElement =
+let inline progressViewIOS (props:IProgressViewIOSProperties list) : React.ReactElement =
     createElement(
       RN.ProgressViewIOS,
       props, [])
 
-let refreshControl (props:IRefreshControlProperties list) : React.ReactElement =
+let inline refreshControl (props:IRefreshControlProperties list) : React.ReactElement =
     createElement(
       RN.RefreshControl,
       props, [])
 
-let slider (props:ISliderProperties list) : React.ReactElement =
+let inline slider (props:ISliderProperties list) : React.ReactElement =
     createElement(
       RN.Slider,
       props, [])
 
-let sliderIOS (props:ISliderIOSProperties list) : React.ReactElement =
+let inline sliderIOS (props:ISliderIOSProperties list) : React.ReactElement =
     createElement(
       RN.SliderIOS,
       props, [])
 
-let switchIOS (props:SwitchIOSProperties list) : React.ReactElement =
+let inline switchIOS (props:SwitchIOSProperties list) : React.ReactElement =
     createElement(
       RN.SwitchIOS,
       props, [])
 
-let image (props:IImageProperties list) : React.ReactElement =
+let inline image (props:IImageProperties list) : React.ReactElement =
     createElement(
       RN.Image,
       props, [])
 
-let imageWithChild (props: IImageProperties list) (child: React.ReactElement) : React.ReactElement =
+let inline imageWithChild (props: IImageProperties list) (child: React.ReactElement) : React.ReactElement =
     createElement(
         RN.Image,
         props,
         [child])
 
-let listView<'a> (dataSource:ListViewDataSource<'a>) (props: IListViewProperties list)  : React.ReactElement =
-    createElement(
-        RN.ListView,
-        JS.Object.assign(
+let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: IListViewProperties list)  : React.ReactElement =
+    R.from
+      RN.ListView
+      (!!JS.Object.assign(
             createObj ["dataSource" ==> dataSource],
-            props), [])
+            keyValueList CaseRules.LowerFirst props)) []
 
-let mapView (props:IMapViewProperties list) (children: React.ReactElement list): React.ReactElement =
+let inline mapView (props:IMapViewProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(
       RN.MapView,
       props,
       children)
 
-let modal (props:ModalProperties list) : React.ReactElement =
+let inline modal (props:ModalProperties list) : React.ReactElement =
     createElement(
       RN.Modal,
       props, [])
 
-let touchableWithoutFeedback (props:ITouchableWithoutFeedbackProperties list) (children: React.ReactElement list): React.ReactElement =
+let inline touchableWithoutFeedback (props:ITouchableWithoutFeedbackProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(
       RN.TouchableWithoutFeedback,
       props,
       children)
 
-let touchableHighlight (props:ITouchableHighlightProperties list) (children: React.ReactElement list) : React.ReactElement =
+let inline touchableHighlight (props:ITouchableHighlightProperties list) (children: React.ReactElement list) : React.ReactElement =
     createElement(
       RN.TouchableHighlight,
       props,
       children)
 
-let touchableHighlightWithChild (props:ITouchableHighlightProperties list) (child: React.ReactElement): React.ReactElement =
+let inline touchableHighlightWithChild (props:ITouchableHighlightProperties list) (child: React.ReactElement): React.ReactElement =
     createElement(
       RN.TouchableHighlight,
       props,
       [child])
 
-let touchableOpacity (props:ITouchableOpacityProperties list) (children: React.ReactElement list): React.ReactElement =
+let inline touchableOpacity (props:ITouchableOpacityProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(
       RN.TouchableOpacity,
       props,
       children)
 
-let touchableNativeFeedback (props:ITouchableNativeFeedbackProperties list) (children: React.ReactElement list): React.ReactElement =
+let inline touchableNativeFeedback (props:ITouchableNativeFeedbackProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(
       RN.TouchableNativeFeedback,
       props,
       children)
 
-let viewPagerAndroid (props: IViewPagerAndroidProperties list) (children: React.ReactElement list) : React.ReactElement =
+let inline viewPagerAndroid (props: IViewPagerAndroidProperties list) (children: React.ReactElement list) : React.ReactElement =
     createElement(
         RN.ViewPagerAndroid,
         props,
         children)
 
-let navigator (props:INavigatorProperties list) : React.ReactElement =
+let inline navigator (props:INavigatorProperties list) : React.ReactElement =
     createElement(
       RN.Navigator,
       props, [])
 
-let styleSheet (props:StyleSheetProperties list) : React.ReactElement =
+let inline styleSheet (props:StyleSheetProperties list) : React.ReactElement =
     createElement(
       RN.StyleSheet,
       props, [])
 
-let tabBarItem (props:ITabBarItemProperties list) : React.ReactElement =
+let inline tabBarItem (props:ITabBarItemProperties list) : React.ReactElement =
     createElement(
       RN.TabBarIOS.Item,
       props, [])
 
-let tabBarIOS (props:ITabBarIOSProperties list) : React.ReactElement =
+let inline tabBarIOS (props:ITabBarIOSProperties list) : React.ReactElement =
     createElement(
       RN.TabBarIOS,
       props, [])
 
-let scrollView (props:IScrollViewProperties list) (children: React.ReactElement list) : React.ReactElement =
+let inline scrollView (props:IScrollViewProperties list) (children: React.ReactElement list) : React.ReactElement =
     createElement(
       RN.ScrollView,
       props,
       children)
 
-let swipeableListView (props:SwipeableListViewProps<_> list) : React.ReactElement =
+let inline swipeableListView (props:SwipeableListViewProps<_> list) : React.ReactElement =
     createElement(
       RN.SwipeableListView,
       props, [])
 
-let statusBar (props:IStatusBarProperties list) : React.ReactElement =
+let inline statusBar (props:IStatusBarProperties list) : React.ReactElement =
     createElement(
       RN.StatusBar,
       props, [])
 
-let switch (props:ISwitchProperties list) (onValueChange: bool -> unit) (value:bool) : React.ReactElement =
-    createElement(
-      RN.Switch,
-      JS.Object.assign(
+let inline switch (props:ISwitchProperties list) (onValueChange: bool -> unit) (value:bool) : React.ReactElement =
+    R.from
+      RN.Switch
+      (!!JS.Object.assign(
             createObj ["onValueChange" ==> onValueChange
                        "value" ==> value],
-            props), [])
+            keyValueList CaseRules.LowerFirst props)) []
 
-let navigationHeader (props:INavigationHeaderProps list) (rendererProps:NavigationTransitionProps): React.ReactElement =
-    createElement(
-      RN.NavigationExperimental.Header,
-      JS.Object.assign(props, rendererProps), [])
+let inline navigationHeader (props:INavigationHeaderProps list) (rendererProps:NavigationTransitionProps): React.ReactElement =
+    R.from
+      RN.NavigationExperimental.Header
+      (!!JS.Object.assign(keyValueList CaseRules.LowerFirst props, rendererProps))
+      []
 
-let navigationState (index:int) (routes:NavigationRoute list): NavigationState =
-    createObj ["index" ==> index
-               "routes" ==> Array.ofList routes]
-    |> unbox
+let inline navigationState (index:int) (routes:NavigationRoute list): NavigationState =
+    !!createObj ["index" ==> index
+                 "routes" ==> Array.ofList routes]
 
-let navigationRoute (key:string) (title:string option): NavigationRoute =
-    createObj ["key" ==> key
-               "title" ==> title]
-    |> unbox
+let inline navigationRoute (key:string) (title:string option): NavigationRoute =
+    !!createObj ["key" ==> key
+                 "title" ==> title]
 
-let navigationCardStack (navigationState: NavigationState)
-                               (renderScene: NavigationTransitionProps -> React.ReactElement)
-                               (props:INavigationCardStackProps list): React.ReactElement =
-    createElement(
-      RN.NavigationExperimental.CardStack,
-      JS.Object.assign(
+let inline navigationCardStack (navigationState: NavigationState)
+                        (renderScene: NavigationTransitionProps -> React.ReactElement)
+                        (props:INavigationCardStackProps list): React.ReactElement =
+    R.from
+      RN.NavigationExperimental.CardStack
+      (!!JS.Object.assign(
             createObj ["renderScene" ==> renderScene
                        "navigationState" ==> navigationState],
-            props), [])
+            keyValueList CaseRules.LowerFirst props))
+      []
 
-let navigationContainer (props:NavigationContainerProps list) : React.ReactElement =
+let inline navigationContainer (props:NavigationContainerProps list) : React.ReactElement =
     createElement(
       RN.NavigationContainer,
       props, [])
 
-let navigationRootContainer (props:NavigationRootContainerProps list) : React.ReactElement =
+let inline navigationRootContainer (props:NavigationRootContainerProps list) : React.ReactElement =
     createElement(
       RN.NavigationRootContainer,
       props, [])
 
-let navigationBar (props:NavigationBarProperties list) : React.ReactElement =
+let inline navigationBar (props:NavigationBarProperties list) : React.ReactElement =
     createElement(
       NavigatorStatic.Globals.NavigationBar,
       props, [])
 
-let breadcrumbNavigationBar (props:IBreadcrumbNavigationBarProperties list) : React.ReactElement =
+let inline breadcrumbNavigationBar (props:IBreadcrumbNavigationBarProperties list) : React.ReactElement =
     createElement(
       NavigatorStatic.Globals.BreadcrumbNavigationBar,
       props, [])
 
-let emptyDataSource<'a>() : ListViewDataSource<'a> =
-    RN.ListView.DataSource.Create(
-        unbox(createObj ["rowHasChanged" ==> fun r1 r2 -> r1 <> r2])
-    ) |> unbox
+let inline emptyDataSource<'a>() : ListViewDataSource<'a> =
+    !!RN.ListView.DataSource.Create(
+        !!createObj ["rowHasChanged" ==> fun r1 r2 -> r1 <> r2])
 
-let newDataSource<'a> (elements:'a []) =
-    emptyDataSource<'a>().cloneWithRows(unbox elements)
+let inline newDataSource<'a> (elements:'a []) =
+    emptyDataSource<'a>().cloneWithRows(!!elements)
 
-let updateDataSource<'a> (data:'a []) (dataSource : ListViewDataSource<'a>) : ListViewDataSource<'a> =
-    dataSource.cloneWithRows (unbox data)
+let inline updateDataSource<'a> (data:'a []) (dataSource : ListViewDataSource<'a>) : ListViewDataSource<'a> =
+    dataSource.cloneWithRows(!!data)
 
 // [<Emit(typeof<React.Emitter>, "Com")>]
 // let createComponent<'T,'P,'S when 'T :> React.Component<'P,'S>> (props: 'P) (children: React.ReactElement list): React.ReactElement = jsNative
@@ -1875,7 +1727,7 @@ module Alert =
 
     /// Shows an alert with many buttons
     let alert (title:string,message:string,buttons: (string * (unit -> unit)) seq) : unit =
-        Alert?alert( title, message, Seq.map createButton buttons |> Seq.toArray ) |> ignore        
+        Alert?alert( title, message, Seq.map createButton buttons |> Seq.toArray ) |> ignore
 
     /// Shows an alert button with one button
     let alertWithOneButton (title:string,message:string,okText:string,onOk:unit -> unit) : unit =
@@ -1899,7 +1751,7 @@ module NetInfo =
     open Fable.Import.Browser
 
     let getConnectionType() : Promise<string> =
-        NetInfo?fetch() |> unbox
+        !!NetInfo?fetch()
 
 /// ImageStore contains functions which help to deal with image data on the device.
 module ImageStore =
@@ -1925,11 +1777,11 @@ module Toast =
 
     /// Shows a toast with short duration
     let showShort (message:string) : unit =
-        Toast?show(message,Toast?SHORT) |> unbox
+        !!Toast?show(message,Toast?SHORT)
 
     /// Shows a toast with long duration
     let showLong (message:string) : unit =
-        Toast?show(message,Toast?LONG) |> unbox
+        !!Toast?show(message,Toast?LONG)
 
 module Storage =
     open Fable.Core.JsInterop
@@ -1952,9 +1804,9 @@ module Storage =
 
     /// Saves a value with the given key to the local device storage.
     let setItem (k:string) (v:string): JS.Promise<unit> =
-        unbox(Globals.AsyncStorage.setItem(k,v))
+        !!Globals.AsyncStorage.setItem(k,v)
 
     /// Saves a value with the given key to the local device storage.
     let [<PassGenerics>] save<'a> (k:string) (v:'a): JS.Promise<unit> =
-        unbox(Globals.AsyncStorage.setItem(k, toJson v))
+        !!Globals.AsyncStorage.setItem(k, toJson v)
 

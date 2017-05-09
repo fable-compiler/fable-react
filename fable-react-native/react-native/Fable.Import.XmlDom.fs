@@ -17,7 +17,7 @@ module XmlDom =
     and XMLSerializer =
         abstract serializeToString: node: Browser.Node -> string
 
-    and [<KeyValueList>] Options =
+    and Options =
         | Locator of obj
         | ErrorHandler of Func<string, obj, obj>
 

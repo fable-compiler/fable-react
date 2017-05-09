@@ -4,19 +4,19 @@ open Fable.Core.JsInterop
 open Fable.Core
 open Fable.Import
 open Fable.Import.ReactNativeBarcodeScanner
+module R = Fable.Helpers.React
 type BCS = ReactNativeBarcodeScanner.Globals
 
 module Props =
 
-    [<KeyValueList; RequireQualifiedAccess>]
+    [<RequireQualifiedAccess>]
     type BarcodeScannerStyle =
         | Flex of int
 
-    [<KeyValueList>]
     type IBarcodeScannerProperties =
         interface end
 
-    [<KeyValueList; RequireQualifiedAccess>]
+    [<RequireQualifiedAccess>]
     type BarcodeScannerProperties =
     | TorchMode of TorchMode
     | CameraType of CameraType
@@ -32,10 +32,10 @@ type Barcode =
 
 
 /// Creates a BarcodeScanner element
-let barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead: Barcode -> unit) : React.ReactElement =
-    ReactNative.createElement(
-      BCS.BarcodeScanner,
-        JS.Object.assign(
+let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead: Barcode -> unit) : React.ReactElement =
+    R.from
+      BCS.BarcodeScanner
+        (!!JS.Object.assign(
             createObj ["onBarCodeRead" ==> onBarcodeRead],
-            props),
-        [])
+            keyValueList CaseRules.LowerFirst props))
+        []
