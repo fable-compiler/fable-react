@@ -70,10 +70,15 @@ module React =
         [<Emit("$0.state")>]
         member __.state: 'S = jsNative
         [<Emit("$0.setState($1)")>]
+        /// Within the constructor, use `setInitState`
         member __.setState(value: 'S): unit = jsNative
         [<Emit("this.state = $1")>]
         /// This method can only be called in the constructor
         member __.setInitState(value: 'S): unit = jsNative
+        [<Emit("$0.forceUpdate($1)")>]
+        member __.forceUpdate(?callBack: unit->unit): unit = jsNative
+        [<Emit("$0.isMounted()")>]
+        member __.isMounted(): bool = jsNative
         interface ReactElement
 
     and ClassicComponent<'P, 'S> =
