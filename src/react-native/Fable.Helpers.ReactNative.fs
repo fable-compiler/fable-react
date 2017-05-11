@@ -747,7 +747,7 @@ module Props =
 
     [<KeyValueList>]
     type ViewPagerAndroidProperties =
-        | InitialPage of float
+        | InitialPage of int
         | ScrollEnabled of bool
         | OnPageScroll of Func<NativeSyntheticEvent<ViewPagerAndroidOnPageScrollEventData>, unit>
         | OnPageSelected of Func<NativeSyntheticEvent<ViewPagerAndroidOnPageSelectedEventData>, unit>
