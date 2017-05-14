@@ -1,6 +1,6 @@
 <Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.0-narumi-901</Version>
+    <Version>1.0.0-narumi-902</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
@@ -14,9 +14,6 @@
     <DotNetCliToolReference Include="dotnet-fable" Version="1.0.0-narumi-*" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="*.fsproj; *.fs">
-      <PackagePath>Content\</PackagePath>
-      <Pack>true</Pack>
-    </Content>
+    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
 </Project>
