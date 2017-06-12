@@ -7,7 +7,7 @@ open Fable.Import.ReactNative
 open Fable.Helpers.ReactNative.Props
 open Fable.Helpers.ReactNative
 open Fable.Import.ReactNativePopupMenu
-module R = Fable.Helpers.React
+module RN = Fable.Helpers.ReactNative
 type BPM = ReactNativePopupMenu.Globals
 
 module Props =
@@ -50,36 +50,33 @@ open Props
 
 /// Creates a MenuContext element
 let inline menuContext (props:IMenuContextProperties list) (onBackdropPress: unit -> unit) (children: React.ReactElement list): React.ReactElement =
-    R.from
-        BPM.MenuContext
-        !!(JS.Object.assign(
+    RN.createElementWithObjProps(
+        BPM.MenuContext,
+        !!JS.Object.assign(
             createObj ["onBackdropPress" ==> onBackdropPress],
-            keyValueList CaseRules.LowerFirst props))
-        children
+            keyValueList CaseRules.LowerFirst props), children)
 
 /// Creates a Menu element
 let inline menu (props:IMenuProperties list) (onSelect: obj -> unit) (children: React.ReactElement list): React.ReactElement =
-    R.from
-        BPM.Menu
-        !!(JS.Object.assign(
+    RN.createElementWithObjProps(
+        BPM.Menu,
+        !!JS.Object.assign(
             createObj ["onSelect" ==> onSelect],
-            keyValueList CaseRules.LowerFirst props))
-        children
+            keyValueList CaseRules.LowerFirst props), children)
 
 
 /// Creates a MenuTrigger element
 let inline menuTrigger (props:IMenuTriggerProperties list) (onPress: unit -> unit) (children: React.ReactElement list): React.ReactElement =
-    R.from
-        BPM.MenuTrigger
-        !!(JS.Object.assign(
+    RN.createElementWithObjProps(
+        BPM.MenuTrigger,
+        !!JS.Object.assign(
             createObj ["onPress" ==> onPress],
-            keyValueList CaseRules.LowerFirst props))
-        children
+            keyValueList CaseRules.LowerFirst props), children)
 
 /// Creates a MenuOptions element
 let inline menuOptions (props:IMenuOptionsProperties list) (children: React.ReactElement list): React.ReactElement =
-    R.from BPM.MenuOptions !!(keyValueList CaseRules.LowerFirst props) children
+    RN.createElement(BPM.MenuOptions, props, children)
 
 /// Creates a MenuOption element
 let inline menuOption (props:IMenuOptionProperties list) : React.ReactElement =
-    R.from BPM.MenuOption !!(keyValueList CaseRules.LowerFirst props) []
+    RN.createElement(BPM.MenuOption, props, [])

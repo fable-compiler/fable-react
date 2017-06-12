@@ -1394,7 +1394,10 @@ module R = Fable.Helpers.React
 let localImage (path:string) : IImageSourceProperties list = jsNative
 
 let inline internal createElement(c: React.ComponentClass<'T>, props: 'P list, children: React.ReactElement list) =
-    R.from c !!(keyValueList CaseRules.LowerFirst props) children
+    applySpread R.createEl (c, keyValueList CaseRules.LowerFirst props, children)
+
+let inline internal createElementWithObjProps(c: React.ComponentClass<'T>, props: obj, children: React.ReactElement list) =
+    applySpread R.createEl (c, props, children)
 
 let inline text (props:TextProperties list) (text:string): React.ReactElement =
     createElement(RN.Text, props, [React.str text])
@@ -1531,11 +1534,11 @@ let inline imageWithChild (props: IImageProperties list) (child: React.ReactElem
         [child])
 
 let inline listView<'a> (dataSource:ListViewDataSource<'a>) (props: IListViewProperties list)  : React.ReactElement =
-    R.from
-      RN.ListView
-      (!!JS.Object.assign(
+    createElementWithObjProps(
+      RN.ListView,
+      !!JS.Object.assign(
             createObj ["dataSource" ==> dataSource],
-            keyValueList CaseRules.LowerFirst props)) []
+            keyValueList CaseRules.LowerFirst props), [])
 
 let inline mapView (props:IMapViewProperties list) (children: React.ReactElement list): React.ReactElement =
     createElement(
@@ -1621,18 +1624,17 @@ let inline statusBar (props:IStatusBarProperties list) : React.ReactElement =
       props, [])
 
 let inline switch (props:ISwitchProperties list) (onValueChange: bool -> unit) (value:bool) : React.ReactElement =
-    R.from
-      RN.Switch
-      (!!JS.Object.assign(
+    createElementWithObjProps(
+      RN.Switch,
+      !!JS.Object.assign(
             createObj ["onValueChange" ==> onValueChange
                        "value" ==> value],
-            keyValueList CaseRules.LowerFirst props)) []
+            keyValueList CaseRules.LowerFirst props), [])
 
 let inline navigationHeader (props:INavigationHeaderProps list) (rendererProps:NavigationTransitionProps): React.ReactElement =
-    R.from
-      RN.NavigationExperimental.Header
-      (!!JS.Object.assign(keyValueList CaseRules.LowerFirst props, rendererProps))
-      []
+    createElementWithObjProps(
+      RN.NavigationExperimental.Header,
+      !!JS.Object.assign(keyValueList CaseRules.LowerFirst props, rendererProps), [])
 
 let inline navigationState (index:int) (routes:NavigationRoute list): NavigationState =
     !!createObj ["index" ==> index
@@ -1645,13 +1647,12 @@ let inline navigationRoute (key:string) (title:string option): NavigationRoute =
 let inline navigationCardStack (navigationState: NavigationState)
                         (renderScene: NavigationTransitionProps -> React.ReactElement)
                         (props:INavigationCardStackProps list): React.ReactElement =
-    R.from
-      RN.NavigationExperimental.CardStack
-      (!!JS.Object.assign(
+    createElementWithObjProps(
+      RN.NavigationExperimental.CardStack,
+      !!JS.Object.assign(
             createObj ["renderScene" ==> renderScene
                        "navigationState" ==> navigationState],
-            keyValueList CaseRules.LowerFirst props))
-      []
+            keyValueList CaseRules.LowerFirst props), [])
 
 let inline navigationContainer (props:NavigationContainerProps list) : React.ReactElement =
     createElement(

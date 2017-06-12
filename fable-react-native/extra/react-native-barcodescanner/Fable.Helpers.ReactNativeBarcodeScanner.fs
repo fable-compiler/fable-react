@@ -4,7 +4,7 @@ open Fable.Core.JsInterop
 open Fable.Core
 open Fable.Import
 open Fable.Import.ReactNativeBarcodeScanner
-module R = Fable.Helpers.React
+module RN = Fable.Helpers.ReactNative
 type BCS = ReactNativeBarcodeScanner.Globals
 
 module Props =
@@ -33,9 +33,8 @@ type Barcode =
 
 /// Creates a BarcodeScanner element
 let inline barcodeScanner (props:IBarcodeScannerProperties list) (onBarcodeRead: Barcode -> unit) : React.ReactElement =
-    R.from
-      BCS.BarcodeScanner
-        (!!JS.Object.assign(
+    RN.createElementWithObjProps(
+      BCS.BarcodeScanner,
+        !!JS.Object.assign(
             createObj ["onBarCodeRead" ==> onBarcodeRead],
-            keyValueList CaseRules.LowerFirst props))
-        []
+            keyValueList CaseRules.LowerFirst props), [])
