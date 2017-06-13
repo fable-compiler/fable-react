@@ -1393,7 +1393,7 @@ module R = Fable.Helpers.React
 // Use `require` to load a local image
 let localImage (path:string) : IImageSourceProperties list = jsNative
 
-let inline internal createElement(c: React.ComponentClass<'T>, props: 'P list, children: React.ReactElement list) =
+let createElement(c: React.ComponentClass<'T>, props: 'P list, children: React.ReactElement list) =
     applySpread R.createEl (c, keyValueList CaseRules.LowerFirst props, children)
 
 let inline internal createElementWithObjProps(c: React.ComponentClass<'T>, props: obj, children: React.ReactElement list) =
