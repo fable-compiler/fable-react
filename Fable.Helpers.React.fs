@@ -1,18 +1,13 @@
-[<Fable.Core.Erase>]
 module Fable.Helpers.React
 
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 
-let [<Literal>] private React = "react"
-
 module Props =
-    [<KeyValueList>]
     type ICSSProp =
         interface end
 
-    [<KeyValueList>]
     type CSSProp =
         | BoxFlex of float
         | BoxFlexGroup of float
@@ -289,21 +284,17 @@ module Props =
         | WritingMode of obj
         interface ICSSProp
 
-    [<KeyValueList>]
     type IProp =
         interface end
 
-    [<KeyValueList>]
     type IHTMLProp =
         inherit IProp
 
-    [<KeyValueList>]
     type Prop =
         | Key of string
         | Ref of (Browser.Element->unit)
         interface IHTMLProp
 
-    [<KeyValueList>]
     type DOMAttr =
         | DangerouslySetInnerHTML of obj
         | OnCopy of (React.ClipboardEvent -> unit)
@@ -371,7 +362,6 @@ module Props =
         | OnWheel of (React.WheelEvent -> unit)
         interface IHTMLProp
 
-    [<KeyValueList>]
     type HTMLAttr =
         | DefaultChecked of bool
         | DefaultValue of U2<string, ResizeArray<string>>
@@ -486,7 +476,6 @@ module Props =
         | SrcSet of string
         | Start of float
         | Step of U2<float, string>
-        | Style of ICSSProp list
         | Summary of string
         | TabIndex of float
         | Target of string
@@ -519,7 +508,9 @@ module Props =
         | Unselectable of bool
         interface IHTMLProp
 
-    [<KeyValueList>]
+    let inline Style (css: ICSSProp list): HTMLAttr =
+        !!("style", keyValueList CaseRules.LowerFirst css)
+
     type SVGAttr =
         | ClipPath of string
         | Cx of U2<float, string>
@@ -581,294 +572,182 @@ module Props =
 
 open Props
 open Fable.Import.React
-open Fable.React.Internal
+open Fable.Core.JsInterop
+
+[<Import("createElement", from="react")>]
+let createEl: obj = null
 
 /// Instantiate a React component from a type inheriting React.Component<>
-[<Emit(typeof<Emitter>, "Com")>]
-let com<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement = jsNative
-/// Instantiate a stateless component from a function
+let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
+    applySpread createEl (typedefof<'T>, props, children)
 
-[<Emit(typeof<Emitter>, "From")>]
-let fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement = jsNative
+/// Instantiate a stateless component from a function
+let inline fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
+    applySpread createEl (f, props, children)
 
 /// Instantiate an imported React component
-[<Emit(typeof<Emitter>, "From")>]
-let from<'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement = jsNative
+let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement =
+    applySpread createEl (com, props, children)
 
 /// Instantiate a DOM React element
-[<Emit(typeof<Emitter>, "From")>]
-let domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement = jsNative
+let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
+    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
+
+/// Instantiate a DOM React element (void)
+let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
+    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, [])
 
 /// Instantiate an SVG React element
-[<Emit(typeof<Emitter>, "From")>]
-let svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement = jsNative
+let inline svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement =
+    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
 
-[<Emit(typeof<Emitter>, "Tagged", "a")>]
-let a b c = domEl "a" b c
-[<Emit(typeof<Emitter>, "Tagged", "abbr")>]
-let abbr b c = domEl "abbr" b c
-[<Emit(typeof<Emitter>, "Tagged", "address")>]
-let address b c = domEl "address" b c
-[<Emit(typeof<Emitter>, "Tagged", "area")>]
-let area b c = domEl "area" b c
-[<Emit(typeof<Emitter>, "Tagged", "article")>]
-let article b c = domEl "article" b c
-[<Emit(typeof<Emitter>, "Tagged", "aside")>]
-let aside b c = domEl "aside" b c
-[<Emit(typeof<Emitter>, "Tagged", "audio")>]
-let audio b c = domEl "audio" b c
-[<Emit(typeof<Emitter>, "Tagged", "b")>]
-let b b' c = domEl "b" b' c
-[<Emit(typeof<Emitter>, "Tagged", "base")>]
-let ``base`` b c = domEl "base" b c
-[<Emit(typeof<Emitter>, "Tagged", "bdi")>]
-let bdi b c = domEl "bdi" b c
-[<Emit(typeof<Emitter>, "Tagged", "bdo")>]
-let bdo b c = domEl "bdo" b c
-[<Emit(typeof<Emitter>, "Tagged", "big")>]
-let big b c = domEl "big" b c
-[<Emit(typeof<Emitter>, "Tagged", "blockquote")>]
-let blockquote b c = domEl "blockquote" b c
-[<Emit(typeof<Emitter>, "Tagged", "body")>]
-let body b c = domEl "body" b c
-[<Emit(typeof<Emitter>, "Tagged", "br")>]
-let br b c = domEl "br" b c
-[<Emit(typeof<Emitter>, "Tagged", "button")>]
-let button b c = domEl "button" b c
-[<Emit(typeof<Emitter>, "Tagged", "canvas")>]
-let canvas b c = domEl "canvas" b c
-[<Emit(typeof<Emitter>, "Tagged", "caption")>]
-let caption b c = domEl "caption" b c
-[<Emit(typeof<Emitter>, "Tagged", "cite")>]
-let cite b c = domEl "cite" b c
-[<Emit(typeof<Emitter>, "Tagged", "code")>]
-let code b c = domEl "code" b c
-[<Emit(typeof<Emitter>, "Tagged", "col")>]
-let col b c = domEl "col" b c
-[<Emit(typeof<Emitter>, "Tagged", "colgroup")>]
-let colgroup b c = domEl "colgroup" b c
-[<Emit(typeof<Emitter>, "Tagged", "data")>]
-let data b c = domEl "data" b c
-[<Emit(typeof<Emitter>, "Tagged", "datalist")>]
-let datalist b c = domEl "datalist" b c
-[<Emit(typeof<Emitter>, "Tagged", "dd")>]
-let dd b c = domEl "dd" b c
-[<Emit(typeof<Emitter>, "Tagged", "del")>]
-let del b c = domEl "del" b c
-[<Emit(typeof<Emitter>, "Tagged", "details")>]
-let details b c = domEl "details" b c
-[<Emit(typeof<Emitter>, "Tagged", "dfn")>]
-let dfn b c = domEl "dfn" b c
-[<Emit(typeof<Emitter>, "Tagged", "dialog")>]
-let dialog b c = domEl "dialog" b c
-[<Emit(typeof<Emitter>, "Tagged", "div")>]
-let div b c = domEl "div" b c
-[<Emit(typeof<Emitter>, "Tagged", "dl")>]
-let dl b c = domEl "dl" b c
-[<Emit(typeof<Emitter>, "Tagged", "dt")>]
-let dt b c = domEl "dt" b c
-[<Emit(typeof<Emitter>, "Tagged", "em")>]
-let em b c = domEl "em" b c
-[<Emit(typeof<Emitter>, "Tagged", "embed")>]
-let embed b c = domEl "embed" b c
-[<Emit(typeof<Emitter>, "Tagged", "fieldset")>]
-let fieldset b c = domEl "fieldset" b c
-[<Emit(typeof<Emitter>, "Tagged", "figcaption")>]
-let figcaption b c = domEl "figcaption" b c
-[<Emit(typeof<Emitter>, "Tagged", "figure")>]
-let figure b c = domEl "figure" b c
-[<Emit(typeof<Emitter>, "Tagged", "footer")>]
-let footer b c = domEl "footer" b c
-[<Emit(typeof<Emitter>, "Tagged", "form")>]
-let form b c = domEl "form" b c
-[<Emit(typeof<Emitter>, "Tagged", "h1")>]
-let h1 b c = domEl "h1" b c
-[<Emit(typeof<Emitter>, "Tagged", "h2")>]
-let h2 b c = domEl "h2" b c
-[<Emit(typeof<Emitter>, "Tagged", "h3")>]
-let h3 b c = domEl "h3" b c
-[<Emit(typeof<Emitter>, "Tagged", "h4")>]
-let h4 b c = domEl "h4" b c
-[<Emit(typeof<Emitter>, "Tagged", "h5")>]
-let h5 b c = domEl "h5" b c
-[<Emit(typeof<Emitter>, "Tagged", "h6")>]
-let h6 b c = domEl "h6" b c
-[<Emit(typeof<Emitter>, "Tagged", "head")>]
-let head b c = domEl "head" b c
-[<Emit(typeof<Emitter>, "Tagged", "header")>]
-let header b c = domEl "header" b c
-[<Emit(typeof<Emitter>, "Tagged", "hgroup")>]
-let hgroup b c = domEl "hgroup" b c
-[<Emit(typeof<Emitter>, "Tagged", "hr")>]
-let hr b c = domEl "hr" b c
-[<Emit(typeof<Emitter>, "Tagged", "html")>]
-let html b c = domEl "html" b c
-[<Emit(typeof<Emitter>, "Tagged", "i")>]
-let i b c = domEl "i" b c
-[<Emit(typeof<Emitter>, "Tagged", "iframe")>]
-let iframe b c = domEl "iframe" b c
-[<Emit(typeof<Emitter>, "Tagged", "img")>]
-let img b c = domEl "img" b c
-[<Emit(typeof<Emitter>, "Tagged", "input")>]
-let input b c = domEl "input" b c
-[<Emit(typeof<Emitter>, "Tagged", "ins")>]
-let ins b c = domEl "ins" b c
-[<Emit(typeof<Emitter>, "Tagged", "kbd")>]
-let kbd b c = domEl "kbd" b c
-[<Emit(typeof<Emitter>, "Tagged", "keygen")>]
-let keygen b c = domEl "keygen" b c
-[<Emit(typeof<Emitter>, "Tagged", "label")>]
-let label b c = domEl "label" b c
-[<Emit(typeof<Emitter>, "Tagged", "legend")>]
-let legend b c = domEl "legend" b c
-[<Emit(typeof<Emitter>, "Tagged", "li")>]
-let li b c = domEl "li" b c
-[<Emit(typeof<Emitter>, "Tagged", "link")>]
-let link b c = domEl "link" b c
-[<Emit(typeof<Emitter>, "Tagged", "main")>]
-let main b c = domEl "main" b c
-[<Emit(typeof<Emitter>, "Tagged", "map")>]
-let map b c = domEl "map" b c
-[<Emit(typeof<Emitter>, "Tagged", "mark")>]
-let mark b c = domEl "mark" b c
-[<Emit(typeof<Emitter>, "Tagged", "menu")>]
-let menu b c = domEl "menu" b c
-[<Emit(typeof<Emitter>, "Tagged", "menuitem")>]
-let menuitem b c = domEl "menuitem" b c
-[<Emit(typeof<Emitter>, "Tagged", "meta")>]
-let meta b c = domEl "meta" b c
-[<Emit(typeof<Emitter>, "Tagged", "meter")>]
-let meter b c = domEl "meter" b c
-[<Emit(typeof<Emitter>, "Tagged", "nav")>]
-let nav b c = domEl "nav" b c
-[<Emit(typeof<Emitter>, "Tagged", "noscript")>]
-let noscript b c = domEl "noscript" b c
-[<Emit(typeof<Emitter>, "Tagged", "object")>]
-let ``object`` b c = domEl "object" b c
-[<Emit(typeof<Emitter>, "Tagged", "ol")>]
-let ol b c = domEl "ol" b c
-[<Emit(typeof<Emitter>, "Tagged", "optgroup")>]
-let optgroup b c = domEl "optgroup" b c
-[<Emit(typeof<Emitter>, "Tagged", "option")>]
-let option b c = domEl "option" b c
-[<Emit(typeof<Emitter>, "Tagged", "output")>]
-let output b c = domEl "output" b c
-[<Emit(typeof<Emitter>, "Tagged", "p")>]
-let p b c = domEl "p" b c
-[<Emit(typeof<Emitter>, "Tagged", "param")>]
-let param b c = domEl "param" b c
-[<Emit(typeof<Emitter>, "Tagged", "picture")>]
-let picture b c = domEl "picture" b c
-[<Emit(typeof<Emitter>, "Tagged", "pre")>]
-let pre b c = domEl "pre" b c
-[<Emit(typeof<Emitter>, "Tagged", "progress")>]
-let progress b c = domEl "progress" b c
-[<Emit(typeof<Emitter>, "Tagged", "q")>]
-let q b c = domEl "q" b c
-[<Emit(typeof<Emitter>, "Tagged", "rp")>]
-let rp b c = domEl "rp" b c
-[<Emit(typeof<Emitter>, "Tagged", "rt")>]
-let rt b c = domEl "rt" b c
-[<Emit(typeof<Emitter>, "Tagged", "ruby")>]
-let ruby b c = domEl "ruby" b c
-[<Emit(typeof<Emitter>, "Tagged", "s")>]
-let s b c = domEl "s" b c
-[<Emit(typeof<Emitter>, "Tagged", "samp")>]
-let samp b c = domEl "samp" b c
-[<Emit(typeof<Emitter>, "Tagged", "script")>]
-let script b c = domEl "script" b c
-[<Emit(typeof<Emitter>, "Tagged", "section")>]
-let section b c = domEl "section" b c
-[<Emit(typeof<Emitter>, "Tagged", "select")>]
-let select b c = domEl "select" b c
-[<Emit(typeof<Emitter>, "Tagged", "small")>]
-let small b c = domEl "small" b c
-[<Emit(typeof<Emitter>, "Tagged", "source")>]
-let source b c = domEl "source" b c
-[<Emit(typeof<Emitter>, "Tagged", "span")>]
-let span b c = domEl "span" b c
-[<Emit(typeof<Emitter>, "Tagged", "strong")>]
-let strong b c = domEl "strong" b c
-[<Emit(typeof<Emitter>, "Tagged", "style")>]
-let style b c = domEl "style" b c
-[<Emit(typeof<Emitter>, "Tagged", "sub")>]
-let sub b c = domEl "sub" b c
-[<Emit(typeof<Emitter>, "Tagged", "summary")>]
-let summary b c = domEl "summary" b c
-[<Emit(typeof<Emitter>, "Tagged", "sup")>]
-let sup b c = domEl "sup" b c
-[<Emit(typeof<Emitter>, "Tagged", "table")>]
-let table b c = domEl "table" b c
-[<Emit(typeof<Emitter>, "Tagged", "tbody")>]
-let tbody b c = domEl "tbody" b c
-[<Emit(typeof<Emitter>, "Tagged", "td")>]
-let td b c = domEl "td" b c
-[<Emit(typeof<Emitter>, "Tagged", "textarea")>]
-let textarea b c = domEl "textarea" b c
-[<Emit(typeof<Emitter>, "Tagged", "tfoot")>]
-let tfoot b c = domEl "tfoot" b c
-[<Emit(typeof<Emitter>, "Tagged", "th")>]
-let th b c = domEl "th" b c
-[<Emit(typeof<Emitter>, "Tagged", "thead")>]
-let thead b c = domEl "thead" b c
-[<Emit(typeof<Emitter>, "Tagged", "time")>]
-let time b c = domEl "time" b c
-[<Emit(typeof<Emitter>, "Tagged", "title")>]
-let title b c = domEl "title" b c
-[<Emit(typeof<Emitter>, "Tagged", "tr")>]
-let tr b c = domEl "tr" b c
-[<Emit(typeof<Emitter>, "Tagged", "track")>]
-let track b c = domEl "track" b c
-[<Emit(typeof<Emitter>, "Tagged", "u")>]
-let u b c = domEl "u" b c
-[<Emit(typeof<Emitter>, "Tagged", "ul")>]
-let ul b c = domEl "ul" b c
-[<Emit(typeof<Emitter>, "Tagged", "var")>]
-let var b c = domEl "var" b c
-[<Emit(typeof<Emitter>, "Tagged", "video")>]
-let video b c = domEl "video" b c
-[<Emit(typeof<Emitter>, "Tagged", "wbr")>]
-let wbr b c = domEl "wbr" b c
-[<Emit(typeof<Emitter>, "Tagged", "svg")>]
-let svg b c = svgEl "svg" b c
-[<Emit(typeof<Emitter>, "Tagged", "circle")>]
-let circle b c = svgEl "circle" b c
-[<Emit(typeof<Emitter>, "Tagged", "clipPath")>]
-let clipPath b c = svgEl "clipPath" b c
-[<Emit(typeof<Emitter>, "Tagged", "defs")>]
-let defs b c = svgEl "defs" b c
-[<Emit(typeof<Emitter>, "Tagged", "ellipse")>]
-let ellipse b c = svgEl "ellipse" b c
-[<Emit(typeof<Emitter>, "Tagged", "g")>]
-let g b c = svgEl "g" b c
-[<Emit(typeof<Emitter>, "Tagged", "image")>]
-let image b c = svgEl "image" b c
-[<Emit(typeof<Emitter>, "Tagged", "line")>]
-let line b c = svgEl "line" b c
-[<Emit(typeof<Emitter>, "Tagged", "linearGradient")>]
-let linearGradient b c = svgEl "linearGradient" b c
-[<Emit(typeof<Emitter>, "Tagged", "mask")>]
-let mask b c = svgEl "mask" b c
-[<Emit(typeof<Emitter>, "Tagged", "path")>]
-let path b c = svgEl "path" b c
-[<Emit(typeof<Emitter>, "Tagged", "pattern")>]
-let pattern b c = svgEl "pattern" b c
-[<Emit(typeof<Emitter>, "Tagged", "polygon")>]
-let polygon b c = svgEl "polygon" b c
-[<Emit(typeof<Emitter>, "Tagged", "polyline")>]
-let polyline b c = svgEl "polyline" b c
-[<Emit(typeof<Emitter>, "Tagged", "radialGradient")>]
-let radialGradient b c = svgEl "radialGradient" b c
-[<Emit(typeof<Emitter>, "Tagged", "rect")>]
-let rect b c = svgEl "rect" b c
-[<Emit(typeof<Emitter>, "Tagged", "stop")>]
-let stop b c = svgEl "stop" b c
-[<Emit(typeof<Emitter>, "Tagged", "text")>]
-let text b c = svgEl "text" b c
-[<Emit(typeof<Emitter>, "Tagged", "tspan")>]
-let tspan b c = svgEl "tspan" b c
+// Standard element
+let inline a b c = domEl "a" b c
+let inline abbr b c = domEl "abbr" b c
+let inline address b c = domEl "address" b c
+let inline article b c = domEl "article" b c
+let inline aside b c = domEl "aside" b c
+let inline audio b c = domEl "audio" b c
+let inline b b' c = domEl "b" b' c
+let inline bdi b c = domEl "bdi" b c
+let inline bdo b c = domEl "bdo" b c
+let inline big b c = domEl "big" b c
+let inline blockquote b c = domEl "blockquote" b c
+let inline body b c = domEl "body" b c
+let inline button b c = domEl "button" b c
+let inline canvas b c = domEl "canvas" b c
+let inline caption b c = domEl "caption" b c
+let inline cite b c = domEl "cite" b c
+let inline code b c = domEl "code" b c
+let inline colgroup b c = domEl "colgroup" b c
+let inline data b c = domEl "data" b c
+let inline datalist b c = domEl "datalist" b c
+let inline dd b c = domEl "dd" b c
+let inline del b c = domEl "del" b c
+let inline details b c = domEl "details" b c
+let inline dfn b c = domEl "dfn" b c
+let inline dialog b c = domEl "dialog" b c
+let inline div b c = domEl "div" b c
+let inline dl b c = domEl "dl" b c
+let inline dt b c = domEl "dt" b c
+let inline em b c = domEl "em" b c
+let inline fieldset b c = domEl "fieldset" b c
+let inline figcaption b c = domEl "figcaption" b c
+let inline figure b c = domEl "figure" b c
+let inline footer b c = domEl "footer" b c
+let inline form b c = domEl "form" b c
+let inline h1 b c = domEl "h1" b c
+let inline h2 b c = domEl "h2" b c
+let inline h3 b c = domEl "h3" b c
+let inline h4 b c = domEl "h4" b c
+let inline h5 b c = domEl "h5" b c
+let inline h6 b c = domEl "h6" b c
+let inline head b c = domEl "head" b c
+let inline header b c = domEl "header" b c
+let inline hgroup b c = domEl "hgroup" b c
+let inline html b c = domEl "html" b c
+let inline i b c = domEl "i" b c
+let inline iframe b c = domEl "iframe" b c
+let inline ins b c = domEl "ins" b c
+let inline kbd b c = domEl "kbd" b c
+let inline label b c = domEl "label" b c
+let inline legend b c = domEl "legend" b c
+let inline li b c = domEl "li" b c
+let inline main b c = domEl "main" b c
+let inline map b c = domEl "map" b c
+let inline mark b c = domEl "mark" b c
+let inline menu b c = domEl "menu" b c
+let inline meter b c = domEl "meter" b c
+let inline nav b c = domEl "nav" b c
+let inline noscript b c = domEl "noscript" b c
+let inline ``object`` b c = domEl "object" b c
+let inline ol b c = domEl "ol" b c
+let inline optgroup b c = domEl "optgroup" b c
+let inline option b c = domEl "option" b c
+let inline output b c = domEl "output" b c
+let inline p b c = domEl "p" b c
+let inline picture b c = domEl "picture" b c
+let inline pre b c = domEl "pre" b c
+let inline progress b c = domEl "progress" b c
+let inline q b c = domEl "q" b c
+let inline rp b c = domEl "rp" b c
+let inline rt b c = domEl "rt" b c
+let inline ruby b c = domEl "ruby" b c
+let inline s b c = domEl "s" b c
+let inline samp b c = domEl "samp" b c
+let inline script b c = domEl "script" b c
+let inline section b c = domEl "section" b c
+let inline select b c = domEl "select" b c
+let inline small b c = domEl "small" b c
+let inline span b c = domEl "span" b c
+let inline strong b c = domEl "strong" b c
+let inline style b c = domEl "style" b c
+let inline sub b c = domEl "sub" b c
+let inline summary b c = domEl "summary" b c
+let inline sup b c = domEl "sup" b c
+let inline table b c = domEl "table" b c
+let inline tbody b c = domEl "tbody" b c
+let inline td b c = domEl "td" b c
+let inline textarea b c = domEl "textarea" b c
+let inline tfoot b c = domEl "tfoot" b c
+let inline th b c = domEl "th" b c
+let inline thead b c = domEl "thead" b c
+let inline time b c = domEl "time" b c
+let inline title b c = domEl "title" b c
+let inline tr b c = domEl "tr" b c
+let inline u b c = domEl "u" b c
+let inline ul b c = domEl "ul" b c
+let inline var b c = domEl "var" b c
+let inline video b c = domEl "video" b c
+
+// Void element
+let inline area b = voidEl "area" b
+let inline ``base`` b = voidEl "base" b
+let inline br b = voidEl "br" b
+let inline col b = voidEl "col" b
+let inline embed b = voidEl "embed" b
+let inline hr b = voidEl "hr" b
+let inline img b = voidEl "img" b
+let inline input b = voidEl "input" b
+let inline keygen b = voidEl "keygen" b
+let inline link b = voidEl "link" b
+let inline menuitem b = voidEl "menuitem" b
+let inline meta b = voidEl "meta" b
+let inline param b = voidEl "param" b
+let inline source b = voidEl "source" b
+let inline track b = voidEl "track" b
+let inline wbr b = voidEl "wbr" b
+
+// SVG elements
+let inline svg b c = svgEl "svg" b c
+let inline circle b c = svgEl "circle" b c
+let inline clipPath b c = svgEl "clipPath" b c
+let inline defs b c = svgEl "defs" b c
+let inline ellipse b c = svgEl "ellipse" b c
+let inline g b c = svgEl "g" b c
+let inline image b c = svgEl "image" b c
+let inline line b c = svgEl "line" b c
+let inline linearGradient b c = svgEl "linearGradient" b c
+let inline mask b c = svgEl "mask" b c
+let inline path b c = svgEl "path" b c
+let inline pattern b c = svgEl "pattern" b c
+let inline polygon b c = svgEl "polygon" b c
+let inline polyline b c = svgEl "polyline" b c
+let inline radialGradient b c = svgEl "radialGradient" b c
+let inline rect b c = svgEl "rect" b c
+let inline stop b c = svgEl "stop" b c
+let inline text b c = svgEl "text" b c
+let inline tspan b c = svgEl "tspan" b c
 
 /// Cast a string to a React element (erased in runtime)
 let [<Emit("$0")>] str (s: string): ReactElement = unbox s
 /// Cast an option value to a React element (erased in runtime)
 let [<Emit("$0")>] opt (o: ReactElement option): ReactElement = unbox o
+
+// Class list helpers
+let classBaseList std classes =
+    classes
+    |> List.fold (fun complete -> function | (name,true) -> complete + " " + name | _ -> complete) std
+    |> ClassName
+
+let classList classes = classBaseList "" classes
