@@ -62,6 +62,7 @@ module Props =
         | BorderLeftColor of obj
         | BorderLeftStyle of obj
         | BorderLeftWidth of obj
+        | BorderRadius of obj
         | BorderRight of obj
         | BorderRightColor of obj
         | BorderRightStyle of obj
@@ -510,6 +511,9 @@ module Props =
 
     let inline Style (css: ICSSProp list): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
+
+    let inline Data(key: string, value: obj): IHTMLProp = 
+        !!("data-" + key, value)
 
     type SVGAttr =
         | ClipPath of string
