@@ -396,7 +396,7 @@ module Props =
         | Controls of bool
         | Coords of string
         | CrossOrigin of string
-        | Data of string
+        // | Data of string
         | [<CompiledName("data-toggle")>] DataToggle of string
         | DateTime of string
         | Default of bool
@@ -414,7 +414,7 @@ module Props =
         | FormTarget of string
         | FrameBorder of U2<float, string>
         | Headers of string
-        // | Height of U2<float, string> // Conflicts with CSSProp, shouldn't be used in HTML5
+        | Height of U2<float, string>
         | Hidden of bool
         | High of float
         | Href of string
