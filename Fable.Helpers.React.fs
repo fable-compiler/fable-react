@@ -12,6 +12,7 @@ module Props =
         | BoxFlex of float
         | BoxFlexGroup of float
         | ColumnCount of float
+        | Cursor of string
         | Flex of U2<float, string>
         | FlexGrow of float
         | FlexShrink of float
@@ -512,7 +513,7 @@ module Props =
     let inline Style (css: ICSSProp list): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
 
-    let inline Data(key: string, value: obj): IHTMLProp = 
+    let inline Data(key: string, value: obj): IHTMLProp =
         !!("data-" + key, value)
 
     type SVGAttr =
