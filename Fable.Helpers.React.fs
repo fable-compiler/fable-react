@@ -603,7 +603,7 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
     applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, [])
 
 /// Instantiate an SVG React element
-let inline svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement =
+let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
     applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
 
 // Standard element
