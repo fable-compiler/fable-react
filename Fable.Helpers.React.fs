@@ -88,7 +88,7 @@ module Props =
 
     type HTMLAttr =
         | DefaultChecked of bool
-        | DefaultValue of U2<string, ResizeArray<string>>
+        | DefaultValue of string
         | Accept of string
         | AcceptCharset of string
         | AccessKey of string
@@ -103,8 +103,8 @@ module Props =
         | AutoFocus of bool
         | AutoPlay of bool
         | Capture of bool
-        | CellPadding of U2<float, string>
-        | CellSpacing of U2<float, string>
+        | CellPadding of obj
+        | CellSpacing of obj
         | CharSet of string
         | Challenge of string
         | Checked of bool
@@ -134,9 +134,9 @@ module Props =
         | FormMethod of string
         | FormNoValidate of bool
         | FormTarget of string
-        | FrameBorder of U2<float, string>
+        | FrameBorder of obj
         | Headers of string
-        | Height of U2<float, string>
+        | Height of obj
         | Hidden of bool
         | High of float
         | Href of string
@@ -159,12 +159,12 @@ module Props =
         | Manifest of string
         | MarginHeight of float
         | MarginWidth of float
-        | Max of U2<float, string>
+        | Max of obj
         | MaxLength of float
         | Media of string
         | MediaGroup of string
         | Method of string
-        | Min of U2<float, string>
+        | Min of obj
         | MinLength of float
         | Multiple of bool
         | Muted of bool
@@ -199,15 +199,15 @@ module Props =
         | SrcLang of string
         | SrcSet of string
         | Start of float
-        | Step of U2<float, string>
+        | Step of obj
         | Summary of string
         | TabIndex of float
         | Target of string
         | Title of string
         | Type of string
         | UseMap of string
-        | Value of U2<string, ResizeArray<string>>
-        | Width of U2<float, string>
+        | Value of string
+        | Width of obj
         | Wmode of string
         | Wrap of string
         | About of string
@@ -240,48 +240,48 @@ module Props =
 
     type SVGAttr =
         | ClipPath of string
-        | Cx of U2<float, string>
-        | Cy of U2<float, string>
+        | Cx of obj
+        | Cy of obj
         | D of string
-        | Dx of U2<float, string>
-        | Dy of U2<float, string>
+        | Dx of obj
+        | Dy of obj
         | Fill of string
-        | FillOpacity of U2<float, string>
+        | FillOpacity of obj
         | FontFamily of string
-        | FontSize of U2<float, string>
-        | Fx of U2<float, string>
-        | Fy of U2<float, string>
+        | FontSize of obj
+        | Fx of obj
+        | Fy of obj
         | GradientTransform of string
         | GradientUnits of string
         | MarkerEnd of string
         | MarkerMid of string
         | MarkerStart of string
-        | Offset of U2<float, string>
-        | Opacity of U2<float, string>
+        | Offset of obj
+        | Opacity of obj
         | PatternContentUnits of string
         | PatternUnits of string
         | Points of string
         | PreserveAspectRatio of string
-        | R of U2<float, string>
-        | Rx of U2<float, string>
-        | Ry of U2<float, string>
+        | R of obj
+        | Rx of obj
+        | Ry of obj
         | SpreadMethod of string
         | StopColor of string
-        | StopOpacity of U2<float, string>
+        | StopOpacity of obj
         | Stroke of string
         | StrokeDasharray of string
         | StrokeLinecap of string
         | StrokeMiterlimit of string
-        | StrokeOpacity of U2<float, string>
-        | StrokeWidth of U2<float, string>
+        | StrokeOpacity of obj
+        | StrokeWidth of obj
         | TextAnchor of string
         | Transform of string
         | Version of string
         | ViewBox of string
-        | Width of U2<float, string>
-        | X1 of U2<float, string>
-        | X2 of U2<float, string>
-        | X of U2<float, string>
+        | Width of obj
+        | X1 of obj
+        | X2 of obj
+        | X of obj
         | XlinkActuate of string
         | XlinkArcrole of string
         | XlinkHref of string
@@ -292,9 +292,9 @@ module Props =
         | XmlBase of string
         | XmlLang of string
         | XmlSpace of string
-        | Y1 of U2<float, string>
-        | Y2 of U2<float, string>
-        | Y of U2<float, string>
+        | Y1 of obj
+        | Y2 of obj
+        | Y of obj
         interface IProp
 
     type CSSProp =
@@ -302,19 +302,19 @@ module Props =
         | BoxFlexGroup of float
         | ColumnCount of float
         | Cursor of string
-        | Flex of U2<float, string>
+        | Flex of obj
         | FlexGrow of float
         | FlexShrink of float
-        | FontWeight of U2<float, string>
+        | FontWeight of obj
         | LineClamp of float
-        | LineHeight of U2<float, string>
+        | LineHeight of obj
         | Opacity of float
         | Order of float
         | Orphans of float
         | Widows of float
         | ZIndex of float
         | Zoom of float
-        | FontSize of U2<float, string>
+        | FontSize of obj
         | FillOpacity of float
         | StrokeOpacity of float
         | StrokeWidth of float
