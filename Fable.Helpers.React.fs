@@ -361,6 +361,10 @@ module Props =
         | OnTouchStart of (React.TouchEvent -> unit)
         | OnScroll of (React.UIEvent -> unit)
         | OnWheel of (React.WheelEvent -> unit)
+        | OnAnimationStart of (React.AnimationEvent -> unit)
+        | OnAnimationEnd of (React.AnimationEvent -> unit)
+        | OnAnimationIteration of (React.AnimationEvent -> unit)
+        | OnTransitionEnd of (React.TransitionEvent -> unit)
         interface IHTMLProp
 
     type HTMLAttr =
