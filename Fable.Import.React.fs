@@ -230,6 +230,18 @@ module React =
         abstract deltaY: float with get, set
         abstract deltaZ: float with get, set
 
+    and AnimationEvent =
+        inherit SyntheticEvent
+        abstract animationName: string with get, set
+        abstract pseudoElement: string with get, set
+        abstract elapsedTime: float with get, set
+    
+    and TransitionEvent =
+        inherit SyntheticEvent
+        abstract propertyName: string with get, set
+        abstract pseudoElement: string with get, set
+        abstract elapsedTime: float with get, set
+
     and EventHandler<'E> = Func<'E, unit>
 
     and ReactEventHandler =
@@ -264,6 +276,12 @@ module React =
 
     and WheelEventHandler =
         EventHandler<WheelEvent>
+
+    and AnimationEventHandler =
+        EventHandler<AnimationEvent>
+
+    and TransitionEventHandler =
+        EventHandler<TransitionEvent>
 
     and Props<'T> =
         abstract children: ReactNode option with get, set
@@ -343,6 +361,10 @@ module React =
         abstract onTouchStart: TouchEventHandler option with get, set
         abstract onScroll: UIEventHandler option with get, set
         abstract onWheel: WheelEventHandler option with get, set
+        abstract onAnimationStart: AnimationEventHandler option with get, set
+        abstract onAnimationEnd: AnimationEventHandler option with get, set
+        abstract onAnimationIteration: AnimationEventHandler option with get, set
+        abstract onTransitionEnd: TransitionEventHandler option with get, set
 
     and CSSProperties =
         abstract boxFlex: float option with get, set
