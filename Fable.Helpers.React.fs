@@ -8,23 +8,317 @@ module Props =
     type ICSSProp =
         interface end
 
+    type IProp =
+        interface end
+
+    type IHTMLProp =
+        inherit IProp
+
+    type Prop =
+        | Key of string
+        | Ref of (Browser.Element->unit)
+        interface IHTMLProp
+
+    type DOMAttr =
+        | DangerouslySetInnerHTML of obj
+        | OnCut of (React.ClipboardEvent -> unit)
+        | OnPaste of (React.ClipboardEvent -> unit)
+        | OnCompositionEnd of (React.CompositionEvent -> unit)
+        | OnCompositionStart of (React.CompositionEvent -> unit)
+        | OnCopy of (React.ClipboardEvent -> unit)
+        | OnCompositionUpdate of (React.CompositionEvent -> unit)
+        | OnFocus of (React.FocusEvent -> unit)
+        | OnBlur of (React.FocusEvent -> unit)
+        | OnChange of (React.FormEvent -> unit)
+        | OnInput of (React.FormEvent -> unit)
+        | OnSubmit of (React.FormEvent -> unit)
+        | OnLoad of (React.SyntheticEvent -> unit)
+        | OnError of (React.SyntheticEvent -> unit)
+        | OnKeyDown of (React.KeyboardEvent -> unit)
+        | OnKeyPress of (React.KeyboardEvent -> unit)
+        | OnKeyUp of (React.KeyboardEvent -> unit)
+        | OnAbort of (React.SyntheticEvent -> unit)
+        | OnCanPlay of (React.SyntheticEvent -> unit)
+        | OnCanPlayThrough of (React.SyntheticEvent -> unit)
+        | OnDurationChange of (React.SyntheticEvent -> unit)
+        | OnEmptied of (React.SyntheticEvent -> unit)
+        | OnEncrypted of (React.SyntheticEvent -> unit)
+        | OnEnded of (React.SyntheticEvent -> unit)
+        | OnLoadedData of (React.SyntheticEvent -> unit)
+        | OnLoadedMetadata of (React.SyntheticEvent -> unit)
+        | OnLoadStart of (React.SyntheticEvent -> unit)
+        | OnPause of (React.SyntheticEvent -> unit)
+        | OnPlay of (React.SyntheticEvent -> unit)
+        | OnPlaying of (React.SyntheticEvent -> unit)
+        | OnProgress of (React.SyntheticEvent -> unit)
+        | OnRateChange of (React.SyntheticEvent -> unit)
+        | OnSeeked of (React.SyntheticEvent -> unit)
+        | OnSeeking of (React.SyntheticEvent -> unit)
+        | OnStalled of (React.SyntheticEvent -> unit)
+        | OnSuspend of (React.SyntheticEvent -> unit)
+        | OnTimeUpdate of (React.SyntheticEvent -> unit)
+        | OnVolumeChange of (React.SyntheticEvent -> unit)
+        | OnWaiting of (React.SyntheticEvent -> unit)
+        | OnClick of (React.MouseEvent -> unit)
+        | OnContextMenu of (React.MouseEvent -> unit)
+        | OnDoubleClick of (React.MouseEvent -> unit)
+        | OnDrag of (React.DragEvent -> unit)
+        | OnDragEnd of (React.DragEvent -> unit)
+        | OnDragEnter of (React.DragEvent -> unit)
+        | OnDragExit of (React.DragEvent -> unit)
+        | OnDragLeave of (React.DragEvent -> unit)
+        | OnDragOver of (React.DragEvent -> unit)
+        | OnDragStart of (React.DragEvent -> unit)
+        | OnDrop of (React.DragEvent -> unit)
+        | OnMouseDown of (React.MouseEvent -> unit)
+        | OnMouseEnter of (React.MouseEvent -> unit)
+        | OnMouseLeave of (React.MouseEvent -> unit)
+        | OnMouseMove of (React.MouseEvent -> unit)
+        | OnMouseOut of (React.MouseEvent -> unit)
+        | OnMouseOver of (React.MouseEvent -> unit)
+        | OnMouseUp of (React.MouseEvent -> unit)
+        | OnSelect of (React.SyntheticEvent -> unit)
+        | OnTouchCancel of (React.TouchEvent -> unit)
+        | OnTouchEnd of (React.TouchEvent -> unit)
+        | OnTouchMove of (React.TouchEvent -> unit)
+        | OnTouchStart of (React.TouchEvent -> unit)
+        | OnScroll of (React.UIEvent -> unit)
+        | OnWheel of (React.WheelEvent -> unit)
+        | OnAnimationStart of (React.AnimationEvent -> unit)
+        | OnAnimationEnd of (React.AnimationEvent -> unit)
+        | OnAnimationIteration of (React.AnimationEvent -> unit)
+        | OnTransitionEnd of (React.TransitionEvent -> unit)
+        interface IHTMLProp
+
+    type HTMLAttr =
+        | DefaultChecked of bool
+        | DefaultValue of string
+        | Accept of string
+        | AcceptCharset of string
+        | AccessKey of string
+        | Action of string
+        | AllowFullScreen of bool
+        | AllowTransparency of bool
+        | Alt of string
+        | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
+        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
+        | Async of bool
+        | AutoComplete of string
+        | AutoFocus of bool
+        | AutoPlay of bool
+        | Capture of bool
+        | CellPadding of obj
+        | CellSpacing of obj
+        | CharSet of string
+        | Challenge of string
+        | Checked of bool
+        | ClassID of string
+        | ClassName of string
+        | Cols of float
+        | ColSpan of float
+        | Content of string
+        | ContentEditable of bool
+        | ContextMenu of string
+        | Controls of bool
+        | Coords of string
+        | CrossOrigin of string
+        // | Data of string
+        | [<CompiledName("data-toggle")>] DataToggle of string
+        | DateTime of string
+        | Default of bool
+        | Defer of bool
+        | Dir of string
+        | Disabled of bool
+        | Download of obj
+        | Draggable of bool
+        | EncType of string
+        | Form of string
+        | FormAction of string
+        | FormEncType of string
+        | FormMethod of string
+        | FormNoValidate of bool
+        | FormTarget of string
+        | FrameBorder of obj
+        | Headers of string
+        | Height of obj
+        | Hidden of bool
+        | High of float
+        | Href of string
+        | HrefLang of string
+        | HtmlFor of string
+        | HttpEquiv of string
+        | Icon of string
+        | Id of string
+        | InputMode of string
+        | Integrity of string
+        | Is of string
+        | KeyParams of string
+        | KeyType of string
+        | Kind of string
+        | Label of string
+        | Lang of string
+        | List of string
+        | Loop of bool
+        | Low of float
+        | Manifest of string
+        | MarginHeight of float
+        | MarginWidth of float
+        | Max of obj
+        | MaxLength of float
+        | Media of string
+        | MediaGroup of string
+        | Method of string
+        | Min of obj
+        | MinLength of float
+        | Multiple of bool
+        | Muted of bool
+        | Name of string
+        | NoValidate of bool
+        | Open of bool
+        | Optimum of float
+        | Pattern of string
+        | Placeholder of string
+        | Poster of string
+        | Preload of string
+        | RadioGroup of string
+        | ReadOnly of bool
+        | Rel of string
+        | Required of bool
+        | Role of string
+        | Rows of float
+        | RowSpan of float
+        | Sandbox of string
+        | Scope of string
+        | Scoped of bool
+        | Scrolling of string
+        | Seamless of bool
+        | Selected of bool
+        | Shape of string
+        | Size of float
+        | Sizes of string
+        | Span of float
+        | SpellCheck of bool
+        | Src of string
+        | SrcDoc of string
+        | SrcLang of string
+        | SrcSet of string
+        | Start of float
+        | Step of obj
+        | Summary of string
+        | TabIndex of float
+        | Target of string
+        | Title of string
+        | Type of string
+        | UseMap of string
+        | Value of string
+        | Width of obj
+        | Wmode of string
+        | Wrap of string
+        | About of string
+        | Datatype of string
+        | Inlist of obj
+        | Prefix of string
+        | Property of string
+        | Resource of string
+        | Typeof of string
+        | Vocab of string
+        | AutoCapitalize of string
+        | AutoCorrect of string
+        | AutoSave of string
+        // | Color of string // Conflicts with CSSProp, shouldn't be used in HTML5
+        | ItemProp of string
+        | ItemScope of bool
+        | ItemType of string
+        | ItemID of string
+        | ItemRef of string
+        | Results of float
+        | Security of string
+        | Unselectable of bool
+        interface IHTMLProp
+
+    let inline Style (css: ICSSProp list): HTMLAttr =
+        !!("style", keyValueList CaseRules.LowerFirst css)
+
+    let inline Data(key: string, value: obj): IHTMLProp =
+        !!("data-" + key, value)
+
+    type SVGAttr =
+        | ClipPath of string
+        | Cx of obj
+        | Cy of obj
+        | D of string
+        | Dx of obj
+        | Dy of obj
+        | Fill of string
+        | FillOpacity of obj
+        | FontFamily of string
+        | FontSize of obj
+        | Fx of obj
+        | Fy of obj
+        | GradientTransform of string
+        | GradientUnits of string
+        | MarkerEnd of string
+        | MarkerMid of string
+        | MarkerStart of string
+        | Offset of obj
+        | Opacity of obj
+        | PatternContentUnits of string
+        | PatternUnits of string
+        | Points of string
+        | PreserveAspectRatio of string
+        | R of obj
+        | Rx of obj
+        | Ry of obj
+        | SpreadMethod of string
+        | StopColor of string
+        | StopOpacity of obj
+        | Stroke of string
+        | StrokeDasharray of string
+        | StrokeLinecap of string
+        | StrokeMiterlimit of string
+        | StrokeOpacity of obj
+        | StrokeWidth of obj
+        | TextAnchor of string
+        | Transform of string
+        | Version of string
+        | ViewBox of string
+        | Width of obj
+        | X1 of obj
+        | X2 of obj
+        | X of obj
+        | XlinkActuate of string
+        | XlinkArcrole of string
+        | XlinkHref of string
+        | XlinkRole of string
+        | XlinkShow of string
+        | XlinkTitle of string
+        | XlinkType of string
+        | XmlBase of string
+        | XmlLang of string
+        | XmlSpace of string
+        | Y1 of obj
+        | Y2 of obj
+        | Y of obj
+        interface IProp
+
     type CSSProp =
         | BoxFlex of float
         | BoxFlexGroup of float
         | ColumnCount of float
-        | Flex of U2<float, string>
+        | Cursor of string
+        | Flex of obj
         | FlexGrow of float
         | FlexShrink of float
-        | FontWeight of U2<float, string>
+        | FontWeight of obj
         | LineClamp of float
-        | LineHeight of U2<float, string>
+        | LineHeight of obj
         | Opacity of float
         | Order of float
         | Orphans of float
         | Widows of float
         | ZIndex of float
         | Zoom of float
-        | FontSize of U2<float, string>
+        | FontSize of obj
         | FillOpacity of float
         | StrokeOpacity of float
         | StrokeWidth of float
@@ -284,300 +578,7 @@ module Props =
         | WrapOption of obj
         | WritingMode of obj
         interface ICSSProp
-
-    type IProp =
-        interface end
-
-    type IHTMLProp =
-        inherit IProp
-
-    type Prop =
-        | Key of string
-        | Ref of (Browser.Element->unit)
-        interface IHTMLProp
-
-    type DOMAttr =
-        | DangerouslySetInnerHTML of obj
-        | OnCopy of (React.ClipboardEvent -> unit)
-        | OnCut of (React.ClipboardEvent -> unit)
-        | OnPaste of (React.ClipboardEvent -> unit)
-        | OnCompositionEnd of (React.CompositionEvent -> unit)
-        | OnCompositionStart of (React.CompositionEvent -> unit)
-        | OnCompositionUpdate of (React.CompositionEvent -> unit)
-        | OnFocus of (React.FocusEvent -> unit)
-        | OnBlur of (React.FocusEvent -> unit)
-        | OnChange of (React.FormEvent -> unit)
-        | OnInput of (React.FormEvent -> unit)
-        | OnSubmit of (React.FormEvent -> unit)
-        | OnLoad of (React.SyntheticEvent -> unit)
-        | OnError of (React.SyntheticEvent -> unit)
-        | OnKeyDown of (React.KeyboardEvent -> unit)
-        | OnKeyPress of (React.KeyboardEvent -> unit)
-        | OnKeyUp of (React.KeyboardEvent -> unit)
-        | OnAbort of (React.SyntheticEvent -> unit)
-        | OnCanPlay of (React.SyntheticEvent -> unit)
-        | OnCanPlayThrough of (React.SyntheticEvent -> unit)
-        | OnDurationChange of (React.SyntheticEvent -> unit)
-        | OnEmptied of (React.SyntheticEvent -> unit)
-        | OnEncrypted of (React.SyntheticEvent -> unit)
-        | OnEnded of (React.SyntheticEvent -> unit)
-        | OnLoadedData of (React.SyntheticEvent -> unit)
-        | OnLoadedMetadata of (React.SyntheticEvent -> unit)
-        | OnLoadStart of (React.SyntheticEvent -> unit)
-        | OnPause of (React.SyntheticEvent -> unit)
-        | OnPlay of (React.SyntheticEvent -> unit)
-        | OnPlaying of (React.SyntheticEvent -> unit)
-        | OnProgress of (React.SyntheticEvent -> unit)
-        | OnRateChange of (React.SyntheticEvent -> unit)
-        | OnSeeked of (React.SyntheticEvent -> unit)
-        | OnSeeking of (React.SyntheticEvent -> unit)
-        | OnStalled of (React.SyntheticEvent -> unit)
-        | OnSuspend of (React.SyntheticEvent -> unit)
-        | OnTimeUpdate of (React.SyntheticEvent -> unit)
-        | OnVolumeChange of (React.SyntheticEvent -> unit)
-        | OnWaiting of (React.SyntheticEvent -> unit)
-        | OnClick of (React.MouseEvent -> unit)
-        | OnContextMenu of (React.MouseEvent -> unit)
-        | OnDoubleClick of (React.MouseEvent -> unit)
-        | OnDrag of (React.DragEvent -> unit)
-        | OnDragEnd of (React.DragEvent -> unit)
-        | OnDragEnter of (React.DragEvent -> unit)
-        | OnDragExit of (React.DragEvent -> unit)
-        | OnDragLeave of (React.DragEvent -> unit)
-        | OnDragOver of (React.DragEvent -> unit)
-        | OnDragStart of (React.DragEvent -> unit)
-        | OnDrop of (React.DragEvent -> unit)
-        | OnMouseDown of (React.MouseEvent -> unit)
-        | OnMouseEnter of (React.MouseEvent -> unit)
-        | OnMouseLeave of (React.MouseEvent -> unit)
-        | OnMouseMove of (React.MouseEvent -> unit)
-        | OnMouseOut of (React.MouseEvent -> unit)
-        | OnMouseOver of (React.MouseEvent -> unit)
-        | OnMouseUp of (React.MouseEvent -> unit)
-        | OnSelect of (React.SyntheticEvent -> unit)
-        | OnTouchCancel of (React.TouchEvent -> unit)
-        | OnTouchEnd of (React.TouchEvent -> unit)
-        | OnTouchMove of (React.TouchEvent -> unit)
-        | OnTouchStart of (React.TouchEvent -> unit)
-        | OnScroll of (React.UIEvent -> unit)
-        | OnWheel of (React.WheelEvent -> unit)
-        | OnAnimationStart of (React.AnimationEvent -> unit)
-        | OnAnimationEnd of (React.AnimationEvent -> unit)
-        | OnAnimationIteration of (React.AnimationEvent -> unit)
-        | OnTransitionEnd of (React.TransitionEvent -> unit)
-        interface IHTMLProp
-
-    type HTMLAttr =
-        | DefaultChecked of bool
-        | DefaultValue of U2<string, ResizeArray<string>>
-        | Accept of string
-        | AcceptCharset of string
-        | AccessKey of string
-        | Action of string
-        | AllowFullScreen of bool
-        | AllowTransparency of bool
-        | Alt of string
-        | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
-        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
-        | Async of bool
-        | AutoComplete of string
-        | AutoFocus of bool
-        | AutoPlay of bool
-        | Capture of bool
-        | CellPadding of U2<float, string>
-        | CellSpacing of U2<float, string>
-        | CharSet of string
-        | Challenge of string
-        | Checked of bool
-        | ClassID of string
-        | ClassName of string
-        | Cols of float
-        | ColSpan of float
-        | Content of string
-        | ContentEditable of bool
-        | ContextMenu of string
-        | Controls of bool
-        | Coords of string
-        | CrossOrigin of string
-        | Data of string
-        | [<CompiledName("data-toggle")>] DataToggle of string
-        | DateTime of string
-        | Default of bool
-        | Defer of bool
-        | Dir of string
-        | Disabled of bool
-        | Download of obj
-        | Draggable of bool
-        | EncType of string
-        | Form of string
-        | FormAction of string
-        | FormEncType of string
-        | FormMethod of string
-        | FormNoValidate of bool
-        | FormTarget of string
-        | FrameBorder of U2<float, string>
-        | Headers of string
-        // | Height of U2<float, string> // Conflicts with CSSProp, shouldn't be used in HTML5
-        | Hidden of bool
-        | High of float
-        | Href of string
-        | HrefLang of string
-        | HtmlFor of string
-        | HttpEquiv of string
-        | Icon of string
-        | Id of string
-        | InputMode of string
-        | Integrity of string
-        | Is of string
-        | KeyParams of string
-        | KeyType of string
-        | Kind of string
-        | Label of string
-        | Lang of string
-        | List of string
-        | Loop of bool
-        | Low of float
-        | Manifest of string
-        | MarginHeight of float
-        | MarginWidth of float
-        | Max of U2<float, string>
-        | MaxLength of float
-        | Media of string
-        | MediaGroup of string
-        | Method of string
-        | Min of U2<float, string>
-        | MinLength of float
-        | Multiple of bool
-        | Muted of bool
-        | Name of string
-        | NoValidate of bool
-        | Open of bool
-        | Optimum of float
-        | Pattern of string
-        | Placeholder of string
-        | Poster of string
-        | Preload of string
-        | RadioGroup of string
-        | ReadOnly of bool
-        | Rel of string
-        | Required of bool
-        | Role of string
-        | Rows of float
-        | RowSpan of float
-        | Sandbox of string
-        | Scope of string
-        | Scoped of bool
-        | Scrolling of string
-        | Seamless of bool
-        | Selected of bool
-        | Shape of string
-        | Size of float
-        | Sizes of string
-        | Span of float
-        | SpellCheck of bool
-        | Src of string
-        | SrcDoc of string
-        | SrcLang of string
-        | SrcSet of string
-        | Start of float
-        | Step of U2<float, string>
-        | Summary of string
-        | TabIndex of float
-        | Target of string
-        | Title of string
-        | Type of string
-        | UseMap of string
-        | Value of U2<string, ResizeArray<string>>
-        | Width of U2<float, string>
-        | Wmode of string
-        | Wrap of string
-        | About of string
-        | Datatype of string
-        | Inlist of obj
-        | Prefix of string
-        | Property of string
-        | Resource of string
-        | Typeof of string
-        | Vocab of string
-        | AutoCapitalize of string
-        | AutoCorrect of string
-        | AutoSave of string
-        // | Color of string // Conflicts with CSSProp, shouldn't be used in HTML5
-        | ItemProp of string
-        | ItemScope of bool
-        | ItemType of string
-        | ItemID of string
-        | ItemRef of string
-        | Results of float
-        | Security of string
-        | Unselectable of bool
-        interface IHTMLProp
-
-    let inline Style (css: ICSSProp list): HTMLAttr =
-        !!("style", keyValueList CaseRules.LowerFirst css)
-
-    let inline Data(key: string, value: obj): IHTMLProp = 
-        !!("data-" + key, value)
-
-    type SVGAttr =
-        | ClipPath of string
-        | Cx of U2<float, string>
-        | Cy of U2<float, string>
-        | D of string
-        | Dx of U2<float, string>
-        | Dy of U2<float, string>
-        | Fill of string
-        | FillOpacity of U2<float, string>
-        | FontFamily of string
-        | FontSize of U2<float, string>
-        | Fx of U2<float, string>
-        | Fy of U2<float, string>
-        | GradientTransform of string
-        | GradientUnits of string
-        | MarkerEnd of string
-        | MarkerMid of string
-        | MarkerStart of string
-        | Offset of U2<float, string>
-        | Opacity of U2<float, string>
-        | PatternContentUnits of string
-        | PatternUnits of string
-        | Points of string
-        | PreserveAspectRatio of string
-        | R of U2<float, string>
-        | Rx of U2<float, string>
-        | Ry of U2<float, string>
-        | SpreadMethod of string
-        | StopColor of string
-        | StopOpacity of U2<float, string>
-        | Stroke of string
-        | StrokeDasharray of string
-        | StrokeLinecap of string
-        | StrokeMiterlimit of string
-        | StrokeOpacity of U2<float, string>
-        | StrokeWidth of U2<float, string>
-        | TextAnchor of string
-        | Transform of string
-        | Version of string
-        | ViewBox of string
-        | Width of U2<float, string>
-        | X1 of U2<float, string>
-        | X2 of U2<float, string>
-        | X of U2<float, string>
-        | XlinkActuate of string
-        | XlinkArcrole of string
-        | XlinkHref of string
-        | XlinkRole of string
-        | XlinkShow of string
-        | XlinkTitle of string
-        | XlinkType of string
-        | XmlBase of string
-        | XmlLang of string
-        | XmlSpace of string
-        | Y1 of U2<float, string>
-        | Y2 of U2<float, string>
-        | Y of U2<float, string>
-        interface IProp
-
+        
 open Props
 open Fable.Import.React
 open Fable.Core.JsInterop
@@ -606,7 +607,7 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
     applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, [])
 
 /// Instantiate an SVG React element
-let inline svgEl (tag: string) (props: #IProp list) (children: ReactElement list): ReactElement =
+let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
     applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
 
 // Standard element
