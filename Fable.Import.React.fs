@@ -235,7 +235,7 @@ module React =
         abstract animationName: string with get, set
         abstract pseudoElement: string with get, set
         abstract elapsedTime: float with get, set
-    
+
     and TransitionEvent =
         inherit SyntheticEvent
         abstract propertyName: string with get, set
@@ -1053,6 +1053,16 @@ module React =
 [<Erase>]
 module ReactDom =
     open React
-
     [<Import("render", "react-dom")>]
     let render(element: ReactElement, container: Element): unit = jsNative
+
+[<Import("default", "react-dom/server")>]
+module ReactDomServer =
+    open React
+
+    /// Render a React element to its initial HTML. This should only be used on the server. React will return an HTML string. You can use this method to generate HTML on the server and send the markup down on the initial request for faster page loads and to allow search engines to crawl your pages for SEO purposes.
+    /// If you call ReactDOM.render() on a node that already has this server-rendered markup, React will preserve it and only attach event handlers, allowing you to have a very performant first-load experience.
+    let renderToString(element: ReactElement): string = jsNative
+
+    /// Similar to renderToString, except this doesn't create extra DOM attributes such as data-reactid, that React uses internally. This is useful if you want to use React as a simple static page generator, as stripping away the extra attributes can save lots of bytes.
+    let renderToStaticMarkup(element: ReactElement): string = jsNative
