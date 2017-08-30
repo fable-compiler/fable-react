@@ -1,4 +1,4 @@
 source https://www.nuget.org/api/v2
 
-nuget Fable.Core prerelease
-nuget Fable.Import.Browser prerelease
+nuget Fable.Core
+nuget Fable.Import.Browser
