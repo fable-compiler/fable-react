@@ -1,4 +1,5 @@
 source https://www.nuget.org/api/v2
+storage: none
 
 nuget Fable.Core
 nuget Fable.Import.Browser

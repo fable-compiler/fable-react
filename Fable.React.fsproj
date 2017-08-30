@@ -1,4 +1,4 @@
-<Project Sdk="FSharp.NET.Sdk;Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Version>1.2.0-beta-002</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
@@ -6,9 +6,6 @@
   <ItemGroup>
     <Compile Include="Fable.Import.React.fs" />
     <Compile Include="Fable.Helpers.React.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="FSharp.NET.Sdk" Version="1.0.*" PrivateAssets="All" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
