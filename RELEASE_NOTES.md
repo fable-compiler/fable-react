@@ -1,3 +1,7 @@
+### 1.2.0-beta-003
+
+* Add CSSProp.OverflowY
+
 ### 1.2.0-beta-002
 
 * Target netstandard1.6 again
