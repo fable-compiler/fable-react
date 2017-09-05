@@ -476,6 +476,7 @@ module Props =
         | Overflow of obj
         | OverflowStyle of obj
         | OverflowX of obj
+        | OverflowY of obj
         | Padding of obj
         | PaddingBottom of obj
         | PaddingLeft of obj
@@ -578,7 +579,7 @@ module Props =
         | WrapOption of obj
         | WritingMode of obj
         interface ICSSProp
-        
+
 open Props
 open Fable.Import.React
 open Fable.Core.JsInterop
