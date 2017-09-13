@@ -1,3 +1,7 @@
+### 1.2.0
+
+* Release stable version
+
 ### 1.2.0-beta-003
 
 * Add CSSProp.OverflowY
