@@ -1,3 +1,7 @@
+### 1.2.1
+
+* Use new `ParamList` attribute
+
 ### 1.2.0
 
 * Release stable version

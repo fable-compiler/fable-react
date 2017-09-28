@@ -585,31 +585,31 @@ open Fable.Import.React
 open Fable.Core.JsInterop
 
 [<Import("createElement", from="react")>]
-let createEl: obj = null
+let createElement(componentClass: obj, props: obj, [<ParamList>] children: obj) = jsNative
 
 /// Instantiate a React component from a type inheriting React.Component<>
 let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
-    applySpread createEl (typedefof<'T>, props, children)
+    createElement(typedefof<'T>, props, children)
 
 /// Instantiate a stateless component from a function
 let inline fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
-    applySpread createEl (f, props, children)
+    createElement(f, props, children)
 
 /// Instantiate an imported React component
 let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement =
-    applySpread createEl (com, props, children)
+    createElement(com, props, children)
 
 /// Instantiate a DOM React element
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
-    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
+    createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 
 /// Instantiate a DOM React element (void)
 let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
-    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, [])
+    createElement(tag, keyValueList CaseRules.LowerFirst props, [])
 
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
-    applySpread createEl (tag, keyValueList CaseRules.LowerFirst props, children)
+    createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 
 // Standard element
 let inline a b c = domEl "a" b c
@@ -750,9 +750,9 @@ let inline text b c = svgEl "text" b c
 let inline tspan b c = svgEl "tspan" b c
 
 /// Cast a string to a React element (erased in runtime)
-let [<Emit("$0")>] str (s: string): ReactElement = unbox s
+let inline str (s: string): ReactElement = unbox s
 /// Cast an option value to a React element (erased in runtime)
-let [<Emit("$0")>] opt (o: ReactElement option): ReactElement = unbox o
+let inline opt (o: ReactElement option): ReactElement = unbox o
 
 // Class list helpers
 let classBaseList std classes =
