@@ -257,6 +257,7 @@ module Props =
         | Fy of obj
         | GradientTransform of string
         | GradientUnits of string
+        | Height of obj
         | MarkerEnd of string
         | MarkerMid of string
         | MarkerStart of string
