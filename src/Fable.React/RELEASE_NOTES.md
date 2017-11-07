@@ -1,3 +1,7 @@
+### 1.2.2
+
+* Add Height to SVGProp
+
 ### 1.2.1
 
 * Use new `ParamList` attribute
