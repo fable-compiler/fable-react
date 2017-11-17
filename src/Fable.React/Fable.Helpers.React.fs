@@ -779,3 +779,40 @@ let classBaseList std classes =
     |> ClassName
 
 let classList classes = classBaseList "" classes
+
+/// Finds a DOM element by its ID and mounts the React element there
+let inline mountById (domElId: string) (reactEl: ReactElement): unit =
+    ReactDom.render(reactEl, Browser.document.getElementById(domElId))
+
+/// Finds the first DOM element matching a CSS selector and mounts the React element there
+let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit =
+    ReactDom.render(reactEl, Browser.document.querySelector(domElSelector))
+
+// Helpers for stateful components (see #44)
+type StatefulCom<'Props> =
+    interface end
+
+type [<Pojo>] PojoWrapper<'T> = { value: 'T }
+
+[<Emit("""(class extends $0 {
+  constructor(props) { super(props); this.state = { value: $1() }; }
+  render() {
+      var c = this.props.children;
+      var c2 = c == null ? [] : (Array.isArray(c) ? c : [c]);
+      return $3(this.props.value, c2, this.state.value, msg =>
+        this.setState({ value: $2(msg, this.state.value)})) }
+})""")>]
+let private makeStatefulComPrivate
+    (reactCom: System.Type)
+    (init: unit->'S)
+    (update: 'Msg->'S->'S)
+    (view: 'P->ReactElement[]->'S->('Msg->unit)->ReactElement): StatefulCom<'P> = jsNative
+
+let makeStatefulCom
+        (init: unit->'S)
+        (update: 'Msg->'S->'S)
+        (view: 'P->ReactElement[]->'S->('Msg->unit)->ReactElement): StatefulCom<'P> =
+    makeStatefulComPrivate (typedefof<React.Component<obj,obj>>) init update view
+
+let inline renderStatefulCom (com: StatefulCom<'P>) (props: 'P) (children: ReactElement list): ReactElement =
+    createElement(com, {value=props}, children)
