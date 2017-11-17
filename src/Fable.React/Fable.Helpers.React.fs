@@ -792,7 +792,7 @@ let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit
 type StatefulCom<'Props> =
     interface end
 
-type [<Pojo>] PojoWrapper<'T> = { value: 'T }
+type [<Pojo>] PojoWrapper<'T> = { key: string; value: 'T }
 
 [<Emit("""(class extends $0 {
   constructor(props) { super(props); this.state = { value: $1() }; }
@@ -811,5 +811,5 @@ let makeStatefulCom
         (view: 'P->ReactElement[]->'S->('Msg->unit)->ReactElement): StatefulCom<'P> =
     makeStatefulComPrivate (typedefof<React.Component<obj,obj>>) init update view
 
-let inline renderStatefulCom (com: StatefulCom<'P>) (props: 'P) (children: ReactElement list): ReactElement =
-    createElement(com, {value=props}, children)
+let inline renderStatefulCom (com: StatefulCom<'P>) (key: string) (props: 'P) (children: ReactElement list): ReactElement =
+    createElement(com, {key=key; value=props}, children)
