@@ -79,6 +79,31 @@ module React =
         member __.forceUpdate(?callBack: unit->unit): unit = jsNative
         [<Emit("$0.isMounted()")>]
         member __.isMounted(): bool = jsNative
+
+        abstract componentWillMount: unit -> unit
+        default __.componentWillMount () = ()
+
+        abstract componentDidMount: unit -> unit
+        default __.componentDidMount () = ()
+
+        abstract componentWillReceiveProps: nextProps: 'P * nextContext: obj -> unit
+        default __.componentWillReceiveProps (_, _) = ()
+
+        abstract shouldComponentUpdate: nextProps: 'P * nextState: 'S * nextContext: obj -> bool
+        default __.shouldComponentUpdate (_, _, _) = true
+
+        abstract componentWillUpdate: nextProps: 'P * nextState: 'S * nextContext: obj -> unit
+        default __.componentWillUpdate (_, _, _) = ()
+
+        abstract componentDidUpdate: prevProps: 'P * prevState: 'S * prevContext: obj -> unit
+        default __.componentDidUpdate (_, _, _) = ()
+
+        abstract componentWillUnmount: unit -> unit
+        default __.componentWillUnmount () = ()
+
+        abstract render: unit -> ReactElement
+        default __.render () = Unchecked.defaultof<ReactElement>
+
         interface ReactElement
 
     and ClassicComponent<'P, 'S> =
