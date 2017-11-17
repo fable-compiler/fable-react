@@ -788,28 +788,47 @@ let inline mountById (domElId: string) (reactEl: ReactElement): unit =
 let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit =
     ReactDom.render(reactEl, Browser.document.querySelector(domElSelector))
 
-// Helpers for stateful components (see #44)
-type StatefulCom<'Props> =
-    interface end
+// Helpers for ReactiveComponents (see #44)
+module ReactiveComponents =
+    type [<Pojo>] Props<'P, 'S, 'Msg> = {
+        props: 'P
+        update: 'Msg -> 'S -> 'S
+        view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement
+        init: 'P -> 'S
+    }
 
-type [<Pojo>] PojoWrapper<'T> = { key: string; value: 'T }
+    and [<Pojo>] State<'T> = {
+        value: 'T
+    }
 
-[<Emit("""(class extends $0 {
-  constructor(props) { super(props); this.state = { value: $1() }; }
-  render() { return $3(this.props.value, Array.prototype.concat(this.props.children || []), this.state.value, msg =>
-        this.setState({ value: $2(msg, this.state.value)})) }
-})""")>]
-let private makeStatefulComPrivate
-    (reactCom: System.Type)
-    (init: unit->'S)
-    (update: 'Msg->'S->'S)
-    (view: 'P->ReactElement[]->'S->('Msg->unit)->ReactElement): StatefulCom<'P> = jsNative
+    and [<Pojo>] Model<'P, 'S> = {
+        props: 'P
+        state: 'S
+        children: ReactElement list
+    }
 
-let makeStatefulCom
-        (init: unit->'S)
-        (update: 'Msg->'S->'S)
-        (view: 'P->ReactElement[]->'S->('Msg->unit)->ReactElement): StatefulCom<'P> =
-    makeStatefulComPrivate (typedefof<React.Component<obj,obj>>) init update view
+    and ReactiveComp<'P, 'S, 'Msg>(props) as this=
+        inherit Component<Props<'P, 'S, 'Msg>, State<'S>>(props)
+        do this.setInitState { value = props.init(props.props) }
 
-let inline renderStatefulCom (com: StatefulCom<'P>) (key: string) (props: 'P) (children: ReactElement list): ReactElement =
-    createElement(com, {key=key; value=props}, children)
+        member x.dispatch msg =
+            x.setState <| {value = x.props.update msg x.state.value }
+
+        member x.render() =
+            let model =
+                { state = x.state.value
+                  props = x.props.props
+                  children = x.children |> Array.toList }
+            x.props.view model x.dispatch
+
+open ReactiveComponents
+
+let renderReactiveCom<'P, 'S, 'Msg>
+        (init: 'P -> 'S)
+        (update: 'Msg -> 'S -> 'S)
+        (view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement)
+        (props: 'P)
+        children =
+    com<ReactiveComp<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
+        { props=props; update=update; view=view; init=init }
+        children
