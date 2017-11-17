@@ -791,6 +791,7 @@ let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit
 // Helpers for ReactiveComponents (see #44)
 module ReactiveComponents =
     type [<Pojo>] Props<'P, 'S, 'Msg> = {
+        key: string
         props: 'P
         update: 'Msg -> 'S -> 'S
         view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement
@@ -802,33 +803,42 @@ module ReactiveComponents =
     }
 
     and [<Pojo>] Model<'P, 'S> = {
+        key: string
         props: 'P
         state: 'S
-        children: ReactElement list
+        children: ReactElement[]
     }
-
-    and ReactiveComp<'P, 'S, 'Msg>(props) as this=
-        inherit Component<Props<'P, 'S, 'Msg>, State<'S>>(props)
-        do this.setInitState { value = props.init(props.props) }
-
-        member x.dispatch msg =
-            x.setState <| {value = x.props.update msg x.state.value }
-
-        member x.render() =
-            let model =
-                { state = x.state.value
-                  props = x.props.props
-                  children = x.children |> Array.toList }
-            x.props.view model x.dispatch
 
 open ReactiveComponents
 
-let renderReactiveCom<'P, 'S, 'Msg>
+type ReactiveCom<'P, 'S, 'Msg>(initProps) =
+    inherit Component<Props<'P, 'S, 'Msg>, State<'S>>(initProps)
+    do base.setInitState { value = initProps.init(initProps.props) }
+
+    override this.render() =
+        let model =
+            { key = this.props.key
+              props = this.props.props
+              state = this.state.value
+              children = this.children }
+        this.props.view model (fun msg ->
+            let newState = this.props.update msg this.state.value
+            this.setState({ value = newState }))
+
+/// Renders a stateful React component from functions similar to Elmish
+///  * `init` - Initializes component state with given props
+///  * `update` - Updates the state when `dispatch` is triggered
+///  * `view` - Render function, receives a `ReactiveComponents.Model` object and a `dispatch` function
+///  * `key` - The key is necessary to identify React elements in a list, an empty string can be passed otherwise
+///  * `props` - External properties passed to the component each time it's rendered, usually from its parent
+///  * `children` - A list of children React elements
+let reactiveCom<'P, 'S, 'Msg>
         (init: 'P -> 'S)
         (update: 'Msg -> 'S -> 'S)
         (view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement)
+        (key: string)
         (props: 'P)
-        children =
-    com<ReactiveComp<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
-        { props=props; update=update; view=view; init=init }
+        (children: ReactElement list): ReactElement =
+    com<ReactiveCom<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
+        { key=key; props=props; update=update; view=view; init=init }
         children
