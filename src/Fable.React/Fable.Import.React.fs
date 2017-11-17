@@ -102,7 +102,6 @@ module React =
         default __.componentWillUnmount () = ()
 
         abstract render: unit -> ReactElement
-        default __.render () = Unchecked.defaultof<ReactElement>
 
         interface ReactElement
 
