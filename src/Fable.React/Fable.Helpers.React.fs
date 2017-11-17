@@ -751,9 +751,26 @@ let inline text b c = svgEl "text" b c
 let inline tspan b c = svgEl "tspan" b c
 
 /// Cast a string to a React element (erased in runtime)
+[<System.Obsolete("Use ofString")>]
 let inline str (s: string): ReactElement = unbox s
 /// Cast an option value to a React element (erased in runtime)
+[<System.Obsolete("Use ofOption")>]
 let inline opt (o: ReactElement option): ReactElement = unbox o
+
+/// Cast a string to a React element (erased in runtime)
+let inline ofString (s: string): ReactElement = unbox s
+/// Cast an option value to a React element (erased in runtime)
+let inline ofOption (o: ReactElement option): ReactElement = unbox o
+
+/// Cast an int to a React element (erased in runtime)
+let inline ofInt (i: int): ReactElement = unbox i
+/// Cast a float to a React element (erased in runtime)
+let inline ofFloat (f: float): ReactElement = unbox f
+
+/// Returns a list **from .render() method**
+let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray els)
+/// Returns an array **from .render() method**
+let inline ofArray (els: ReactElement list): ReactElement = unbox els
 
 // Class list helpers
 let classBaseList std classes =
