@@ -66,7 +66,7 @@ module React =
         [<Emit("$0.props")>]
         member __.props: 'P = jsNative
 
-        [<Emit("$0.props.children")>]
+        [<Emit("Array.prototype.concat($0.props.children || [])")>]
         member __.children: ReactElement array = jsNative
 
         [<Emit("$0.state")>]

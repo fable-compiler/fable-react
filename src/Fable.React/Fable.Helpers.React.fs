@@ -796,10 +796,7 @@ type [<Pojo>] PojoWrapper<'T> = { value: 'T }
 
 [<Emit("""(class extends $0 {
   constructor(props) { super(props); this.state = { value: $1() }; }
-  render() {
-      var c = this.props.children;
-      var c2 = c == null ? [] : (Array.isArray(c) ? c : [c]);
-      return $3(this.props.value, c2, this.state.value, msg =>
+  render() { return $3(this.props.value, Array.prototype.concat(this.props.children || []), this.state.value, msg =>
         this.setState({ value: $2(msg, this.state.value)})) }
 })""")>]
 let private makeStatefulComPrivate
