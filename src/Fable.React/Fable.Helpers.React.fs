@@ -583,22 +583,64 @@ module Props =
 
 open Props
 open Fable.Import.React
-open Fable.Core.JsInterop
 
 [<Import("createElement", from="react")>]
-let createElement(componentClass: obj, props: obj, [<ParamList>] children: obj) = jsNative
+let createElement(component: obj, props: obj, [<ParamList>] children: obj) = jsNative
 
-/// Instantiate a React component from a type inheriting React.Component<>
+/// OBSOLETE: Use `ofType`
+[<System.Obsolete("Use ofType")>]
 let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
     createElement(typedefof<'T>, props, children)
 
-/// Instantiate a stateless component from a function
+/// OBSOLETE: Use `ofFunction`
+[<System.Obsolete("Use ofFunction")>]
 let inline fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
     createElement(f, props, children)
 
 /// Instantiate an imported React component
 let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement =
     createElement(com, props, children)
+
+/// Instantiate a component from a type inheriting React.Component
+/// Example: `ofType<MyComponent,_,_> { myProps = 5 } []`
+let inline ofType<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
+    createElement(typedefof<'T>, props, children)
+
+/// Instantiate a stateless component from a function
+/// Example:
+/// ```
+/// let Hello (p: MyProps) = div [] [ofString ("Hello " + p.name)]
+/// ofFunction Hello { name = "Maxime" } []
+/// ```
+let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
+    createElement(f, props, children)
+
+/// Instantiate an imported React component. The first two arguments must be string literals, "default" can be used for the first one.
+/// Example: `ofImported "Map" "leaflet" { x = 10; y = 50 } []`
+let inline ofImported<[<Pojo>]'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement list): ReactElement =
+    createElement(import importMember importPath, props, children)
+
+/// OBSOLETE: Use `ofString`
+[<System.Obsolete("Use ofString")>]
+let inline str (s: string): ReactElement = unbox s
+/// OBSOLETE: Use `ofOption`
+[<System.Obsolete("Use ofOption")>]
+let inline opt (o: ReactElement option): ReactElement = unbox o
+
+/// Cast a string to a React element (erased in runtime)
+let inline ofString (s: string): ReactElement = unbox s
+/// Cast an option value to a React element (erased in runtime)
+let inline ofOption (o: ReactElement option): ReactElement = unbox o
+
+/// Cast an int to a React element (erased in runtime)
+let inline ofInt (i: int): ReactElement = unbox i
+/// Cast a float to a React element (erased in runtime)
+let inline ofFloat (f: float): ReactElement = unbox f
+
+/// Returns a list **from .render() method**
+let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray els)
+/// Returns an array **from .render() method**
+let inline ofArray (els: ReactElement list): ReactElement = unbox els
 
 /// Instantiate a DOM React element
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
@@ -612,7 +654,7 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
     createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 
-// Standard element
+// Standard elements
 let inline a b c = domEl "a" b c
 let inline abbr b c = domEl "abbr" b c
 let inline address b c = domEl "address" b c
@@ -750,28 +792,6 @@ let inline stop b c = svgEl "stop" b c
 let inline text b c = svgEl "text" b c
 let inline tspan b c = svgEl "tspan" b c
 
-/// Cast a string to a React element (erased in runtime)
-[<System.Obsolete("Use ofString")>]
-let inline str (s: string): ReactElement = unbox s
-/// Cast an option value to a React element (erased in runtime)
-[<System.Obsolete("Use ofOption")>]
-let inline opt (o: ReactElement option): ReactElement = unbox o
-
-/// Cast a string to a React element (erased in runtime)
-let inline ofString (s: string): ReactElement = unbox s
-/// Cast an option value to a React element (erased in runtime)
-let inline ofOption (o: ReactElement option): ReactElement = unbox o
-
-/// Cast an int to a React element (erased in runtime)
-let inline ofInt (i: int): ReactElement = unbox i
-/// Cast a float to a React element (erased in runtime)
-let inline ofFloat (f: float): ReactElement = unbox f
-
-/// Returns a list **from .render() method**
-let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray els)
-/// Returns an array **from .render() method**
-let inline ofArray (els: ReactElement list): ReactElement = unbox els
-
 // Class list helpers
 let classBaseList std classes =
     classes
@@ -839,6 +859,6 @@ let reactiveCom<'P, 'S, 'Msg>
         (key: string)
         (props: 'P)
         (children: ReactElement list): ReactElement =
-    com<ReactiveCom<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
+    ofType<ReactiveCom<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
         { key=key; props=props; update=update; view=view; init=init }
         children

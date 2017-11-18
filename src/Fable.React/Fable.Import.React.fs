@@ -62,6 +62,20 @@ module React =
     and ReactInstance =
         U2<Component<obj, obj>, Element>
 
+    /// Create a React component by inheriting this class as follows
+    ///
+    /// ```
+    /// type MyComponent(props) =
+    ///     inherit React.Component<MyProps, MyState>(props)
+    ///     base.setInitState({ value = 5 })
+    ///
+    ///     override this.render() =
+    ///         // Don't use captured `props` from constructor,
+    ///         // use `this.props` instead (updated version)
+    ///         let msg = sprintf "Hello %s, you have %i €"
+    ///                     this.props.name this.state.value
+    ///         div [] [ofString msg]
+    /// ```
     and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
         [<Emit("$0.props")>]
         member __.props: 'P = jsNative
@@ -71,23 +85,23 @@ module React =
 
         [<Emit("$0.state")>]
         member __.state: 'S = jsNative
-        [<Emit("$0.setState($1)")>]
 
         /// ATTENTION: Within the constructor, use `setInitState`
         /// Enqueues changes to the component state and tells React that this component and its children need to be re-rendered with the updated state. This is the primary method you use to update the user interface in response to event handlers and server responses.
         /// Think of setState() as a request rather than an immediate command to update the component. For better perceived performance, React may delay it, and then update several components in a single pass. React does not guarantee that the state changes are applied immediately.
         /// setState() does not always immediately update the component. It may batch or defer the update until later. This makes reading this.state right after calling setState() a potential pitfall. Instead, use componentDidUpdate or a setState callback (setState(updater, callback)), either of which are guaranteed to fire after the update has been applied. If you need to set the state based on the previous state, read about the updater argument below.
         /// setState() will always lead to a re-render unless shouldComponentUpdate() returns false. If mutable objects are being used and conditional rendering logic cannot be implemented in shouldComponentUpdate(), calling setState() only when the new state differs from the previous state will avoid unnecessary re-renders.
-        member __.setState(value: 'S): unit = jsNative
         [<Emit("$0.setState($1)")>]
+        member __.setState(value: 'S): unit = jsNative
 
         /// Overload of `setState` accepting updater function with the signature: `(prevState, props) => stateChange`
         /// prevState is a reference to the previous state. It should not be directly mutated. Instead, changes should be represented by building a new object based on the input from prevState and props.
         /// Both prevState and props received by the updater function are guaranteed to be up-to-date. The output of the updater is shallowly merged with prevState.
+        [<Emit("$0.setState($1)")>]
         member __.setState(updater: 'S->'P->'S): unit = jsNative
-        [<Emit("this.state = $1")>]
 
         /// This method can only be called in the constructor
+        [<Emit("this.state = $1")>]
         member __.setInitState(value: 'S): unit = jsNative
 
         /// By default, when your component’s state or props change, your component will re-render. If your render() method depends on some other data, you can tell React that the component needs re-rendering by calling forceUpdate().
