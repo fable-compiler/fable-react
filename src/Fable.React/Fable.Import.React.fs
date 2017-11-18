@@ -9,7 +9,7 @@ module React =
     type ReactType =
         U3<string, ComponentClass<obj>, StatelessComponent<obj>>
 
-    and ReactElement =
+    and [<AllowNullLiteral>] ReactElement =
         interface end
 
     and ClassicElement<'P> =

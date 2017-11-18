@@ -616,21 +616,24 @@ let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children:
     createElement(f, props, children)
 
 /// Instantiate an imported React component. The first two arguments must be string literals, "default" can be used for the first one.
-/// Example: `ofImported "Map" "leaflet" { x = 10; y = 50 } []`
-let inline ofImported<[<Pojo>]'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement list): ReactElement =
+/// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
+let inline ofImport<[<Pojo>]'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement list): ReactElement =
     createElement(import importMember importPath, props, children)
 
-/// OBSOLETE: Use `ofString`
-[<System.Obsolete("Use ofString")>]
+/// Alias of `ofString`
 let inline str (s: string): ReactElement = unbox s
-/// OBSOLETE: Use `ofOption`
-[<System.Obsolete("Use ofOption")>]
-let inline opt (o: ReactElement option): ReactElement = unbox o
 
 /// Cast a string to a React element (erased in runtime)
 let inline ofString (s: string): ReactElement = unbox s
+
+/// OBSOLETE: Use `ofOption`
+[<System.Obsolete("Use ofOption")>]
+let inline opt (o: ReactElement option): ReactElement =
+    match o with Some o -> o | None -> null
+
 /// Cast an option value to a React element (erased in runtime)
-let inline ofOption (o: ReactElement option): ReactElement = unbox o
+let inline ofOption (o: ReactElement option): ReactElement =
+    match o with Some o -> o | None -> null // Option.toObj(o)
 
 /// Cast an int to a React element (erased in runtime)
 let inline ofInt (i: int): ReactElement = unbox i
