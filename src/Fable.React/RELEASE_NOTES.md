@@ -1,3 +1,10 @@
+### 1.3.0-beta-001
+
+* Add `reactiveCom` helper (stateful mini-Elmish component)
+* Add `mountById` and `mountBySelectors`
+* Add abstract methods to `React.Component` so users have autocompletion and docs when overriding
+* Uniform helpers API: ofType, ofFunction, ofImport, ofOption, ofArray...
+
 ### 1.2.2
 
 * Add Height to SVGProp

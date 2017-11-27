@@ -575,3 +575,10 @@ NUGET
   remote: https://www.nuget.org/api/v2
     FAKE (4.63.2)
     FSharp.Core (4.2.3) - content: none, redirects: force
+    Octokit (0.28)
+GITHUB
+  remote: fsharp/FAKE
+    modules/Octokit/Octokit.fsx (0341a2e614eb2a7f34607cec914eb0ed83ce9add)
+      Octokit (>= 0.20)
+  remote: fable-compiler/fake-helpers
+    Fable.FakeHelpers.fs (ac8d3f6677366c381350023977dbe91adc9aa8a0)
