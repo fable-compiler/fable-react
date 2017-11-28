@@ -585,7 +585,7 @@ open Props
 open Fable.Import.React
 
 [<Import("createElement", from="react")>]
-let createElement(component: obj, props: obj, [<ParamList>] children: obj) = jsNative
+let createElement(comp: obj, props: obj, [<ParamList>] children: obj) = jsNative
 
 /// OBSOLETE: Use `ofType`
 [<System.Obsolete("Use ofType")>]
