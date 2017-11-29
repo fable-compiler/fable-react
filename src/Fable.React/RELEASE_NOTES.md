@@ -1,4 +1,4 @@
-### 1.3.0-beta-001
+### 2.0.0-beta-001
 
 * Add `reactiveCom` helper (stateful mini-Elmish component)
 * Add `mountById` and `mountBySelectors`
