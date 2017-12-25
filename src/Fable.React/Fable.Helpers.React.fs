@@ -380,6 +380,7 @@ module Props =
         | BoxLineProgression of obj
         | BoxLines of obj
         | BoxOrdinalGroup of obj
+        | BoxShadow of obj
         | BreakAfter of obj
         | BreakBefore of obj
         | BreakInside of obj
