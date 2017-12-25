@@ -1,4 +1,3 @@
-open Octokit
 // include Fake libs
 #r "./packages/build/FAKE/tools/FakeLib.dll"
 #r "System.IO.Compression.FileSystem"
@@ -7,6 +6,7 @@ open Octokit
 
 open Fake
 open Fable.FakeHelpers
+open Octokit
 
 #if MONO
 // prevent incorrect output encoding (e.g. https://github.com/fsharp/FAKE/issues/1196)
@@ -16,7 +16,7 @@ System.Console.OutputEncoding <- System.Text.Encoding.UTF8
 let project = "fable-react"
 let gitOwner = "fable-compiler"
 
-let dotnetcliVersion = "2.0.3"
+let dotnetcliVersion = "2.1.3"
 let mutable dotnetExePath = environVarOrDefault "DOTNET" "dotnet"
 
 // Clean and install dotnet SDK

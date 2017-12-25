@@ -1,3 +1,8 @@
+### 2.0.0-beta-002
+
+* Add BoxShadow CSSProp (@worldbeater)
+* Add Class as alias of ClassName
+
 ### 2.0.0-beta-001
 
 * Add `reactiveCom` helper (stateful mini-Elmish component)
