@@ -5,21 +5,24 @@ open Fable.Core
 open Fable.Core.JsInterop
 
 module Props =
-    [<StringEnum>]
-    type Layout =
+
+    type [<StringEnum>] Layout =
         | Horizontal
         | Vertical
 
-    [<StringEnum>]
-    type StackOffset =
+    type [<StringEnum>] StackOffset =
         | Expand
         | Wiggle
         | Silhouette
         | Sign
         | [<CompiledName("none")>] NoStackOffset
 
-    [<StringEnum>]
-    type Interpolation =
+    type [<StringEnum>] BaseValue =
+        | DataMin
+        | DataMax
+        | Auto
+
+    type [<StringEnum>] Interpolation =
         | Basis
         | BasisClosed
         | BasisOpen
@@ -34,8 +37,7 @@ module Props =
         | StepAfter
         //| Function
 
-    [<StringEnum>]
-    type Legend =
+    type [<StringEnum>] Legend =
         | Line
         | Square
         | Rect
@@ -47,8 +49,7 @@ module Props =
         | Wye
         | [<CompiledName("none")>] NoLegend
 
-    [<StringEnum>]
-    type Easing =
+    type [<StringEnum>] Easing =
         | Ease
         | [<CompiledName("ease-in")>] EaseIn
         | [<CompiledName("ease-out")>] EaseOut
@@ -66,7 +67,7 @@ module Props =
           right: float
           left: float }
 
-    type ChartProp =
+    type [<RequireQualifiedAccess>] ChartProp =
         /// If any two categorical charts(LineChart, AreaChart, BarChart, ComposedChart) have the same syncId, these two charts can sync the position tooltip, and the startIndex, endIndex of Brush.
         | SyncId of string
         | Layout of Layout
@@ -86,14 +87,17 @@ module Props =
         /// BarChart: The type of offset function used to generate the lower and upper values in the series array. The four types are built-in offsets in d3-shape.
         | StackOffset of StackOffset
 
+        /// AreaChart: The base value of are.
+        | BaseValue of U2<float, BaseValue>
+
         // Events
         | OnClick of (React.MouseEvent -> unit)
         | OnMouseEnter of (React.MouseEvent -> unit)
         | OnMouseMove of (React.MouseEvent -> unit)
         | OnMouseLeave of (React.MouseEvent -> unit)
-        static member Custom(key: string, value: obj): ChartProp = !!(key, value)
+        static member inline Custom(key: string, value: obj): ChartProp = !!(key, value)
 
-    type CartesianProp =
+    type [<RequireQualifiedAccess>] CartesianProp =
         /// The interpolation type of line. And customized interpolation function can be set to type. It's the same as type in Area.
         | Type of Interpolation
         /// The key of a group of data which should be unique in a LineChart.
@@ -148,7 +152,8 @@ module Props =
         | OnMouseMove of (React.MouseEvent -> unit)
         | OnMouseLeave of (React.MouseEvent -> unit)
         interface Fable.Helpers.React.Props.IProp
-        static member Custom(key: string, value: obj): ChartProp = !!(key, value)
+        static member inline Custom(key: string, value: obj): ChartProp = !!(key, value)
+
 
 type RechartComponent =
     interface end
@@ -157,6 +162,7 @@ module Imports =
     // Charts
     let lineChartEl: obj = import "LineChart" "recharts"
     let barChartEl: obj = import "BarChart" "recharts"
+    let areaChartEl: obj = import "AreaChart" "recharts"
 
     // General Components
     let tooltipEl: obj = import "Tooltip" "recharts"
@@ -179,6 +185,10 @@ let inline lineChart (props: ChartProp list) (children: RechartComponent list): 
 
 let inline barChart (props: ChartProp list) (children: RechartComponent list): React.ReactElement =
     createElement(barChartEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline areaChart (props: ChartProp list) (children: RechartComponent list): React.ReactElement =
+    createElement(areaChartEl, keyValueList CaseRules.LowerFirst props, children)
+
 
 // TODO: Tooltip props
 let inline tooltip (props: obj list): RechartComponent =
