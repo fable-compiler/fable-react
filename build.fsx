@@ -16,6 +16,12 @@ System.Console.OutputEncoding <- System.Text.Encoding.UTF8
 let project = "fable-react"
 let gitOwner = "fable-compiler"
 
+let packages =
+    [ "src/Fable.React/Fable.React.fsproj"
+      "src/Fable.ReactLeaflet/Fable.ReactLeaflet.fsproj"
+      "src/Fable.Recharts/Fable.Recharts.fsproj"
+    ]
+
 let dotnetcliVersion = "2.1.3"
 let mutable dotnetExePath = environVarOrDefault "DOTNET" "dotnet"
 
@@ -26,9 +32,7 @@ Target "Bootstrap" (fun () ->
 )
 
 Target "PublishPackages" (fun () ->
-    [ "src/Fable.React/Fable.React.fsproj"
-      "src/Fable.ReactLeaflet/Fable.ReactLeaflet.fsproj"]
-    |> publishPackages __SOURCE_DIRECTORY__ dotnetExePath
+    publishPackages __SOURCE_DIRECTORY__ dotnetExePath packages
 )
 
 Target "GitHubRelease" (fun () ->

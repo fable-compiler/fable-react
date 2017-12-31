@@ -2,8 +2,8 @@
 
 Fable bindings and helpers for React projects
 
-# Why is Fable.ReactLeaflet library included in this repo?
+## Why does this repository include bindings for React JS libraries?
 
-One of the reasons not to add `ReactLeaflet` in `fable-import` was that repo only contains pure bindings which only have metadata and thus can be distributed just in `.dll` form. But `ReactLeaflet` contains actual code so it needs to include also sources in the distribution.
+Fable bindings for JS libraries maintained by the Fable team are in [fable-import](https://github.com/fable-compiler/fable-import). However, that repository only contains _pure bindings_ (which only have metadata and thus can be distributed just in `.dll` form), while libraries like `Fable.ReactLeaflet` contain actual code that must be compiled to JS, so they need to include also the sources in the distribution.
 
-Adding `Fable.ReactLeaflet` to this repo makes it easier to maintain for us as a maintainer instead of having one repo per react package for example.
+Keeping the bindings for React JS libraries in this repository makes it easier to maintain them, even if each of the libraries has its own Nuget package.
