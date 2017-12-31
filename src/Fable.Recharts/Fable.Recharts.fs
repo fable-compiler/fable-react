@@ -67,7 +67,7 @@ module Props =
           right: float
           left: float }
 
-    type [<RequireQualifiedAccess>] ChartProp =
+    type [<RequireQualifiedAccess>] Chart =
         /// If any two categorical charts(LineChart, AreaChart, BarChart, ComposedChart) have the same syncId, these two charts can sync the position tooltip, and the startIndex, endIndex of Brush.
         | SyncId of string
         | Layout of Layout
@@ -90,14 +90,33 @@ module Props =
         /// AreaChart: The base value of are.
         | BaseValue of U2<float, BaseValue>
 
+        /// ComposedChart: If false set, stacked items will be rendered left to right. If true set, stacked items will be rendered right to left. (Render direction affects SVG layering, not x position.)
+        | ReverseStackOrder of bool
+
+        /// RadarChart: [Percentage (e.g. "50%") | Number] The x-coordinate of center. If set a percentage, the final value is obtained by multiplying the percentage of width.
+        | Cx of obj
+        /// RadarChart: [Percentage (e.g. "50%") | Number] The y-coordinate of center. If set a percentage, the final value is obtained by multiplying the percentage of height.
+        | Cy of obj
+        /// RadarChart: The angle of first radial direction line.
+        | StartAngle of float
+        /// RadarChart: The angle of last point in the circle which should be startAngle - 360 or startAngle + 360. We'll calculate the direction of chart by 'startAngle' and 'endAngle'.
+        | EndAngle of float
+        /// RadarChart: The inner radius of first circle grid. If set a percentage, the final value is obtained by multiplying the percentage of maxRadius which is calculated by the width, height, cx, cy.
+        | InnerRadius of obj
+        /// RadarChart: The outer radius of last circle grid. If set a percentage, the final value is obtained by multiplying the percentage of maxRadius which is calculated by the width, height, cx, cy.
+        | OuterRadius of obj
+
         // Events
         | OnClick of (React.MouseEvent -> unit)
-        | OnMouseEnter of (React.MouseEvent -> unit)
+        | OnMouseDown of (React.MouseEvent -> unit)
+        | OnMouseUp of (React.MouseEvent -> unit)
         | OnMouseMove of (React.MouseEvent -> unit)
+        | OnMouseOver of (React.MouseEvent -> unit)
+        | OnMouseEnter of (React.MouseEvent -> unit)
         | OnMouseLeave of (React.MouseEvent -> unit)
-        static member inline Custom(key: string, value: obj): ChartProp = !!(key, value)
+        static member inline Custom(key: string, value: obj): Chart = !!(key, value)
 
-    type [<RequireQualifiedAccess>] CartesianProp =
+    type [<RequireQualifiedAccess>] Cartesian =
         /// The interpolation type of line. And customized interpolation function can be set to type. It's the same as type in Area.
         | Type of Interpolation
         /// The key of a group of data which should be unique in a LineChart.
@@ -152,7 +171,7 @@ module Props =
         | OnMouseMove of (React.MouseEvent -> unit)
         | OnMouseLeave of (React.MouseEvent -> unit)
         interface Fable.Helpers.React.Props.IProp
-        static member inline Custom(key: string, value: obj): ChartProp = !!(key, value)
+        static member inline Custom(key: string, value: obj): Chart = !!(key, value)
 
 
 type RechartComponent =
@@ -163,6 +182,11 @@ module Imports =
     let lineChartEl: obj = import "LineChart" "recharts"
     let barChartEl: obj = import "BarChart" "recharts"
     let areaChartEl: obj = import "AreaChart" "recharts"
+    let composedChartEl: obj = import "ComposedChart" "recharts"
+    let pieChartEl: obj = import "PieChart" "recharts"
+    let radarChartEl: obj = import "RadarChart" "recharts"
+    let radialBarChartEl: obj = import "RadialBarChart" "recharts"
+    let scatterChartEl: obj = import "ScatterChart" "recharts"
 
     // General Components
     let tooltipEl: obj = import "Tooltip" "recharts"
@@ -180,15 +204,29 @@ open Fable.Helpers.React.Props
 open Props
 open Imports
 
-let inline lineChart (props: ChartProp list) (children: RechartComponent list): React.ReactElement =
+let inline lineChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
     createElement(lineChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline barChart (props: ChartProp list) (children: RechartComponent list): React.ReactElement =
+let inline barChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
     createElement(barChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline areaChart (props: ChartProp list) (children: RechartComponent list): React.ReactElement =
+let inline areaChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
     createElement(areaChartEl, keyValueList CaseRules.LowerFirst props, children)
 
+let inline composedChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+    createElement(composedChartEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline pieChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+    createElement(pieChartEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline radarChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+    createElement(radarChartEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline radialBarChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+    createElement(radialBarChartEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline scatterChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+    createElement(scatterChartEl, keyValueList CaseRules.LowerFirst props, children)
 
 // TODO: Tooltip props
 let inline tooltip (props: obj list): RechartComponent =
