@@ -1,17 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>0.1.0-beta-002</Version>
+    <Version>0.1.0-beta-001</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Fable.Recharts.fs" />
+    <Compile Include="../Fable.Recharts/Fable.Recharts.fs" />
+    <Compile Include="Data.fs" />
+    <Compile Include="App.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Fable.React/Fable.React.fsproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

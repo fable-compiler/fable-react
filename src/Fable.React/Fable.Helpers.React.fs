@@ -115,7 +115,7 @@ module Props =
         | ClassID of string
         | ClassName of string
         /// Alias of ClassName
-        | [<CompiledName("ClassName")>] Class of string
+        | [<CompiledName("className")>] Class of string
         | Cols of float
         | ColSpan of float
         | Content of string

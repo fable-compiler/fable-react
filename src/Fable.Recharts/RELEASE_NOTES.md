@@ -1,3 +1,3 @@
-### 0.1.0-beta-001
+### 0.1.0-beta-002
 
 * Initial release

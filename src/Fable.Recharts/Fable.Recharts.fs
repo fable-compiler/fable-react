@@ -22,7 +22,7 @@ module Props =
         | DataMax
         | Auto
 
-    type [<StringEnum>] Interpolation =
+    type [<StringEnum>] InterpolationType =
         | Basis
         | BasisClosed
         | BasisOpen
@@ -37,7 +37,7 @@ module Props =
         | StepAfter
         //| Function
 
-    type [<StringEnum>] Legend =
+    type [<StringEnum>] ShapeType =
         | Line
         | Square
         | Rect
@@ -49,6 +49,27 @@ module Props =
         | Wye
         | [<CompiledName("none")>] NoLegend
 
+    type [<StringEnum>] LineType =
+        | Joint
+        | Fitting
+
+    type [<StringEnum>] ScaleType =
+        | Auto
+        | Linear
+        | Pow
+        | Sqrt
+        | Log
+        | Identity
+        | Time
+        | Band
+        | Point
+        | Ordinal
+        | Quantile
+        | Quantize
+        | UtcTime
+        | Sequential
+        | Threshold
+
     type [<StringEnum>] Easing =
         | Ease
         | [<CompiledName("ease-in")>] EaseIn
@@ -56,16 +77,34 @@ module Props =
         | [<CompiledName("ease-in-out")>] EaseInOut
         | Linear
 
-    type [<Pojo>] CoordinatePoint =
+    type [<Pojo>] Point2 =
+        { x: float; y: float }
+
+    type [<Pojo>] Point3 =
+        { x: float; y: float; z: float }
+
+    type [<Pojo>] LinePoint =
         { x: float
           y: float
           value: float }
+
+    type [<Pojo>] ScatterPoint =
+        { cx: float
+          cy: float
+          r: float
+          payload: Point3 }
 
     type [<Pojo>] Margin =
         { top: float
           bottom: float
           right: float
           left: float }
+
+    type [<Pojo>] ViewBox =
+        { x: float
+          y: float
+          width: float
+          height: float }
 
     type [<RequireQualifiedAccess>] Chart =
         /// If any two categorical charts(LineChart, AreaChart, BarChart, ComposedChart) have the same syncId, these two charts can sync the position tooltip, and the startIndex, endIndex of Brush.
@@ -87,8 +126,10 @@ module Props =
         /// BarChart: The type of offset function used to generate the lower and upper values in the series array. The four types are built-in offsets in d3-shape.
         | StackOffset of StackOffset
 
-        /// AreaChart: The base value of are.
-        | BaseValue of U2<float, BaseValue>
+        /// AreaChart: The base value of area.
+        | BaseValue of BaseValue
+        /// AreaChart: Alternative to BaseValue using a float value.
+        | [<CompiledName("baseValue")>] BaseValueNumber of float
 
         /// ComposedChart: If false set, stacked items will be rendered left to right. If true set, stacked items will be rendered right to left. (Render direction affects SVG layering, not x position.)
         | ReverseStackOrder of bool
@@ -114,25 +155,205 @@ module Props =
         | OnMouseOver of (React.MouseEvent -> unit)
         | OnMouseEnter of (React.MouseEvent -> unit)
         | OnMouseLeave of (React.MouseEvent -> unit)
+
+        interface Fable.Helpers.React.Props.IProp
         static member inline Custom(key: string, value: obj): Chart = !!(key, value)
 
-    type [<RequireQualifiedAccess>] Cartesian =
-        /// The interpolation type of line. And customized interpolation function can be set to type. It's the same as type in Area.
-        | Type of Interpolation
-        /// The key of a group of data which should be unique in a LineChart.
+    type [<RequireQualifiedAccess>] Treemap =
+        | Width of float
+        | Height of float
+        | Data of System.Array
+        /// The key of a group of data which should be unique in a treemap.
         | DataKey of obj
-        // The id of x-axis which is corresponding to the data.
-        | XAxisId of obj
-        // The id of y-axis which is corresponding to the data.
-        | YAxisId of obj
-        | LegendType of Legend
-        /// If false set, labels will not be drawn. If true set, labels will be drawn which have the props calculated internally. If object set, labels will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom label element. If set a function, the function will be called to render customized label.
+        /// The treemap will try to keep every single rectangle's aspect ratio near the aspectRatio given.
+        | AspectRatio of float
+        /// If set false, animation of area will be disabled.
+        | IsAnimationActive of bool
+        /// Specifies when the animation should begin, the unit of this option is ms.
+        | AnimationBegin of float
+        /// Specifies the duration of animation, the unit of this option is ms.
+        | AnimationDuration of float
+        | AnimationEasing of Easing
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Treemap = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Responsive =
+        /// width / height. If specified, the height will be calculated by width / aspect.
+        | Aspect of float
+        /// The percentage value of the chart's width or a fixed width.
+        | Width of obj
+        /// The percentage value of the chart's width or a fixed height.
+        | Height of obj
+        /// The minimum width of the container.
+        | MinWidth of float
+        /// The minimum height of the container.
+        | MinHeight of float
+        /// If specified a positive number, debounced function will be used to handle the resize event.
+        | Debounce of float
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Responsive = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Legend =
+        | Width of float
+        | Height of float
+        | Layout of Layout
+        /// The alignment of legend items in 'horizontal' direction, which cen be 'left', 'center', 'right'.
+        | Align of string
+        /// The alignment of legend items in 'vertical' direction, which can be 'top', 'middle', 'bottom'.
+        | VerticalAlign of string
+        | IconSize of float
+        | IconType of ShapeType
+        /// The source data of the content to be displayed in the legend, usually calculated internally.
+        /// FORMAT [{ value: 'item name', type: 'line', id: 'ID01' }]
+        | PayLoad of System.Array
+        /// The width of chart container, usually calculated internally.
+        | ChartWidth of float
+        /// The height of chart container, usually calculated internally.
+        | ChartHeight of float
+        /// The margin of chart container, usually calculated internally.
+        | Margin of Margin
+        /// If set to a React element, the option will be used to render the legend. If set to a function, the function will be called to render the legend's content.
+        | Content of obj
+        /// The style of legend container which is a "position: absolute;" div element. Because the position of legend is quite flexible, so you can change the position by the value of top, left, right, bottom in this option. And the format of wrapperStyle is the same as React inline style.
+        | WrapperStyle of obj
+        | OnClick of (React.MouseEvent -> unit)
+        | OnMouseDown of (React.MouseEvent -> unit)
+        | OnMouseUp of (React.MouseEvent -> unit)
+        | OnMouseMove of (React.MouseEvent -> unit)
+        | OnMouseOver of (React.MouseEvent -> unit)
+        | OnMouseEnter of (React.MouseEvent -> unit)
+        | OnMouseLeave of (React.MouseEvent -> unit)
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Legend = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Tooltip =
+        /// The separator between name and value.
+        | Separator of string
+        /// The offset size between the position of tooltip and the active position.
+        | Offset of float
+        /// The style of default tooltip content item which is a li element.
+        | ItemStyle of obj
+        /// The style of tooltip wrapper which is a dom element.
+        | WrapperStyle of obj
+        /// The style of default tooltip label which is a p element.
+        | LabelStyle of obj
+        /// If set false, no cursor will be drawn when tooltip is active. If set a object, the option is the configuration of cursor. If set a React element, the option is the custom react element of drawing cursor.
+        | Cursor of obj
+        | ViewBox of ViewBox
+        /// If set true, the tooltip is displayed. If set false, the tooltip is hidden, usually calculated internally.
+        | Active of bool
+        /// The coordinate of tooltip position, usually calculated internally.
+        | Coordinate of Point2
+        /// The source data of the content to be displayed in the tooltip, usually calculated internally.
+        /// FORMAT: [{ name: '05-01', value: 12, unit: 'kg' }]
+        | Payload of System.Array
+        /// The label value which is active now, usually calculated internally.
         | Label of obj
+        /// If set a React element, the option is the custom react element of rendering tooltip. If set a function, the function will be called to render tooltip content.
+        | Content of obj
+        /// The formatter function of value in tooltip.
+        | Formatter of obj
+        /// The formatter function of label in tooltip.
+        | LabelFormatter of obj
+        /// Sort function of payload
+        /// DEFAULT: () => -1
+        | ItemSorter of obj
+        /// If set false, animation of area will be disabled.
+        | IsAnimationActive of bool
+        /// Specifies when the animation should begin, the unit of this option is ms.
+        | AnimationBegin of float
+        /// Specifies the duration of animation, the unit of this option is ms.
+        | AnimationDuration of float
+        | AnimationEasing of Easing
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Tooltip = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Cell =
+        /// The presentation attribute of a rectangle in bar or a sector in pie.
+        | Fill of string
+        /// The presentation attribute of a rectangle in bar or a sector in pie.
+        | Stroke of string
+        static member inline Custom(key: string, value: obj): Cell = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Text =
+        /// Scale the text to fit the width or not.
+        | ScaleToFit of bool
+        /// The rotate angle of Text.
+        | Angle of float
+        /// The width of Text. When the width is specified to be a number, the text will warp auto by calculating the width of text.
+        | Width of float
+        /// 'start' | 'middle' | 'end' | 'inherit'
+        | TextAnchor of string
+        /// 'start' | 'middle' | 'end'
+        | VerticalAnchor of string
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Text = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Label =
+        | ViewBox of ViewBox
+        /// The formatter function of label value which has only one parameter - the value pf label.
+        | Formatter of (obj->obj)
+        /// The value of label, which can be specified by this props or the children of <Label />
+        | Value of obj
+        /// The position of label relative to the view box: "top" | "left" | "right" | "bottom" | "inside" | "outside" | "insideLeft" | "insideRight" | "insideTop" | "insideBottom" | "insideTopLeft" | "insideBottomLeft" | "insideTopRight" | "insideBottomRight" | "insideStart" | "insideEnd" | "end" | "center"
+        | Position of string
+        /// The offset to the specified "position"
+        | Offset of float
+        /// The value of label, which can be specified by this props or the props "value"
+        | Children of obj
+        /// If set a React element, the option is the custom react element of rendering label. If set a function, the function will be called to render label content.
+        | Content of obj
+        /// The unique id of this component, which will be used to generate unique clip path id internally. This props is suggested to be set in SSR.
+        | Id of string
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Label = !!(key, value)
+
+    type [<RequireQualifiedAccess>] LabelList =
+        /// The key of a group of label values in data.
+        | DataKey of obj
+        /// The accessor function to get the value of each label.
+        | ValueAccessor of obj
+        /// If set a React element, the option is the customized react element of rendering each label. If set a function, the function will be called to render each label content.
+        | Content of obj
+        /// The position of each label relative to the view box: "top" | "left" | "right" | "bottom" | "inside" | "outside" | "insideLeft" | "insideRight" | "insideTop" | "insideBottom" | "insideTopLeft" | "insideBottomLeft" | "insideTopRight" | "insideBottomRight" | "insideStart" | "insideEnd" | "end" | "center"
+        | Position of string
+        /// The offset to the specified "position"
+        | Offset of float
+        /// The formatter function of label value which has only one parameter - the value pf label.
+        | Formatter of (obj->obj)
+        /// The data input to the charts.
+        | Data of float
+        /// The parameter to calculate the view box of label in radial charts.
+        | ClockWise of string
+        /// The unique id of this component, which will be used to generate unique clip path id internally. This props is suggested to be set in SSR.
+        | Id of string
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): LabelList = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Cartesian =
+        /// Area/Line: Use InterpolationType. Customized interpolation function can also be set to type.
+        /// Axis: 'number' | 'category' (default 'category')
+        | Type of obj
+        | Data of System.Array
+        /// The key of a group of data which should be unique.
+        | DataKey of obj
+        | LegendType of ShapeType
+        /// If set to false, labels will not be drawn. If true set, labels will be drawn which have the props calculated internally. If object set, labels will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom label element. If set a function, the function will be called to render customized label.
+        | Label of obj
+        /// If "none", no stroke curve will be drawn.
+        | Stroke of string
+        | StrokeWidth of string
         /// The layout of line, usually inherited from parent.
         | Layout of Layout
+        /// The value which can describe the line, usually calculated internally.
+        | BaseLine of obj
         | Unit of string
-        /// The name of data. This option will be used in tooltip and legend to represent a line. If no value was set to this option, the value of dataKey will be used alternatively.
         | Name of string
+        /// The unique id of this component, which will be used to generate unique clip path id internally. This props is suggested to be set in SSR.
+        | Id of string
+        /// The stack id of bar/area, when two bars have the same value axis and same stackId, then the two bars are stacked in order.
+        | StackId of obj
+
         /// If set false, animation of line will be disabled.
         | IsAnimationActive of bool
         /// Specifies when the animation should begin, the unit of this option is ms.
@@ -141,13 +362,15 @@ module Props =
         | AnimationDuration of float
         | AnimationEasing of Easing
 
-        /// Line: If false set, dots will not be drawn. If true set, dots will be drawn which have the props calculated internally. If object set, dots will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom dot element.If set a function, the function will be called to render customized dot.
+        /// If false set, dots will not be drawn. If true set, dots will be drawn which have the props calculated internally. If object set, dots will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom dot element.If set a function, the function will be called to render customized dot.
         | Dot of obj
-        /// Line: The dot is shown when muser enter a line chart and this chart has tooltip. If false set, no active dot will not be drawn. If true set, active dot will be drawn which have the props calculated internally. If object set, active dot will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom active dot element.If set a function, the function will be called to render customized active dot.
+        /// The dot is shown when muser enter a line chart and this chart has tooltip. If false set, no active dot will not be drawn. If true set, active dot will be drawn which have the props calculated internally. If object set, active dot will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom active dot element.If set a function, the function will be called to render customized active dot.
         | ActiveDot of obj
-        /// Line: The coordinates of all the points in the line, usually calculated internally.
-        | Points of CoordinatePoint[]
-        /// Line: Whether to connect a graph line across null points.
+        /// The coordinates of all the points in the line, usually calculated internally.
+        /// FORMAT LinePoint: [{x: 12, y: 12, value: 240}]
+        /// FORMAT ScatterPoint: [{ cx: 12, cy: 12, r: 4, payload: {x: 12, y: 45, z: 9 }}]
+        | Points of System.Array
+        /// Whether to connect a graph line across null points.
         | ConnectNulls of bool
 
         /// Bar: The width or height of each bar. If the barSize is not specified, the size of bar will be caculated by the barCategoryGap, barGap and the quantity of bar groups.
@@ -156,10 +379,201 @@ module Props =
         | MaxBarSize of float
         /// Bar: The minimal height of a bar in a horizontal BarChart, or the minimal width of a bar in a vertical BarChart. By default, 0 values are not shown. To visualize a 0 (or close to zero) point, set the minimal point size to a pixel value like 3. In stacked bar charts, minPointSize might not be respected for tightly packed values. So we strongly recommend not using this props in stacked BarChart.
         | MinPointSize of float
+        /// Bar: If false set, background of bars will not be drawn. If true set, background of bars will be drawn which have the props calculated internally. If object set, background of bars will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom background element. If set a function, the function will be called to render customized background.
+        | Background of obj
         /// Bar: If set a ReactElement, the shape of bar can be customized. If set a function, the function will be called to render customized shape.
-        | Shape of React.ReactElement
-        /// Bar: The stack id of bar, when two bars have the same value axis and same stackId, then the two bars are stacked in order.
-        | StackId of obj
+        /// Scatter: ShapeType can be used as well.
+        | Shape of obj
+
+        /// Scatter: If false set, line will not be drawn. If true set, line will be drawn which have the props calculated internally. If object set, line will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom line element. If set a function, the function will be called to render Customized line.
+        | Line of obj
+        /// Scatter: If 'joint' set, line will generated by just jointing all the points. If 'fitting' set, line will be generated by fitting algorithm.
+        | LineType of LineType
+
+        // Axis
+
+        /// If set true, the axis do not display in the chart.
+        | Hide of bool
+        | Width of float
+        | Height of float
+        | XAxisId of obj
+        | YAxisId of obj
+        | ZAxisId of obj
+        /// DEFAULT: [10, 10]
+        | Range of System.Array
+        /// If set false, no axis line will be drawn. If set a object, the option is the configuration of axis line.
+        | AxisLine of obj
+        /// XAxis: 'bottom' , 'top'
+        /// YAxis: 'left', 'right'
+        | Orientation of string
+        /// Allow the ticks of the axis to be decimals or not.
+        | AllowDecimals of bool
+        /// When domain of the axis is specified and the type of the axis is 'number', if allowDataOverflow is set to be false, the domain will be adjusted when the minimum value of data is smaller than domain[0] or the maximum value of data is greater than domain[1] so that the axis displays all data values. If set to true, graphic elements (line, area, bars) will be clipped to conform to the specified domain.
+        | AllowDataOverflow of bool
+        /// Allow the axis has duplicated categorys or not when the type of axis is "category".
+        | AllowDuplicatedCategory of bool
+        /// The minimum gap between two adjacent labels.
+        /// DEFAULT: 5
+        | MinTickGap of float
+        /// The count of axis ticks.
+        /// DEFAULT: 5
+        | TickCount of float
+        /// The lenght of tick line.
+        /// DEFAULT: 6
+        | TickSize of float
+        /// If set false, no axis line will be drawn. If set a object, the option is the configuration of axis line.
+        | TickLine of obj
+        /// The margin between tick line and tick.
+        | TickMargin of float
+        /// The formatter function of tick.
+        | TickFormatter of obj
+        /// Set the values of axis ticks manually.
+        | Ticks of System.Array
+        /// If set false, no ticks will be drawn. If set a object, the option is the configuration of ticks. If set a React element, the option is the custom react element of drawing ticks.
+        | Tick of obj
+        /// Specify the domain of axis when the axis is a number axis. The length of domain should be 2, and we will validate the values in domain. And each element in the array can be a number, 'auto', 'dataMin', 'dataMax', a string like 'dataMin - 20', 'dataMax + 100', or a function that accepts a single argument and returns a number. If any element of domain is set to be 'auto', comprehensible scale ticks will be calculated, and the final domain of axis is generated by the ticks.
+        /// DEFAULT: [0, 'auto']
+        | Domain of System.Array
+        /// If set 0, all the ticks will be shown. If set "preserveStart", "preserveEnd" or "preserveStartEnd", the ticks which is to be shown or hidden will be calculated automatically.
+        | Interval of obj
+        /// Specify the padding of axis.
+        /// DEFAULT: { left: 0, right: 0 }
+        | Padding of obj
+        /// If set true, flips ticks around the axis line, displaying the labels inside the chart instead of outside.
+        | Mirror of bool
+        /// Reverse the ticks or not.
+        | Reversed of bool
+        /// If 'auto' set, the scale funtion is descided by the type of chart, and the props type.
+        | Scale of ScaleType
+
+        | X of float
+        | Y of float
+        /// ReferenceArea: A boundary value of the area. If the specified x-axis is a number axis, the type of x must be Number. If the specified x-axis is a category axis, the value of x must be one of the categorys. If one of x1 or x2 is invalidate, the area will cover along x-axis.
+        | X1 of obj
+        /// ReferenceArea: A boundary value of the area. If the specified x-axis is a number axis, the type of x must be Number. If the specified x-axis is a category axis, the value of x must be one of the categorys. If one of x1 or x2 is invalidate, the area will cover along x-axis.
+        | X2 of obj
+        /// ReferenceArea: A boundary value of the area. If the specified y-axis is a number axis, the type of y must be Number. If the specified y-axis is a category axis, the value of y must be one of the categorys. If one of y1 or y2 is invalidate, the area will cover along y-axis.
+        | Y1 of obj
+        /// ReferenceArea: A boundary value of the area. If the specified y-axis is a number axis, the type of y must be Number. If the specified y-axis is a category axis, the value of y must be one of the categorys. If one of y1 or y2 is invalidate, the area will cover along y-axis.
+        | Y2 of obj
+        | TravellerWidth of float
+        | StartIndex of float
+        | EndIndex of float
+        | ViewBox of ViewBox
+
+        /// If set false, no horizontal grid lines will be drawn.
+        | Horizontal of bool
+        /// If set false, no vertical grid lines will be drawn.
+        | Vertical of bool
+        /// The y-coordinates of all horizontal lines.
+        | HorizontalPoints of System.Array
+        /// The x-coordinates of all vertical lines.
+        | VerticalPoints of System.Array
+
+        /// The configuration of the corresponding x-axis, usually calculated internally.
+        | XAxis of obj
+        /// The configuration of the corresponding y-axis, usually calculated internally.
+        | YAxis of obj
+        /// If the corresponding axis is a number axis and this option is set true, the value of reference line will be take into account when calculate the domain of corresponding axis, so that the reference line will always show.
+        | AlwaysShow of bool
+        /// If set true, the line will be rendered in front of bars in BarChart, etc.
+        | IsFront of bool
+
+        /// ErrorBar: Only used for ScatterChart with error bars in two directions. Only accepts a value of "x" or "y" and makes the error bars lie in that direction.
+        | Direction of string
+
+        // Events
+        /// Brush: The handler of changing the active scope of brush.
+        | OnChange of (unit -> unit) // TODO: Check args
+        | OnClick of (React.MouseEvent -> unit)
+        | OnMouseDown of (React.MouseEvent -> unit)
+        | OnMouseUp of (React.MouseEvent -> unit)
+        | OnMouseOver of (React.MouseEvent -> unit)
+        | OnMouseOut of (React.MouseEvent -> unit)
+        | OnMouseEnter of (React.MouseEvent -> unit)
+        | OnMouseMove of (React.MouseEvent -> unit)
+        | OnMouseLeave of (React.MouseEvent -> unit)
+
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Cartesian = !!(key, value)
+
+    type [<RequireQualifiedAccess>] Polar =
+        /// [Percentage (e.g. "50%") | Number] The x-coordinate of center. If set a percentage, the final value is obtained by multiplying the percentage of width.
+        | Cx of obj
+        /// [Percentage (e.g. "50%") | Number] The y-coordinate of center. If set a percentage, the final value is obtained by multiplying the percentage of height.
+        | Cy of obj
+        /// The inner radius of first circle grid. If set a percentage, the final value is obtained by multiplying the percentage of maxRadius which is calculated by the width, height, cx, cy.
+        | InnerRadius of obj
+        /// The outer radius of last circle grid. If set a percentage, the final value is obtained by multiplying the percentage of maxRadius which is calculated by the width, height, cx, cy.
+        | OuterRadius of obj
+        /// Pie: The start angle of first sector.
+        | StartAngle of float
+        /// Pie: The end angle of last sector, which should be unequal to startAngle.
+        | EndAngle of float
+        /// Pie/RadialBar: The minimum angle of each unzero data.
+        | MinAngle of float
+        /// Pie: The angle between two sectors.
+        | PaddingAngle of float
+        /// Pie: The key of each sector's name.
+        | NameKey of string
+        /// Pie: The index of active sector in Pie, this option can be changed in mouse event handlers.
+        | ActiveInex of System.Array
+        /// Pie: The shape of active sector.
+        | ActiveShape of obj
+        | PolarAngles of System.Array
+        | PolarRadius of System.Array
+        /// The type of polar grids: 'polygon' | 'circle'
+        | GridType of string
+        /// The angle of radial direction line to display axis text.
+        | Angle of float
+
+        /// Axis: 'number' | 'category' (default 'category')
+        | Type of obj
+        | Data of System.Array
+        /// The key of a group of data which should be unique.
+        | DataKey of obj
+        | LegendType of ShapeType
+        /// If set to false, labels will not be drawn. If true set, labels will be drawn which have the props calculated internally. If object set, labels will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom label element. If set a function, the function will be called to render customized label.
+        | Label of obj
+        /// If false set, label lines will not be drawn. If true set, label lines will be drawn which have the props calculated internally. If object set, label lines will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom label line element. If set a function, the function will be called to render customized label line.
+        | LabelLine of obj
+
+        /// If set false, animation of line will be disabled.
+        | IsAnimationActive of bool
+        /// Specifies when the animation should begin, the unit of this option is ms.
+        | AnimationBegin of float
+        /// Specifies the duration of animation, the unit of this option is ms.
+        | AnimationDuration of float
+        | AnimationEasing of Easing
+
+        /// If false set, dots will not be drawn. If true set, dots will be drawn which have the props calculated internally. If object set, dots will be drawn which have the props mergered by the internal calculated props and the option. If ReactElement set, the option can be the custom dot element.If set a function, the function will be called to render customized dot.
+        | Dot of obj
+        /// The coordinates of all the points in the line, usually calculated internally.
+        | Points of System.Array
+        | Background of obj
+        | Shape of obj
+
+        /// If set false, no axis line will be drawn. If set a object, the option is the configuration of axis line.
+        | AxisLine of obj
+        | Orientation of string
+        /// Allow the axis has duplicated categorys or not when the type of axis is "category".
+        | AllowDuplicatedCategory of bool
+        /// The count of axis ticks.
+        /// DEFAULT: 5
+        | TickCount of float
+        /// If set false, no axis line will be drawn. If set a object, the option is the configuration of axis line.
+        | TickLine of obj
+        /// The formatter function of tick.
+        | TickFormatter of obj
+        /// Set the values of axis ticks manually.
+        | Ticks of System.Array
+        /// If set false, no ticks will be drawn. If set a object, the option is the configuration of ticks. If set a React element, the option is the custom react element of drawing ticks.
+        | Tick of obj
+        /// Specify the domain of axis when the axis is a number axis. The length of domain should be 2, and we will validate the values in domain. And each element in the array can be a number, 'auto', 'dataMin', 'dataMax', a string like 'dataMin - 20', 'dataMax + 100', or a function that accepts a single argument and returns a number. If any element of domain is set to be 'auto', comprehensible scale ticks will be calculated, and the final domain of axis is generated by the ticks.
+        /// DEFAULT: [0, 'auto']
+        | Domain of System.Array
+        /// If 'auto' set, the scale funtion is descided by the type of chart, and the props type.
+        | Scale of ScaleType
 
         // Events
         | OnClick of (React.MouseEvent -> unit)
@@ -170,12 +584,14 @@ module Props =
         | OnMouseEnter of (React.MouseEvent -> unit)
         | OnMouseMove of (React.MouseEvent -> unit)
         | OnMouseLeave of (React.MouseEvent -> unit)
+
         interface Fable.Helpers.React.Props.IProp
-        static member inline Custom(key: string, value: obj): Chart = !!(key, value)
+        static member inline Custom(key: string, value: obj): Polar = !!(key, value)
 
+    type [<RequireQualifiedAccess>] Shape =
+        interface Fable.Helpers.React.Props.IProp
+        static member inline Custom(key: string, value: obj): Shape = !!(key, value)
 
-type RechartComponent =
-    interface end
 
 module Imports =
     // Charts
@@ -187,67 +603,183 @@ module Imports =
     let radarChartEl: obj = import "RadarChart" "recharts"
     let radialBarChartEl: obj = import "RadialBarChart" "recharts"
     let scatterChartEl: obj = import "ScatterChart" "recharts"
+    let treemapEl: obj = import "Treemap" "recharts"
 
     // General Components
-    let tooltipEl: obj = import "Tooltip" "recharts"
+    let responsiveContainerEl: obj = import "ResponsiveContainer" "recharts"
     let legendEl: obj = import "Legend" "recharts"
+    let tooltipEl: obj = import "Tooltip" "recharts"
+    let cellEl: obj = import "Cell" "recharts"
+    let textEl: obj = import "Text" "recharts"
+    let labelEl: obj = import "Label" "recharts"
+    let labelListEl: obj = import "LabelList" "recharts"
 
     // Cartesian Components
-    let lineEl: obj = import "Line" "recharts"
+    let areaEl: obj = import "Area" "recharts"
     let barEl: obj = import "Bar" "recharts"
-    let cartesianGridEl: obj = import "CartesianGrid" "recharts"
+    let lineEl: obj = import "Line" "recharts"
+    let scatterEl: obj = import "Scatter" "recharts"
     let xaxisEl: obj = import "XAxis" "recharts"
     let yaxisEl: obj = import "YAxis" "recharts"
+    let zaxisEl: obj = import "ZAxis" "recharts"
+    let brushEl: obj = import "Brush" "recharts"
+    let cartesianAxisEl: obj = import "CartesianAxis" "recharts"
+    let cartesianGridEl: obj = import "CartesianGrid" "recharts"
+    let referenceLineEl: obj = import "ReferenceLine" "recharts"
+    let referenceDotEl: obj = import "ReferenceDot" "recharts"
+    let referenceAreaEl: obj = import "ReferenceArea" "recharts"
+    let errorBarEl: obj = import "ErrorBar" "recharts"
+
+    // Polar Components
+    let pieEl: obj = import "Pie" "recharts"
+    let radarEl: obj = import "Radar" "recharts"
+    let radialBarEl: obj = import "RadialBar" "recharts"
+    let polarAngleAxisEl: obj = import "PolarAngleAxis" "recharts"
+    let polarGridEl: obj = import "PolarGrid" "recharts"
+    let polarRadiusAxisEl: obj = import "PolarRadiusAxis" "recharts"
+
+    // Shapes
+    let crossEl: obj = import "Cross" "recharts"
+    let curveEl: obj = import "Curve" "recharts"
+    let dotEl: obj = import "Dot" "recharts"
+    let polygonEl: obj = import "Polygon" "recharts"
+    let rectangleEl: obj = import "Rectangle" "recharts"
+    let sectorEl: obj = import "Sector" "recharts"
+
 
 open Fable.Helpers.React
-open Fable.Helpers.React.Props
-open Props
 open Imports
+open Props
 
-let inline lineChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+// Charts
+let inline lineChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(lineChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline barChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline barChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(barChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline areaChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline areaChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(areaChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline composedChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline composedChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(composedChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline pieChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline pieChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(pieChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline radarChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline radarChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(radarChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline radialBarChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline radialBarChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(radialBarChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline scatterChart (props: Chart list) (children: RechartComponent list): React.ReactElement =
+let inline scatterChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     createElement(scatterChartEl, keyValueList CaseRules.LowerFirst props, children)
 
-// TODO: Tooltip props
-let inline tooltip (props: obj list): RechartComponent =
-    createElement(tooltipEl, keyValueList CaseRules.LowerFirst props, [])
+let inline treemap (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(treemapEl, keyValueList CaseRules.LowerFirst props, children)
 
-// TODO: Legend props
-let inline legend (props: obj list): RechartComponent =
-    createElement(legendEl, keyValueList CaseRules.LowerFirst props, [])
+// General Components
 
-let inline bar (props: IProp list): RechartComponent =
-    createElement(barEl, keyValueList CaseRules.LowerFirst props, [])
+let inline responsiveContainer (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(responsiveContainerEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline line (props: IProp list): RechartComponent =
-    createElement(lineEl, keyValueList CaseRules.LowerFirst props, [])
+let inline legend (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(legendEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline cartesianGrid (props: IProp list): RechartComponent =
-    createElement(cartesianGridEl, keyValueList CaseRules.LowerFirst props, [])
+let inline tooltip (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(tooltipEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline xaxis (props: IProp list): RechartComponent =
-    createElement(xaxisEl, keyValueList CaseRules.LowerFirst props, [])
+let inline cell (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(cellEl, keyValueList CaseRules.LowerFirst props, children)
 
-let inline yaxis (props: IProp list): RechartComponent =
-    createElement(yaxisEl, keyValueList CaseRules.LowerFirst props, [])
+let inline text (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(textEl, keyValueList CaseRules.LowerFirst props, children)
 
+let inline label (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(labelEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline labelList (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(labelListEl, keyValueList CaseRules.LowerFirst props, children)
+
+// Cartesian Components
+let inline area (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(areaEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline bar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(barEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline line (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(lineEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline scatter (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(scatterEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline xaxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(xaxisEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline yaxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(yaxisEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline zaxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(zaxisEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline brush (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(brushEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline cartesianAxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(cartesianAxisEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline cartesianGrid (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(cartesianGridEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline referenceLine (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(referenceLineEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline referenceDot (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(referenceDotEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline referenceArea (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(referenceAreaEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline errorBar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(errorBarEl, keyValueList CaseRules.LowerFirst props, children)
+
+
+// Polar Components
+let inline pie (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(pieEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline radar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(radarEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline radialBar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(radialBarEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline polarAngleAxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(polarAngleAxisEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline polarGrid (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(polarGridEl, keyValueList CaseRules.LowerFirst props, children)
+
+let inline polarRadiusAxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
+    createElement(polarRadiusAxisEl, keyValueList CaseRules.LowerFirst props, children)
+
+// Shapes
+let inline cross (props: IProp list): React.ReactElement =
+    createElement(crossEl, keyValueList CaseRules.LowerFirst props, [])
+
+let inline curve (props: IProp list): React.ReactElement =
+    createElement(curveEl, keyValueList CaseRules.LowerFirst props, [])
+
+let inline dot (props: IProp list): React.ReactElement =
+    createElement(dotEl, keyValueList CaseRules.LowerFirst props, [])
+
+let inline polygon (props: IProp list): React.ReactElement =
+    createElement(polygonEl, keyValueList CaseRules.LowerFirst props, [])
+
+let inline rectangle (props: IProp list): React.ReactElement =
+    createElement(rectangleEl, keyValueList CaseRules.LowerFirst props, [])
+
+let inline sector (props: IProp list): React.ReactElement =
+    createElement(sectorEl, keyValueList CaseRules.LowerFirst props, [])
