@@ -593,193 +593,138 @@ module Props =
         static member inline Custom(key: string, value: obj): Shape = !!(key, value)
 
 
-module Imports =
-    // Charts
-    let lineChartEl: obj = import "LineChart" "recharts"
-    let barChartEl: obj = import "BarChart" "recharts"
-    let areaChartEl: obj = import "AreaChart" "recharts"
-    let composedChartEl: obj = import "ComposedChart" "recharts"
-    let pieChartEl: obj = import "PieChart" "recharts"
-    let radarChartEl: obj = import "RadarChart" "recharts"
-    let radialBarChartEl: obj = import "RadialBarChart" "recharts"
-    let scatterChartEl: obj = import "ScatterChart" "recharts"
-    let treemapEl: obj = import "Treemap" "recharts"
-
-    // General Components
-    let responsiveContainerEl: obj = import "ResponsiveContainer" "recharts"
-    let legendEl: obj = import "Legend" "recharts"
-    let tooltipEl: obj = import "Tooltip" "recharts"
-    let cellEl: obj = import "Cell" "recharts"
-    let textEl: obj = import "Text" "recharts"
-    let labelEl: obj = import "Label" "recharts"
-    let labelListEl: obj = import "LabelList" "recharts"
-
-    // Cartesian Components
-    let areaEl: obj = import "Area" "recharts"
-    let barEl: obj = import "Bar" "recharts"
-    let lineEl: obj = import "Line" "recharts"
-    let scatterEl: obj = import "Scatter" "recharts"
-    let xaxisEl: obj = import "XAxis" "recharts"
-    let yaxisEl: obj = import "YAxis" "recharts"
-    let zaxisEl: obj = import "ZAxis" "recharts"
-    let brushEl: obj = import "Brush" "recharts"
-    let cartesianAxisEl: obj = import "CartesianAxis" "recharts"
-    let cartesianGridEl: obj = import "CartesianGrid" "recharts"
-    let referenceLineEl: obj = import "ReferenceLine" "recharts"
-    let referenceDotEl: obj = import "ReferenceDot" "recharts"
-    let referenceAreaEl: obj = import "ReferenceArea" "recharts"
-    let errorBarEl: obj = import "ErrorBar" "recharts"
-
-    // Polar Components
-    let pieEl: obj = import "Pie" "recharts"
-    let radarEl: obj = import "Radar" "recharts"
-    let radialBarEl: obj = import "RadialBar" "recharts"
-    let polarAngleAxisEl: obj = import "PolarAngleAxis" "recharts"
-    let polarGridEl: obj = import "PolarGrid" "recharts"
-    let polarRadiusAxisEl: obj = import "PolarRadiusAxis" "recharts"
-
-    // Shapes
-    let crossEl: obj = import "Cross" "recharts"
-    let curveEl: obj = import "Curve" "recharts"
-    let dotEl: obj = import "Dot" "recharts"
-    let polygonEl: obj = import "Polygon" "recharts"
-    let rectangleEl: obj = import "Rectangle" "recharts"
-    let sectorEl: obj = import "Sector" "recharts"
-
-
 open Fable.Helpers.React
-open Imports
 open Props
 
 // Charts
 let inline lineChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(lineChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "LineChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline barChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(barChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "BarChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline areaChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(areaChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "AreaChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline composedChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(composedChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ComposedChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline pieChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(pieChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "PieChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline radarChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(radarChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "RadarChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline radialBarChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(radialBarChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "RadialBarChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline scatterChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(scatterChartEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ScatterChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline treemap (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(treemapEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Treemap" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 // General Components
 
 let inline responsiveContainer (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(responsiveContainerEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ResponsiveContainer" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline legend (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(legendEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Legend" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline tooltip (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(tooltipEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Tooltip" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline cell (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(cellEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Cell" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline text (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(textEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Text" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline label (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(labelEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Label" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline labelList (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(labelListEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "LabelList" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 // Cartesian Components
 let inline area (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(areaEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Area" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline bar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(barEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Bar" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline line (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(lineEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Line" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline scatter (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(scatterEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Scatter" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline xaxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(xaxisEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "XAxis" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline yaxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(yaxisEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "YAxis" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline zaxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(zaxisEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ZAxis" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline brush (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(brushEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Brush" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline cartesianAxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(cartesianAxisEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "CartesianAxis" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline cartesianGrid (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(cartesianGridEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "CartesianGrid" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline referenceLine (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(referenceLineEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ReferenceLine" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline referenceDot (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(referenceDotEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ReferenceDot" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline referenceArea (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(referenceAreaEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ReferenceArea" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline errorBar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(errorBarEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "ErrorBar" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 
 // Polar Components
 let inline pie (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(pieEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Pie" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline radar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(radarEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "Radar" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline radialBar (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(radialBarEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "RadialBar" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline polarAngleAxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(polarAngleAxisEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "PolarAngleAxis" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline polarGrid (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(polarGridEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "PolarGrid" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 let inline polarRadiusAxis (props: IProp list) (children: React.ReactElement list): React.ReactElement =
-    createElement(polarRadiusAxisEl, keyValueList CaseRules.LowerFirst props, children)
+    ofImport "PolarRadiusAxis" "recharts" (keyValueList CaseRules.LowerFirst props) children
 
 // Shapes
 let inline cross (props: IProp list): React.ReactElement =
-    createElement(crossEl, keyValueList CaseRules.LowerFirst props, [])
+    ofImport "Cross" "recharts" (keyValueList CaseRules.LowerFirst props) []
 
 let inline curve (props: IProp list): React.ReactElement =
-    createElement(curveEl, keyValueList CaseRules.LowerFirst props, [])
+    ofImport "Curve" "recharts" (keyValueList CaseRules.LowerFirst props) []
 
 let inline dot (props: IProp list): React.ReactElement =
-    createElement(dotEl, keyValueList CaseRules.LowerFirst props, [])
+    ofImport "Dot" "recharts" (keyValueList CaseRules.LowerFirst props) []
 
 let inline polygon (props: IProp list): React.ReactElement =
-    createElement(polygonEl, keyValueList CaseRules.LowerFirst props, [])
+    ofImport "Polygon" "recharts" (keyValueList CaseRules.LowerFirst props) []
 
 let inline rectangle (props: IProp list): React.ReactElement =
-    createElement(rectangleEl, keyValueList CaseRules.LowerFirst props, [])
+    ofImport "Rectangle" "recharts" (keyValueList CaseRules.LowerFirst props) []
 
 let inline sector (props: IProp list): React.ReactElement =
-    createElement(sectorEl, keyValueList CaseRules.LowerFirst props, [])
+    ofImport "Sector" "recharts" (keyValueList CaseRules.LowerFirst props) []
