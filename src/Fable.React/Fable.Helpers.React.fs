@@ -646,7 +646,7 @@ let inline ofFloat (f: float): ReactElement = unbox f
 /// Returns a list **from .render() method**
 let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray els)
 /// Returns an array **from .render() method**
-let inline ofArray (els: ReactElement list): ReactElement = unbox els
+let inline ofArray (els: ReactElement array): ReactElement = unbox els
 
 /// Instantiate a DOM React element
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
