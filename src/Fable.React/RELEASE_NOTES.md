@@ -1,3 +1,7 @@
+### 2.0.0
+
+* Stable version
+
 ### 2.0.0-beta-002
 
 * Add BoxShadow CSSProp (@worldbeater)

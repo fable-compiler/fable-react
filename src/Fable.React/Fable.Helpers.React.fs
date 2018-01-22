@@ -640,11 +640,13 @@ let inline ofOption (o: ReactElement option): ReactElement =
 
 /// Cast an int to a React element (erased in runtime)
 let inline ofInt (i: int): ReactElement = unbox i
+
 /// Cast a float to a React element (erased in runtime)
 let inline ofFloat (f: float): ReactElement = unbox f
 
 /// Returns a list **from .render() method**
 let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray els)
+
 /// Returns an array **from .render() method**
 let inline ofArray (els: ReactElement array): ReactElement = unbox els
 

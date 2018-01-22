@@ -22,7 +22,7 @@ let packages =
       "src/Fable.Recharts/Fable.Recharts.fsproj"
     ]
 
-let dotnetcliVersion = "2.1.3"
+let dotnetcliVersion = "2.1.4"
 let mutable dotnetExePath = environVarOrDefault "DOTNET" "dotnet"
 
 // Clean and install dotnet SDK
