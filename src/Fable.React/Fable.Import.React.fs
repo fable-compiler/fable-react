@@ -65,12 +65,12 @@ module React =
     /// Create a React component by inheriting this class as follows
     ///
     /// ```
-    /// type MyComponent(props) =
-    ///     inherit React.Component<MyProps, MyState>(props)
+    /// type MyComponent(initialProps) =
+    ///     inherit React.Component<MyProps, MyState>(initialProps)
     ///     base.setInitState({ value = 5 })
     ///
     ///     override this.render() =
-    ///         // Don't use captured `props` from constructor,
+    ///         // Don't use captured `initialProps` from constructor,
     ///         // use `this.props` instead (updated version)
     ///         let msg = sprintf "Hello %s, you have %i €"
     ///                     this.props.name this.state.value
@@ -168,6 +168,40 @@ module React =
         /// > render() will not be invoked if shouldComponentUpdate() returns false.
         abstract render: unit -> ReactElement
 
+        interface ReactElement
+
+    /// A react component that implements `shouldComponentUpdate()` with a shallow prop and state comparison.
+    ///
+    /// Usage:
+    /// ```
+    /// type MyComponent(initialProps) =
+    ///     inherit React.PureComponent<MyProps, MyState>(initialProps)
+    ///     base.setInitState({ value = 5 })
+    ///     override this.render() =
+    ///         let msg = sprintf "Hello %s, you have %i €"
+    ///                     this.props.name this.state.value
+    ///         div [] [ofString msg]
+    /// ```
+    and [<AbstractClass; Import("PureComponent", "react")>] PureComponent<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
+        inherit Component<'P, 'S>(props)
+
+    /// A react component that implements `shouldComponentUpdate()` with a shallow prop comparison.
+    ///
+    /// Usage:
+    /// ```
+    /// type MyComponent(initialProps) =
+    ///     inherit React.PureStatelessComponent<MyProps>(initialProps)
+    ///     override this.render() =
+    ///         let msg = sprintf "Hello %s, you have %i €"
+    ///                     this.props.name this.props.value
+    ///         div [] [ofString msg]
+    /// ```
+    and [<AbstractClass; Import("PureComponent", "react")>] PureStatelessComponent<[<Pojo>]'P>(props: 'P) =
+        inherit Component<'P, obj>(props)
+
+    and FragmentProps = { key: string }
+
+    and [<Import("Fragment", "react")>] Fragment(props: FragmentProps) =
         interface ReactElement
 
     and ClassicComponent<'P, 'S> =
