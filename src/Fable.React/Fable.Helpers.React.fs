@@ -14,6 +14,13 @@ module Props =
     type IHTMLProp =
         inherit IProp
 
+    type IFragmentProp =
+        inherit IProp
+
+    type FragmentProp =
+        | Key of string
+        interface IFragmentProp
+
     type Prop =
         | Key of string
         | Ref of (Browser.Element->unit)
@@ -661,6 +668,10 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
     createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+
+/// Instantiate a React fragment
+let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =
+    createElement(typedefof<Fragment>, keyValueList CaseRules.LowerFirst props, children)
 
 // Standard elements
 let inline a b c = domEl "a" b c
