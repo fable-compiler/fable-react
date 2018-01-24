@@ -1,3 +1,7 @@
+### 2.1.0
+
+* Add React PureComponent and Fragment (@vbfox)
+
 ### 2.0.0
 
 * Stable version
