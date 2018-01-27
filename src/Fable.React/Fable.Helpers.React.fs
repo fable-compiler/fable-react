@@ -312,56 +312,71 @@ module Props =
         interface IProp
 
     type CSSProp =
-        | BoxFlex of float
-        | BoxFlexGroup of float
-        | ColumnCount of float
-        | Cursor of string
-        | Flex of obj
-        | FlexGrow of float
-        | FlexShrink of float
-        | FontWeight of obj
-        | LineClamp of float
-        | LineHeight of obj
-        | Opacity of float
-        | Order of float
-        | Orphans of float
-        | Widows of float
-        | ZIndex of float
-        | Zoom of float
-        | FontSize of obj
-        | FillOpacity of float
-        | StrokeOpacity of float
-        | StrokeWidth of float
         | AlignContent of obj
         | AlignItems of obj
         | AlignSelf of obj
         | AlignmentAdjust of obj
         | AlignmentBaseline of obj
+        | All of obj
+        | Animation of obj
         | AnimationDelay of obj
         | AnimationDirection of obj
+        | AnimationDuration of obj
+        | AnimationFillMode of obj
         | AnimationIterationCount of obj
         | AnimationName of obj
         | AnimationPlayState of obj
+        | AnimationTimingFunction of obj
         | Appearance of obj
         | BackfaceVisibility of obj
+        | Background of obj
+        | BackgroundAttachment of obj
         | BackgroundBlendMode of obj
+        | BackgroundClip of obj
         | BackgroundColor of obj
         | BackgroundComposite of obj
         | BackgroundImage of obj
         | BackgroundOrigin of obj
+        | BackgroundPosition of obj
         | BackgroundPositionX of obj
+        | BackgroundPositionY of obj
         | BackgroundRepeat of obj
+        | BackgroundSize of obj
         | BaselineShift of obj
         | Behavior of obj
+        | BlockSize of obj
         | Border of obj
+        | BorderBlockEnd of obj
+        | BorderBlockEndColor of obj
+        | BorderBlockEndStyle of obj
+        | BorderBlockEndWidth of obj
+        | BorderBlockStart of obj
+        | BorderBlockStartColor of obj
+        | BorderBlockStartStyle of obj
+        | BorderBlockStartWidth of obj
+        | BorderBottom of obj
+        | BorderBottomColor of obj
         | BorderBottomLeftRadius of obj
         | BorderBottomRightRadius of obj
+        | BorderBottomStyle of obj
         | BorderBottomWidth of obj
         | BorderCollapse of obj
         | BorderColor of obj
         | BorderCornerShape of obj
+        | BorderImage of obj
+        | BorderImageOutset of obj
+        | BorderImageRepeat of obj
+        | BorderImageSlice of obj
         | BorderImageSource of obj
         | BorderImageWidth of obj
+        | BorderInlineEnd of obj
+        | BorderInlineEndColor of obj
+        | BorderInlineEndStyle of obj
+        | BorderInlineEndWidth of obj
+        | BorderInlineStart of obj
+        | BorderInlineStartColor of obj
+        | BorderInlineStartStyle of obj
+        | BorderInlineStartWidth of obj
         | BorderLeft of obj
         | BorderLeftColor of obj
         | BorderLeftStyle of obj
@@ -384,71 +399,121 @@ module Props =
         | BoxAlign of obj
         | BoxDecorationBreak of obj
         | BoxDirection of obj
+        | BoxFlex of obj
+        | BoxFlexGroup of obj
         | BoxLineProgression of obj
         | BoxLines of obj
         | BoxOrdinalGroup of obj
         | BoxShadow of obj
+        | BoxSizing of obj
         | BreakAfter of obj
         | BreakBefore of obj
         | BreakInside of obj
+        | CaptionSide of obj
+        | CaretColor of obj
         | Clear of obj
         | Clip of obj
+        | ClipPath of obj
         | ClipRule of obj
         | Color of obj
+        | ColorInterpolation of obj
+        | ColorInterpolationFilters of obj
+        | ColorProfile of obj
+        | ColorRendering of obj
+        | ColumnCount of obj
         | ColumnFill of obj
         | ColumnGap of obj
         | ColumnRule of obj
         | ColumnRuleColor of obj
+        | ColumnRuleStyle of obj
         | ColumnRuleWidth of obj
         | ColumnSpan of obj
         | ColumnWidth of obj
         | Columns of obj
+        | Content of obj
         | CounterIncrement of obj
         | CounterReset of obj
         | Cue of obj
         | CueAfter of obj
+        | Cursor of obj
         | Direction of obj
         | Display of obj
+        | DominantBaseline of obj
+        | EmptyCells of obj
+        | EnableBackground of obj
         | Fill of obj
+        | FillOpacity of obj
         | FillRule of obj
         | Filter of obj
+        | Flex of obj
         | FlexAlign of obj
         | FlexBasis of obj
         | FlexDirection of obj
         | FlexFlow of obj
+        | FlexGrow of obj
         | FlexItemAlign of obj
         | FlexLinePack of obj
         | FlexOrder of obj
+        | FlexShrink of obj
         | FlexWrap of obj
         | Float of obj
+        | FloodColor of obj
+        | FloodOpacity of obj
         | FlowFrom of obj
         | Font of obj
         | FontFamily of obj
+        | FontFeatureSettings of obj
         | FontKerning of obj
+        | FontLanguageOverride of obj
+        | FontSize of obj
         | FontSizeAdjust of obj
         | FontStretch of obj
         | FontStyle of obj
         | FontSynthesis of obj
         | FontVariant of obj
         | FontVariantAlternates of obj
+        | FontVariantCaps of obj
+        | FontVariantEastAsian of obj
+        | FontVariantLigatures of obj
+        | FontVariantNumeric of obj
+        | FontVariantPosition of obj
+        | FontWeight of obj
+        | GlyphOrientationHorizontal of obj
+        | GlyphOrientationVertical of obj
+        | Grid of obj
         | GridArea of obj
+        | GridAutoColumns of obj
+        | GridAutoFlow of obj
+        | GridAutoRows of obj
         | GridColumn of obj
         | GridColumnEnd of obj
+        | GridColumnGap of obj
         | GridColumnStart of obj
+        | GridGap of obj
         | GridRow of obj
         | GridRowEnd of obj
+        | GridRowGap of obj
         | GridRowPosition of obj
         | GridRowSpan of obj
+        | GridRowStart of obj
+        | GridTemplate of obj
         | GridTemplateAreas of obj
         | GridTemplateColumns of obj
         | GridTemplateRows of obj
+        | HangingPunctuation of obj
         | Height of obj
         | HyphenateLimitChars of obj
         | HyphenateLimitLines of obj
         | HyphenateLimitZone of obj
         | Hyphens of obj
+        | ImageOrientation of obj
+        | ImageRendering of obj
+        | ImageResolution of obj
         | ImeMode of obj
+        | InlineSize of obj
+        | Isolation of obj
         | JustifyContent of obj
+        | Kerning of obj
         | LayoutGrid of obj
         | LayoutGridChar of obj
         | LayoutGridLine of obj
@@ -456,16 +521,26 @@ module Props =
         | LayoutGridType of obj
         | Left of obj
         | LetterSpacing of obj
+        | LightingColor of obj
         | LineBreak of obj
+        | LineClamp of obj
+        | LineHeight of obj
         | ListStyle of obj
         | ListStyleImage of obj
         | ListStylePosition of obj
         | ListStyleType of obj
         | Margin of obj
+        | MarginBlockEnd of obj
+        | MarginBlockStart of obj
         | MarginBottom of obj
+        | MarginInlineEnd of obj
+        | MarginInlineStart of obj
         | MarginLeft of obj
         | MarginRight of obj
         | MarginTop of obj
+        | MarkerEnd of obj
+        | MarkerMid of obj
+        | MarkerStart of obj
         | MarqueeDirection of obj
         | MarqueeStyle of obj
         | Mask of obj
@@ -475,21 +550,47 @@ module Props =
         | MaskBorderSource of obj
         | MaskBorderWidth of obj
         | MaskClip of obj
+        | MaskComposite of obj
+        | MaskImage of obj
+        | MaskMode of obj
         | MaskOrigin of obj
+        | MaskPosition of obj
+        | MaskRepeat of obj
+        | MaskSize of obj
+        | MaskType of obj
         | MaxFontSize of obj
         | MaxHeight of obj
         | MaxWidth of obj
+        | MinBlockSize of obj
         | MinHeight of obj
+        | MinInlineSize of obj
         | MinWidth of obj
+        | MixBlendMode of obj
+        | ObjectFit of obj
+        | ObjectPosition of obj
+        | OffsetBlockEnd of obj
+        | OffsetBlockStart of obj
+        | OffsetInlineEnd of obj
+        | OffsetInlineStart of obj
+        | Opacity of obj
+        | Order of obj
+        | Orphans of obj
         | Outline of obj
         | OutlineColor of obj
         | OutlineOffset of obj
+        | OutlineStyle of obj
+        | OutlineWidth of obj
         | Overflow of obj
         | OverflowStyle of obj
+        | OverflowWrap of obj
         | OverflowX of obj
         | OverflowY of obj
         | Padding of obj
+        | PaddingBlockEnd of obj
+        | PaddingBlockStart of obj
         | PaddingBottom of obj
+        | PaddingInlineEnd of obj
+        | PaddingInlineStart of obj
         | PaddingLeft of obj
         | PaddingRight of obj
         | PaddingTop of obj
@@ -506,21 +607,40 @@ module Props =
         | PunctuationTrim of obj
         | Quotes of obj
         | RegionFragment of obj
+        | Resize of obj
         | RestAfter of obj
         | RestBefore of obj
         | Right of obj
         | RubyAlign of obj
+        | RubyMerge of obj
         | RubyPosition of obj
+        | ScrollBehavior of obj
+        | ScrollSnapCoordinate of obj
+        | ScrollSnapDestination of obj
+        | ScrollSnapType of obj
         | ShapeImageThreshold of obj
         | ShapeInside of obj
         | ShapeMargin of obj
         | ShapeOutside of obj
+        | ShapeRendering of obj
         | Speak of obj
         | SpeakAs of obj
+        | StopColor of obj
+        | StopOpacity of obj
+        | Stroke of obj
+        | StrokeDasharray of obj
+        | StrokeDashoffset of obj
+        | StrokeLinecap of obj
+        | StrokeLinejoin of obj
+        | StrokeMiterlimit of obj
+        | StrokeOpacity of obj
+        | StrokeWidth of obj
         | TabSize of obj
         | TableLayout of obj
         | TextAlign of obj
         | TextAlignLast of obj
+        | TextAnchor of obj
+        | TextCombineUpright of obj
         | TextDecoration of obj
         | TextDecorationColor of obj
         | TextDecorationLine of obj
@@ -532,9 +652,11 @@ module Props =
         | TextDecorationUnderline of obj
         | TextEmphasis of obj
         | TextEmphasisColor of obj
+        | TextEmphasisPosition of obj
         | TextEmphasisStyle of obj
         | TextHeight of obj
         | TextIndent of obj
+        | TextJustify of obj
         | TextJustifyTrim of obj
         | TextKashidaSpace of obj
         | TextLineThrough of obj
@@ -542,6 +664,7 @@ module Props =
         | TextLineThroughMode of obj
         | TextLineThroughStyle of obj
         | TextLineThroughWidth of obj
+        | TextOrientation of obj
         | TextOverflow of obj
         | TextOverline of obj
         | TextOverlineColor of obj
@@ -557,6 +680,7 @@ module Props =
         | Top of obj
         | TouchAction of obj
         | Transform of obj
+        | TransformBox of obj
         | TransformOrigin of obj
         | TransformOriginZ of obj
         | TransformStyle of obj
@@ -581,7 +705,9 @@ module Props =
         | VoiceVolume of obj
         | WhiteSpace of obj
         | WhiteSpaceTreatment of obj
+        | Widows of obj
         | Width of obj
+        | WillChange of obj
         | WordBreak of obj
         | WordSpacing of obj
         | WordWrap of obj
@@ -589,6 +715,8 @@ module Props =
         | WrapMargin of obj
         | WrapOption of obj
         | WritingMode of obj
+        | ZIndex of obj
+        | Zoom of obj
         interface ICSSProp
 
 open Props
