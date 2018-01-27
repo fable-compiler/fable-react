@@ -490,59 +490,76 @@ module React =
         abstract onTransitionEnd: TransitionEventHandler option with get, set
 
     and CSSProperties =
-        abstract boxFlex: float option with get, set
-        abstract boxFlexGroup: float option with get, set
-        abstract columnCount: float option with get, set
-        abstract flex: U2<float, string> option with get, set
-        abstract flexGrow: float option with get, set
-        abstract flexShrink: float option with get, set
-        abstract fontWeight: U2<float, string> option with get, set
-        abstract lineClamp: float option with get, set
-        abstract lineHeight: U2<float, string> option with get, set
-        abstract opacity: float option with get, set
-        abstract order: float option with get, set
-        abstract orphans: float option with get, set
-        abstract widows: float option with get, set
-        abstract zIndex: float option with get, set
-        abstract zoom: float option with get, set
-        abstract fontSize: U2<float, string> option with get, set
-        abstract fillOpacity: float option with get, set
-        abstract strokeOpacity: float option with get, set
-        abstract strokeWidth: float option with get, set
         abstract alignContent: obj option with get, set
         abstract alignItems: obj option with get, set
         abstract alignSelf: obj option with get, set
         abstract alignmentAdjust: obj option with get, set
         abstract alignmentBaseline: obj option with get, set
+        abstract all: obj option with get, set
+        abstract animation: obj option with get, set
         abstract animationDelay: obj option with get, set
         abstract animationDirection: obj option with get, set
+        abstract animationDuration: obj option with get, set
+        abstract animationFillMode: obj option with get, set
         abstract animationIterationCount: obj option with get, set
         abstract animationName: obj option with get, set
         abstract animationPlayState: obj option with get, set
+        abstract animationTimingFunction: obj option with get, set
         abstract appearance: obj option with get, set
         abstract backfaceVisibility: obj option with get, set
+        abstract background: obj option with get, set
+        abstract backgroundAttachment: obj option with get, set
         abstract backgroundBlendMode: obj option with get, set
+        abstract backgroundClip: obj option with get, set
         abstract backgroundColor: obj option with get, set
         abstract backgroundComposite: obj option with get, set
         abstract backgroundImage: obj option with get, set
         abstract backgroundOrigin: obj option with get, set
+        abstract backgroundPosition: obj option with get, set
         abstract backgroundPositionX: obj option with get, set
+        abstract backgroundPositionY: obj option with get, set
         abstract backgroundRepeat: obj option with get, set
+        abstract backgroundSize: obj option with get, set
         abstract baselineShift: obj option with get, set
         abstract behavior: obj option with get, set
+        abstract blockSize: obj option with get, set
         abstract border: obj option with get, set
+        abstract borderBlockEnd: obj option with get, set
+        abstract borderBlockEndColor: obj option with get, set
+        abstract borderBlockEndStyle: obj option with get, set
+        abstract borderBlockEndWidth: obj option with get, set
+        abstract borderBlockStart: obj option with get, set
+        abstract borderBlockStartColor: obj option with get, set
+        abstract borderBlockStartStyle: obj option with get, set
+        abstract borderBlockStartWidth: obj option with get, set
+        abstract borderBottom: obj option with get, set
+        abstract borderBottomColor: obj option with get, set
         abstract borderBottomLeftRadius: obj option with get, set
         abstract borderBottomRightRadius: obj option with get, set
+        abstract borderBottomStyle: obj option with get, set
         abstract borderBottomWidth: obj option with get, set
         abstract borderCollapse: obj option with get, set
         abstract borderColor: obj option with get, set
         abstract borderCornerShape: obj option with get, set
+        abstract borderImage: obj option with get, set
+        abstract borderImageOutset: obj option with get, set
+        abstract borderImageRepeat: obj option with get, set
+        abstract borderImageSlice: obj option with get, set
         abstract borderImageSource: obj option with get, set
         abstract borderImageWidth: obj option with get, set
+        abstract borderInlineEnd: obj option with get, set
+        abstract borderInlineEndColor: obj option with get, set
+        abstract borderInlineEndStyle: obj option with get, set
+        abstract borderInlineEndWidth: obj option with get, set
+        abstract borderInlineStart: obj option with get, set
+        abstract borderInlineStartColor: obj option with get, set
+        abstract borderInlineStartStyle: obj option with get, set
+        abstract borderInlineStartWidth: obj option with get, set
         abstract borderLeft: obj option with get, set
         abstract borderLeftColor: obj option with get, set
         abstract borderLeftStyle: obj option with get, set
         abstract borderLeftWidth: obj option with get, set
+        abstract borderRadius: obj option with get, set
         abstract borderRight: obj option with get, set
         abstract borderRightColor: obj option with get, set
         abstract borderRightStyle: obj option with get, set
@@ -560,70 +577,121 @@ module React =
         abstract boxAlign: obj option with get, set
         abstract boxDecorationBreak: obj option with get, set
         abstract boxDirection: obj option with get, set
+        abstract boxFlex: obj option with get, set
+        abstract boxFlexGroup: obj option with get, set
         abstract boxLineProgression: obj option with get, set
         abstract boxLines: obj option with get, set
         abstract boxOrdinalGroup: obj option with get, set
+        abstract boxShadow: obj option with get, set
+        abstract boxSizing: obj option with get, set
         abstract breakAfter: obj option with get, set
         abstract breakBefore: obj option with get, set
         abstract breakInside: obj option with get, set
+        abstract captionSide: obj option with get, set
+        abstract caretColor: obj option with get, set
         abstract clear: obj option with get, set
         abstract clip: obj option with get, set
+        abstract clipPath: obj option with get, set
         abstract clipRule: obj option with get, set
         abstract color: obj option with get, set
+        abstract colorInterpolation: obj option with get, set
+        abstract colorInterpolationFilters: obj option with get, set
+        abstract colorProfile: obj option with get, set
+        abstract colorRendering: obj option with get, set
+        abstract columnCount: obj option with get, set
         abstract columnFill: obj option with get, set
         abstract columnGap: obj option with get, set
         abstract columnRule: obj option with get, set
         abstract columnRuleColor: obj option with get, set
+        abstract columnRuleStyle: obj option with get, set
         abstract columnRuleWidth: obj option with get, set
         abstract columnSpan: obj option with get, set
         abstract columnWidth: obj option with get, set
         abstract columns: obj option with get, set
+        abstract content: obj option with get, set
         abstract counterIncrement: obj option with get, set
         abstract counterReset: obj option with get, set
         abstract cue: obj option with get, set
         abstract cueAfter: obj option with get, set
+        abstract cursor: obj option with get, set
         abstract direction: obj option with get, set
         abstract display: obj option with get, set
+        abstract dominantBaseline: obj option with get, set
+        abstract emptyCells: obj option with get, set
+        abstract enableBackground: obj option with get, set
         abstract fill: obj option with get, set
+        abstract fillOpacity: obj option with get, set
         abstract fillRule: obj option with get, set
         abstract filter: obj option with get, set
+        abstract flex: obj option with get, set
         abstract flexAlign: obj option with get, set
         abstract flexBasis: obj option with get, set
         abstract flexDirection: obj option with get, set
         abstract flexFlow: obj option with get, set
+        abstract flexGrow: obj option with get, set
         abstract flexItemAlign: obj option with get, set
         abstract flexLinePack: obj option with get, set
         abstract flexOrder: obj option with get, set
+        abstract flexShrink: obj option with get, set
         abstract flexWrap: obj option with get, set
         abstract float: obj option with get, set
+        abstract floodColor: obj option with get, set
+        abstract floodOpacity: obj option with get, set
         abstract flowFrom: obj option with get, set
         abstract font: obj option with get, set
         abstract fontFamily: obj option with get, set
+        abstract fontFeatureSettings: obj option with get, set
         abstract fontKerning: obj option with get, set
+        abstract fontLanguageOverride: obj option with get, set
+        abstract fontSize: obj option with get, set
         abstract fontSizeAdjust: obj option with get, set
         abstract fontStretch: obj option with get, set
         abstract fontStyle: obj option with get, set
         abstract fontSynthesis: obj option with get, set
         abstract fontVariant: obj option with get, set
         abstract fontVariantAlternates: obj option with get, set
+        abstract fontVariantCaps: obj option with get, set
+        abstract fontVariantEastAsian: obj option with get, set
+        abstract fontVariantLigatures: obj option with get, set
+        abstract fontVariantNumeric: obj option with get, set
+        abstract fontVariantPosition: obj option with get, set
+        abstract fontWeight: obj option with get, set
+        abstract glyphOrientationHorizontal: obj option with get, set
+        abstract glyphOrientationVertical: obj option with get, set
+        abstract grid: obj option with get, set
         abstract gridArea: obj option with get, set
+        abstract gridAutoColumns: obj option with get, set
+        abstract gridAutoFlow: obj option with get, set
+        abstract gridAutoRows: obj option with get, set
         abstract gridColumn: obj option with get, set
         abstract gridColumnEnd: obj option with get, set
+        abstract gridColumnGap: obj option with get, set
         abstract gridColumnStart: obj option with get, set
+        abstract gridGap: obj option with get, set
         abstract gridRow: obj option with get, set
         abstract gridRowEnd: obj option with get, set
+        abstract gridRowGap: obj option with get, set
         abstract gridRowPosition: obj option with get, set
         abstract gridRowSpan: obj option with get, set
+        abstract gridRowStart: obj option with get, set
+        abstract gridTemplate: obj option with get, set
         abstract gridTemplateAreas: obj option with get, set
         abstract gridTemplateColumns: obj option with get, set
         abstract gridTemplateRows: obj option with get, set
+        abstract hangingPunctuation: obj option with get, set
         abstract height: obj option with get, set
         abstract hyphenateLimitChars: obj option with get, set
         abstract hyphenateLimitLines: obj option with get, set
         abstract hyphenateLimitZone: obj option with get, set
         abstract hyphens: obj option with get, set
+        abstract imageOrientation: obj option with get, set
+        abstract imageRendering: obj option with get, set
+        abstract imageResolution: obj option with get, set
         abstract imeMode: obj option with get, set
+        abstract inlineSize: obj option with get, set
+        abstract isolation: obj option with get, set
         abstract justifyContent: obj option with get, set
+        abstract kerning: obj option with get, set
         abstract layoutGrid: obj option with get, set
         abstract layoutGridChar: obj option with get, set
         abstract layoutGridLine: obj option with get, set
@@ -631,16 +699,26 @@ module React =
         abstract layoutGridType: obj option with get, set
         abstract left: obj option with get, set
         abstract letterSpacing: obj option with get, set
+        abstract lightingColor: obj option with get, set
         abstract lineBreak: obj option with get, set
+        abstract lineClamp: obj option with get, set
+        abstract lineHeight: obj option with get, set
         abstract listStyle: obj option with get, set
         abstract listStyleImage: obj option with get, set
         abstract listStylePosition: obj option with get, set
         abstract listStyleType: obj option with get, set
         abstract margin: obj option with get, set
+        abstract marginBlockEnd: obj option with get, set
+        abstract marginBlockStart: obj option with get, set
         abstract marginBottom: obj option with get, set
+        abstract marginInlineEnd: obj option with get, set
+        abstract marginInlineStart: obj option with get, set
         abstract marginLeft: obj option with get, set
         abstract marginRight: obj option with get, set
         abstract marginTop: obj option with get, set
+        abstract markerEnd: obj option with get, set
+        abstract markerMid: obj option with get, set
+        abstract markerStart: obj option with get, set
         abstract marqueeDirection: obj option with get, set
         abstract marqueeStyle: obj option with get, set
         abstract mask: obj option with get, set
@@ -650,20 +728,47 @@ module React =
         abstract maskBorderSource: obj option with get, set
         abstract maskBorderWidth: obj option with get, set
         abstract maskClip: obj option with get, set
+        abstract maskComposite: obj option with get, set
+        abstract maskImage: obj option with get, set
+        abstract maskMode: obj option with get, set
         abstract maskOrigin: obj option with get, set
+        abstract maskPosition: obj option with get, set
+        abstract maskRepeat: obj option with get, set
+        abstract maskSize: obj option with get, set
+        abstract maskType: obj option with get, set
         abstract maxFontSize: obj option with get, set
         abstract maxHeight: obj option with get, set
         abstract maxWidth: obj option with get, set
+        abstract minBlockSize: obj option with get, set
         abstract minHeight: obj option with get, set
+        abstract minInlineSize: obj option with get, set
         abstract minWidth: obj option with get, set
+        abstract mixBlendMode: obj option with get, set
+        abstract objectFit: obj option with get, set
+        abstract objectPosition: obj option with get, set
+        abstract offsetBlockEnd: obj option with get, set
+        abstract offsetBlockStart: obj option with get, set
+        abstract offsetInlineEnd: obj option with get, set
+        abstract offsetInlineStart: obj option with get, set
+        abstract opacity: obj option with get, set
+        abstract order: obj option with get, set
+        abstract orphans: obj option with get, set
         abstract outline: obj option with get, set
         abstract outlineColor: obj option with get, set
         abstract outlineOffset: obj option with get, set
+        abstract outlineStyle: obj option with get, set
+        abstract outlineWidth: obj option with get, set
         abstract overflow: obj option with get, set
         abstract overflowStyle: obj option with get, set
+        abstract overflowWrap: obj option with get, set
         abstract overflowX: obj option with get, set
+        abstract overflowY: obj option with get, set
         abstract padding: obj option with get, set
+        abstract paddingBlockEnd: obj option with get, set
+        abstract paddingBlockStart: obj option with get, set
         abstract paddingBottom: obj option with get, set
+        abstract paddingInlineEnd: obj option with get, set
+        abstract paddingInlineStart: obj option with get, set
         abstract paddingLeft: obj option with get, set
         abstract paddingRight: obj option with get, set
         abstract paddingTop: obj option with get, set
@@ -680,21 +785,40 @@ module React =
         abstract punctuationTrim: obj option with get, set
         abstract quotes: obj option with get, set
         abstract regionFragment: obj option with get, set
+        abstract resize: obj option with get, set
         abstract restAfter: obj option with get, set
         abstract restBefore: obj option with get, set
         abstract right: obj option with get, set
         abstract rubyAlign: obj option with get, set
+        abstract rubyMerge: obj option with get, set
         abstract rubyPosition: obj option with get, set
+        abstract scrollBehavior: obj option with get, set
+        abstract scrollSnapCoordinate: obj option with get, set
+        abstract scrollSnapDestination: obj option with get, set
+        abstract scrollSnapType: obj option with get, set
         abstract shapeImageThreshold: obj option with get, set
         abstract shapeInside: obj option with get, set
         abstract shapeMargin: obj option with get, set
         abstract shapeOutside: obj option with get, set
+        abstract shapeRendering: obj option with get, set
         abstract speak: obj option with get, set
         abstract speakAs: obj option with get, set
+        abstract stopColor: obj option with get, set
+        abstract stopOpacity: obj option with get, set
+        abstract stroke: obj option with get, set
+        abstract strokeDasharray: obj option with get, set
+        abstract strokeDashoffset: obj option with get, set
+        abstract strokeLinecap: obj option with get, set
+        abstract strokeLinejoin: obj option with get, set
+        abstract strokeMiterlimit: obj option with get, set
+        abstract strokeOpacity: obj option with get, set
+        abstract strokeWidth: obj option with get, set
         abstract tabSize: obj option with get, set
         abstract tableLayout: obj option with get, set
         abstract textAlign: obj option with get, set
         abstract textAlignLast: obj option with get, set
+        abstract textAnchor: obj option with get, set
+        abstract textCombineUpright: obj option with get, set
         abstract textDecoration: obj option with get, set
         abstract textDecorationColor: obj option with get, set
         abstract textDecorationLine: obj option with get, set
@@ -706,9 +830,11 @@ module React =
         abstract textDecorationUnderline: obj option with get, set
         abstract textEmphasis: obj option with get, set
         abstract textEmphasisColor: obj option with get, set
+        abstract textEmphasisPosition: obj option with get, set
         abstract textEmphasisStyle: obj option with get, set
         abstract textHeight: obj option with get, set
         abstract textIndent: obj option with get, set
+        abstract textJustify: obj option with get, set
         abstract textJustifyTrim: obj option with get, set
         abstract textKashidaSpace: obj option with get, set
         abstract textLineThrough: obj option with get, set
@@ -716,6 +842,7 @@ module React =
         abstract textLineThroughMode: obj option with get, set
         abstract textLineThroughStyle: obj option with get, set
         abstract textLineThroughWidth: obj option with get, set
+        abstract textOrientation: obj option with get, set
         abstract textOverflow: obj option with get, set
         abstract textOverline: obj option with get, set
         abstract textOverlineColor: obj option with get, set
@@ -731,6 +858,7 @@ module React =
         abstract top: obj option with get, set
         abstract touchAction: obj option with get, set
         abstract transform: obj option with get, set
+        abstract transformBox: obj option with get, set
         abstract transformOrigin: obj option with get, set
         abstract transformOriginZ: obj option with get, set
         abstract transformStyle: obj option with get, set
@@ -755,7 +883,9 @@ module React =
         abstract voiceVolume: obj option with get, set
         abstract whiteSpace: obj option with get, set
         abstract whiteSpaceTreatment: obj option with get, set
+        abstract widows: obj option with get, set
         abstract width: obj option with get, set
+        abstract willChange: obj option with get, set
         abstract wordBreak: obj option with get, set
         abstract wordSpacing: obj option with get, set
         abstract wordWrap: obj option with get, set
@@ -763,6 +893,8 @@ module React =
         abstract wrapMargin: obj option with get, set
         abstract wrapOption: obj option with get, set
         abstract writingMode: obj option with get, set
+        abstract zIndex: obj option with get, set
+        abstract zoom: obj option with get, set
         [<Emit("$0[$1]{{=$2}}")>] abstract Item: propertyName: string -> obj with get, set
 
     and HTMLAttributes =
