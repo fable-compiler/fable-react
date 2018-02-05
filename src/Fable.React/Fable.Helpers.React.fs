@@ -311,6 +311,7 @@ module Props =
         | Y of obj
         interface IProp
 
+    /// If you are searching for a way to provide a value not supported by this DSL then use something like: !!("align-content", "center")
     type CSSProp =
         | AlignContent of obj
         | AlignItems of obj
