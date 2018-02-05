@@ -311,7 +311,6 @@ module Props =
         | Y of obj
         interface IProp
 
-    /// If you are searching for a way to provide a value not supported by this DSL then use something like: !!("align-content", "center")
     type CSSProp =
         | AlignContent of obj
         | AlignItems of obj
@@ -719,6 +718,8 @@ module Props =
         | ZIndex of obj
         | Zoom of obj
         interface ICSSProp
+        /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom "align-content" "center"
+        static member inline Custom (key: string) (value: obj) : ICSSProp = !!(key, value)
 
 open Props
 open Fable.Import.React
