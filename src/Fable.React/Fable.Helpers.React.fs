@@ -5,9 +5,6 @@ open Fable.Core.JsInterop
 open Fable.Import
 
 module Props =
-    type ICSSProp =
-        interface end
-
     type IProp =
         interface end
 
@@ -244,12 +241,6 @@ module Props =
         | Security of string
         | Unselectable of bool
         interface IHTMLProp
-
-    let inline Style (css: ICSSProp list): HTMLAttr =
-        !!("style", keyValueList CaseRules.LowerFirst css)
-
-    let inline Data(key: string, value: obj): IHTMLProp =
-        !!("data-" + key, value)
 
     type SVGAttr =
         | ClipPath of string
@@ -717,7 +708,12 @@ module Props =
         | WritingMode of obj
         | ZIndex of obj
         | Zoom of obj
-        interface ICSSProp
+
+    let inline Style (css: CSSProp list): HTMLAttr =
+        !!("style", keyValueList CaseRules.LowerFirst css)
+
+    let inline Data(key: string, value: obj): IHTMLProp =
+        !!("data-" + key, value)
 
 open Props
 open Fable.Import.React
