@@ -708,6 +708,8 @@ module Props =
         | WritingMode of obj
         | ZIndex of obj
         | Zoom of obj
+        /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
+        static member inline Custom (key: string, value: obj) : CSSProp = !!(key, value)
 
     let inline Style (css: CSSProp list): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
