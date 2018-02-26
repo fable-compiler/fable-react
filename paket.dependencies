@@ -4,6 +4,7 @@ storage: none
 clitool dotnet-Fable
 nuget Fable.Core
 nuget Fable.Import.Browser
+nuget Fable.Elmish
 
 group Build
 framework: net46
