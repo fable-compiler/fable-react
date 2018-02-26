@@ -955,40 +955,86 @@ let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit
 
 // Helpers for ReactiveComponents (see #44)
 module ReactiveComponents =
+    open Elmish 
+    type [<Pojo>] Error =
+        | NoError
+        | HasError of System.Exception
+
+
     type [<Pojo>] Props<'P, 'S, 'Msg> = {
         key: string
         props: 'P
-        update: 'Msg -> 'S -> 'S
+        update: 'Msg -> 'S -> 'S * Cmd<'Msg>
         view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement
-        init: 'P -> 'S
+        init: 'P -> 'S * Cmd<'Msg>
+        onError: System.Exception -> ReactElement
     }
 
-    and [<Pojo>] State<'T> = {
+    and [<Pojo>] State<'T, 'Msg> = {
+        error: Error
         value: 'T
+        cmd :  Cmd<'Msg>
     }
 
     and [<Pojo>] Model<'P, 'S> = {
-        key: string
         props: 'P
         state: 'S
         children: ReactElement[]
     }
 
+//SEE:
+//https://medium.com/javascript-inside/elm-architecture-for-react-part-2-73e73d9a6a89
+
 open ReactiveComponents
+type ReactiveCom<'P, 'S, 'Msg>(initProps) as this =
+    inherit Component<Props<'P, 'S, 'Msg>, State<'S, 'Msg>>(initProps)
 
-type ReactiveCom<'P, 'S, 'Msg>(initProps) =
-    inherit Component<Props<'P, 'S, 'Msg>, State<'S>>(initProps)
-    do base.setInitState { value = initProps.init(initProps.props) }
+    let initialState, initialCmd = initProps.init initProps.props
+    do base.setInitState { value = initialState; cmd = initialCmd; error = NoError }
 
+    let dispatch = this.Dispatch
+    let run = this.Run
+    let updater = this.Updater
+
+    ///Run initial cmd returned by Elmish init function
+    override this.componentDidMount() = run initialCmd dispatch
+
+    ///Elmish update of the component: returns a new state based on current state
+    ///Triggers a component render
+    member this.Updater (msg: 'Msg) (state: State<'S, 'Msg>) (props: Props<'P, 'S, 'Msg>)  =
+        let newState, cmd = props.update msg state.value
+        { state with value = newState; cmd = cmd }
+
+    ///Run all the command which will return a msg
+    member this.Run (cmd: Elmish.Cmd<'Msg>) (dispatch: Elmish.Dispatch<'Msg>) =
+        cmd |> List.iter(fun sub -> sub dispatch)
+
+    ///Prepares one updater callback when a new msg is received
+    ///we use the callback to build the newState out of the last state
+    ///and make sure of the order of the updaed, React setstate may be delayed
+    member this.Dispatch : Elmish.Dispatch<'Msg> =
+        fun msg ->
+            let updater state props = this.Updater msg state props
+            this.setState ( updater )
+
+    ///Run the new command added to state after the last component update -> render cycle
+    override this.componentDidUpdate (_, _) = run this.state.cmd dispatch
+
+    ///Catch any error and add it to the component state
+    override this.componentDidCatch(error, info) =
+        this.setState { this.state with error = HasError error }
+
+    ///Render the component based on the last update
     override this.render() =
         let model =
-            { key = this.props.key
+            {
               props = this.props.props
               state = this.state.value
               children = this.children }
-        this.props.view model (fun msg ->
-            let newState = this.props.update msg this.state.value
-            this.setState({ value = newState }))
+
+        match this.state.error with
+        | NoError       -> this.props.view model dispatch
+        | HasError exn  -> this.props.onError exn
 
 /// Renders a stateful React component from functions similar to Elmish
 ///  * `init` - Initializes component state with given props
@@ -996,14 +1042,16 @@ type ReactiveCom<'P, 'S, 'Msg>(initProps) =
 ///  * `view` - Render function, receives a `ReactiveComponents.Model` object and a `dispatch` function
 ///  * `key` - The key is necessary to identify React elements in a list, an empty string can be passed otherwise
 ///  * `props` - External properties passed to the component each time it's rendered, usually from its parent
+///  * `onError` - function to handle any exception caught during runtime. Return a react element to diplay in the next render
 ///  * `children` - A list of children React elements
 let reactiveCom<'P, 'S, 'Msg>
-        (init: 'P -> 'S)
-        (update: 'Msg -> 'S -> 'S)
+        (init: 'P -> 'S * Elmish.Cmd<'Msg>)
+        (update: 'Msg -> 'S -> 'S * Elmish.Cmd<'Msg>)
         (view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement)
         (key: string)
         (props: 'P)
+        (onError: System.Exception -> ReactElement)
         (children: ReactElement list): ReactElement =
-    ofType<ReactiveCom<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
-        { key=key; props=props; update=update; view=view; init=init }
+    ofType<ReactiveCom<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S, 'Msg>>
+        { key=key; props=props; init=init; update=update; view=view; onError=onError}
         children
