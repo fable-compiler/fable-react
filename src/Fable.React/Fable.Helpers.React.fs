@@ -23,12 +23,12 @@ module Props =
         | Ref of (Browser.Element->unit)
         interface IHTMLProp
     [<Pojo>]
-    type DangeousHtml = {
+    type DangerousHtml = {
         __html: string
     }
 
     type DOMAttr =
-        | DangerouslySetInnerHTML of DangeousHtml
+        | DangerouslySetInnerHTML of DangerousHtml
         | OnCut of (React.ClipboardEvent -> unit)
         | OnPaste of (React.ClipboardEvent -> unit)
         | OnCompositionEnd of (React.CompositionEvent -> unit)

@@ -21,7 +21,7 @@ let private cssProp (key: string) (value: obj) =
     | :? float as v -> (addUnit key (string v))
     | _ -> value.ToString()
 
-  sprintf "%s: %s;" key value
+  key + ": " + value + ";"
 
 let private renderCssProp (prop: CSSProp): string =
   match prop with
@@ -433,7 +433,7 @@ let private renderCssProp (prop: CSSProp): string =
   | CSSProp.Custom (key, value) -> cssProp key value
 
 let private renderHtmlAttr (attr: HTMLAttr): string =
-  let inline pair (key: string) (value: string) = sprintf "%s=\"%s\"" key value
+  let inline pair (key: string) (value: string) = key + "=\"" + value + "\""
   let inline boolAttr (key: string) (value: bool) = if value then key else ""
   match attr with
   | DefaultChecked v | Checked v -> boolAttr "checked" v
@@ -590,7 +590,7 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
   | Data (key, value) -> pair ("data-" + key) (string value)
 
 let private renderSVGAttr (attr: SVGAttr): string =
-  let inline pair (key: string) (value: obj) = sprintf "%s=\"%s\"" key (string value)
+  let inline pair (key: string) (value: obj) = key + "=\"" +  (string value) + "\""
   match attr with
   | SVGAttr.ClipPath v -> pair "clip-path" v
   | SVGAttr.Cx v -> pair "cx" v
@@ -668,21 +668,25 @@ let private renderAttrs (attrs: IHTMLProp seq) =
 
   html.ToString().Trim(), childHtml
 
-let rec renderToString (htmlNode: ReactElement): string =
+let renderToString (htmlNode: ReactElement): string =
 
-  let inline renderList (nodes: HTMLNode seq) =
-    let html = StringBuilder()
-    for node in nodes do
-      html.Append(renderToString node) |> ignore
-    html.ToString()
+  let rec render (htmlNode: ReactElement): string =
+    let inline renderList (nodes: HTMLNode seq) =
+      let html = StringBuilder()
+      for node in nodes do
+        html.Append(render node) |> ignore
+      html.ToString()
 
-  match htmlNode :?> HTMLNode with
-  | HTMLNode.Text str -> str
-  | HTMLNode.Node (tag, attrs, children) ->
-    let attrs, child = renderAttrs (attrs |> Seq.cast)
-    let child =
-      match child with
-      | Some c -> c
-      | None -> (renderList (children |> Seq.cast))
-    sprintf "<%s %s>%s</%s>" tag attrs child tag
-  | HTMLNode.List nodes -> renderList (nodes |> Seq.cast)
+    match htmlNode :?> HTMLNode with
+    | HTMLNode.Text str -> str
+    | HTMLNode.Node (tag, attrs, children) ->
+      let attrs, child = renderAttrs (attrs |> Seq.cast)
+      let child =
+        match child with
+        | Some c -> c
+        | None -> (renderList (children |> Seq.cast))
+      let attrs = if attrs = "" then attrs else " " + attrs
+      "<" + tag + attrs + ">" + child + "</" + tag + ">"
+    | HTMLNode.List nodes -> renderList (nodes |> Seq.cast)
+
+  render htmlNode
