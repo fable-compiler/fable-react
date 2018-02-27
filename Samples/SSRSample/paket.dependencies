@@ -1,0 +1,31 @@
+github fable-elmish/react src/common.fs
+github fable-elmish/react src/react.fs
+
+group Server
+  source https://api.nuget.org/v3/index.json
+  storage: none
+
+  nuget FSharp.Core
+  nuget Giraffe ~> 1
+  nuget Microsoft.AspNetCore
+  nuget Microsoft.AspNetCore.StaticFiles
+  nuget Fable.JsonConverter
+
+  clitool Microsoft.DotNet.Watcher.Tools
+
+group Client
+  source https://api.nuget.org/v3/index.json
+  storage: none
+
+  nuget Fable.Core
+  nuget Fable.Elmish.Debugger
+  nuget Fable.Elmish.React
+  nuget Fable.Elmish.HMR
+  nuget Fable.Import.Browser
+
+  clitool dotnet-fable
+
+group Build
+  source https://api.nuget.org/v3/index.json
+
+  nuget FAKE

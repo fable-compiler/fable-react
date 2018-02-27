@@ -1,0 +1,6 @@
+group Client
+  Fable.Core
+  Fable.Import.Browser
+  Fable.Elmish.Debugger
+  Fable.Elmish.HMR
+  dotnet-fable
