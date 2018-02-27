@@ -1,0 +1,11 @@
+group Server
+  FSharp.Core
+  Giraffe
+  Microsoft.AspNetCore
+  Microsoft.AspNetCore.StaticFiles
+  Microsoft.DotNet.Watcher.Tools
+  Fable.JsonConverter
+
+group Client
+  Fable.Core
+  Fable.Import.Browser

@@ -22,9 +22,13 @@ module Props =
         | Key of string
         | Ref of (Browser.Element->unit)
         interface IHTMLProp
+    [<Pojo>]
+    type DangeousHtml = {
+        __html: string
+    }
 
     type DOMAttr =
-        | DangerouslySetInnerHTML of obj
+        | DangerouslySetInnerHTML of DangeousHtml
         | OnCut of (React.ClipboardEvent -> unit)
         | OnPaste of (React.ClipboardEvent -> unit)
         | OnCompositionEnd of (React.CompositionEvent -> unit)
@@ -94,154 +98,6 @@ module Props =
         | OnTransitionEnd of (React.TransitionEvent -> unit)
         interface IHTMLProp
 
-    type HTMLAttr =
-        | DefaultChecked of bool
-        | DefaultValue of string
-        | Accept of string
-        | AcceptCharset of string
-        | AccessKey of string
-        | Action of string
-        | AllowFullScreen of bool
-        | AllowTransparency of bool
-        | Alt of string
-        | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
-        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
-        | Async of bool
-        | AutoComplete of string
-        | AutoFocus of bool
-        | AutoPlay of bool
-        | Capture of bool
-        | CellPadding of obj
-        | CellSpacing of obj
-        | CharSet of string
-        | Challenge of string
-        | Checked of bool
-        | ClassID of string
-        | ClassName of string
-        /// Alias of ClassName
-        | [<CompiledName("className")>] Class of string
-        | Cols of float
-        | ColSpan of float
-        | Content of string
-        | ContentEditable of bool
-        | ContextMenu of string
-        | Controls of bool
-        | Coords of string
-        | CrossOrigin of string
-        // | Data of string
-        | [<CompiledName("data-toggle")>] DataToggle of string
-        | DateTime of string
-        | Default of bool
-        | Defer of bool
-        | Dir of string
-        | Disabled of bool
-        | Download of obj
-        | Draggable of bool
-        | EncType of string
-        | Form of string
-        | FormAction of string
-        | FormEncType of string
-        | FormMethod of string
-        | FormNoValidate of bool
-        | FormTarget of string
-        | FrameBorder of obj
-        | Headers of string
-        | Height of obj
-        | Hidden of bool
-        | High of float
-        | Href of string
-        | HrefLang of string
-        | HtmlFor of string
-        | HttpEquiv of string
-        | Icon of string
-        | Id of string
-        | InputMode of string
-        | Integrity of string
-        | Is of string
-        | KeyParams of string
-        | KeyType of string
-        | Kind of string
-        | Label of string
-        | Lang of string
-        | List of string
-        | Loop of bool
-        | Low of float
-        | Manifest of string
-        | MarginHeight of float
-        | MarginWidth of float
-        | Max of obj
-        | MaxLength of float
-        | Media of string
-        | MediaGroup of string
-        | Method of string
-        | Min of obj
-        | MinLength of float
-        | Multiple of bool
-        | Muted of bool
-        | Name of string
-        | NoValidate of bool
-        | Open of bool
-        | Optimum of float
-        | Pattern of string
-        | Placeholder of string
-        | Poster of string
-        | Preload of string
-        | RadioGroup of string
-        | ReadOnly of bool
-        | Rel of string
-        | Required of bool
-        | Role of string
-        | Rows of float
-        | RowSpan of float
-        | Sandbox of string
-        | Scope of string
-        | Scoped of bool
-        | Scrolling of string
-        | Seamless of bool
-        | Selected of bool
-        | Shape of string
-        | Size of float
-        | Sizes of string
-        | Span of float
-        | SpellCheck of bool
-        | Src of string
-        | SrcDoc of string
-        | SrcLang of string
-        | SrcSet of string
-        | Start of float
-        | Step of obj
-        | Summary of string
-        | TabIndex of float
-        | Target of string
-        | Title of string
-        | Type of string
-        | UseMap of string
-        | Value of string
-        | Width of obj
-        | Wmode of string
-        | Wrap of string
-        | About of string
-        | Datatype of string
-        | Inlist of obj
-        | Prefix of string
-        | Property of string
-        | Resource of string
-        | Typeof of string
-        | Vocab of string
-        | AutoCapitalize of string
-        | AutoCorrect of string
-        | AutoSave of string
-        // | Color of string // Conflicts with CSSProp, shouldn't be used in HTML5
-        | ItemProp of string
-        | ItemScope of bool
-        | ItemType of string
-        | ItemID of string
-        | ItemRef of string
-        | Results of float
-        | Security of string
-        | Unselectable of bool
-        interface IHTMLProp
-
     type SVGAttr =
         | ClipPath of string
         | Cx of obj
@@ -300,6 +156,12 @@ module Props =
         | Y1 of obj
         | Y2 of obj
         | Y of obj
+#if !FABLE_COMPILER
+        | Custom of string * obj
+#else
+        /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
+        static member inline Custom (key: string, value: obj) : SVGAttr = !!(key, value)
+#endif
         interface IProp
 
     type CSSProp =
@@ -708,20 +570,206 @@ module Props =
         | WritingMode of obj
         | ZIndex of obj
         | Zoom of obj
+#if !FABLE_COMPILER
+        | Custom of string * obj
+#else
         /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
         static member inline Custom (key: string, value: obj) : CSSProp = !!(key, value)
+#endif
 
+
+    type HTMLAttr =
+        | DefaultChecked of bool
+        | DefaultValue of string
+        | Accept of string
+        | AcceptCharset of string
+        | AccessKey of string
+        | Action of string
+        | AllowFullScreen of bool
+        | AllowTransparency of bool
+        | Alt of string
+        | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
+        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
+        | Async of bool
+        | AutoComplete of string
+        | AutoFocus of bool
+        | AutoPlay of bool
+        | Capture of bool
+        | CellPadding of obj
+        | CellSpacing of obj
+        | CharSet of string
+        | Challenge of string
+        | Checked of bool
+        | ClassID of string
+        | ClassName of string
+        /// Alias of ClassName
+        | [<CompiledName("className")>] Class of string
+        | Cols of float
+        | ColSpan of float
+        | Content of string
+        | ContentEditable of bool
+        | ContextMenu of string
+        | Controls of bool
+        | Coords of string
+        | CrossOrigin of string
+        // | Data of string
+        | [<CompiledName("data-toggle")>] DataToggle of string
+        | DateTime of string
+        | Default of bool
+        | Defer of bool
+        | Dir of string
+        | Disabled of bool
+        | Download of obj
+        | Draggable of bool
+        | EncType of string
+        | Form of string
+        | FormAction of string
+        | FormEncType of string
+        | FormMethod of string
+        | FormNoValidate of bool
+        | FormTarget of string
+        | FrameBorder of obj
+        | Headers of string
+        | Height of obj
+        | Hidden of bool
+        | High of float
+        | Href of string
+        | HrefLang of string
+        | HtmlFor of string
+        | HttpEquiv of string
+        | Icon of string
+        | Id of string
+        | InputMode of string
+        | Integrity of string
+        | Is of string
+        | KeyParams of string
+        | KeyType of string
+        | Kind of string
+        | Label of string
+        | Lang of string
+        | List of string
+        | Loop of bool
+        | Low of float
+        | Manifest of string
+        | MarginHeight of float
+        | MarginWidth of float
+        | Max of obj
+        | MaxLength of float
+        | Media of string
+        | MediaGroup of string
+        | Method of string
+        | Min of obj
+        | MinLength of float
+        | Multiple of bool
+        | Muted of bool
+        | Name of string
+        | NoValidate of bool
+        | Open of bool
+        | Optimum of float
+        | Pattern of string
+        | Placeholder of string
+        | Poster of string
+        | Preload of string
+        | RadioGroup of string
+        | ReadOnly of bool
+        | Rel of string
+        | Required of bool
+        | Role of string
+        | Rows of float
+        | RowSpan of float
+        | Sandbox of string
+        | Scope of string
+        | Scoped of bool
+        | Scrolling of string
+        | Seamless of bool
+        | Selected of bool
+        | Shape of string
+        | Size of float
+        | Sizes of string
+        | Span of float
+        | SpellCheck of bool
+        | Src of string
+        | SrcDoc of string
+        | SrcLang of string
+        | SrcSet of string
+        | Start of float
+        | Step of obj
+        | Summary of string
+        | TabIndex of float
+        | Target of string
+        | Title of string
+        | Type of string
+        | UseMap of string
+        | Value of string
+        | Width of obj
+        | Wmode of string
+        | Wrap of string
+        | About of string
+        | Datatype of string
+        | Inlist of obj
+        | Prefix of string
+        | Property of string
+        | Resource of string
+        | Typeof of string
+        | Vocab of string
+        | AutoCapitalize of string
+        | AutoCorrect of string
+        | AutoSave of string
+        // | Color of string // Conflicts with CSSProp, shouldn't be used in HTML5
+        | ItemProp of string
+        | ItemScope of bool
+        | ItemType of string
+        | ItemID of string
+        | ItemRef of string
+        | Results of float
+        | Security of string
+        | Unselectable of bool
+#if !FABLE_COMPILER
+        | Custom of string * obj
+        | Style of CSSProp list
+        | Data of string * obj
+#else
+        static member inline Custom (key: string, value: obj) : HTMLAttr = !!(key, value)
+#endif
+        interface IHTMLProp
+
+#if FABLE_COMPILER
     let inline Style (css: CSSProp list): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
 
-    let inline Data(key: string, value: obj): IHTMLProp =
+    let inline Data (key: string, value: obj): IHTMLProp =
         !!("data-" + key, value)
+#endif
 
 open Props
 open Fable.Import.React
 
+[<Erase>]
+type HTMLNode =
+| Text of string
+| Node of string * IProp seq * ReactElement seq
+| List of ReactElement seq
+with interface ReactElement
+
 [<Import("createElement", from="react")>]
-let createElement(comp: obj, props: obj, [<ParamList>] children: obj) = jsNative
+let createElement(comp: obj, props: obj, [<ParamList>] children: obj) =
+    HTMLNode.Text "" :> ReactElement
+
+[<Erase>]
+type ServerElementType =
+| Fragment
+| Tag
+
+let inline isomorphicElement (tag: obj, props: IProp seq, children: ReactElement list, elementType: ServerElementType) =
+#if FABLE_COMPILER
+    createElement(tag, keyValueList CaseRules.LowerFirst (props :?> IProp list), children)
+#else
+    match elementType with
+    | ServerElementType.Tag ->
+          HTMLNode.Node (string tag, props, children) :> ReactElement
+    | ServerElementType.Fragment ->
+          HTMLNode.List children :> ReactElement
+#endif
 
 /// OBSOLETE: Use `ofType`
 [<System.Obsolete("Use ofType")>]
@@ -755,21 +803,20 @@ let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children:
 /// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
 let inline ofImport<[<Pojo>]'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement list): ReactElement =
     createElement(import importMember importPath, props, children)
-
+#if FABLE_COMPILER
 /// Alias of `ofString`
 let inline str (s: string): ReactElement = unbox s
 
 /// Cast a string to a React element (erased in runtime)
 let inline ofString (s: string): ReactElement = unbox s
 
-/// OBSOLETE: Use `ofOption`
-[<System.Obsolete("Use ofOption")>]
-let inline opt (o: ReactElement option): ReactElement =
-    match o with Some o -> o | None -> null
-
 /// Cast an option value to a React element (erased in runtime)
 let inline ofOption (o: ReactElement option): ReactElement =
     match o with Some o -> o | None -> null // Option.toObj(o)
+
+/// OBSOLETE: Use `ofOption`
+[<System.Obsolete("Use ofOption")>]
+let inline opt (o: ReactElement option): ReactElement = ofOption o
 
 /// Cast an int to a React element (erased in runtime)
 let inline ofInt (i: int): ReactElement = unbox i
@@ -783,21 +830,53 @@ let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray el
 /// Returns an array **from .render() method**
 let inline ofArray (els: ReactElement array): ReactElement = unbox els
 
+#else
+/// Alias of `ofString`
+let inline str (s: string): ReactElement = HTMLNode.Text s :> ReactElement
+
+/// Cast a string to a React element (erased in runtime)
+let inline ofString (s: string): ReactElement = str s
+
+/// Cast an option value to a React element (erased in runtime)
+let inline ofOption (o: ReactElement option): ReactElement =
+    match o with Some o -> o | None -> null // Option.toObj(o)
+
+/// OBSOLETE: Use `ofOption`
+[<System.Obsolete("Use ofOption")>]
+let inline opt (o: ReactElement option): ReactElement = ofOption o
+
+/// Cast an int to a React element (erased in runtime)
+let inline ofInt (i: int): ReactElement = str (string i)
+
+/// Cast a float to a React element (erased in runtime)
+let inline ofFloat (f: float): ReactElement = str (string f)
+
+/// Returns a list **from .render() method**
+let inline ofList (els: ReactElement list): ReactElement = HTMLNode.List els :> ReactElement
+
+/// Returns an array **from .render() method**
+let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :> ReactElement
+
+#endif
+
 /// Instantiate a DOM React element
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
-    createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+//   createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+    isomorphicElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
 
 /// Instantiate a DOM React element (void)
 let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
-    createElement(tag, keyValueList CaseRules.LowerFirst props, [])
+//   createElement(tag, keyValueList CaseRules.LowerFirst props, [])
+    isomorphicElement(tag, (props |> Seq.cast<IProp>), [], ServerElementType.Tag)
 
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
-    createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+//   createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+    isomorphicElement(tag, props, [], ServerElementType.Tag)
 
 /// Instantiate a React fragment
 let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =
-    createElement(typedefof<Fragment>, keyValueList CaseRules.LowerFirst props, children)
+    isomorphicElement(typedefof<Fragment>, props |> Seq.cast<IProp>, children, ServerElementType.Fragment)
 
 // Standard elements
 let inline a b c = domEl "a" b c
