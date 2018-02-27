@@ -18,6 +18,7 @@ open Shared
 
 let clientPath = Path.Combine("..","Client") |> Path.GetFullPath
 let port = 8085us
+let assetsBaseUrl = "http://localhost:8080"
 
 let initState: Model = {
   counter = Some 42
@@ -37,7 +38,7 @@ let htmlTemplate =
             [ rawText (sprintf """
             var __INIT_STATE__ = %s
             """ (toJson initState)) ]
-          script [ _src "http://localhost:8080/public/bundle.js" ] []
+          script [ _src (assetsBaseUrl + "/public/bundle.js") ] []
         ]
     ]
 
