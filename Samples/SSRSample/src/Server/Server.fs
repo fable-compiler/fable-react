@@ -15,10 +15,11 @@ open Giraffe.Serialization.Json
 open Newtonsoft.Json
 
 open Shared
+open System.Diagnostics
 
 let clientPath = Path.Combine("..","Client") |> Path.GetFullPath
 let port = 8085us
-let assetsBaseUrl = "http://localhost:8080"
+let assetsBaseUrl = "http://localhost:8082"
 
 let initState: Model = {
   counter = Some 42
@@ -26,6 +27,18 @@ let initState: Model = {
   someFloat = 11.11
   someInt = 22
 }
+
+let bench () =
+  let watch = Stopwatch()
+  watch.Start()
+  let times = 10000
+  for i = 1 to times do
+    Fable.Helpers.ReactServer.renderToString(Client.View.view initState ignore)
+    |> ignore
+  watch.Stop()
+  printfn "render %d times: %dms" times watch.ElapsedMilliseconds
+
+bench ()
 
 let getInitCounter () : Task<Model> = task { return initState }
 
@@ -37,7 +50,7 @@ let htmlTemplate =
           script []
             [ rawText (sprintf """
             var __INIT_STATE__ = %s
-            """ (toJson initState)) ]
+            """ (toJson (toJson initState))) ]
           script [ _src (assetsBaseUrl + "/public/bundle.js") ] []
         ]
     ]

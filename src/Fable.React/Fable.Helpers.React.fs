@@ -873,7 +873,7 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
 //   createElement(tag, keyValueList CaseRules.LowerFirst props, children)
-    isomorphicElement(tag, props, [], ServerElementType.Tag)
+    isomorphicElement(tag, props, children, ServerElementType.Tag)
 
 /// Instantiate a React fragment
 let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =

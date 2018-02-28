@@ -15,6 +15,7 @@
     "babel-preset-env": "1.6.0",
     "concurrently": "3.5.0",
     "fable-loader": "1.1.3",
+    "fable-splitter": "^0.1.21",
     "fable-utils": "1.0.6",
     "webpack": "3.7.1",
     "webpack-dev-server": "2.9.1"
@@ -27,6 +28,7 @@
     "restoreClient": "cd src/Client && yarn install",
     "restoreNetClient": "dotnet restore src/Client/Client.fsproj",
     "prestartClient": "concurrently \"npm run restoreClient\" \"npm run restoreNetClient\" ",
-    "startClient": "cd src/Client && dotnet fable webpack-dev-server"
+    "startClient": "cd src/Client && dotnet fable webpack-dev-server",
+    "buildClientLib": "fable-splitter ./src/Client/Client.fsproj -o ./src/Client/bin/lib --config ./splitter.config.js"
   }
 }

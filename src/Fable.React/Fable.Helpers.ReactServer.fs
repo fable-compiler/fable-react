@@ -482,228 +482,234 @@ let private renderCssProp (prop: CSSProp): string =
   | Zoom v -> cssProp "zoom" v
   | CSSProp.Custom (key, value) -> cssProp key (cssPropRegex.Replace(string value, "-$1").ToLower())
 
+let inline boolAttr (key: string) (value: bool) = if value then key else ""
+let inline strAttr (key: string) (value: string) = key + "=\"" + (escapeHtml value) + "\""
+let inline objAttr (key: string) (value: obj) = strAttr key (string value)
 let private renderHtmlAttr (attr: HTMLAttr): string =
-  let inline pair (key: string) (value: string) = key + "=\"" + (escapeHtml value) + "\""
-  let inline boolAttr (key: string) (value: bool) = if value then key else ""
   match attr with
   | DefaultChecked v | Checked v -> boolAttr "checked" v
-  | DefaultValue v |  Value v -> pair "value" v
-  | Accept v -> pair "accept" v
-  | AcceptCharset v -> pair "accept-charset" v
-  | AccessKey v -> pair "accesskey" v
-  | Action v -> pair "action" v
+  | DefaultValue v |  Value v -> strAttr "value" v
+  | Accept v -> strAttr "accept" v
+  | AcceptCharset v -> strAttr "accept-charset" v
+  | AccessKey v -> strAttr "accesskey" v
+  | Action v -> strAttr "action" v
   | AllowFullScreen v -> boolAttr "allowfullscreen" v
   | AllowTransparency v -> boolAttr "allowtransparency" v
-  | Alt v -> pair "alt" v
+  | Alt v -> strAttr "alt" v
   | AriaHasPopup v -> boolAttr "aria-haspopup" v
   | AriaExpanded v -> boolAttr "aria-expanded" v
   | Async v -> boolAttr "async" v
-  | AutoComplete v -> pair "autocomplete" v
+  | AutoComplete v -> strAttr "autocomplete" v
   | AutoFocus v -> boolAttr "autofocus" v
   | AutoPlay v -> boolAttr "autoplay" v
   | Capture v -> boolAttr "capture" v
-  | CellPadding v -> pair "cellpadding" (string v)
-  | CellSpacing v -> pair "cellspacing" (string v)
-  | CharSet v -> pair "charset" v
-  | Challenge v -> pair "challenge" v
-  | ClassID v -> pair "class-id" v
-  | ClassName v -> pair "class" v
-  | Class v -> pair "class" v
-  | Cols v -> pair "cols" (string v)
-  | ColSpan v -> pair "colspan" (string v)
-  | Content v -> pair "content" v
+  | CellPadding v -> strAttr "cellpadding" (string v)
+  | CellSpacing v -> strAttr "cellspacing" (string v)
+  | CharSet v -> strAttr "charset" v
+  | Challenge v -> strAttr "challenge" v
+  | ClassID v -> strAttr "class-id" v
+  | ClassName v -> strAttr "class" v
+  | Class v -> strAttr "class" v
+  | Cols v -> strAttr "cols" (string v)
+  | ColSpan v -> strAttr "colspan" (string v)
+  | Content v -> strAttr "content" v
   | ContentEditable v -> boolAttr "contenteditable" v
-  | ContextMenu v -> pair "contextmenu" v
+  | ContextMenu v -> strAttr "contextmenu" v
   | Controls v -> boolAttr "controls" v
-  | Coords v -> pair "coords" v
-  | CrossOrigin v -> pair "crossorigin" v
+  | Coords v -> strAttr "coords" v
+  | CrossOrigin v -> strAttr "crossorigin" v
   // | Data v -> pair "data" v
-  | DataToggle v -> pair "data-toggle" v
-  | DateTime v -> pair "datetime" v
+  | DataToggle v -> strAttr "data-toggle" v
+  | DateTime v -> strAttr "datetime" v
   | Default v -> boolAttr "default" v
   | Defer v -> boolAttr "defer" v
-  | Dir v -> pair "dir" v
+  | Dir v -> strAttr "dir" v
   | Disabled v -> boolAttr "disabled" v
-  | Download v -> pair "download" (string v)
+  | Download v -> strAttr "download" (string v)
   | Draggable v -> boolAttr "draggable" v
-  | EncType v -> pair "enctype" v
-  | Form v -> pair "form" v
-  | FormAction v -> pair "formaction" v
-  | FormEncType v -> pair "formenctype" v
-  | FormMethod v -> pair "formmethod" v
+  | EncType v -> strAttr "enctype" v
+  | Form v -> strAttr "form" v
+  | FormAction v -> strAttr "formaction" v
+  | FormEncType v -> strAttr "formenctype" v
+  | FormMethod v -> strAttr "formmethod" v
   | FormNoValidate v -> boolAttr "formnovalidate" v
-  | FormTarget v -> pair "formtarget" v
-  | FrameBorder v -> pair "frameborder" (string v)
-  | Headers v -> pair "headers" v
-  | HTMLAttr.Height v -> pair "height" (string v)
+  | FormTarget v -> strAttr "formtarget" v
+  | FrameBorder v -> strAttr "frameborder" (string v)
+  | Headers v -> strAttr "headers" v
+  | HTMLAttr.Height v -> strAttr "height" (string v)
   | Hidden v -> boolAttr "hidden" v
   // -----
-  | High v -> pair "high" (string v)
-  | Href v -> pair "href" v
-  | HrefLang v -> pair "hreflang" v
-  | HtmlFor v -> pair "for" v
-  | HttpEquiv v -> pair "http-equiv" v
-  | Icon v -> pair "icon" v
-  | Id v -> pair "id" v
-  | InputMode v -> pair "inputmode" v
-  | Integrity v -> pair "integrity" v
-  | Is v -> pair "is" v
-  | KeyParams v -> pair "keyparams" v
-  | KeyType v -> pair "keytype" v
-  | Kind v -> pair "kind" v
-  | Label v -> pair "label" v
-  | Lang v -> pair "lang" v
-  | List v -> pair "list" v
+  | High v -> strAttr "high" (string v)
+  | Href v -> strAttr "href" v
+  | HrefLang v -> strAttr "hreflang" v
+  | HtmlFor v -> strAttr "for" v
+  | HttpEquiv v -> strAttr "http-equiv" v
+  | Icon v -> strAttr "icon" v
+  | Id v -> strAttr "id" v
+  | InputMode v -> strAttr "inputmode" v
+  | Integrity v -> strAttr "integrity" v
+  | Is v -> strAttr "is" v
+  | KeyParams v -> strAttr "keyparams" v
+  | KeyType v -> strAttr "keytype" v
+  | Kind v -> strAttr "kind" v
+  | Label v -> strAttr "label" v
+  | Lang v -> strAttr "lang" v
+  | List v -> strAttr "list" v
   | Loop v -> boolAttr "loop" v
-  | Low v -> pair "low" (string v)
-  | Manifest v -> pair "manifest" v
-  | MarginHeight v -> pair "marginheight" (string v)
-  | MarginWidth v -> pair "marginwidth" (string v)
-  | Max v -> pair "max" (string v)
-  | MaxLength v -> pair "maxlength" (string v)
-  | Media v -> pair "media" v
-  | MediaGroup v -> pair "mediagroup" v
-  | Method v -> pair "method" v
-  | Min v -> pair "min" (string v)
-  | MinLength v -> pair "minlength" (string v)
+  | Low v -> strAttr "low" (string v)
+  | Manifest v -> strAttr "manifest" v
+  | MarginHeight v -> strAttr "marginheight" (string v)
+  | MarginWidth v -> strAttr "marginwidth" (string v)
+  | Max v -> strAttr "max" (string v)
+  | MaxLength v -> strAttr "maxlength" (string v)
+  | Media v -> strAttr "media" v
+  | MediaGroup v -> strAttr "mediagroup" v
+  | Method v -> strAttr "method" v
+  | Min v -> strAttr "min" (string v)
+  | MinLength v -> strAttr "minlength" (string v)
   | Multiple v -> boolAttr "multiple" v
-  | Muted v -> pair "muted" (string v)
-  | Name v -> pair "name" v
+  | Muted v -> strAttr "muted" (string v)
+  | Name v -> strAttr "name" v
   | NoValidate v -> boolAttr "novalidate" v
   | Open v -> boolAttr "open" v
-  | Optimum v -> pair "optimum" (string v)
-  | Pattern v -> pair "pattern" v
-  | Placeholder v -> pair "placeholder" v
-  | Poster v -> pair "poster" v
-  | Preload v -> pair "preload" v
-  | RadioGroup v -> pair "radiogroup" v
+  | Optimum v -> strAttr "optimum" (string v)
+  | Pattern v -> strAttr "pattern" v
+  | Placeholder v -> strAttr "placeholder" v
+  | Poster v -> strAttr "poster" v
+  | Preload v -> strAttr "preload" v
+  | RadioGroup v -> strAttr "radiogroup" v
   | ReadOnly v -> boolAttr "readonly" v
-  | Rel v -> pair "rel" v
+  | Rel v -> strAttr "rel" v
   | Required v -> boolAttr "required" v
-  | Role v -> pair "role" v
-  | Rows v -> pair "rows" (string v)
-  | RowSpan v -> pair "row-span" (string v)
-  | Sandbox v -> pair "sandbox" v
-  | Scope v -> pair "scope" v
+  | Role v -> strAttr "role" v
+  | Rows v -> strAttr "rows" (string v)
+  | RowSpan v -> strAttr "row-span" (string v)
+  | Sandbox v -> strAttr "sandbox" v
+  | Scope v -> strAttr "scope" v
   | Scoped v -> boolAttr "scoped" v
-  | Scrolling v -> pair "scrolling" v
+  | Scrolling v -> strAttr "scrolling" v
   | Seamless v -> boolAttr "seamless" v
   | Selected v -> boolAttr "selected" v
-  | Shape v -> pair "shape" v
-  | Size v -> pair "size" (string v)
-  | Sizes v -> pair "sizes" v
-  | Span v -> pair "span" (string v)
+  | Shape v -> strAttr "shape" v
+  | Size v -> strAttr "size" (string v)
+  | Sizes v -> strAttr "sizes" v
+  | Span v -> strAttr "span" (string v)
   | SpellCheck v -> boolAttr "spellcheck" v
-  | Src v -> pair "src" v
-  | SrcDoc v -> pair "srcdoc" v
-  | SrcLang v -> pair "srclang" v
-  | SrcSet v -> pair "srcset" v
-  | Start v -> pair "start" (string v)
-  | Step v -> pair "step" (string v)
-  | Summary v -> pair "summary" v
-  | TabIndex v -> pair "tabindex" (string v)
-  | Target v -> pair "target" v
-  | Title v -> pair "title" v
-  | Type v -> pair "type" v
-  | UseMap v -> pair "use-map" v
-  | HTMLAttr.Width v -> pair "width" (string v)
-  | Wmode v -> pair "wmode" v
-  | Wrap v -> pair "wrap" v
-  | About v -> pair "about" v
-  | Datatype v -> pair "datatype" v
-  | Inlist v -> pair "inlist" (string v)
-  | Prefix v -> pair "prefix" v
-  | Property v -> pair "property" v
-  | Resource v -> pair "resource" v
-  | Typeof v -> pair "typeof" v
-  | Vocab v -> pair "vocab" v
-  | AutoCapitalize v -> pair "auto-capitalize" v
-  | AutoCorrect v -> pair "auto-correct" v
-  | AutoSave v -> pair "auto-save" v
+  | Src v -> strAttr "src" v
+  | SrcDoc v -> strAttr "srcdoc" v
+  | SrcLang v -> strAttr "srclang" v
+  | SrcSet v -> strAttr "srcset" v
+  | Start v -> strAttr "start" (string v)
+  | Step v -> strAttr "step" (string v)
+  | Summary v -> strAttr "summary" v
+  | TabIndex v -> strAttr "tabindex" (string v)
+  | Target v -> strAttr "target" v
+  | Title v -> strAttr "title" v
+  | Type v -> strAttr "type" v
+  | UseMap v -> strAttr "use-map" v
+  | HTMLAttr.Width v -> strAttr "width" (string v)
+  | Wmode v -> strAttr "wmode" v
+  | Wrap v -> strAttr "wrap" v
+  | About v -> strAttr "about" v
+  | Datatype v -> strAttr "datatype" v
+  | Inlist v -> strAttr "inlist" (string v)
+  | Prefix v -> strAttr "prefix" v
+  | Property v -> strAttr "property" v
+  | Resource v -> strAttr "resource" v
+  | Typeof v -> strAttr "typeof" v
+  | Vocab v -> strAttr "vocab" v
+  | AutoCapitalize v -> strAttr "auto-capitalize" v
+  | AutoCorrect v -> strAttr "auto-correct" v
+  | AutoSave v -> strAttr "auto-save" v
   // | Color v -> pair "color" v // Conflicts with CSSProp, shouldn't be used in HTML5
-  | ItemProp v -> pair "itemprop" v
+  | ItemProp v -> strAttr "itemprop" v
   | ItemScope v -> boolAttr "itemscope" v
-  | ItemType v -> pair "itemtype" v
-  | ItemID v -> pair "itemid" v
-  | ItemRef v -> pair "itemref" v
-  | Results v -> pair "results" (string v)
-  | Security v -> pair "security" v
+  | ItemType v -> strAttr "itemtype" v
+  | ItemID v -> strAttr "itemid" v
+  | ItemRef v -> strAttr "itemref" v
+  | Results v -> strAttr "results" (string v)
+  | Security v -> strAttr "security" v
   | Unselectable v -> boolAttr "unselectable" v
   | Style cssList ->
     let css = StringBuilder()
     for cssProp in cssList do
       css.Append(renderCssProp cssProp) |> ignore
       css.Append(" ") |> ignore
-    pair "style" (css.ToString())
+    strAttr "style" (css.ToString())
 
-  | Custom (key, value) -> pair key (string value)
-  | Data (key, value) -> pair ("data-" + key) (string value)
+  | Custom (key, value) -> strAttr key (string value)
+  | Data (key, value) -> strAttr ("data-" + key) (string value)
 
 let private renderSVGAttr (attr: SVGAttr): string =
-  let inline pair (key: string) (value: obj) = key + "=\"" +  (value |> string |> escapeHtml) + "\""
   match attr with
-  | SVGAttr.ClipPath v -> pair "clip-path" v
-  | SVGAttr.Cx v -> pair "cx" v
-  | SVGAttr.Cy v -> pair "cy" v
-  | SVGAttr.D v -> pair "d" v
-  | SVGAttr.Dx v -> pair "dx" v
-  | SVGAttr.Dy v -> pair "dy" v
-  | SVGAttr.Fill v -> pair "fill" v
-  | SVGAttr.FillOpacity v -> pair "fill-opacity" v
-  | SVGAttr.FontFamily v -> pair "font-family" v
-  | SVGAttr.FontSize v -> pair "font-size" v
-  | SVGAttr.Fx v -> pair "fx" v
-  | SVGAttr.Fy v -> pair "fy" v
-  | SVGAttr.GradientTransform v -> pair "gradient-transform" v
-  | SVGAttr.GradientUnits v -> pair "gradient-units" v
-  | SVGAttr.Height v -> pair "height" v
-  | SVGAttr.MarkerEnd v -> pair "marker-end" v
-  | SVGAttr.MarkerMid v -> pair "marker-mid" v
-  | SVGAttr.MarkerStart v -> pair "marker-start" v
-  | SVGAttr.Offset v -> pair "offset" v
-  | SVGAttr.Opacity v -> pair "opacity" v
-  | SVGAttr.PatternContentUnits v -> pair "pattern-content-units" v
-  | SVGAttr.PatternUnits v -> pair "pattern-units" v
-  | SVGAttr.Points v -> pair "points" v
-  | SVGAttr.PreserveAspectRatio v -> pair "preserve-aspect-ratio" v
-  | SVGAttr.R v -> pair "r" v
-  | SVGAttr.Rx v -> pair "rx" v
-  | SVGAttr.Ry v -> pair "ry" v
-  | SVGAttr.SpreadMethod v -> pair "spread-method" v
-  | SVGAttr.StopColor v -> pair "stop-color" v
-  | SVGAttr.StopOpacity v -> pair "stop-opacity" v
-  | SVGAttr.Stroke v -> pair "stroke" v
-  | SVGAttr.StrokeDasharray v -> pair "stroke-dasharray" v
-  | SVGAttr.StrokeLinecap v -> pair "stroke-linecap" v
-  | SVGAttr.StrokeMiterlimit v -> pair "stroke-miterlimit" v
-  | SVGAttr.StrokeOpacity v -> pair "stroke-opacity" v
-  | SVGAttr.StrokeWidth v -> pair "stroke-width" v
-  | SVGAttr.TextAnchor v -> pair "text-anchor" v
-  | SVGAttr.Transform v -> pair "transform" v
-  | SVGAttr.Version v -> pair "version" v
-  | SVGAttr.ViewBox v -> pair "view-box" v
-  | SVGAttr.Width v -> pair "width" v
-  | SVGAttr.X1 v -> pair "x1" v
-  | SVGAttr.X2 v -> pair "x2" v
-  | SVGAttr.X v -> pair "x" v
-  | SVGAttr.XlinkActuate v -> pair "xlink:actuate" v
-  | SVGAttr.XlinkArcrole v -> pair "xlink:arcrole" v
-  | SVGAttr.XlinkHref v -> pair "xlink:href" v
-  | SVGAttr.XlinkRole v -> pair "xlink:role" v
-  | SVGAttr.XlinkShow v -> pair "xlink:show" v
-  | SVGAttr.XlinkTitle v -> pair "xlink:title" v
-  | SVGAttr.XlinkType v -> pair "xlink:type" v
-  | SVGAttr.XmlBase v -> pair "xml:base" v
-  | SVGAttr.XmlLang v -> pair "xml:lang" v
-  | SVGAttr.XmlSpace v -> pair "xml:space" v
-  | SVGAttr.Y1 v -> pair "y1" v
-  | SVGAttr.Y2 v -> pair "y2" v
-  | SVGAttr.Y v -> pair "y" v
-  | SVGAttr.Custom (key, value) -> pair key value
+  | SVGAttr.ClipPath v -> objAttr "clip-path" v
+  | SVGAttr.Cx v -> objAttr "cx" v
+  | SVGAttr.Cy v -> objAttr "cy" v
+  | SVGAttr.D v -> objAttr "d" v
+  | SVGAttr.Dx v -> objAttr "dx" v
+  | SVGAttr.Dy v -> objAttr "dy" v
+  | SVGAttr.Fill v -> objAttr "fill" v
+  | SVGAttr.FillOpacity v -> objAttr "fill-opacity" v
+  | SVGAttr.FontFamily v -> objAttr "font-family" v
+  | SVGAttr.FontSize v -> objAttr "font-size" v
+  | SVGAttr.Fx v -> objAttr "fx" v
+  | SVGAttr.Fy v -> objAttr "fy" v
+  | SVGAttr.GradientTransform v -> objAttr "gradient-transform" v
+  | SVGAttr.GradientUnits v -> objAttr "gradient-units" v
+  | SVGAttr.Height v -> objAttr "height" v
+  | SVGAttr.MarkerEnd v -> objAttr "marker-end" v
+  | SVGAttr.MarkerMid v -> objAttr "marker-mid" v
+  | SVGAttr.MarkerStart v -> objAttr "marker-start" v
+  | SVGAttr.Offset v -> objAttr "offset" v
+  | SVGAttr.Opacity v -> objAttr "opacity" v
+  | SVGAttr.PatternContentUnits v -> objAttr "pattern-content-units" v
+  | SVGAttr.PatternUnits v -> objAttr "pattern-units" v
+  | SVGAttr.Points v -> objAttr "points" v
+  | SVGAttr.PreserveAspectRatio v -> objAttr "preserve-aspect-ratio" v
+  | SVGAttr.R v -> objAttr "r" v
+  | SVGAttr.Rx v -> objAttr "rx" v
+  | SVGAttr.Ry v -> objAttr "ry" v
+  | SVGAttr.SpreadMethod v -> objAttr "spread-method" v
+  | SVGAttr.StopColor v -> objAttr "stop-color" v
+  | SVGAttr.StopOpacity v -> objAttr "stop-opacity" v
+  | SVGAttr.Stroke v -> objAttr "stroke" v
+  | SVGAttr.StrokeDasharray v -> objAttr "stroke-dasharray" v
+  | SVGAttr.StrokeLinecap v -> objAttr "stroke-linecap" v
+  | SVGAttr.StrokeMiterlimit v -> objAttr "stroke-miterlimit" v
+  | SVGAttr.StrokeOpacity v -> objAttr "stroke-opacity" v
+  | SVGAttr.StrokeWidth v -> objAttr "stroke-width" v
+  | SVGAttr.TextAnchor v -> objAttr "text-anchor" v
+  | SVGAttr.Transform v -> objAttr "transform" v
+  | SVGAttr.Version v -> objAttr "version" v
+  | SVGAttr.ViewBox v -> objAttr "view-box" v
+  | SVGAttr.Width v -> objAttr "width" v
+  | SVGAttr.X1 v -> objAttr "x1" v
+  | SVGAttr.X2 v -> objAttr "x2" v
+  | SVGAttr.X v -> objAttr "x" v
+  | SVGAttr.XlinkActuate v -> objAttr "xlink:actuate" v
+  | SVGAttr.XlinkArcrole v -> objAttr "xlink:arcrole" v
+  | SVGAttr.XlinkHref v -> objAttr "xlink:href" v
+  | SVGAttr.XlinkRole v -> objAttr "xlink:role" v
+  | SVGAttr.XlinkShow v -> objAttr "xlink:show" v
+  | SVGAttr.XlinkTitle v -> objAttr "xlink:title" v
+  | SVGAttr.XlinkType v -> objAttr "xlink:type" v
+  | SVGAttr.XmlBase v -> objAttr "xml:base" v
+  | SVGAttr.XmlLang v -> objAttr "xml:lang" v
+  | SVGAttr.XmlSpace v -> objAttr "xml:space" v
+  | SVGAttr.Y1 v -> objAttr "y1" v
+  | SVGAttr.Y2 v -> objAttr "y2" v
+  | SVGAttr.Y v -> objAttr "y" v
+  | SVGAttr.Custom (key, value) -> objAttr key value
+type 'a ValueAttr =
+| HasDefault of 'a
+| HasValue of 'a
+| HasNone
 
-let private renderAttrs (attrs: IProp seq) =
+let private renderAttrs (attrs: IProp seq) tag =
   let html = StringBuilder()
   let mutable childHtml = None
+  let mutable valueAttr: string ValueAttr = ValueAttr.HasNone
+  let mutable checkedAttr: bool ValueAttr = ValueAttr.HasNone
   for attr in attrs do
     match attr with
     | :? DOMAttr as attr ->
@@ -712,29 +718,67 @@ let private renderAttrs (attrs: IProp seq) =
           childHtml <- Some v.__html
       | _ -> ()
     | :? HTMLAttr as attr ->
-      html.Append(renderHtmlAttr attr) |> ignore
-      html.Append(" ") |> ignore
+      match valueAttr, attr with
+      | HasNone, DefaultValue v ->
+        valueAttr <- HasDefault v
+      | _, Value v ->
+        valueAttr <- HasValue v
+      | HasValue _, DefaultValue _ -> ()
+      | _, _ ->
+        match checkedAttr, attr with
+        | HasNone, DefaultChecked v -> checkedAttr <- HasDefault v
+        | _, Checked v -> checkedAttr <- HasValue v
+        | HasValue _, DefaultChecked _ -> ()
+        | _, _ ->
+          html.Append(renderHtmlAttr attr) |> ignore
+          html.Append(" ") |> ignore
     | :? SVGAttr as attr ->
       html.Append(renderSVGAttr attr) |> ignore
       html.Append(" ") |> ignore
     | _ -> ()
 
+  match valueAttr with
+  | HasValue v | HasDefault v ->
+    if tag = "textarea"
+    then childHtml <- Some v
+    else
+      html.Append(strAttr "value" v) |> ignore
+      html.Append(" ") |> ignore
+  | _ -> ()
+
+  match checkedAttr with
+  | HasValue b | HasDefault b ->
+      html.Append(boolAttr "checked" b) |> ignore
+      html.Append(" ") |> ignore
+  | _ -> ()
+
   html.ToString().Trim(), childHtml
+
+
+let rec private addReactMark htmlNode =
+  match htmlNode with
+  | HTMLNode.Node (tag, attrs, children) ->
+    HTMLNode.Node (tag, attrs |> Seq.append [ Data ("reactroot", "") ] , children)
+  | HTMLNode.List nodes ->
+    HTMLNode.List (nodes |> Seq.cast |> Seq.map addReactMark |> Seq.cast)
+  | h -> h
 
 let renderToString (htmlNode: ReactElement): string =
 
-  let rec render (htmlNode: ReactElement): string =
+  let htmlNode = addReactMark (htmlNode :?> HTMLNode)
+
+  let rec render (htmlNode: HTMLNode): string =
     let inline renderList (nodes: HTMLNode seq) =
       let html = StringBuilder()
       for node in nodes do
         html.Append(render node) |> ignore
       html.ToString()
 
-    match htmlNode :?> HTMLNode with
+    match htmlNode with
     | HTMLNode.Text str -> escapeHtml str
     | HTMLNode.RawText str -> str
     | HTMLNode.Node (tag, attrs, children) ->
-      let attrs, child = renderAttrs (attrs |> Seq.cast)
+      let attrs, child = renderAttrs (attrs |> Seq.cast) tag
       let child =
         match child with
         | Some c -> c
