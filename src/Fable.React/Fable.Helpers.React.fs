@@ -747,6 +747,7 @@ open Fable.Import.React
 [<Erase>]
 type HTMLNode =
 | Text of string
+| RawText of string
 | Node of string * IProp seq * ReactElement seq
 | List of ReactElement seq
 with interface ReactElement
@@ -846,10 +847,10 @@ let inline ofOption (o: ReactElement option): ReactElement =
 let inline opt (o: ReactElement option): ReactElement = ofOption o
 
 /// Cast an int to a React element (erased in runtime)
-let inline ofInt (i: int): ReactElement = str (string i)
+let inline ofInt (i: int): ReactElement = HTMLNode.RawText (string i) :> ReactElement
 
 /// Cast a float to a React element (erased in runtime)
-let inline ofFloat (f: float): ReactElement = str (string f)
+let inline ofFloat (f: float): ReactElement = HTMLNode.RawText (string f) :> ReactElement
 
 /// Returns a list **from .render() method**
 let inline ofList (els: ReactElement list): ReactElement = HTMLNode.List els :> ReactElement
