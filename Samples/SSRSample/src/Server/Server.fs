@@ -19,7 +19,7 @@ open System.Diagnostics
 
 let clientPath = Path.Combine("..","Client") |> Path.GetFullPath
 let port = 8085us
-let assetsBaseUrl = "http://localhost:8082"
+let assetsBaseUrl = "http://localhost:8080"
 
 let initState: Model = {
   counter = Some 42
@@ -50,7 +50,7 @@ let htmlTemplate =
           script []
             [ rawText (sprintf """
             var __INIT_STATE__ = %s
-            """ (toJson (toJson initState))) ]
+            """ (toJson (toJson initState))) ] // call toJson twice to output json as js string in html
           script [ _src (assetsBaseUrl + "/public/bundle.js") ] []
         ]
     ]

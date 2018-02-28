@@ -6,7 +6,7 @@ function resolve(relativePath) {
 }
 
 module.exports = {
-  entry: resolve("src/MyProject.fsproj"),
+  entry: resolve("src/Client/Client.fsproj"),
   outDir: resolve("out"),
   babel: fableUtils.resolveBabelOptions({
     presets: [["env", { modules: "commonjs" }]],

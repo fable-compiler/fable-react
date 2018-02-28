@@ -10,6 +10,7 @@ open Fable.Helpers.React.Props
 
 // Adapted from https://github.com/emotion-js/emotion/blob/182e34bab2b2028c96d513b67ed86faee1b642b2/packages/emotion-utils/src/index.js#L13
 let private unitlessCssProps = set [ "animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width" ]
+
 let escapeHtml (str: string) =
   let escaped = StringBuilder()
   let splits = str.Split('"', '\'', '&', '<', '>')
@@ -31,32 +32,6 @@ let escapeHtml (str: string) =
   escaped.Append(Array.last splits) |> ignore
   escaped.ToString()
 
-//       case 38: // &
-//         escape = '&amp;';
-//         break;
-//       case 39: // '
-//         escape = '&#x27;'; // modified from escape-html; used to be '&#39'
-//         break;
-//       case 60: // <
-//         escape = '&lt;';
-//         break;
-//       case 62: // >
-//         escape = '&gt;';
-//         break;
-//       default:
-//         continue;
-//     }
-
-//     if (lastIndex !== index) {
-//       html += str.substring(lastIndex, index);
-//     }
-
-//     lastIndex = index + 1;
-//     html += escape;
-//   }
-
-//   return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
-// }
 let inline private addUnit (key: string) (value: string) =
   if unitlessCssProps |> Set.contains key |> not
   then value + "px"
@@ -69,7 +44,7 @@ let private cssProp (key: string) (value: obj) =
     | :? float as v -> (addUnit key (string v))
     | _ -> value.ToString()
 
-  key + ": " + value + ";"
+  key + ":" + value + ";"
 
 let private cssPropRegex = Regex("([A-Z])")
 
@@ -634,8 +609,9 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
     let css = StringBuilder()
     for cssProp in cssList do
       css.Append(renderCssProp cssProp) |> ignore
-      css.Append(" ") |> ignore
-    strAttr "style" (css.ToString())
+    let css = css.ToString().Trim()
+    let css = css.[0..css.Length - 2]
+    strAttr "style" css
 
   | Custom (key, value) -> strAttr key (string value)
   | Data (key, value) -> strAttr ("data-" + key) (string value)
@@ -700,16 +676,10 @@ let private renderSVGAttr (attr: SVGAttr): string =
   | SVGAttr.Y2 v -> objAttr "y2" v
   | SVGAttr.Y v -> objAttr "y" v
   | SVGAttr.Custom (key, value) -> objAttr key value
-type 'a ValueAttr =
-| HasDefault of 'a
-| HasValue of 'a
-| HasNone
 
 let private renderAttrs (attrs: IProp seq) tag =
   let html = StringBuilder()
   let mutable childHtml = None
-  let mutable valueAttr: string ValueAttr = ValueAttr.HasNone
-  let mutable checkedAttr: bool ValueAttr = ValueAttr.HasNone
   for attr in attrs do
     match attr with
     | :? DOMAttr as attr ->
@@ -718,39 +688,17 @@ let private renderAttrs (attrs: IProp seq) tag =
           childHtml <- Some v.__html
       | _ -> ()
     | :? HTMLAttr as attr ->
-      match valueAttr, attr with
-      | HasNone, DefaultValue v ->
-        valueAttr <- HasDefault v
-      | _, Value v ->
-        valueAttr <- HasValue v
-      | HasValue _, DefaultValue _ -> ()
+      match tag, attr with
+      | "textarea", Value v
+      | "textarea", DefaultValue v ->
+          childHtml <- Some v
       | _, _ ->
-        match checkedAttr, attr with
-        | HasNone, DefaultChecked v -> checkedAttr <- HasDefault v
-        | _, Checked v -> checkedAttr <- HasValue v
-        | HasValue _, DefaultChecked _ -> ()
-        | _, _ ->
-          html.Append(renderHtmlAttr attr) |> ignore
-          html.Append(" ") |> ignore
+        html.Append(renderHtmlAttr attr) |> ignore
+        html.Append(" ") |> ignore
     | :? SVGAttr as attr ->
       html.Append(renderSVGAttr attr) |> ignore
       html.Append(" ") |> ignore
     | _ -> ()
-
-  match valueAttr with
-  | HasValue v | HasDefault v ->
-    if tag = "textarea"
-    then childHtml <- Some v
-    else
-      html.Append(strAttr "value" v) |> ignore
-      html.Append(" ") |> ignore
-  | _ -> ()
-
-  match checkedAttr with
-  | HasValue b | HasDefault b ->
-      html.Append(boolAttr "checked" b) |> ignore
-      html.Append(" ") |> ignore
-  | _ -> ()
 
   html.ToString().Trim(), childHtml
 

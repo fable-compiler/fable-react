@@ -4,13 +4,9 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
+  <Import Project="../Shared/Shared.props" />
   <ItemGroup>
-    <Compile Include="../../../../src/Fable.React/Fable.Import.React.fs" />
-    <Compile Include="../../../../src/Fable.React/Fable.Helpers.React.fs" />
     <Compile Include="../../../../src/Fable.React/Fable.Helpers.ReactServer.fs" />
-    <Compile Include="../Shared/Shared.fs" />
-    <Compile Include="../Client/Types.fs" />
-    <Compile Include="../Client/View.fs" />
     <Compile Include="./FableJson.fs" />
     <Compile Include="./Server.fs" />
   </ItemGroup>
