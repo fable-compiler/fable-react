@@ -1,14 +1,62 @@
 module Fable.Helpers.ReactServer
 
+open System
 open System.Text
+open System.Text.RegularExpressions
 
 open Fable.Import.React
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
 
 // Adapted from https://github.com/emotion-js/emotion/blob/182e34bab2b2028c96d513b67ed86faee1b642b2/packages/emotion-utils/src/index.js#L13
-let unitlessCssProps = set [ "animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width" ]
+let private unitlessCssProps = set [ "animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width" ]
+let escapeHtml (str: string) =
+  let escaped = StringBuilder()
+  let splits = str.Split('"', '\'', '&', '<', '>')
+  let mutable charIndex = -1
+  for i = 0 to splits.Length - 2 do
+    let part = splits.[i]
+    escaped.Append(part) |> ignore
+    charIndex <- charIndex + part.Length + 1
+    let char = str.[charIndex]
+    ignore (
+      match char with
+      | '"' -> escaped.Append("&quot")
+      | '&' -> escaped.Append("&amp;")
+      | ''' -> escaped.Append("&#x27;") // modified from escape-html; used to be '&#39'
+      | '<' -> escaped.Append("&lt;")
+      | '>' -> escaped.Append("&gt;")
+      | c   -> escaped.Append(c)
+    )
+  escaped.Append(Array.last splits) |> ignore
+  escaped.ToString()
 
+//       case 38: // &
+//         escape = '&amp;';
+//         break;
+//       case 39: // '
+//         escape = '&#x27;'; // modified from escape-html; used to be '&#39'
+//         break;
+//       case 60: // <
+//         escape = '&lt;';
+//         break;
+//       case 62: // >
+//         escape = '&gt;';
+//         break;
+//       default:
+//         continue;
+//     }
+
+//     if (lastIndex !== index) {
+//       html += str.substring(lastIndex, index);
+//     }
+
+//     lastIndex = index + 1;
+//     html += escape;
+//   }
+
+//   return lastIndex !== index ? html + str.substring(lastIndex, index) : html;
+// }
 let inline private addUnit (key: string) (value: string) =
   if unitlessCssProps |> Set.contains key |> not
   then value + "px"
@@ -22,6 +70,8 @@ let private cssProp (key: string) (value: obj) =
     | _ -> value.ToString()
 
   key + ": " + value + ";"
+
+let private cssPropRegex = Regex("([A-Z])")
 
 let private renderCssProp (prop: CSSProp): string =
   match prop with
@@ -430,10 +480,10 @@ let private renderCssProp (prop: CSSProp): string =
   | WritingMode v -> cssProp "writing-mode" v
   | ZIndex v -> cssProp "z-index" v
   | Zoom v -> cssProp "zoom" v
-  | CSSProp.Custom (key, value) -> cssProp key value
+  | CSSProp.Custom (key, value) -> cssProp key (cssPropRegex.Replace(string value, "-$1").ToLower())
 
 let private renderHtmlAttr (attr: HTMLAttr): string =
-  let inline pair (key: string) (value: string) = key + "=\"" + value + "\""
+  let inline pair (key: string) (value: string) = key + "=\"" + (escapeHtml value) + "\""
   let inline boolAttr (key: string) (value: bool) = if value then key else ""
   match attr with
   | DefaultChecked v | Checked v -> boolAttr "checked" v
@@ -590,7 +640,7 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
   | Data (key, value) -> pair ("data-" + key) (string value)
 
 let private renderSVGAttr (attr: SVGAttr): string =
-  let inline pair (key: string) (value: obj) = key + "=\"" +  (string value) + "\""
+  let inline pair (key: string) (value: obj) = key + "=\"" +  (value |> string |> escapeHtml) + "\""
   match attr with
   | SVGAttr.ClipPath v -> pair "clip-path" v
   | SVGAttr.Cx v -> pair "cx" v
@@ -651,7 +701,7 @@ let private renderSVGAttr (attr: SVGAttr): string =
   | SVGAttr.Y v -> pair "y" v
   | SVGAttr.Custom (key, value) -> pair key value
 
-let private renderAttrs (attrs: IHTMLProp seq) =
+let private renderAttrs (attrs: IProp seq) =
   let html = StringBuilder()
   let mutable childHtml = None
   for attr in attrs do
@@ -663,6 +713,9 @@ let private renderAttrs (attrs: IHTMLProp seq) =
       | _ -> ()
     | :? HTMLAttr as attr ->
       html.Append(renderHtmlAttr attr) |> ignore
+      html.Append(" ") |> ignore
+    | :? SVGAttr as attr ->
+      html.Append(renderSVGAttr attr) |> ignore
       html.Append(" ") |> ignore
     | _ -> ()
 
@@ -678,7 +731,8 @@ let renderToString (htmlNode: ReactElement): string =
       html.ToString()
 
     match htmlNode :?> HTMLNode with
-    | HTMLNode.Text str -> str
+    | HTMLNode.Text str -> escapeHtml str
+    | HTMLNode.RawText str -> str
     | HTMLNode.Node (tag, attrs, children) ->
       let attrs, child = renderAttrs (attrs |> Seq.cast)
       let child =
