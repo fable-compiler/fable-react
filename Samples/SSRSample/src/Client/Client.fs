@@ -8,8 +8,12 @@ open Fable.Core.JsInterop
 open Fable.PowerPack.Fetch
 open Client.Types
 open Client.View
+open Fable.Import.React
 open Fable.Import.Browser
 open Shared
+
+Client.Bench.jsRenderBench()
+
 
 // let div = document.getElementById("elmish-app")
 // div.innerHTML <- ""
@@ -18,7 +22,7 @@ open Shared
 
 let init () =
   // Init model by server side state
-  let model = !!window?__INIT_STATE__
+  let model = ofJson<Model> !!window?__INIT_STATE__
   // let cmd =
   //   Cmd.ofPromise
   //     (fetchAs<int> "/api/init")
@@ -35,8 +39,6 @@ let update msg (model : Model) =
     | None, Init (Ok x) -> x
     | _ -> model
   model', Cmd.none
-
-
 
 
 #if DEBUG
