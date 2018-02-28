@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ItemGroup>
+    <Compile Include="../../../../src/Fable.React/Fable.Import.React.fs" />
+    <Compile Include="../../../../src/Fable.React/Fable.Helpers.React.fs" />
+    <Compile Include="../../../../src/Fable.React/Fable.Helpers.Isomorphic.fs" />
+    <Compile Include="../Shared/Shared.fs" />
+    <Compile Include="../Client/Types.fs" />
+    <Compile Include="../Client/View.fs" />
+  </ItemGroup>
+</Project>
+

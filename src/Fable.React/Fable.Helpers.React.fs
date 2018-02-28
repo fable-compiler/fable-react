@@ -756,26 +756,36 @@ with interface ReactElement
 let createElement(comp: obj, props: obj, [<ParamList>] children: obj) =
     HTMLNode.Text "" :> ReactElement
 
-[<Erase>]
 type ServerElementType =
-| Fragment
-| Tag
+| Fragment = 1
+| Component = 2
+| Tag = 3
 
-let inline isomorphicElement (tag: obj, props: IProp seq, children: ReactElement list, elementType: ServerElementType) =
+let isomorphicElement (tag: obj, props: obj, children: ReactElement list, elementType: ServerElementType) =
 #if FABLE_COMPILER
-    createElement(tag, keyValueList CaseRules.LowerFirst (props :?> IProp list), children)
+    let props =
+        match elementType with
+        | ServerElementType.Component -> props
+        | _ -> keyValueList CaseRules.LowerFirst (props :?> IProp list)
+    createElement(tag, props, children)
 #else
     match elementType with
     | ServerElementType.Tag ->
-          HTMLNode.Node (string tag, props, children) :> ReactElement
+          HTMLNode.Node (string tag, props :?> IProp seq, children) :> ReactElement
     | ServerElementType.Fragment ->
           HTMLNode.List children :> ReactElement
+    | ServerElementType.Component ->
+          let tag = tag :?> System.Type
+          let comp = System.Activator.CreateInstance(tag, props)
+          let render = tag.GetMethod("render")
+          render.Invoke(comp, null) :?> ReactElement
+    | _ -> HTMLNode.Text "" :> ReactElement
 #endif
 
 /// OBSOLETE: Use `ofType`
 [<System.Obsolete("Use ofType")>]
 let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
-    createElement(typedefof<'T>, props, children)
+    isomorphicElement(typedefof<'T>, props, children, ServerElementType.Component)
 
 /// OBSOLETE: Use `ofFunction`
 [<System.Obsolete("Use ofFunction")>]
@@ -789,7 +799,12 @@ let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: Rea
 /// Instantiate a component from a type inheriting React.Component
 /// Example: `ofType<MyComponent,_,_> { myProps = 5 } []`
 let inline ofType<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
-    createElement(typedefof<'T>, props, children)
+#if FABLE_COMPILER
+    let obj = typedefof<'T>
+#else
+    let obj = typeof<'T>
+#endif
+    isomorphicElement(obj, props, children, ServerElementType.Component)
 
 /// Instantiate a stateless component from a function
 /// Example:
@@ -804,6 +819,7 @@ let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children:
 /// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
 let inline ofImport<[<Pojo>]'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement list): ReactElement =
     createElement(import importMember importPath, props, children)
+
 #if FABLE_COMPILER
 /// Alias of `ofString`
 let inline str (s: string): ReactElement = unbox s
@@ -859,6 +875,7 @@ let inline ofList (els: ReactElement list): ReactElement = HTMLNode.List els :> 
 let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :> ReactElement
 
 #endif
+
 
 /// Instantiate a DOM React element
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =

@@ -76,6 +76,7 @@ module React =
     ///                     this.props.name this.state.value
     ///         div [] [ofString msg]
     /// ```
+#if FABLE_COMPILER
     and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
         [<Emit("$0.props")>]
         member __.props: 'P = jsNative
@@ -170,6 +171,50 @@ module React =
 
         interface ReactElement
 
+#else
+    and [<AbstractClass>] Component<'P, 'S>(initProps: 'P) =
+        member __.props: 'P = initProps
+
+        member __.children: ReactElement array = [| |]
+
+        member val state: 'S = Unchecked.defaultof<'S> with get, set
+
+        member x.setState(value: 'S): unit = x.state <- value
+        member x.setState(updater: 'S->'P->'S): unit = x.state <- updater x.state x.props
+
+        member x.setInitState(value: 'S): unit = x.state <- value
+
+        member __.forceUpdate(?callBack: unit->unit): unit = ()
+
+        member __.isMounted(): bool = false
+
+        abstract componentWillMount: unit -> unit
+        default __.componentWillMount () = ()
+        abstract componentDidMount: unit -> unit
+        default __.componentDidMount () = ()
+
+        abstract componentWillReceiveProps: nextProps: 'P -> unit
+        default __.componentWillReceiveProps (_) = ()
+
+        abstract shouldComponentUpdate: nextProps: 'P * nextState: 'S -> bool
+        default __.shouldComponentUpdate (_, _) = true
+
+        abstract componentWillUpdate: nextProps: 'P * nextState: 'S -> unit
+        default __.componentWillUpdate (_, _) = ()
+
+        abstract componentDidUpdate: prevProps: 'P * prevState: 'S -> unit
+        default __.componentDidUpdate (_, _) = ()
+
+        abstract componentWillUnmount: unit -> unit
+        default __.componentWillUnmount () = ()
+
+        abstract componentDidCatch: error: Exception * info: obj -> unit
+        default __.componentDidCatch (_, _) = ()
+
+        abstract render: unit -> ReactElement
+
+        interface ReactElement
+#endif
     /// A react component that implements `shouldComponentUpdate()` with a shallow prop and state comparison.
     ///
     /// Usage:

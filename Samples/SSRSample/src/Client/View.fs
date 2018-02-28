@@ -2,10 +2,24 @@
 module Client.View
 
 
+open Fable.Import
+open Fable.Core
+open Fable.Core.JsInterop
 open Fable.Helpers.React
+open Fable.Helpers.Isomorphic
 open Fable.Helpers.React.Props
 open Client.Types
 open Shared
+
+type [<Pojo>] JsCompProps = {
+  text: string
+}
+
+#if FABLE_COMPILER
+let JsComp: React.ComponentClass<JsCompProps> = importDefault "./jsComp"
+#else
+let JsComp = Unchecked.defaultof<React.ComponentClass<JsCompProps>>
+#endif
 
 let show = function
 | Some x -> string x
@@ -31,6 +45,28 @@ let safeComponents =
     [ strong [] [ str "SAFE Template" ]
       str " powered by: "
       components ]
+
+let jsComp (props: JsCompProps) =
+  ofImport "default" "./jsComp" props []
+
+let jsCompServer (props: JsCompProps) =
+  div [] [ str "loading" ]
+
+type [<Pojo>] MyProp = {
+  text: string
+}
+type [<Pojo>] MyState = {
+  text: string
+}
+
+type MyReactComp(initProps: MyProp) as self =
+  inherit React.Component<MyProp, MyState>(initProps) with
+  do self.setInitState { text="my state" }
+
+  override x.render() =
+    div [] [ str (sprintf "prop: %s state: %s" x.props.text x.state.text) ]
+
+
 
 let view (model: Model) (dispatch) =
   div []
@@ -65,28 +101,50 @@ let view (model: Model) (dispatch) =
         span [] [ str "Test checkbox:" ]
         input [ Type "checkbox"; DefaultChecked true ]
         input [ Type "checkbox"; DefaultChecked false ]
-        input [ Type "checkbox"; Checked true ]
-        input [ Type "checkbox"; Checked false ]
-        input [ Type "checkbox"; Checked true; DefaultChecked false ]
-        input [ Type "checkbox"; DefaultChecked true; Checked false ]
+        input [ Type "checkbox"; Checked true; OnChange ignore ]
+        input [ Type "checkbox"; Checked false; OnChange ignore ]
       ]
       div [] [
         span [] [ str "Test value:" ]
         input [ Type "text"; DefaultValue "true" ]
         input [ Type "text"; DefaultValue "false" ]
-        input [ Type "text"; Value "true" ]
-        input [ Type "text"; Value "false" ]
-        input [ Type "text"; Value "true"; DefaultValue "false" ]
-        input [ Type "text"; DefaultValue "true"; Value "false" ]
+        input [ Type "text"; Value "true"; OnChange ignore ]
+        input [ Type "text"; Value "false"; OnChange ignore ]
       ]
 
       div [] [
         span [] [ str "Test textarea:" ]
         textarea [ DefaultValue "true" ] []
         textarea [ DefaultValue "false" ] []
-        textarea [ Value "true" ] []
-        textarea [ Value "false" ] []
-        textarea [ Value "true"; DefaultValue "false" ] []
-        textarea [ DefaultValue "true"; Value "false" ] []
+        textarea [ Value "true"; OnChange ignore] []
+        textarea [ Value "false"; OnChange ignore] []
       ]
+
+      div [] [
+        span [] [ str "Test React.Fragment:" ]
+        fragment []
+          [ span [] [ str "child 1" ]
+            span [] [ str "child 2" ]
+            span [] [ str "child 3" ]
+            span [] [ str "child 4" ]
+          ]
+      ]
+
+      div [] [
+        span [] [ str "Test escape:" ]
+        fragment []
+          [ span
+              [ Data ("value", "<div>\"\'&</div>");
+                Style [ Display "<div>\"\'&</div>"]
+              ]
+              [ str "<div>\"\'&</div>" ]
+          ]
+      ]
+
+      div [] [
+        span [] [ str "Test js component:" ]
+        hybridView jsComp jsCompServer { text="I'm rendered by a js Component!" }
+      ]
+
+      ofType<MyReactComp, _, _> { text="my prop" } []
     ]
