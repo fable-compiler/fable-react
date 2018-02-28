@@ -1,3 +1,7 @@
+### 3.0.0-alpha-001
+
+* Alpha release of next major version
+
 ### 2.1.0
 
 * Add React PureComponent and Fragment (@vbfox)
