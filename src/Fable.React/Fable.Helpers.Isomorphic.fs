@@ -42,28 +42,3 @@ let hybridView (clientView: 'model -> ReactElement) (serverView: 'model -> React
 #else
     serverView model
 #endif
-
-
-
-// /// Isomorphic helper function for Fable.Core.JsInterop.import,
-// /// it works exactly the same as import in client side, but would return Unchecked.defaultof<'T> in server side instead of throw an runtime error immediately
-// [<Emit("""import "$1" from "$2" """)>]
-// let inline importOrDefault<'T> selector path =
-//     Unchecked.defaultof<'T>
-
-// /// Isomorphic helper function for Fable.Core.JsInterop.importAll,
-// /// it works exactly the same as importAll in client side, but would return Unchecked.defaultof<'T> in server side instead of throw an runtime error immediately
-// let inline importAllOrDefault<'T> path =
-//     importOrDefault<'T> "*" path
-
-
-
-// /// Isomorphic helper function for Fable.Core.JsInterop.importDefault,
-// /// it works exactly the same as importDefault in client side, but would return Unchecked.defaultof<'T> in server side instead of throw an runtime error immediately
-// let inline importDefaultOrDefault<'T> path =
-//     importOrDefault<'T> "default" path
-
-// /// Isomorphic helper function for Fable.Core.JsInterop.importSideEffects,
-// /// it works exactly the same as importSideEffects in client side, but would ignore in server side instead of throw an runtime error immediately
-// let inline importSideEffectsOrDefault path =
-//     hybridExec importSideEffects ignore path
