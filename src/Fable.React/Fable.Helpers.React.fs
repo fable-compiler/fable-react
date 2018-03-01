@@ -769,7 +769,7 @@ type ServerElementType =
 let [<Literal>] private ChildrenName = "children"
 
 module ServerRenderingInternal =
-    let inline hybridExec  (clientFn: 'a -> 'b) (serverFn: 'a -> 'b) (input: 'a) =
+    let inline isomorphicExec  (clientFn: 'a -> 'b) (serverFn: 'a -> 'b) (input: 'a) =
 #if FABLE_COMPILER
         clientFn input
 #else
@@ -829,7 +829,7 @@ let inline ofType<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 
     let inline serverRender () =
         createServerElement(typeof<'T>, props, children, ServerElementType.Component)
 
-    hybridExec clientRender serverRender ()
+    isomorphicExec clientRender serverRender ()
 
 
 
@@ -845,7 +845,7 @@ let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P)
 /// ofFunction Hello { name = "Maxime" } []
 /// ```
 let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
-    hybridExec createElement createServerElementByFn (f, props, children)
+    isomorphicExec createElement createServerElementByFn (f, props, children)
 
 
 /// OBSOLETE: Use `ofFunction`
@@ -923,7 +923,7 @@ let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement l
     let inline serverRender (tag, props, children) =
         createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
 
-    hybridExec clientRender serverRender (tag, props, children)
+    isomorphicExec clientRender serverRender (tag, props, children)
 
 /// Instantiate a DOM React element (void)
 let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
@@ -933,7 +933,7 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
     let inline serverRender (tag, props, children) =
         createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
 
-    hybridExec clientRender serverRender (tag, props, [])
+    isomorphicExec clientRender serverRender (tag, props, [])
 
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
@@ -942,7 +942,7 @@ let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list)
     let inline serverRender (tag, props, children) =
         createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
 
-    hybridExec clientRender serverRender (tag, props, children)
+    isomorphicExec clientRender serverRender (tag, props, children)
 
 /// Instantiate a React fragment
 let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =
@@ -951,7 +951,7 @@ let inline fragment (props: IFragmentProp list) (children: ReactElement list): R
     let inline serverRender () =
         createServerElement(typedefof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
 
-    hybridExec clientRender serverRender ()
+    isomorphicExec clientRender serverRender ()
 
 // Standard elements
 let inline a b c = domEl "a" b c

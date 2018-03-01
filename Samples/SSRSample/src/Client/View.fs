@@ -163,7 +163,7 @@ let view (model: Model) (dispatch) =
 
       div [] [
         span [] [ str "Test js component:" ]
-        hybridView jsComp jsCompServer { text="I'm rendered by a js Component!" }
+        isomorphicView jsComp jsCompServer { text="I'm rendered by a js Component!" }
       ]
 
       div [] [

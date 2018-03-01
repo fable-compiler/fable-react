@@ -33,10 +33,10 @@ open Fable.Helpers.React
 
 /// Isomorphic helper function for conditional executaion
 /// it will execute `clientFn model` in the client side and `serverFn model` in the server side
-let inline hybridExec clientFn serverFn model =
-    ServerRenderingInternal.hybridExec clientFn serverFn model
+let inline isomorphicExec clientFn serverFn model =
+    ServerRenderingInternal.isomorphicExec clientFn serverFn model
 
-let hybridView (clientView: 'model -> ReactElement) (serverView: 'model -> ReactElement) (model: 'model) =
+let isomorphicView (clientView: 'model -> ReactElement) (serverView: 'model -> ReactElement) (model: 'model) =
 #if FABLE_COMPILER
     ofType<HybridComponent<_>, _, _> { clientView=clientView; serverView=serverView; model=model } []
 #else
