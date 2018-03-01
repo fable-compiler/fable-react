@@ -64,9 +64,29 @@ type MyReactComp(initProps: MyProp) as self =
   do self.setInitState { text="my state" }
 
   override x.render() =
-    div [] [ str (sprintf "prop: %s state: %s" x.props.text x.state.text) ]
+    div []
+      [ span [] [ str (sprintf "prop: %s state: %s" x.props.text x.state.text) ]
+        span [] [ ofArray x.children ] ]
 
 
+
+type [<Pojo>] FnCompProps = {
+  text: string
+}
+
+let fnComp (props: FnCompProps) =
+  div []
+      [ span [] [ str (sprintf "prop: %s" props.text) ] ]
+
+type [<Pojo>] FnCompWithChildrenProps = {
+  children: React.ReactElement array
+  text: string
+}
+
+let fnCompWithChildren (props: FnCompWithChildrenProps) =
+  div []
+      [ span [] [ str (sprintf "prop: %s" props.text) ]
+        span [] [ ofArray props.children ] ]
 
 let view (model: Model) (dispatch) =
   div []
@@ -146,5 +166,15 @@ let view (model: Model) (dispatch) =
         hybridView jsComp jsCompServer { text="I'm rendered by a js Component!" }
       ]
 
-      ofType<MyReactComp, _, _> { text="my prop" } []
+      div [] [
+        span [] [ str "Test ofType:" ]
+        ofType<MyReactComp, _, _> { text="my prop" } [ span [] [ str "I'm rendered by children!"] ]
+      ]
+
+      div [] [
+        span [] [ str "Test ofFunction:" ]
+        ofFunction fnComp { text = "I'm rendered by Function Component!"} []
+        ofFunction fnCompWithChildren { text = "I'm rendered by Function Component!"; children=[||]} [ span [] [ str "I'm rendered by children!"] ]
+      ]
+
     ]
