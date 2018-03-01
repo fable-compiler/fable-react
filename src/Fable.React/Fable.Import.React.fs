@@ -76,16 +76,15 @@ module React =
     ///                     this.props.name this.state.value
     ///         div [] [ofString msg]
     /// ```
-#if FABLE_COMPILER
-    and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
+    and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(initProps: 'P) =
         [<Emit("$0.props")>]
-        member __.props: 'P = jsNative
+        member __.props: 'P = initProps
 
         [<Emit("Array.prototype.concat($0.props.children || [])")>]
-        member __.children: ReactElement array = jsNative
+        member val children: ReactElement array = [| |] with get, set
 
         [<Emit("$0.state")>]
-        member __.state: 'S = jsNative
+        member val state: 'S = Unchecked.defaultof<'S> with get, set
 
         /// ATTENTION: Within the constructor, use `setInitState`
         /// Enqueues changes to the component state and tells React that this component and its children need to be re-rendered with the updated state. This is the primary method you use to update the user interface in response to event handlers and server responses.
@@ -93,26 +92,26 @@ module React =
         /// setState() does not always immediately update the component. It may batch or defer the update until later. This makes reading this.state right after calling setState() a potential pitfall. Instead, use componentDidUpdate or a setState callback (setState(updater, callback)), either of which are guaranteed to fire after the update has been applied. If you need to set the state based on the previous state, read about the updater argument below.
         /// setState() will always lead to a re-render unless shouldComponentUpdate() returns false. If mutable objects are being used and conditional rendering logic cannot be implemented in shouldComponentUpdate(), calling setState() only when the new state differs from the previous state will avoid unnecessary re-renders.
         [<Emit("$0.setState($1)")>]
-        member __.setState(value: 'S): unit = jsNative
+        member x.setState(value: 'S): unit = x.state <- value
 
         /// Overload of `setState` accepting updater function with the signature: `(prevState, props) => stateChange`
         /// prevState is a reference to the previous state. It should not be directly mutated. Instead, changes should be represented by building a new object based on the input from prevState and props.
         /// Both prevState and props received by the updater function are guaranteed to be up-to-date. The output of the updater is shallowly merged with prevState.
         [<Emit("$0.setState($1)")>]
-        member __.setState(updater: 'S->'P->'S): unit = jsNative
+        member x.setState(updater: 'S->'P->'S): unit = x.state <- updater x.state x.props
 
         /// This method can only be called in the constructor
         [<Emit("this.state = $1")>]
-        member __.setInitState(value: 'S): unit = jsNative
+        member x.setInitState(value: 'S): unit = x.state <- value
 
         /// By default, when your component’s state or props change, your component will re-render. If your render() method depends on some other data, you can tell React that the component needs re-rendering by calling forceUpdate().
         /// Calling forceUpdate() will cause render() to be called on the component, skipping shouldComponentUpdate(). This will trigger the normal lifecycle methods for child components, including the shouldComponentUpdate() method of each child. React will still only update the DOM if the markup changes.
         /// Normally you should try to avoid all uses of forceUpdate() and only read from this.props and this.state in render().
         [<Emit("$0.forceUpdate($1)")>]
-        member __.forceUpdate(?callBack: unit->unit): unit = jsNative
+        member __.forceUpdate(?callBack: unit->unit): unit = ()
 
         [<Emit("$0.isMounted()")>]
-        member __.isMounted(): bool = jsNative
+        member __.isMounted(): bool = false
 
         /// Invoked immediately before mounting occurs. It is called before render(), therefore calling setState() synchronously in this method will not trigger an extra rendering. Generally, we recommend using the constructor() instead.
         /// Avoid introducing any side-effects or subscriptions in this method. For those use cases, use componentDidMount() instead.
@@ -171,50 +170,6 @@ module React =
 
         interface ReactElement
 
-#else
-    and [<AbstractClass>] Component<'P, 'S>(initProps: 'P) =
-        member __.props: 'P = initProps
-
-        member __.children: ReactElement array = [| |]
-
-        member val state: 'S = Unchecked.defaultof<'S> with get, set
-
-        member x.setState(value: 'S): unit = x.state <- value
-        member x.setState(updater: 'S->'P->'S): unit = x.state <- updater x.state x.props
-
-        member x.setInitState(value: 'S): unit = x.state <- value
-
-        member __.forceUpdate(?callBack: unit->unit): unit = ()
-
-        member __.isMounted(): bool = false
-
-        abstract componentWillMount: unit -> unit
-        default __.componentWillMount () = ()
-        abstract componentDidMount: unit -> unit
-        default __.componentDidMount () = ()
-
-        abstract componentWillReceiveProps: nextProps: 'P -> unit
-        default __.componentWillReceiveProps (_) = ()
-
-        abstract shouldComponentUpdate: nextProps: 'P * nextState: 'S -> bool
-        default __.shouldComponentUpdate (_, _) = true
-
-        abstract componentWillUpdate: nextProps: 'P * nextState: 'S -> unit
-        default __.componentWillUpdate (_, _) = ()
-
-        abstract componentDidUpdate: prevProps: 'P * prevState: 'S -> unit
-        default __.componentDidUpdate (_, _) = ()
-
-        abstract componentWillUnmount: unit -> unit
-        default __.componentWillUnmount () = ()
-
-        abstract componentDidCatch: error: Exception * info: obj -> unit
-        default __.componentDidCatch (_, _) = ()
-
-        abstract render: unit -> ReactElement
-
-        interface ReactElement
-#endif
     /// A react component that implements `shouldComponentUpdate()` with a shallow prop and state comparison.
     ///
     /// Usage:
