@@ -1,6 +1,6 @@
-# Five Step to Enable Server-Side Rendering in your Elmish + Dotnet App!
+# Five Steps to enable Server-Side Rendering in your Elmish + DotNet App!
 
-[SSR Sample App of safe-stack template is awailable!](https://github.com/fable-compiler/fable-react/tree/master/Samples/SSRSample)
+[SSR Sample App of SAFE-stack template is available!](https://github.com/fable-compiler/fable-react/tree/master/Samples/SSRSample)
 
 ## Step 1: Reorganize your source files
 
@@ -17,13 +17,13 @@ pages
 
 View.fs and Types.fs will be shared between client and server.
 
-## Step 2. Make shared files can be executed on the server side
+## Step 2. Make sure shared files can be executed on the server side
 
-Some code works in Fable might throw a run time exception when executed on dotnet, so we should be careful with unsafe type casting and add compiler directives to remove some code if necessary.
+Some code that works in Fable might throw a run time exception when executed on dotnet, so we should be careful with unsafe type casting and add compiler directives to remove some code if necessary.
 
 Here are some hints about doing this:
 
-### 1. Replace unsafe cast (unbox and `!!`) in your html attributes and css props with `HTMLAttr.Custom`, `SVGAttr.Custom` and `CSSProp.Custom`
+### 1. Replace unsafe cast (unbox and `!!`) in your HTML attributes and CSS props with `HTMLAttr.Custom`, `SVGAttr.Custom` and `CSSProp.Custom`
 
 ```diff
 - div [ !!("class", "container") ] []
@@ -40,7 +40,7 @@ Here are some hints about doing this:
 
 ### 2. Make sure your browser/js code won't be executed on the server side
 
-One big challenge of sharing code between client and sever is that server side has different API environment with client side. In this respect Fable + dotnet's SSR is has not much difference with nodejs, except in dotnet you should not only prevent browser's API call, but also js.
+One big challenge of sharing code between client and server is that server side has different API environment than client side. In this respect Fable + dotnet's SSR is not much different than nodejs, except in dotnet you should not only prevent browser's API call, but also js.
 
 Thanks for Fable Compiler's `FABLE_COMPILER` directive, we can easly distinguish client environment and server environment and execute different code in each environment:
 
@@ -89,9 +89,9 @@ open Fable.Import.Browser
 ```
 
 
-### 3. Add placeholder for components cannot been rendered on the serve side, like js native components.
+### 3. Add a placeholder for components that cannot been rendered on the server side, like js native components.
 
-In `Fable.Helpers.Isomorphic` we also implemented a help funciton to render a placeholder element for components that cannot been rendered on the server side, this function will also help [React.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) to understand the differences between htmls rendered by client and server, so React won't treat it as a mistake and warn about it.
+In `Fable.Helpers.Isomorphic` we also implemented a help function to render a placeholder element for components that cannot been rendered on the server side, this function will also help [React.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) to understand the differences between htmls rendered by client and server, so React won't treat it as a mistake and warn about it.
 
 ```diff
 open Fable.Core
@@ -165,8 +165,8 @@ let renderHtml () =
 
 ## Step 4. Update your elmish app's init function
 
-1. Init your elmish app by state printed in the html.
-2. Remove init commands that still fetch data which already printed in the html.
+1. Init your elmish app by state printed in the HTML.
+2. Remove init commands that still fetch data which already printed in the HTML.
 
 e.g.
 
@@ -199,7 +199,7 @@ Program.mkProgram init update view
 |> Program.run
 ```
 
-Now enjoi! If you find bugs or just need some help, please create an issue and let we know.
+Now enjoy! If you find bugs or just need some help, please create an issue and let us know.
 
 ## Try the sample app
 
