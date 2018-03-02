@@ -36,7 +36,7 @@ let bench () =
     Fable.Helpers.ReactServer.renderToString(Client.View.view initState ignore)
     |> ignore
   watch.Stop()
-  printfn "render %d times: %dms" times watch.ElapsedMilliseconds
+  printfn "render %d times in dotnet core: %dms" times watch.ElapsedMilliseconds
 
 bench ()
 
