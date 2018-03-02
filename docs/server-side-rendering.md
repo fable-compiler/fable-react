@@ -206,5 +206,5 @@ Now enjoy! If you find bugs or just need some help, please create an issue and l
 ```sh
 git clone https://github.com/fable-compiler/fable-react.git
 cd ./fable-react/Samples/SSRSample/
-./build.sh # or ./build.cmd in windows
+./build.sh run # or ./build.cmd run on windows
 ```
