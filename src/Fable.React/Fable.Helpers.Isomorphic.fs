@@ -32,7 +32,7 @@ open Components
 open Fable.Helpers.React
 
 /// Isomorphic helper function for conditional executaion
-/// it will execute `clientFn model` in the client side and `serverFn model` in the server side
+/// it will execute `clientFn model` on the client side and `serverFn model` on the server side
 let inline isomorphicExec clientFn serverFn model =
     ServerRenderingInternal.isomorphicExec clientFn serverFn model
 

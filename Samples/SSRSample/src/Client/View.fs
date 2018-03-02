@@ -11,15 +11,6 @@ open Fable.Helpers.React.Props
 open Client.Types
 open Shared
 
-type [<Pojo>] JsCompProps = {
-  text: string
-}
-
-#if FABLE_COMPILER
-let JsComp: React.ComponentClass<JsCompProps> = importDefault "./jsComp"
-#else
-let JsComp = Unchecked.defaultof<React.ComponentClass<JsCompProps>>
-#endif
 
 let show = function
 | Some x -> string x
@@ -46,11 +37,16 @@ let safeComponents =
       str " powered by: "
       components ]
 
+type [<Pojo>] JsCompProps = {
+  text: string
+}
+
 let jsComp (props: JsCompProps) =
   ofImport "default" "./jsComp" props []
 
 let jsCompServer (props: JsCompProps) =
   div [] [ str "loading" ]
+
 
 type [<Pojo>] MyProp = {
   text: string
@@ -181,5 +177,4 @@ let view (model: Model) (dispatch) =
         ofFunction fnComp { text = "I'm rendered by Function Component!"} []
         ofFunction fnCompWithChildren { text = "I'm rendered by Function Component!"; children=[||]} [ span [] [ str "I'm rendered by children!"] ]
       ]
-
     ]
