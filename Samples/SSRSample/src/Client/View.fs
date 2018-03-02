@@ -172,6 +172,11 @@ let view (model: Model) (dispatch) =
       ]
 
       div [] [
+        span [] [ str "Test null:" ]
+        null
+      ]
+
+      div [] [
         span [] [ str "Test ofFunction:" ]
         ofFunction fnComp { text = "I'm rendered by Function Component!"} []
         ofFunction fnCompWithChildren { text = "I'm rendered by Function Component!"; children=[||]} [ span [] [ str "I'm rendered by children!"] ]

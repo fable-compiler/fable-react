@@ -754,17 +754,18 @@ type HTMLNode =
 | RawText of string
 | Node of string * IProp seq * ReactElement seq
 | List of ReactElement seq
+| Empty
 with interface ReactElement
 
 [<Import("createElement", from="react")>]
 let createElement(comp: obj, props: obj, [<ParamList>] children: obj) =
-    HTMLNode.Text "" :> ReactElement
+    HTMLNode.Empty :> ReactElement
 
 [<StringEnum>]
 type ServerElementType =
-| [<CompiledName("t")>] Tag
-| [<CompiledName("f")>] Fragment
-| [<CompiledName("c")>] Component
+| Tag
+| Fragment
+| Component
 
 let [<Literal>] private ChildrenName = "children"
 

@@ -712,11 +712,17 @@ let rec private addReactMark htmlNode =
     HTMLNode.List (nodes |> Seq.cast |> Seq.map addReactMark |> Seq.cast)
   | h -> h
 
+let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
+  if isNull htmlNode
+  then HTMLNode.Empty
+  else htmlNode :?> HTMLNode
+
 let renderToString (htmlNode: ReactElement): string =
 
-  let htmlNode = addReactMark (htmlNode :?> HTMLNode)
+  let htmlNode = addReactMark (castHTMLNode htmlNode)
 
   let rec render (htmlNode: HTMLNode): string =
+
     let inline renderList (nodes: HTMLNode seq) =
       let html = StringBuilder()
       for node in nodes do
@@ -727,13 +733,14 @@ let renderToString (htmlNode: ReactElement): string =
     | HTMLNode.Text str -> escapeHtml str
     | HTMLNode.RawText str -> str
     | HTMLNode.Node (tag, attrs, children) ->
-      let attrs, child = renderAttrs (attrs |> Seq.cast) tag
+      let attrs, child = renderAttrs attrs tag
       let child =
         match child with
         | Some c -> c
-        | None -> (renderList (children |> Seq.cast))
+        | None -> (renderList (children |> Seq.map castHTMLNode))
       let attrs = if attrs = "" then attrs else " " + attrs
       "<" + tag + attrs + ">" + child + "</" + tag + ">"
     | HTMLNode.List nodes -> renderList (nodes |> Seq.cast)
+    | HTMLNode.Empty -> ""
 
   render htmlNode
