@@ -62,8 +62,8 @@ Target "Run" (fun () ->
     run dotnetCli "fable webpack-dev-server" clientPath
   }
   let browser = async {
-    Threading.Thread.Sleep 5000
-    Diagnostics.Process.Start "http://localhost:8080" |> ignore
+    Threading.Thread.Sleep 10000
+    Diagnostics.Process.Start "http://localhost:8085" |> ignore
   }
 
   [ server; client; browser]
