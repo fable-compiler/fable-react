@@ -1,4 +1,4 @@
-# Five Steps to enable Server-Side Rendering in your Elmish + DotNet App!
+# Five steps to enable Server-Side Rendering in your Elmish + DotNet App!
 
 [SSR Sample App of SAFE-stack template is available!](https://github.com/fable-compiler/fable-react/tree/master/Samples/SSRSample)
 
