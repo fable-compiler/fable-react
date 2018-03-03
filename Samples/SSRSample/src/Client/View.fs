@@ -60,9 +60,9 @@ type MyReactComp(initProps: MyProp) as self =
   do self.setInitState { text="my state" }
 
   override x.render() =
-    div []
-      [ span [] [ str (sprintf "prop: %s state: %s" x.props.text x.state.text) ]
-        span [] [ ofArray x.children ] ]
+    div [ ClassName "class-comp children-comp" ]
+      [ div [] [ str (sprintf "prop: %s state: %s" x.props.text x.state.text) ]
+        div [] [ ofArray x.children ] ]
 
 
 
@@ -71,7 +71,7 @@ type [<Pojo>] FnCompProps = {
 }
 
 let fnComp (props: FnCompProps) =
-  div []
+  div [ ClassName "fn-comp" ]
       [ span [] [ str (sprintf "prop: %s" props.text) ] ]
 
 type [<Pojo>] FnCompWithChildrenProps = {
@@ -80,64 +80,70 @@ type [<Pojo>] FnCompWithChildrenProps = {
 }
 
 let fnCompWithChildren (props: FnCompWithChildrenProps) =
-  div []
-      [ span [] [ str (sprintf "prop: %s" props.text) ]
-        span [] [ ofArray props.children ] ]
+  div [ ClassName "fn-comp children-comp" ]
+      [ div [] [ str (sprintf "prop: %s" props.text) ]
+        div [] [ ofArray props.children ] ]
 
 let view (model: Model) (dispatch) =
   div []
-    [ h1 [] [ str "SAFE Template" ]
-      p  [] [ str "The initial counter is fetched from server" ]
-      p  [] [ str "Press buttons to manipulate counter:" ]
-      button [ OnClick (fun _ -> dispatch Decrement) ] [ str "-" ]
-      div [] [ str (show model.counter) ]
-      button [ OnClick (fun _ -> dispatch Increment) ] [ str "+" ]
-      safeComponents
-      div [] [
-        span [] [ str "Test str:" ]
+    [ h1 [ ClassName "title is-1 has-text-centered"] [ str "Server-Side Rendering Sample" ]
+      div [ ClassName "intro" ]
+        [ p  [] [ str "The initial state is rendered in html from server." ]
+          div [ ClassName "counter-app" ]
+            [ p  [] [ str "Press buttons to manipulate counter:" ]
+              div [ ClassName "counter" ]
+                [ button [ ClassName "button is-small"; OnClick (fun _ -> dispatch Decrement) ] [ str "-" ]
+                  span [ ClassName "tag is-info" ] [ str (show model.counter) ]
+                  button [ ClassName "button is-small"; OnClick (fun _ -> dispatch Increment) ] [ str "+" ]
+                ]
+            ]
+          safeComponents
+        ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test str:" ]
         span [] [ str model.someString ]
       ]
-      div [] [
-        span [] [ str "Test ofFloat:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test ofFloat:" ]
         span [] [ ofFloat model.someFloat ]
       ]
-      div [] [
-        span [] [ str "Test ofInt:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test ofInt:" ]
         span [] [ ofInt model.someInt ]
       ]
-      div [] [
-        span [] [ str "Test html attr:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test html attr:" ]
         span [ Id "someId"; Data ("aa", "bb"); HTMLAttr.Custom ("cc", "dd") ] [ str "data-aa" ]
       ]
-      div [] [
-        span [] [ str "Test CSS prop:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test CSS prop:" ]
         div [ Style [ Display "block"; CSSProp.Custom ("color", "red") ] ] [ str "Custom CSSProp" ]
       ]
-      div [] [
-        span [] [ str "Test checkbox:" ]
-        input [ Type "checkbox"; DefaultChecked true ]
-        input [ Type "checkbox"; DefaultChecked false ]
-        input [ Type "checkbox"; Checked true; OnChange ignore ]
-        input [ Type "checkbox"; Checked false; OnChange ignore ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test checkbox:" ]
+        input [ ClassName "checkbox"; Type "checkbox"; DefaultChecked true ]
+        input [ ClassName "checkbox"; Type "checkbox"; DefaultChecked false ]
+        input [ ClassName "checkbox"; Type "checkbox"; Checked true; OnChange ignore ]
+        input [ ClassName "checkbox"; Type "checkbox"; Checked false; OnChange ignore ]
       ]
-      div [] [
-        span [] [ str "Test value:" ]
-        input [ Type "text"; DefaultValue "true" ]
-        input [ Type "text"; DefaultValue "false" ]
-        input [ Type "text"; Value "true"; OnChange ignore ]
-        input [ Type "text"; Value "false"; OnChange ignore ]
-      ]
-
-      div [] [
-        span [] [ str "Test textarea:" ]
-        textarea [ DefaultValue "true" ] []
-        textarea [ DefaultValue "false" ] []
-        textarea [ Value "true"; OnChange ignore] []
-        textarea [ Value "false"; OnChange ignore] []
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test value:" ]
+        input [ ClassName "input"; Type "text"; DefaultValue "true" ]
+        input [ ClassName "input"; Type "text"; DefaultValue "false" ]
+        input [ ClassName "input"; Type "text"; Value "true"; OnChange ignore ]
+        input [ ClassName "input"; Type "text"; Value "false"; OnChange ignore ]
       ]
 
-      div [] [
-        span [] [ str "Test React.Fragment:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test textarea:" ]
+        textarea [ ClassName "textarea"; DefaultValue "true" ] []
+        textarea [ ClassName "textarea"; DefaultValue "false" ] []
+        textarea [ ClassName "textarea"; Value "true"; OnChange ignore] []
+        textarea [ ClassName "textarea"; Value "false"; OnChange ignore] []
+      ]
+
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test React.Fragment:" ]
         fragment []
           [ span [] [ str "child 1" ]
             span [] [ str "child 2" ]
@@ -146,8 +152,8 @@ let view (model: Model) (dispatch) =
           ]
       ]
 
-      div [] [
-        span [] [ str "Test escape:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test escape:" ]
         fragment []
           [ span
               [ Data ("value", "<div>\"\'&</div>");
@@ -157,24 +163,24 @@ let view (model: Model) (dispatch) =
           ]
       ]
 
-      div [] [
-        span [] [ str "Test js component:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test js component:" ]
         isomorphicView jsComp jsCompServer { text="I'm rendered by a js Component!" }
       ]
 
-      div [] [
-        span [] [ str "Test ofType:" ]
-        ofType<MyReactComp, _, _> { text="my prop" } [ span [] [ str "I'm rendered by children!"] ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test ofType:" ]
+        ofType<MyReactComp, _, _> { text="my prop" } [ span [] [ str " I'm rendered by children!"] ]
       ]
 
-      div [] [
-        span [] [ str "Test null:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test null:" ]
         null
       ]
 
-      div [] [
-        span [] [ str "Test ofFunction:" ]
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test ofFunction:" ]
         ofFunction fnComp { text = "I'm rendered by Function Component!"} []
-        ofFunction fnCompWithChildren { text = "I'm rendered by Function Component!"; children=[||]} [ span [] [ str "I'm rendered by children!"] ]
+        ofFunction fnCompWithChildren { text = " I'm rendered by Function Component! "; children=[||]} [ span [] [ str " I'm rendered by children!"] ]
       ]
     ]

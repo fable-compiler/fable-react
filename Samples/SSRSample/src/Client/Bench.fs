@@ -23,12 +23,12 @@ let jsRenderBench () =
   if not isNode then () else
 
   let renderToString: ReactElement -> string = importMember "react-dom/server"
-  let mutable len = 10000
-  console.log(renderToString (view initState ignore))
-  console.time("render")
-  while len > 0 do
+  let mutable times = 10000
+  let label = sprintf "render %d times in nodejs" times
+  console.time(label)
+  while times > 0 do
     renderToString (view initState ignore) |> ignore
-    len <- len - 1
-  console.timeEnd("render")
+    times <- times - 1
+  console.timeEnd(label)
 
 jsRenderBench ()

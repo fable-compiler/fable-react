@@ -1,12 +1,58 @@
-# Five steps to enable Server-Side Rendering in your Elmish + DotNet App!
+# Five steps to enable Server-Side Rendering in your [Elmish](https://github.com/fable-elmish/elmish) + [DotNet Core](https://github.com/dotnet/core) App!
 
-[SSR Sample App of SAFE-stack template is available!](https://github.com/fable-compiler/fable-react/tree/master/Samples/SSRSample)
+> [SSR Sample App](https://github.com/fable-compiler/fable-react/tree/master/Samples/SSRSample) based on [SAFE-Stack](https://github.com/SAFE-Stack/SAFE-BookStore) template is available!
+
+## Introduction
+
+### What is Server-Side Rendering (SSR) ?
+
+Commonly speaking SSR means the majority of your app's code can run on both the server and the client, it is also as known as "isomorphic app" or "universal app". In React, you can render your components to html on the server side (usually a nodejs server) by `ReactDOMServer.renderToString`, reuse the server-rendered html and bind events on the client side by `React.hydrate`.
+
+#### Props
+
+* Better SEO, as the search engine crawlers will directly see the fully rendered page.
+* Faster time-to-content, especially on slow internet or slow devices.
+
+#### Cons
+
+* Development constraints, browser-specific code need add compile directives to ignore in the server.
+* More involved build setup and deployment requirements.
+* More server-side load.
+
+#### Conclusions
+
+While SSR looks pretty cool, it still adds more complexity to your app, and increases server-side load. But it could be really helpful in some cases like solving SEO issue in SPAs, improving time-to-content of mobile sites, etc.
+
+### Server-Side Rendering in fable-react
+
+fable-react's SSR approach is a little different from those you see on the network, it is a **Pure F#** approach. It means you can render your elmish's view function directly on dotnet core, with all benefits of dotnet core runtime!
+
+There are lots of articles about comparing dotnet core and nodejs, I will only mention two main differences between F#/dotnet core and nodejs in SSR:
+
+* F# is a compiled language, which means it's generally considered faster then a dynamic language, like js.
+* Nodejs's single thread, event-driven, non-blocking I/O model works well in most web sites, but it is not good at CPU intensive tasks, including html rendering. Usually we need to run multi nodejs instances to take the advantage of multi-core systems. DotNet support non-blocking I/O (and `async/await` sugar), too. But the awesome part is that it also has pretty good support for multi-thread programming.
+
+In a simple test in my local macbook, rendering on dotnet core is about ~2x faster then nodejs (with ReactDOMServer.renderToString + NODE_ENV=production). You can find more detail in the bottom of this page.
+
+In a word, with this approach, you can not only get a better performance then nodejs, but also don't need the complexity of running and maintaining nodejs instances on your server!
+
+Here is a list of Fable.Helpers.React API that support server-side rendering:
+
+* HTML/CSS/SVG DSL function/unions, like `div`, `input`, `Style`, `Display`, `svg`, etc.
+* str/ofString/ofInt/ofFloat
+* ofOption/ofArray/ofList
+* fragment
+* ofType
+* ofFunction
+
+These don't support, but you can wrap it by `Fable.Helpers.Isomorphic.isomorphicView` to skip or render a placeholder on the server:
+
+* ofImport
 
 ## Step 1: Reorganize your source files
 
 Separate all your elmish view and types to standalone files, like this:
 
-```F#
 pages
 |-- Home
     |-- View.fs // contains view function.
@@ -19,7 +65,7 @@ View.fs and Types.fs will be shared between client and server.
 
 ## Step 2. Make sure shared files can be executed on the server side
 
-Some code that works in Fable might throw a run time exception when executed on dotnet, so we should be careful with unsafe type casting and add compiler directives to remove some code if necessary.
+Some code that works in Fable might throw a runtime exception on dotnet core, we should be careful with unsafe type casting and add compiler directives to remove some code if necessary.
 
 Here are some hints about doing this:
 
@@ -40,9 +86,9 @@ Here are some hints about doing this:
 
 ### 2. Make sure your browser/js code won't be executed on the server side
 
-One big challenge of sharing code between client and server is that server side has different API environment than client side. In this respect Fable + dotnet's SSR is not much different than nodejs, except in dotnet you should not only prevent browser's API call, but also js.
+One big challenge of sharing code between client and server is that the server side has different API environment with client side. In this respect Fable + dotnet core's SSR is not much different than nodejs, except on dotnet core you should not only prevent browser's API call, but also js.
 
-Thanks for Fable Compiler's `FABLE_COMPILER` directive, we can easly distinguish client environment and server environment and execute different code in each environment:
+Thanks for Fable Compiler's `FABLE_COMPILER` directive, we can easily distinguish it's running on client or server and execute different code in different environment:
 
 ```#F
 #if FABLE_COMPILER
@@ -52,7 +98,7 @@ Thanks for Fable Compiler's `FABLE_COMPILER` directive, we can easly distinguish
 #endif
 ```
 
-We also provice a help function in `Fable.Helpers.Isomorphic` of this, the definition is:
+We also provide a help function in `Fable.Helpers.Isomorphic`, the definition is:
 
 ```F#
 let inline isomorphicExec clientFn serverFn input =
@@ -71,7 +117,7 @@ open Fable.Import.JS
 open Fable.Helpers.Isomorphic
 open Fable.Import.Browser
 
-// example code to make your document's title has marquee effect
+// example code to add marquee effect to your document's title
 -window.setInterval(
 -    fun () ->
 -        document.title <- document.title.[1..len - 1] + document.title.[0..0],
@@ -91,7 +137,7 @@ open Fable.Import.Browser
 
 ### 3. Add a placeholder for components that cannot been rendered on the server side, like js native components.
 
-In `Fable.Helpers.Isomorphic` we also implemented a help function to render a placeholder element for components that cannot been rendered on the server side, this function will also help [React.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) to understand the differences between htmls rendered by client and server, so React won't treat it as a mistake and warn about it.
+In `Fable.Helpers.Isomorphic` we also implemented a help function (`isomorphicView`) to render a placeholder element for components that cannot be rendered on the server side, this function will also help [React.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) to understand the differences between htmls rendered by client and server, so React won't treat it as a mistake and warn about it.
 
 ```diff
 open Fable.Core
@@ -116,9 +162,9 @@ let jsComp (props: JsCompProps) =
 +isomorphicView jsComp jsCompServer { text="I'm rendered by a js Component!" }
 ```
 
-## Step 3. Create your init state on the server side.
+## Step 3. Create your initial state on the server side.
 
-On the server side, you could create routes like normal MVC app, just make sure the model passed to server rendering function is exactly match the model on the client side in current route.
+On the server side, you can create routes like normal MVC app, just make sure the model passed to server-side rendering function is exactly match the model on the client side in current route.
 
 Here is an example:
 
@@ -165,8 +211,8 @@ let renderHtml () =
 
 ## Step 4. Update your elmish app's init function
 
-1. Init your elmish app by state printed in the HTML.
-2. Remove init commands that still fetch data which already printed in the HTML.
+1. Initialize your elmish app by state printed in the HTML.
+2. Remove initial commands that fetch state which already included in the HTML.
 
 e.g.
 
@@ -199,7 +245,7 @@ Program.mkProgram init update view
 |> Program.run
 ```
 
-Now enjoy! If you find bugs or just need some help, please create an issue and let us know.
+Now enjoy! If you find bugs or just need some help, please create an issue and let us know, thanks!
 
 ## Try the sample app
 
@@ -207,4 +253,35 @@ Now enjoy! If you find bugs or just need some help, please create an issue and l
 git clone https://github.com/fable-compiler/fable-react.git
 cd ./fable-react/Samples/SSRSample/
 ./build.sh run # or ./build.cmd run on windows
+```
+
+## Run simple benchmark test in sample app
+
+The result of dotnet core is already printed in console when your server started, here are some commands to run benchmark of ReactDOMServer on nodejs.
+
+```sh
+cd ./Samples/SSRSample/src/Client
+dotnet fable npm-run buildClientLib
+NODE_ENV=production node ./bin/lib/Bench.js
+```
+
+### Benchmark result in my laptop (MacBook Pro with 2.7 GHz Intel Core i5, 16 GB 1867 MHz DDR3):
+
+```sh
+
+# SSR on dotnet core with Debug mode
+# dir: fable-react/Samples/SSRSample/src/Server
+$ dotnet run
+render 10000 times in dotnet core: 3731ms
+
+# SSR on dotnet core with Release mode
+# dir: fable-react/Samples/SSRSample/src/Server
+$ dotnet run --configuration Release
+render 10000 times in dotnet core: 2698ms
+
+# SSR on nodejs with NODE_ENV=production
+# dir: fable-react/Samples/SSRSample/src/Client
+$ NODE_ENV=production node ./bin/lib/Bench.js
+render 10000 times in nodejs: 5782.382ms
+
 ```

@@ -4,9 +4,7 @@ Fable bindings and helpers for React projects
 
 ## Documents
 
-### [Server-Side Rendering](docs/server-side-rendering.md):
-
-A **Pure F#** solution for Server-Side Rendering, **No NodeJS Required!**
+* [Server-Side Rendering tutorial](docs/server-side-rendering.md): A **Pure F#** solution for SSR, **No NodeJS Required!**
 
 
 

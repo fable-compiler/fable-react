@@ -1,0 +1,51 @@
+body {
+  padding: 20px 40px;
+}
+.counter-app {
+  margin: 20px 0;
+}
+.counter {
+  margin: 10px auto 0;
+  display: inline-block;
+}
+
+.counter .tag {
+  margin: 0 15px;
+}
+
+.intro,
+.test-case {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.test-case {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.label {
+  margin-right: 6px;
+}
+
+.checkbox, .input, .textarea {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}
+
+
+.children-comp,
+.class-comp,
+.fn-comp,
+.js-comp {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #f93;
+}
+
+.children-comp > span {
+  margin-bottom: 5px;
+  border: 1px solid #0cb3f0;
+  padding: 5px 10px;
+  display: block;
+}
