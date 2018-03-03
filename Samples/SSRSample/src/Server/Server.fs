@@ -43,14 +43,25 @@ bench ()
 let getInitCounter () : Task<Model> = task { return initState }
 
 let htmlTemplate =
+  let clientHtml = Fable.Helpers.ReactServer.renderToString(Client.View.view initState ignore)
+  let stateJson = toJson (toJson initState) // call toJson twice to output json as js string in html
   html []
-    [ head [] []
+    [ head []
+        [ link
+            [ _rel "stylesheet"
+              _href "https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css"
+            ]
+          link
+            [ _rel "stylesheet"
+              _href (assetsBaseUrl + "/index.css")
+            ]
+        ]
       body []
-        [ div [_id "elmish-app"] [ rawText (Fable.Helpers.ReactServer.renderToString(Client.View.view initState ignore)) ]
+        [ div [_id "elmish-app"] [ rawText clientHtml ]
           script []
             [ rawText (sprintf """
             var __INIT_STATE__ = %s
-            """ (toJson (toJson initState))) ] // call toJson twice to output json as js string in html
+            """ stateJson) ]
           script [ _src (assetsBaseUrl + "/public/bundle.js") ] []
         ]
     ]
