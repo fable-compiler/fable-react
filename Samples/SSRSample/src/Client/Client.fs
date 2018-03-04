@@ -12,9 +12,6 @@ open Fable.Import.React
 open Fable.Import.Browser
 open Shared
 
-Client.Bench.jsRenderBench()
-
-
 // let div = document.getElementById("elmish-app")
 // div.innerHTML <- ""
 // console.log("root", div)
