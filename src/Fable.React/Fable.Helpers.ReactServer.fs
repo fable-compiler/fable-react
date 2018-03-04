@@ -11,6 +11,8 @@ open Fable.Helpers.React.Props
 // Adapted from https://github.com/emotion-js/emotion/blob/182e34bab2b2028c96d513b67ed86faee1b642b2/packages/emotion-utils/src/index.js#L13
 let private unitlessCssProps = set [ "animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width" ]
 
+let private voidTags = set ["area"; "base"; "br"; "col"; "embed"; "hr"; "img"; "input"; "keygen"; "link"; "menuitem"; "meta"; "param"; "source"; "track"; "wbr"]
+
 // Adapted from https://github.com/facebook/react/blob/37e4329bc81def4695211d6e3795a654ef4d84f5/packages/react-dom/src/server/escapeTextForBrowser.js#L49
 let escapeHtml (str: string) =
   let escaped = StringBuilder()
@@ -739,7 +741,9 @@ let renderToString (htmlNode: ReactElement): string =
         | Some c -> c
         | None -> (renderList (children |> Seq.map castHTMLNode))
       let attrs = if attrs = "" then attrs else " " + attrs
-      "<" + tag + attrs + ">" + child + "</" + tag + ">"
+      if voidTags |> Set.contains tag
+      then "<" + tag + attrs + "/>"
+      else "<" + tag + attrs + ">" + child + "</" + tag + ">"
     | HTMLNode.List nodes -> renderList (nodes |> Seq.cast)
     | HTMLNode.Empty -> ""
 
