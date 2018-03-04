@@ -1,0 +1,6 @@
+group Server
+  FSharp.Core
+
+group Client
+  Fable.Core
+  Fable.Import.Browser

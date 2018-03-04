@@ -32,7 +32,7 @@ There are lots of articles about comparing dotnet core and nodejs, I will only m
 * F# is a compiled language, which means it's generally considered faster then a dynamic language, like js.
 * Nodejs's single thread, event-driven, non-blocking I/O model works well in most web sites, but it is not good at CPU intensive tasks, including html rendering. Usually we need to run multi nodejs instances to take the advantage of multi-core systems. DotNet support non-blocking I/O (and `async/await` sugar), too. But the awesome part is that it also has pretty good support for multi-thread programming.
 
-In a simple test in my local macbook, rendering on dotnet core is about ~2x faster then nodejs (with ReactDOMServer.renderToString + NODE_ENV=production). You can find more detail in the bottom of this page.
+In a simple test in my local macbook, rendering on dotnet core is about ~3x faster then nodejs (with ReactDOMServer.renderToString + NODE_ENV=production). You can find more detail in the bottom of this page.
 
 In a word, with this approach, you can not only get a better performance then nodejs, but also don't need the complexity of running and maintaining nodejs instances on your server!
 
@@ -257,31 +257,44 @@ cd ./fable-react/Samples/SSRSample/
 
 ## Run simple benchmark test in sample app
 
-The result of dotnet core is already printed in console when your server started, here are some commands to run benchmark of ReactDOMServer on nodejs.
+The SSRSample project also contains a simple benchmark test, you can try it in you computer by:
 
 ```sh
-cd ./Samples/SSRSample/src/Client
-dotnet fable npm-run buildClientLib
-NODE_ENV=production node ./bin/lib/Bench.js
+
+cd ./Samples/SSRSample
+./build.sh bench # or ./build.cmd bench on windows
+
 ```
 
-### Benchmark result in my laptop (MacBook Pro with 2.7 GHz Intel Core i5, 16 GB 1867 MHz DDR3):
+Here is the benchmark result in my laptop (MacBook Pro with 2.7 GHz Intel Core i5, 16 GB 1867 MHz DD~R3), rendering on dotnet core is about ~4x faster then on nodejs in a single thread. To take the advantage of multi-core systems, we also tested with multi-thread on dotnet core and cluster mode in nodejs, the dotnet core version is still about ~3x faster then nodejs version, with less memory footprint!
 
 ```sh
 
-# SSR on dotnet core with Debug mode
-# dir: fable-react/Samples/SSRSample/src/Server
-$ dotnet run
-render 10000 times in dotnet core: 3731ms
+dotnet ./bin/Release/netcoreapp2.0/dotnet.dll
+Thread 1 started
+Thread 1 render 10000 times used 2414ms
+[Single thread] 2414ms    4142.502req/s
+Thread 1 started
+Thread 4 started
+Thread 3 started
+Thread 5 started
+Thread 3 render 5000 times used 3399ms
+Thread 5 render 5000 times used 3401ms
+Thread 1 render 5000 times used 3402ms
+Thread 4 render 5000 times used 3405ms
+[4 tasks] Total: 3401ms    Memory footprint: 32.184MB   Requests/sec: 5880.623
 
-# SSR on dotnet core with Release mode
-# dir: fable-react/Samples/SSRSample/src/Server
-$ dotnet run --configuration Release
-render 10000 times in dotnet core: 2698ms
-
-# SSR on nodejs with NODE_ENV=production
-# dir: fable-react/Samples/SSRSample/src/Client
-$ NODE_ENV=production node ./bin/lib/Bench.js
-render 10000 times in nodejs: 5782.382ms
+/usr/local/bin/node ./node.js
+Master 78856 is running
+[Single process] 9511ms    1051.414req/s
+Worker 78863: started
+Worker 78861: started
+Worker 78860: started
+Worker 78862: started
+Worker 78863: render 5000 times used 10390ms
+Worker 78861: render 5000 times used 10459ms
+Worker 78862: render 5000 times used 10528ms
+Worker 78860: render 5000 times used 10567ms
+[4 workers] Total: 10486ms    Memory footprint: 104.033MB    Requests/sec: 1907.305
 
 ```

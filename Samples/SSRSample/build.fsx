@@ -5,6 +5,7 @@ open System
 open Fake
 
 let serverPath = "./src/Server" |> FullName
+let benchmarkPath = "./benchmark" |> FullName
 let clientPath = "./src/Client" |> FullName
 let deployDir = "./deploy" |> FullName
 
@@ -20,13 +21,18 @@ let yarnTool = platformTool "yarn" "yarn.cmd"
 let dotnetcliVersion = DotNetCli.GetDotNetSDKVersionFromGlobalJson()
 let mutable dotnetCli = "dotnet"
 
-let run cmd args workingDir =
+let runWithEnv cmd args workingDir (env: (string * string) list) =
   let result =
     ExecProcess (fun info ->
       info.FileName <- cmd
+      for (key, value) in env do
+        info.Environment.Add(key, value)
       info.WorkingDirectory <- workingDir
       info.Arguments <- args) TimeSpan.MaxValue
-  if result <> 0 then failwithf "'%s %s' failed" cmd args
+  if result <> 0 then failwithf "'%s %s' failedwith" cmd args
+
+let run cmd args workingDir =
+  runWithEnv cmd args workingDir []
 
 Target "Clean" (fun _ ->
   CleanDirs [deployDir]
@@ -52,6 +58,17 @@ Target "RestoreServer" (fun () ->
 Target "Build" (fun () ->
   run dotnetCli "build" serverPath
   run dotnetCli "fable webpack -- -p" clientPath
+)
+
+Target "BuildBench" (fun () ->
+  run dotnetCli "build --configuration Release" serverPath
+  run dotnetCli "build --configuration Release" benchmarkPath
+  run dotnetCli "fable npm-run buildClientLib" clientPath
+)
+
+Target "Bench" (fun () ->
+  run dotnetCli "./bin/Release/netcoreapp2.0/dotnet.dll" benchmarkPath
+  runWithEnv nodeTool "./node.js" benchmarkPath ["NODE_ENV", "production"]
 )
 
 Target "Run" (fun () ->
@@ -81,5 +98,9 @@ Target "Run" (fun () ->
 "InstallClient"
   ==> "RestoreServer"
   ==> "Run"
+
+
+"BuildBench"
+  ==> "Bench"
 
 RunTargetOrDefault "Build"

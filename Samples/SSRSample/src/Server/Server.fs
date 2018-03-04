@@ -27,19 +27,6 @@ let initState: Model = {
   someFloat = 11.11
   someInt = 22
 }
-
-let bench () =
-  let watch = Stopwatch()
-  watch.Start()
-  let times = 10000
-  for i = 1 to times do
-    Fable.Helpers.ReactServer.renderToString(Client.View.view initState ignore)
-    |> ignore
-  watch.Stop()
-  printfn "render %d times in dotnet core: %dms" times watch.ElapsedMilliseconds
-
-bench ()
-
 let getInitCounter () : Task<Model> = task { return initState }
 
 let htmlTemplate =
