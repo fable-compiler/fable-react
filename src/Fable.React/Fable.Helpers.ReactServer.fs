@@ -49,7 +49,9 @@ let private cssProp (key: string) (value: obj) =
 
   key + ":" + value + ";"
 
-let private cssPropRegex = Regex("([A-Z])")
+let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
+let inline private slugKey key =
+  slugRegex.Replace(string key, "-$1").ToLower()
 
 let private renderCssProp (prop: CSSProp): string =
   match prop with
@@ -458,7 +460,7 @@ let private renderCssProp (prop: CSSProp): string =
   | WritingMode v -> cssProp "writing-mode" v
   | ZIndex v -> cssProp "z-index" v
   | Zoom v -> cssProp "zoom" v
-  | CSSProp.Custom (key, value) -> cssProp key (cssPropRegex.Replace(string value, "-$1").ToLower())
+  | CSSProp.Custom (key, value) -> cssProp (slugKey key) value
 
 let inline boolAttr (key: string) (value: bool) = if value then key else ""
 let inline strAttr (key: string) (value: string) = key + "=\"" + (escapeHtml value) + "\""
@@ -616,7 +618,7 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
     let css = css.[0..css.Length - 2]
     strAttr "style" css
 
-  | Custom (key, value) -> strAttr key (string value)
+  | Custom (key, value) -> strAttr (key.ToLower()) (string value)
   | Data (key, value) -> strAttr ("data-" + key) (string value)
 
 let private renderSVGAttr (attr: SVGAttr): string =
@@ -678,7 +680,7 @@ let private renderSVGAttr (attr: SVGAttr): string =
   | SVGAttr.Y1 v -> objAttr "y1" v
   | SVGAttr.Y2 v -> objAttr "y2" v
   | SVGAttr.Y v -> objAttr "y" v
-  | SVGAttr.Custom (key, value) -> objAttr key value
+  | SVGAttr.Custom (key, value) -> objAttr (slugKey key) value
 
 let private renderAttrs (attrs: IProp seq) tag =
   let html = StringBuilder()

@@ -43,9 +43,18 @@ body {
   border: 1px solid #f93;
 }
 
-.children-comp > span {
-  margin-bottom: 5px;
+.children-comp > div {
+  margin-bottom: 10px;
   border: 1px solid #0cb3f0;
   padding: 5px 10px;
   display: block;
+}
+
+[placeholder][contenteditable]:empty:before {
+  content: attr(placeholder);
+  color: #9b9b9b;
+}
+
+[placeholder][contenteditable]:empty:focus:before {
+  content: "";
 }

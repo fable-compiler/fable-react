@@ -183,4 +183,19 @@ let view (model: Model) (dispatch) =
         ofFunction fnComp { text = "I'm rendered by Function Component!"} []
         ofFunction fnCompWithChildren { text = " I'm rendered by Function Component! "; children=[||]} [ span [] [ str " I'm rendered by children!"] ]
       ]
+
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test void elements:" ]
+        hr [ Style [ BorderColor "green" ] ]
+        br []
+      ]
+
+      div [ ClassName "test-case" ] [
+        span [ ClassName "label" ] [ str "Test add slug to attributes:" ]
+        div
+          [ HTMLAttr.Custom ("contentEditable", "true")
+            HTMLAttr.Custom ("placeholder", "I'm editable!")
+            Style [ CSSProp.Custom ("WebkitTransform", "translateX(30px)"); CSSProp.Custom ("WebkitTransformOrigin", "0 0") ] ]
+          [ ]
+      ]
     ]
