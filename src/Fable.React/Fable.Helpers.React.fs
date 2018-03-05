@@ -1,9 +1,7 @@
 module Fable.Helpers.React
 
-open System
 open System.Reflection
 open FSharp.Reflection
-open FSharp.Reflection.FSharpReflectionExtensions
 open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import

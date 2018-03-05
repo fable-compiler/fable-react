@@ -1,3 +1,7 @@
+### 3.0.0-alpha-002
+
+* Add Server Side Rendering Support
+
 ### 3.0.0-alpha-001
 
 * Alpha release of next major version
