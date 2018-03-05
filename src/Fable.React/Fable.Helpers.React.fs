@@ -10,97 +10,14 @@ module Props =
     type IProp =
         interface end
 
-    type IHTMLProp =
-        inherit IProp
-
-    type IFragmentProp =
-        inherit IProp
-
     type FragmentProp =
         | Key of string
-        interface IFragmentProp
+        interface IProp
 
-    type Prop =
-        | Key of string
-        | Ref of (Browser.Element->unit)
-        interface IHTMLProp
-    [<Pojo>]
-    type DangerousHtml = {
-        __html: string
-    }
+    type [<Pojo>] DangerousHtml =
+        { __html: string }
 
-    type DOMAttr =
-        | DangerouslySetInnerHTML of DangerousHtml
-        | OnCut of (React.ClipboardEvent -> unit)
-        | OnPaste of (React.ClipboardEvent -> unit)
-        | OnCompositionEnd of (React.CompositionEvent -> unit)
-        | OnCompositionStart of (React.CompositionEvent -> unit)
-        | OnCopy of (React.ClipboardEvent -> unit)
-        | OnCompositionUpdate of (React.CompositionEvent -> unit)
-        | OnFocus of (React.FocusEvent -> unit)
-        | OnBlur of (React.FocusEvent -> unit)
-        | OnChange of (React.FormEvent -> unit)
-        | OnInput of (React.FormEvent -> unit)
-        | OnSubmit of (React.FormEvent -> unit)
-        | OnLoad of (React.SyntheticEvent -> unit)
-        | OnError of (React.SyntheticEvent -> unit)
-        | OnKeyDown of (React.KeyboardEvent -> unit)
-        | OnKeyPress of (React.KeyboardEvent -> unit)
-        | OnKeyUp of (React.KeyboardEvent -> unit)
-        | OnAbort of (React.SyntheticEvent -> unit)
-        | OnCanPlay of (React.SyntheticEvent -> unit)
-        | OnCanPlayThrough of (React.SyntheticEvent -> unit)
-        | OnDurationChange of (React.SyntheticEvent -> unit)
-        | OnEmptied of (React.SyntheticEvent -> unit)
-        | OnEncrypted of (React.SyntheticEvent -> unit)
-        | OnEnded of (React.SyntheticEvent -> unit)
-        | OnLoadedData of (React.SyntheticEvent -> unit)
-        | OnLoadedMetadata of (React.SyntheticEvent -> unit)
-        | OnLoadStart of (React.SyntheticEvent -> unit)
-        | OnPause of (React.SyntheticEvent -> unit)
-        | OnPlay of (React.SyntheticEvent -> unit)
-        | OnPlaying of (React.SyntheticEvent -> unit)
-        | OnProgress of (React.SyntheticEvent -> unit)
-        | OnRateChange of (React.SyntheticEvent -> unit)
-        | OnSeeked of (React.SyntheticEvent -> unit)
-        | OnSeeking of (React.SyntheticEvent -> unit)
-        | OnStalled of (React.SyntheticEvent -> unit)
-        | OnSuspend of (React.SyntheticEvent -> unit)
-        | OnTimeUpdate of (React.SyntheticEvent -> unit)
-        | OnVolumeChange of (React.SyntheticEvent -> unit)
-        | OnWaiting of (React.SyntheticEvent -> unit)
-        | OnClick of (React.MouseEvent -> unit)
-        | OnContextMenu of (React.MouseEvent -> unit)
-        | OnDoubleClick of (React.MouseEvent -> unit)
-        | OnDrag of (React.DragEvent -> unit)
-        | OnDragEnd of (React.DragEvent -> unit)
-        | OnDragEnter of (React.DragEvent -> unit)
-        | OnDragExit of (React.DragEvent -> unit)
-        | OnDragLeave of (React.DragEvent -> unit)
-        | OnDragOver of (React.DragEvent -> unit)
-        | OnDragStart of (React.DragEvent -> unit)
-        | OnDrop of (React.DragEvent -> unit)
-        | OnMouseDown of (React.MouseEvent -> unit)
-        | OnMouseEnter of (React.MouseEvent -> unit)
-        | OnMouseLeave of (React.MouseEvent -> unit)
-        | OnMouseMove of (React.MouseEvent -> unit)
-        | OnMouseOut of (React.MouseEvent -> unit)
-        | OnMouseOver of (React.MouseEvent -> unit)
-        | OnMouseUp of (React.MouseEvent -> unit)
-        | OnSelect of (React.SyntheticEvent -> unit)
-        | OnTouchCancel of (React.TouchEvent -> unit)
-        | OnTouchEnd of (React.TouchEvent -> unit)
-        | OnTouchMove of (React.TouchEvent -> unit)
-        | OnTouchStart of (React.TouchEvent -> unit)
-        | OnScroll of (React.UIEvent -> unit)
-        | OnWheel of (React.WheelEvent -> unit)
-        | OnAnimationStart of (React.AnimationEvent -> unit)
-        | OnAnimationEnd of (React.AnimationEvent -> unit)
-        | OnAnimationIteration of (React.AnimationEvent -> unit)
-        | OnTransitionEnd of (React.TransitionEvent -> unit)
-        interface IHTMLProp
-
-    type SVGAttr =
+    type SVGProp =
         | ClipPath of string
         | Cx of obj
         | Cy of obj
@@ -162,7 +79,7 @@ module Props =
         | Custom of string * obj
 #else
         /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
-        static member inline Custom (key: string, value: obj) : SVGAttr = !!(key, value)
+        static member inline Custom (key: string, value: obj) : SVGProp = !!(key, value)
 #endif
         interface IProp
 
@@ -579,8 +496,78 @@ module Props =
         static member inline Custom (key: string, value: obj) : CSSProp = !!(key, value)
 #endif
 
-
-    type HTMLAttr =
+    type DOMProp =
+        | Key of string
+        | Ref of (Browser.Element->unit)
+        | DangerouslySetInnerHTML of DangerousHtml
+        | OnCut of (React.ClipboardEvent -> unit)
+        | OnPaste of (React.ClipboardEvent -> unit)
+        | OnCompositionEnd of (React.CompositionEvent -> unit)
+        | OnCompositionStart of (React.CompositionEvent -> unit)
+        | OnCopy of (React.ClipboardEvent -> unit)
+        | OnCompositionUpdate of (React.CompositionEvent -> unit)
+        | OnFocus of (React.FocusEvent -> unit)
+        | OnBlur of (React.FocusEvent -> unit)
+        | OnChange of (React.FormEvent -> unit)
+        | OnInput of (React.FormEvent -> unit)
+        | OnSubmit of (React.FormEvent -> unit)
+        | OnLoad of (React.SyntheticEvent -> unit)
+        | OnError of (React.SyntheticEvent -> unit)
+        | OnKeyDown of (React.KeyboardEvent -> unit)
+        | OnKeyPress of (React.KeyboardEvent -> unit)
+        | OnKeyUp of (React.KeyboardEvent -> unit)
+        | OnAbort of (React.SyntheticEvent -> unit)
+        | OnCanPlay of (React.SyntheticEvent -> unit)
+        | OnCanPlayThrough of (React.SyntheticEvent -> unit)
+        | OnDurationChange of (React.SyntheticEvent -> unit)
+        | OnEmptied of (React.SyntheticEvent -> unit)
+        | OnEncrypted of (React.SyntheticEvent -> unit)
+        | OnEnded of (React.SyntheticEvent -> unit)
+        | OnLoadedData of (React.SyntheticEvent -> unit)
+        | OnLoadedMetadata of (React.SyntheticEvent -> unit)
+        | OnLoadStart of (React.SyntheticEvent -> unit)
+        | OnPause of (React.SyntheticEvent -> unit)
+        | OnPlay of (React.SyntheticEvent -> unit)
+        | OnPlaying of (React.SyntheticEvent -> unit)
+        | OnProgress of (React.SyntheticEvent -> unit)
+        | OnRateChange of (React.SyntheticEvent -> unit)
+        | OnSeeked of (React.SyntheticEvent -> unit)
+        | OnSeeking of (React.SyntheticEvent -> unit)
+        | OnStalled of (React.SyntheticEvent -> unit)
+        | OnSuspend of (React.SyntheticEvent -> unit)
+        | OnTimeUpdate of (React.SyntheticEvent -> unit)
+        | OnVolumeChange of (React.SyntheticEvent -> unit)
+        | OnWaiting of (React.SyntheticEvent -> unit)
+        | OnClick of (React.MouseEvent -> unit)
+        | OnContextMenu of (React.MouseEvent -> unit)
+        | OnDoubleClick of (React.MouseEvent -> unit)
+        | OnDrag of (React.DragEvent -> unit)
+        | OnDragEnd of (React.DragEvent -> unit)
+        | OnDragEnter of (React.DragEvent -> unit)
+        | OnDragExit of (React.DragEvent -> unit)
+        | OnDragLeave of (React.DragEvent -> unit)
+        | OnDragOver of (React.DragEvent -> unit)
+        | OnDragStart of (React.DragEvent -> unit)
+        | OnDrop of (React.DragEvent -> unit)
+        | OnMouseDown of (React.MouseEvent -> unit)
+        | OnMouseEnter of (React.MouseEvent -> unit)
+        | OnMouseLeave of (React.MouseEvent -> unit)
+        | OnMouseMove of (React.MouseEvent -> unit)
+        | OnMouseOut of (React.MouseEvent -> unit)
+        | OnMouseOver of (React.MouseEvent -> unit)
+        | OnMouseUp of (React.MouseEvent -> unit)
+        | OnSelect of (React.SyntheticEvent -> unit)
+        | OnTouchCancel of (React.TouchEvent -> unit)
+        | OnTouchEnd of (React.TouchEvent -> unit)
+        | OnTouchMove of (React.TouchEvent -> unit)
+        | OnTouchStart of (React.TouchEvent -> unit)
+        | OnScroll of (React.UIEvent -> unit)
+        | OnWheel of (React.WheelEvent -> unit)
+        | OnAnimationStart of (React.AnimationEvent -> unit)
+        | OnAnimationEnd of (React.AnimationEvent -> unit)
+        | OnAnimationIteration of (React.AnimationEvent -> unit)
+        | OnTransitionEnd of (React.TransitionEvent -> unit)
+        // HTML Attributes
         | DefaultChecked of bool
         | DefaultValue of string
         | Accept of string
@@ -731,15 +718,15 @@ module Props =
         | Style of CSSProp list
         | Data of string * obj
 #else
-        static member inline Custom (key: string, value: obj) : HTMLAttr = !!(key, value)
+        static member inline Custom (key: string, value: obj) : DOMProp = !!(key, value)
 #endif
-        interface IHTMLProp
+        interface IProp
 
 #if FABLE_COMPILER
-    let inline Style (css: CSSProp list): HTMLAttr =
+    let inline Style (css: CSSProp list): DOMProp =
         !!("style", keyValueList CaseRules.LowerFirst css)
 
-    let inline Data (key: string, value: obj): IHTMLProp =
+    let inline Data (key: string, value: obj): DOMProp =
         !!("data-" + key, value)
 #endif
 
@@ -915,7 +902,7 @@ let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :
 
 
 /// Instantiate a DOM React element
-let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
+let inline domEl (tag: string) (props: DOMProp list) (children: ReactElement list): ReactElement =
     let inline clientRender (tag, props, children) =
         createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 
@@ -925,7 +912,7 @@ let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement l
     isomorphicExec clientRender serverRender (tag, props, children)
 
 /// Instantiate a DOM React element (void)
-let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
+let inline voidEl (tag: string) (props: DOMProp list) : ReactElement =
     let inline clientRender (tag, props, children) =
         createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 
@@ -944,7 +931,7 @@ let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list)
     isomorphicExec clientRender serverRender (tag, props, children)
 
 /// Instantiate a React fragment
-let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =
+let inline fragment (props: FragmentProp list) (children: ReactElement list): ReactElement =
     let inline clientRender () =
         createElement(typedefof<Fragment>, keyValueList CaseRules.LowerFirst props, children)
     let inline serverRender () =
