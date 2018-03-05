@@ -53,6 +53,8 @@ These don't support, but you can wrap it by `Fable.Helpers.Isomorphic.isomorphic
 
 Separate all your elmish view and types to standalone files, like this:
 
+```F#
+
 pages
 |-- Home
     |-- View.fs // contains view function.
