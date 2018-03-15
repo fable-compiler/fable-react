@@ -1,3 +1,7 @@
+### 3.0.0-alpha-003
+
+* Give precedence to CSSProps
+
 ### 3.0.0-alpha-002
 
 * Add Server Side Rendering Support

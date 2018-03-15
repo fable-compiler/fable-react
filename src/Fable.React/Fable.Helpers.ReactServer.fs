@@ -492,7 +492,7 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
   | Class v -> strAttr "class" v
   | Cols v -> strAttr "cols" (string v)
   | ColSpan v -> strAttr "colspan" (string v)
-  | Content v -> strAttr "content" v
+  | HTMLAttr.Content v -> strAttr "content" v
   | ContentEditable v -> boolAttr "contenteditable" v
   | ContextMenu v -> strAttr "contextmenu" v
   | Controls v -> boolAttr "controls" v
@@ -618,7 +618,7 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
     let css = css.[0..css.Length - 2]
     strAttr "style" css
 
-  | Custom (key, value) -> strAttr (key.ToLower()) (string value)
+  | HTMLAttr.Custom (key, value) -> strAttr (key.ToLower()) (string value)
   | Data (key, value) -> strAttr ("data-" + key) (string value)
 
 let private renderSVGAttr (attr: SVGAttr): string =

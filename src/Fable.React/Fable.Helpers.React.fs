@@ -6,7 +6,7 @@ open Fable.Core
 open Fable.Core.JsInterop
 open Fable.Import
 
-module Props =
+module rec Props =
     type IProp =
         interface end
 
@@ -165,6 +165,161 @@ module Props =
         static member inline Custom (key: string, value: obj) : SVGAttr = !!(key, value)
 #endif
         interface IProp
+
+    type HTMLAttr =
+        | DefaultChecked of bool
+        | DefaultValue of string
+        | Accept of string
+        | AcceptCharset of string
+        | AccessKey of string
+        | Action of string
+        | AllowFullScreen of bool
+        | AllowTransparency of bool
+        | Alt of string
+        | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
+        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
+        | Async of bool
+        | AutoComplete of string
+        | AutoFocus of bool
+        | AutoPlay of bool
+        | Capture of bool
+        | CellPadding of obj
+        | CellSpacing of obj
+        | CharSet of string
+        | Challenge of string
+        | Checked of bool
+        | ClassID of string
+        | ClassName of string
+        /// Alias of ClassName
+        | [<CompiledName("className")>] Class of string
+        | Cols of float
+        | ColSpan of float
+        | Content of string
+        | ContentEditable of bool
+        | ContextMenu of string
+        | Controls of bool
+        | Coords of string
+        | CrossOrigin of string
+        // | Data of string
+        | [<CompiledName("data-toggle")>] DataToggle of string
+        | DateTime of string
+        | Default of bool
+        | Defer of bool
+        | Dir of string
+        | Disabled of bool
+        | Download of obj
+        | Draggable of bool
+        | EncType of string
+        | Form of string
+        | FormAction of string
+        | FormEncType of string
+        | FormMethod of string
+        | FormNoValidate of bool
+        | FormTarget of string
+        | FrameBorder of obj
+        | Headers of string
+        | Height of obj
+        | Hidden of bool
+        | High of float
+        | Href of string
+        | HrefLang of string
+        | HtmlFor of string
+        | HttpEquiv of string
+        | Icon of string
+        | Id of string
+        | InputMode of string
+        | Integrity of string
+        | Is of string
+        | KeyParams of string
+        | KeyType of string
+        | Kind of string
+        | Label of string
+        | Lang of string
+        | List of string
+        | Loop of bool
+        | Low of float
+        | Manifest of string
+        | MarginHeight of float
+        | MarginWidth of float
+        | Max of obj
+        | MaxLength of float
+        | Media of string
+        | MediaGroup of string
+        | Method of string
+        | Min of obj
+        | MinLength of float
+        | Multiple of bool
+        | Muted of bool
+        | Name of string
+        | NoValidate of bool
+        | Open of bool
+        | Optimum of float
+        | Pattern of string
+        | Placeholder of string
+        | Poster of string
+        | Preload of string
+        | RadioGroup of string
+        | ReadOnly of bool
+        | Rel of string
+        | Required of bool
+        | Role of string
+        | Rows of float
+        | RowSpan of float
+        | Sandbox of string
+        | Scope of string
+        | Scoped of bool
+        | Scrolling of string
+        | Seamless of bool
+        | Selected of bool
+        | Shape of string
+        | Size of float
+        | Sizes of string
+        | Span of float
+        | SpellCheck of bool
+        | Src of string
+        | SrcDoc of string
+        | SrcLang of string
+        | SrcSet of string
+        | Start of float
+        | Step of obj
+        | Summary of string
+        | TabIndex of float
+        | Target of string
+        | Title of string
+        | Type of string
+        | UseMap of string
+        | Value of string
+        | Width of obj
+        | Wmode of string
+        | Wrap of string
+        | About of string
+        | Datatype of string
+        | Inlist of obj
+        | Prefix of string
+        | Property of string
+        | Resource of string
+        | Typeof of string
+        | Vocab of string
+        | AutoCapitalize of string
+        | AutoCorrect of string
+        | AutoSave of string
+        // | Color of string // Conflicts with CSSProp, shouldn't be used in HTML5
+        | ItemProp of string
+        | ItemScope of bool
+        | ItemType of string
+        | ItemID of string
+        | ItemRef of string
+        | Results of float
+        | Security of string
+        | Unselectable of bool
+#if !FABLE_COMPILER
+        | Custom of string * obj
+        | Style of CSSProp list
+        | Data of string * obj
+#else
+        static member inline Custom (key: string, value: obj) : HTMLAttr = !!(key, value)
+#endif
+        interface IHTMLProp
 
     type CSSProp =
         | AlignContent of obj
@@ -578,162 +733,6 @@ module Props =
         /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
         static member inline Custom (key: string, value: obj) : CSSProp = !!(key, value)
 #endif
-
-
-    type HTMLAttr =
-        | DefaultChecked of bool
-        | DefaultValue of string
-        | Accept of string
-        | AcceptCharset of string
-        | AccessKey of string
-        | Action of string
-        | AllowFullScreen of bool
-        | AllowTransparency of bool
-        | Alt of string
-        | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
-        | [<CompiledName("aria-expanded")>] AriaExpanded of bool
-        | Async of bool
-        | AutoComplete of string
-        | AutoFocus of bool
-        | AutoPlay of bool
-        | Capture of bool
-        | CellPadding of obj
-        | CellSpacing of obj
-        | CharSet of string
-        | Challenge of string
-        | Checked of bool
-        | ClassID of string
-        | ClassName of string
-        /// Alias of ClassName
-        | [<CompiledName("className")>] Class of string
-        | Cols of float
-        | ColSpan of float
-        | Content of string
-        | ContentEditable of bool
-        | ContextMenu of string
-        | Controls of bool
-        | Coords of string
-        | CrossOrigin of string
-        // | Data of string
-        | [<CompiledName("data-toggle")>] DataToggle of string
-        | DateTime of string
-        | Default of bool
-        | Defer of bool
-        | Dir of string
-        | Disabled of bool
-        | Download of obj
-        | Draggable of bool
-        | EncType of string
-        | Form of string
-        | FormAction of string
-        | FormEncType of string
-        | FormMethod of string
-        | FormNoValidate of bool
-        | FormTarget of string
-        | FrameBorder of obj
-        | Headers of string
-        | Height of obj
-        | Hidden of bool
-        | High of float
-        | Href of string
-        | HrefLang of string
-        | HtmlFor of string
-        | HttpEquiv of string
-        | Icon of string
-        | Id of string
-        | InputMode of string
-        | Integrity of string
-        | Is of string
-        | KeyParams of string
-        | KeyType of string
-        | Kind of string
-        | Label of string
-        | Lang of string
-        | List of string
-        | Loop of bool
-        | Low of float
-        | Manifest of string
-        | MarginHeight of float
-        | MarginWidth of float
-        | Max of obj
-        | MaxLength of float
-        | Media of string
-        | MediaGroup of string
-        | Method of string
-        | Min of obj
-        | MinLength of float
-        | Multiple of bool
-        | Muted of bool
-        | Name of string
-        | NoValidate of bool
-        | Open of bool
-        | Optimum of float
-        | Pattern of string
-        | Placeholder of string
-        | Poster of string
-        | Preload of string
-        | RadioGroup of string
-        | ReadOnly of bool
-        | Rel of string
-        | Required of bool
-        | Role of string
-        | Rows of float
-        | RowSpan of float
-        | Sandbox of string
-        | Scope of string
-        | Scoped of bool
-        | Scrolling of string
-        | Seamless of bool
-        | Selected of bool
-        | Shape of string
-        | Size of float
-        | Sizes of string
-        | Span of float
-        | SpellCheck of bool
-        | Src of string
-        | SrcDoc of string
-        | SrcLang of string
-        | SrcSet of string
-        | Start of float
-        | Step of obj
-        | Summary of string
-        | TabIndex of float
-        | Target of string
-        | Title of string
-        | Type of string
-        | UseMap of string
-        | Value of string
-        | Width of obj
-        | Wmode of string
-        | Wrap of string
-        | About of string
-        | Datatype of string
-        | Inlist of obj
-        | Prefix of string
-        | Property of string
-        | Resource of string
-        | Typeof of string
-        | Vocab of string
-        | AutoCapitalize of string
-        | AutoCorrect of string
-        | AutoSave of string
-        // | Color of string // Conflicts with CSSProp, shouldn't be used in HTML5
-        | ItemProp of string
-        | ItemScope of bool
-        | ItemType of string
-        | ItemID of string
-        | ItemRef of string
-        | Results of float
-        | Security of string
-        | Unselectable of bool
-#if !FABLE_COMPILER
-        | Custom of string * obj
-        | Style of CSSProp list
-        | Data of string * obj
-#else
-        static member inline Custom (key: string, value: obj) : HTMLAttr = !!(key, value)
-#endif
-        interface IHTMLProp
 
 #if FABLE_COMPILER
     let inline Style (css: CSSProp list): HTMLAttr =
