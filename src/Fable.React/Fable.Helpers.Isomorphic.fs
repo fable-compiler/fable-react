@@ -33,8 +33,12 @@ open Fable.Helpers.React
 
 /// Isomorphic helper function for conditional executaion
 /// it will execute `clientFn model` on the client side and `serverFn model` on the server side
-let inline isomorphicExec clientFn serverFn model =
-    ServerRenderingInternal.isomorphicExec clientFn serverFn model
+let inline isomorphicExec  (clientFn: 'a -> 'b) (serverFn: 'a -> 'b) (input: 'a) =
+#if FABLE_COMPILER
+    clientFn input
+#else
+    serverFn input
+#endif
 
 let isomorphicView (clientView: 'model -> ReactElement) (serverView: 'model -> ReactElement) (model: 'model) =
 #if FABLE_COMPILER

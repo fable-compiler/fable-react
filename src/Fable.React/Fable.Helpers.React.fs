@@ -767,12 +767,6 @@ type ServerElementType =
 let [<Literal>] private ChildrenName = "children"
 
 module ServerRenderingInternal =
-    let inline isomorphicExec  (clientFn: 'a -> 'b) (serverFn: 'a -> 'b) (input: 'a) =
-#if FABLE_COMPILER
-        clientFn input
-#else
-        serverFn input
-#endif
 
 #if FABLE_COMPILER
     let inline createServerElement (tag: obj, props: obj, children: ReactElement list, elementType: ServerElementType) =
@@ -821,14 +815,11 @@ let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: Rea
 /// Instantiate a component from a type inheriting React.Component
 /// Example: `ofType<MyComponent,_,_> { myProps = 5 } []`
 let inline ofType<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
-    let inline clientRender () =
-        createElement(typedefof<'T>, props, children)
-
-    let inline serverRender () =
-        createServerElement(typeof<'T>, props, children, ServerElementType.Component)
-
-    isomorphicExec clientRender serverRender ()
-
+#if FABLE_COMPILER
+    createElement(typedefof<'T>, props, children)
+#else
+    createServerElement(typeof<'T>, props, children, ServerElementType.Component)
+#endif
 
 
 /// OBSOLETE: Use `ofType`
@@ -843,8 +834,11 @@ let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P)
 /// ofFunction Hello { name = "Maxime" } []
 /// ```
 let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
-    isomorphicExec createElement createServerElementByFn (f, props, children)
-
+#if FABLE_COMPILER
+    createElement(f, props, children)
+#else
+    createServerElementByFn(f, props, children)
+#endif
 
 /// OBSOLETE: Use `ofFunction`
 [<System.Obsolete("Use ofFunction")>]
@@ -915,41 +909,35 @@ let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :
 
 /// Instantiate a DOM React element
 let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
-    let inline clientRender (tag, props, children) =
-        createElement(tag, keyValueList CaseRules.LowerFirst props, children)
-
-    let inline serverRender (tag, props, children) =
-        createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
-
-    isomorphicExec clientRender serverRender (tag, props, children)
+#if FABLE_COMPILER
+    createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+#else
+    createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
+#endif
 
 /// Instantiate a DOM React element (void)
 let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
-    let inline clientRender (tag, props, children) =
-        createElement(tag, keyValueList CaseRules.LowerFirst props, children)
-
-    let inline serverRender (tag, props, children) =
-        createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
-
-    isomorphicExec clientRender serverRender (tag, props, [])
+#if FABLE_COMPILER
+    createElement(tag, keyValueList CaseRules.LowerFirst props, [])
+#else
+    createServerElement(tag, (props |> Seq.cast<IProp>), [], ServerElementType.Tag)
+#endif
 
 /// Instantiate an SVG React element
 let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
-    let inline clientRender (tag, props, children) =
-        createElement(tag, keyValueList CaseRules.LowerFirst props, children)
-    let inline serverRender (tag, props, children) =
-        createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
-
-    isomorphicExec clientRender serverRender (tag, props, children)
+#if FABLE_COMPILER
+    createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+#else
+    createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
+#endif
 
 /// Instantiate a React fragment
 let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =
-    let inline clientRender () =
-        createElement(typedefof<Fragment>, keyValueList CaseRules.LowerFirst props, children)
-    let inline serverRender () =
-        createServerElement(typedefof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
-
-    isomorphicExec clientRender serverRender ()
+#if FABLE_COMPILER
+    createElement(typedefof<Fragment>, keyValueList CaseRules.LowerFirst props, children)
+#else
+    createServerElement(typedefof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
+#endif
 
 // Standard elements
 let inline a b c = domEl "a" b c
