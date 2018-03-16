@@ -1,3 +1,7 @@
+### 3.0.0
+
+* Stable version
+
 ### 3.0.0-alpha-003
 
 * Give precedence to CSSProps
