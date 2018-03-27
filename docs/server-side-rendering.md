@@ -32,7 +32,7 @@ There are lots of articles about comparing dotnet core and nodejs, I will only m
 * F# is a compiled language, which means it's generally considered faster then a dynamic language, like js.
 * Nodejs's single thread, event-driven, non-blocking I/O model works well in most web sites, but it is not good at CPU intensive tasks, including html rendering. Usually we need to run multi nodejs instances to take the advantage of multi-core systems. DotNet support non-blocking I/O (and `async/await` sugar), too. But the awesome part is that it also has pretty good support for multi-thread programming.
 
-In a simple test in my local macbook, rendering on dotnet core is about ~1.5x faster then nodejs (with ReactDOMServer.renderToString + NODE_ENV=production) in a single thread. You can find more detail in the bottom of this page.
+In a simple test, rendering on dotnet core is about ~1.5x faster then nodejs (with ReactDOMServer.renderToString + NODE_ENV=production) in a single thread. You can find more detail in the bottom of this page.
 
 In a word, with this approach, you can not only get a better performance then nodejs, but also don't need the complexity of running and maintaining nodejs instances on your server!
 
@@ -268,7 +268,7 @@ cd ./Samples/SSRSample
 
 ```
 
-Here is the benchmark result in my linux laptop (Intel Core i7-3630QM, 8 core), rendering on dotnet core is about ~1.5x faster then on nodejs in a single thread. To take the advantage of multi-core systems, we also tested with multi-thread on dotnet core and cluster mode in nodejs, the dotnet core version is still faster then nodejs version, but not much. I guess it's because multi-process takes more advantages from multi cores then multi-threaded. What's more, multi-threaded dotnet has less memory footprint.
+Here is the benchmark result on a linux laptop (Intel Core i7-3630QM, 8 core), rendering on dotnet core is about ~1.5x faster then on nodejs in a single thread. To take the advantage of multi-core systems, we also tested with multi-thread on dotnet core and cluster mode in nodejs, the dotnet core version is still faster then nodejs version, but not much. I guess it's because multi-process takes more advantages from multi cores then multi-threaded. What's more, multi-threaded dotnet has less memory footprint.
 
 ```sh
 
