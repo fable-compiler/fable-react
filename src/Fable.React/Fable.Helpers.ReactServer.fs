@@ -722,31 +722,35 @@ let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
   else htmlNode :?> HTMLNode
 
 let renderToString (htmlNode: ReactElement): string =
-
   let htmlNode = addReactMark (castHTMLNode htmlNode)
+  let html = StringBuilder()
+  let inline append (text:string) =
+    html.Append(text) |> ignore
 
-  let rec render (htmlNode: HTMLNode): string =
-
-    let inline renderList (nodes: HTMLNode seq) =
-      let html = StringBuilder()
-      for node in nodes do
-        html.Append(render node) |> ignore
-      html.ToString()
-
+  let rec render (htmlNode: HTMLNode) : unit =
     match htmlNode with
-    | HTMLNode.Text str -> escapeHtml str
-    | HTMLNode.RawText str -> str
+    | HTMLNode.Text str -> html.Append(escapeHtml str)
+    | HTMLNode.RawText str -> html.Append(str)
     | HTMLNode.Node (tag, attrs, children) ->
       let attrs, child = renderAttrs attrs tag
-      let child =
-        match child with
-        | Some c -> c
-        | None -> (renderList (children |> Seq.map castHTMLNode))
+
       let attrs = if attrs = "" then attrs else " " + attrs
-      if voidTags.Contains tag
-      then "<" + tag + attrs + "/>"
-      else "<" + tag + attrs + ">" + child + "</" + tag + ">"
-    | HTMLNode.List nodes -> renderList (nodes |> Seq.cast)
-    | HTMLNode.Empty -> ""
+      if voidTags.Contains tag then 
+        append "<"; append tag; append attrs; append "/>"
+      else 
+        append "<"; append tag; append attrs; append ">"; 
+        
+        match child with
+        | Some c -> append c
+        | None ->
+          for child in children do
+            render (castHTMLNode child)
+
+        append "</"; append tag; append ">"
+    | HTMLNode.List nodes ->
+        for node in nodes do
+          render node
+    | HTMLNode.Empty -> ()
 
   render htmlNode
+  html.ToString()
