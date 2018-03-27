@@ -15,7 +15,7 @@ let initState: Model = {
 }
 
 let coreCount = Environment.ProcessorCount
-let workerTimes = 5000
+let workerTimes = 20_000
 let totalTimes = workerTimes * coreCount
 let mutable totalms = 0L
 
@@ -36,7 +36,7 @@ let render times () =
   int watch.ElapsedMilliseconds
 
 let singleTest () =
-  let times = workerTimes * 2
+  let times = totalTimes
   let time = render times ()
   printfn "[Single thread] %dms    %.3freq/s" time ((float times) / (float time) * 1000.)
 

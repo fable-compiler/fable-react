@@ -100,7 +100,9 @@ Target "Run" (fun () ->
   ==> "Run"
 
 
-"BuildBench"
+"InstallClient"
+  ==> "RestoreServer"
+  ==>"BuildBench"
   ==> "Bench"
 
 RunTargetOrDefault "Build"
