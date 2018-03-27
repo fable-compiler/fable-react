@@ -499,6 +499,7 @@ let private renderHtmlAttr (attr: HTMLAttr): string =
   | Coords v -> strAttr "coords" v
   | CrossOrigin v -> strAttr "crossorigin" v
   // | Data v -> pair "data" v
+  | DataTarget v -> strAttr "data-target" v
   | DataToggle v -> strAttr "data-toggle" v
   | DateTime v -> strAttr "datetime" v
   | Default v -> boolAttr "default" v

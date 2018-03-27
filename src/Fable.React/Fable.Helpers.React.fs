@@ -201,6 +201,7 @@ module rec Props =
         | Coords of string
         | CrossOrigin of string
         // | Data of string
+        | [<CompiledName("data-target")>] DataTarget of string
         | [<CompiledName("data-toggle")>] DataToggle of string
         | DateTime of string
         | Default of bool
