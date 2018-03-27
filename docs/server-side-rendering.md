@@ -274,45 +274,45 @@ Here is the benchmark result on a linux laptop (Intel Core i7-3630QM, 8 core), r
 
 dotnet ./bin/Release/netcoreapp2.0/dotnet.dll
 Thread 1 started
-Thread 1 render 160000 times used 25146ms
-[Single thread] 25146ms    6362.841req/s
+Thread 1 render 160000 times used 23062ms
+[Single thread] 23062ms    6937.820req/s
 Thread 1 started
 Thread 3 started
 Thread 4 started
+Thread 6 started
 Thread 5 started
 Thread 7 started
-Thread 8 started
+Thread 10 started
 Thread 9 started
-Thread 6 started
-Thread 3 render 20000 times used 10370ms
-Thread 9 render 20000 times used 10409ms
-Thread 6 render 20000 times used 10421ms
-Thread 4 render 20000 times used 10434ms
-Thread 7 render 20000 times used 10445ms
-Thread 1 render 20000 times used 10458ms
-Thread 5 render 20000 times used 10483ms
-Thread 8 render 20000 times used 10497ms
-[8 tasks] Total: 10439ms    Memory footprint: 43.266MB   Requests/sec: 15327.139
+Thread 3 render 20000 times used 9593ms
+Thread 5 render 20000 times used 9689ms
+Thread 10 render 20000 times used 9693ms
+Thread 9 render 20000 times used 9705ms
+Thread 4 render 20000 times used 9720ms
+Thread 1 render 20000 times used 9753ms
+Thread 7 render 20000 times used 9757ms
+Thread 6 render 20000 times used 9795ms
+[8 tasks] Total: 9713ms    Memory footprint: 44.063MB   Requests/sec: 16472.768
 
 /usr/local/bin/node ./node.js
-Master 3266 is running
-[Single process] 33702ms    4747.493req/s
-Worker 3275: started
-Worker 3281: started
-Worker 3303: started
-Worker 3289: started
-Worker 3304: started
-Worker 3296: started
-Worker 3320: started
-Worker 3317: started
-Worker 3281: render 20000 times used 10247ms
-Worker 3289: render 20000 times used 10709ms
-Worker 3275: render 20000 times used 11048ms
-Worker 3303: render 20000 times used 11119ms
-Worker 3296: render 20000 times used 11188ms
-Worker 3320: render 20000 times used 11359ms
-Worker 3304: render 20000 times used 11370ms
-Worker 3317: render 20000 times used 11574ms
-[8 workers] Total: 11076.75ms    Memory footprint: 200.066MB    Requests/sec: 14444.670
+Master 10891 is running
+[Single process] 34322ms    4661.733req/s
+Worker 10911: started
+Worker 10916: started
+Worker 10928: started
+Worker 10942: started
+Worker 10930: started
+Worker 10935: started
+Worker 10922: started
+Worker 10951: started
+Worker 10911: render 20000 times used 11394ms
+Worker 10935: render 20000 times used 11353ms
+Worker 10928: render 20000 times used 11522ms
+Worker 10922: render 20000 times used 11492ms
+Worker 10916: render 20000 times used 11812ms
+Worker 10930: render 20000 times used 11913ms
+Worker 10951: render 20000 times used 11781ms
+Worker 10942: render 20000 times used 12236ms
+[8 workers] Total: 11687.875ms    Memory footprint: 200.066MB    Requests/sec: 13689.400
 
 ```

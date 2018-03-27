@@ -15,14 +15,8 @@ let private voidTags = System.Collections.Generic.HashSet<_>(["area"; "base"; "b
 
 // Adapted from https://github.com/facebook/react/blob/37e4329bc81def4695211d6e3795a654ef4d84f5/packages/react-dom/src/server/escapeTextForBrowser.js#L49
 let escapeHtml (sb:StringBuilder) (str: string) =
-  let splits = str.Split('"', '\'', '&', '<', '>')
-  let mutable charIndex = -1
-  for i = 0 to splits.Length - 2 do
-    let part = splits.[i]
-    sb.Append part |> ignore
-    charIndex <- charIndex + part.Length + 1
-    let char = str.[charIndex]
-    match char with
+  for c in str.ToCharArray() do
+    match c with
     | '"' -> sb.Append("&quot")
     | '&' -> sb.Append("&amp;")
     | ''' -> sb.Append("&#x27;") // modified from escape-html; used to be '&#39'
@@ -30,7 +24,6 @@ let escapeHtml (sb:StringBuilder) (str: string) =
     | '>' -> sb.Append("&gt;")
     | c   -> sb.Append(c)
     |> ignore
-  sb.Append(Array.last splits) |> ignore
 
 let inline private addUnit (html:StringBuilder) (key: string) (value: string) =
   html.Append value |> ignore
@@ -40,7 +33,7 @@ let inline private addUnit (html:StringBuilder) (key: string) (value: string) =
 let private cssProp (html:StringBuilder) (key: string) (value: obj) =
   html.Append key |> ignore
   html.Append ':' |> ignore
-  
+
   match value with
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
@@ -622,7 +615,7 @@ let private renderHtmlAttr (html:StringBuilder) (attr: HTMLAttr) =
 
     for cssProp in cssList do
       renderCssProp html cssProp
-    
+
     html.Append '"' |> ignore
 
   | HTMLAttr.Custom (key, value) -> strAttr html (key.ToLower()) (string value)
@@ -723,9 +716,9 @@ let rec private addReactMark htmlNode =
   | h -> h
 
 let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
-  if isNull htmlNode then 
+  if isNull htmlNode then
     HTMLNode.Empty
-  else 
+  else
     htmlNode :?> HTMLNode
 
 let renderToString (htmlNode: ReactElement): string =
@@ -742,11 +735,11 @@ let renderToString (htmlNode: ReactElement): string =
 
       let child = renderAttrs html attrs tag
 
-      if voidTags.Contains tag then 
+      if voidTags.Contains tag then
         html.Append "/>" |> ignore
-      else 
+      else
         html.Append '>' |> ignore
-        
+
         match child with
         | Some c -> html.Append c |> ignore
         | None ->
