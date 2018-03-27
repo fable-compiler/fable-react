@@ -682,8 +682,7 @@ let private renderSVGAttr (attr: SVGAttr): string =
   | SVGAttr.Y v -> objAttr "y" v
   | SVGAttr.Custom (key, value) -> objAttr (slugKey key) value
 
-let private renderAttrs (attrs: IProp seq) tag =
-  let html = StringBuilder()
+let private renderAttrs (append:string -> unit) (attrs: IProp seq) tag =
   let mutable childHtml = None
   for attr in attrs do
     match attr with
@@ -698,14 +697,14 @@ let private renderAttrs (attrs: IProp seq) tag =
       | "textarea", DefaultValue v ->
           childHtml <- Some v
       | _, _ ->
-        html.Append(renderHtmlAttr attr) |> ignore
-        html.Append(" ") |> ignore
+        append(renderHtmlAttr attr)
+        append(" ") |> ignore
     | :? SVGAttr as attr ->
-      html.Append(renderSVGAttr attr) |> ignore
-      html.Append(" ") |> ignore
+      append(renderSVGAttr attr) 
+      append(" ")
     | _ -> ()
 
-  html.ToString().Trim(), childHtml
+  childHtml
 
 
 let rec private addReactMark htmlNode =
@@ -732,13 +731,15 @@ let renderToString (htmlNode: ReactElement): string =
     | HTMLNode.Text str -> html.Append(escapeHtml str)
     | HTMLNode.RawText str -> html.Append(str)
     | HTMLNode.Node (tag, attrs, children) ->
-      let attrs, child = renderAttrs attrs tag
+      append "<"
+      append tag
 
-      let attrs = if attrs = "" then attrs else " " + attrs
+      let child = renderAttrs append attrs tag
+
       if voidTags.Contains tag then 
-        append "<"; append tag; append attrs; append "/>"
+        append "/>"
       else 
-        append "<"; append tag; append attrs; append ">"; 
+        append ">"
         
         match child with
         | Some c -> append c
@@ -746,7 +747,9 @@ let renderToString (htmlNode: ReactElement): string =
           for child in children do
             render (castHTMLNode child)
 
-        append "</"; append tag; append ">"
+        append "</"
+        append tag
+        append ">"
     | HTMLNode.List nodes ->
         for node in nodes do
           render node
