@@ -19,18 +19,17 @@ let escapeHtml (sb:StringBuilder) (str: string) =
   let mutable charIndex = -1
   for i = 0 to splits.Length - 2 do
     let part = splits.[i]
-    sb.Append(part) |> ignore
+    sb.Append part |> ignore
     charIndex <- charIndex + part.Length + 1
     let char = str.[charIndex]
-    ignore (
-      match char with
-      | '"' -> sb.Append("&quot")
-      | '&' -> sb.Append("&amp;")
-      | ''' -> sb.Append("&#x27;") // modified from escape-html; used to be '&#39'
-      | '<' -> sb.Append("&lt;")
-      | '>' -> sb.Append("&gt;")
-      | c   -> sb.Append(c)
-    )
+    match char with
+    | '"' -> sb.Append("&quot")
+    | '&' -> sb.Append("&amp;")
+    | ''' -> sb.Append("&#x27;") // modified from escape-html; used to be '&#39'
+    | '<' -> sb.Append("&lt;")
+    | '>' -> sb.Append("&gt;")
+    | c   -> sb.Append(c)
+    |> ignore
   sb.Append(Array.last splits) |> ignore
 
 let inline private addUnit (html:StringBuilder) (key: string) (value: string) =
@@ -464,7 +463,7 @@ let private renderCssProp (html:StringBuilder) (prop: CSSProp) =
 
 let inline boolAttr (html:StringBuilder) (key: string) (value: bool) = if value then html.Append key |> ignore
 
-let inline strAttr (html:StringBuilder) (key: string) (value: string) = 
+let inline strAttr (html:StringBuilder) (key: string) (value: string) =
   html.Append key |> ignore
   html.Append "=\"" |> ignore
   escapeHtml html value
