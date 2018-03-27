@@ -39,14 +39,14 @@ let inline private addUnit (html:StringBuilder) (key: string) (value: string) =
 
 let private cssProp (html:StringBuilder) (key: string) (value: obj) =
   html.Append key |> ignore
-  html.Append ":" |> ignore
+  html.Append ':' |> ignore
   
   match value with
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
   | _ -> html.Append value |> ignore
 
-  html.Append ";" |> ignore
+  html.Append ';' |> ignore
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
 let inline private slugKey key =
@@ -467,7 +467,7 @@ let inline strAttr (html:StringBuilder) (key: string) (value: string) =
   html.Append key |> ignore
   html.Append "=\"" |> ignore
   escapeHtml html value
-  html.Append "\"" |> ignore
+  html.Append '"' |> ignore
 
 let inline objAttr (html:StringBuilder) (key: string) (value: obj) = strAttr html key (string value)
 
@@ -623,7 +623,7 @@ let private renderHtmlAttr (html:StringBuilder) (attr: HTMLAttr) =
     for cssProp in cssList do
       renderCssProp html cssProp
     
-    html.Append "\"" |> ignore
+    html.Append '"' |> ignore
 
   | HTMLAttr.Custom (key, value) -> strAttr html (key.ToLower()) (string value)
   | Data (key, value) -> strAttr html ("data-" + key) (string value)
@@ -723,40 +723,39 @@ let rec private addReactMark htmlNode =
   | h -> h
 
 let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
-  if isNull htmlNode
-  then HTMLNode.Empty
-  else htmlNode :?> HTMLNode
+  if isNull htmlNode then 
+    HTMLNode.Empty
+  else 
+    htmlNode :?> HTMLNode
 
 let renderToString (htmlNode: ReactElement): string =
   let htmlNode = addReactMark (castHTMLNode htmlNode)
   let html = StringBuilder()
-  let inline append (text:string) =
-    html.Append(text) |> ignore
 
   let rec render (htmlNode: HTMLNode) : unit =
     match htmlNode with
     | HTMLNode.Text str -> escapeHtml html str
-    | HTMLNode.RawText str -> append str
+    | HTMLNode.RawText str -> html.Append str |> ignore
     | HTMLNode.Node (tag, attrs, children) ->
-      append "<"
-      append tag
+      html.Append '<' |> ignore
+      html.Append tag |> ignore
 
       let child = renderAttrs html attrs tag
 
       if voidTags.Contains tag then 
-        append "/>"
+        html.Append "/>" |> ignore
       else 
-        append ">"
+        html.Append '>' |> ignore
         
         match child with
-        | Some c -> append c
+        | Some c -> html.Append c |> ignore
         | None ->
           for child in children do
             render (castHTMLNode child)
 
-        append "</"
-        append tag
-        append ">"
+        html.Append "</" |> ignore
+        html.Append tag |> ignore
+        html.Append '>' |> ignore
     | HTMLNode.List nodes ->
         for node in nodes do
           render (castHTMLNode node)
