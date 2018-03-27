@@ -705,11 +705,11 @@ let private renderAttrs (html:StringBuilder) (attrs: IProp seq) tag =
       | "textarea", DefaultValue v ->
           childHtml <- Some v
       | _, _ ->
-        renderHtmlAttr html attr
         html.Append(" ") |> ignore
+        renderHtmlAttr html attr
     | :? SVGAttr as attr ->
-      renderSVGAttr html attr
       html.Append(" ")|> ignore
+      renderSVGAttr html attr
     | _ -> ()
 
   childHtml
