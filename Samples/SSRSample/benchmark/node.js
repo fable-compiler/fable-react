@@ -14,7 +14,7 @@ const initState = {
 
 const noop = () => {}
 const mb = bytes => (bytes / 1024 / 1024).toFixed(3)
-const workerTimes = 5000
+const workerTimes = 20000
 const totalTimes = workerTimes * coreCount
 
 function render(len = workerTimes) {
@@ -26,7 +26,7 @@ function render(len = workerTimes) {
 }
 
 function singleTest() {
-  const times = workerTimes * 2
+  const times = totalTimes
   const time = render(times)
   console.log(`[Single process] ${time}ms    ${(times / time * 1000).toFixed(3)}req/s`)
 }
