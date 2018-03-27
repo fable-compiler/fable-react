@@ -14,675 +14,683 @@ let private unitlessCssProps = System.Collections.Generic.HashSet<_>([ "animatio
 let private voidTags = System.Collections.Generic.HashSet<_>(["area"; "base"; "br"; "col"; "embed"; "hr"; "img"; "input"; "keygen"; "link"; "menuitem"; "meta"; "param"; "source"; "track"; "wbr"])
 
 // Adapted from https://github.com/facebook/react/blob/37e4329bc81def4695211d6e3795a654ef4d84f5/packages/react-dom/src/server/escapeTextForBrowser.js#L49
-let escapeHtml (str: string) =
-  let escaped = StringBuilder()
+let escapeHtml (sb:StringBuilder) (str: string) =
   let splits = str.Split('"', '\'', '&', '<', '>')
   let mutable charIndex = -1
   for i = 0 to splits.Length - 2 do
     let part = splits.[i]
-    escaped.Append(part) |> ignore
+    sb.Append(part) |> ignore
     charIndex <- charIndex + part.Length + 1
     let char = str.[charIndex]
     ignore (
       match char with
-      | '"' -> escaped.Append("&quot")
-      | '&' -> escaped.Append("&amp;")
-      | ''' -> escaped.Append("&#x27;") // modified from escape-html; used to be '&#39'
-      | '<' -> escaped.Append("&lt;")
-      | '>' -> escaped.Append("&gt;")
-      | c   -> escaped.Append(c)
+      | '"' -> sb.Append("&quot")
+      | '&' -> sb.Append("&amp;")
+      | ''' -> sb.Append("&#x27;") // modified from escape-html; used to be '&#39'
+      | '<' -> sb.Append("&lt;")
+      | '>' -> sb.Append("&gt;")
+      | c   -> sb.Append(c)
     )
-  escaped.Append(Array.last splits) |> ignore
-  escaped.ToString()
+  sb.Append(Array.last splits) |> ignore
 
-let inline private addUnit (key: string) (value: string) =
-  if unitlessCssProps.Contains key 
-  then vaule
-  else value + "px"
+let inline private addUnit (html:StringBuilder) (key: string) (value: string) =
+  html.Append value |> ignore
+  if not (unitlessCssProps.Contains key) then
+    html.Append "px" |> ignore
 
-let private cssProp (key: string) (value: obj) =
-  let value =
-    match value with
-    | :? int as v -> (addUnit key (string v))
-    | :? float as v -> (addUnit key (string v))
-    | _ -> value.ToString()
+let private cssProp (html:StringBuilder) (key: string) (value: obj) =
+  html.Append key |> ignore
+  html.Append ":" |> ignore
+  
+  match value with
+  | :? int as v -> addUnit html key (string v)
+  | :? float as v -> addUnit html key (string v)
+  | _ -> html.Append value |> ignore
 
-  key + ":" + value + ";"
+  html.Append ";" |> ignore
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
 let inline private slugKey key =
   slugRegex.Replace(string key, "-$1").ToLower()
 
-let private renderCssProp (prop: CSSProp): string =
+let private renderCssProp (html:StringBuilder) (prop: CSSProp) =
   match prop with
-  | AlignContent v -> cssProp "align-content" v
-  | AlignItems v -> cssProp "align-items" v
-  | AlignSelf v -> cssProp "align-self" v
-  | AlignmentAdjust v -> cssProp "alignment-adjust" v
-  | AlignmentBaseline v -> cssProp "alignment-baseline" v
-  | All v -> cssProp "all" v
-  | Animation v -> cssProp "animation" v
-  | AnimationDelay v -> cssProp "animation-delay" v
-  | AnimationDirection v -> cssProp "animation-direction" v
-  | AnimationDuration v -> cssProp "animation-duration" v
-  | AnimationFillMode v -> cssProp "animation-fill-mode" v
-  | AnimationIterationCount v -> cssProp "animation-iteration-count" v
-  | AnimationName v -> cssProp "animation-name" v
-  | AnimationPlayState v -> cssProp "animation-play-state" v
-  | AnimationTimingFunction v -> cssProp "animation-timing-function" v
-  | Appearance v -> cssProp "appearance" v
-  | BackfaceVisibility v -> cssProp "backface-visibility" v
-  | Background v -> cssProp "background" v
-  | BackgroundAttachment v -> cssProp "background-attachment" v
-  | BackgroundBlendMode v -> cssProp "background-blend-mode" v
-  | BackgroundClip v -> cssProp "background-clip" v
-  | BackgroundColor v -> cssProp "background-color" v
-  | BackgroundComposite v -> cssProp "background-composite" v
-  | BackgroundImage v -> cssProp "background-image" v
-  | BackgroundOrigin v -> cssProp "background-origin" v
-  | BackgroundPosition v -> cssProp "background-position" v
-  | BackgroundPositionX v -> cssProp "background-position-x" v
-  | BackgroundPositionY v -> cssProp "background-position-y" v
-  | BackgroundRepeat v -> cssProp "background-repeat" v
-  | BackgroundSize v -> cssProp "background-size" v
-  | BaselineShift v -> cssProp "baseline-shift" v
-  | Behavior v -> cssProp "behavior" v
-  | BlockSize v -> cssProp "block-size" v
-  | Border v -> cssProp "border" v
-  | BorderBlockEnd v -> cssProp "border-block-end" v
-  | BorderBlockEndColor v -> cssProp "border-block-end-color" v
-  | BorderBlockEndStyle v -> cssProp "border-block-end-style" v
-  | BorderBlockEndWidth v -> cssProp "border-block-end-width" v
-  | BorderBlockStart v -> cssProp "border-block-start" v
-  | BorderBlockStartColor v -> cssProp "border-block-start-color" v
-  | BorderBlockStartStyle v -> cssProp "border-block-start-style" v
-  | BorderBlockStartWidth v -> cssProp "border-block-start-width" v
-  | BorderBottom v -> cssProp "border-bottom" v
-  | BorderBottomColor v -> cssProp "border-bottom-color" v
-  | BorderBottomLeftRadius v -> cssProp "border-bottom-left-radius" v
-  | BorderBottomRightRadius v -> cssProp "border-bottom-right-radius" v
-  | BorderBottomStyle v -> cssProp "border-bottom-style" v
-  | BorderBottomWidth v -> cssProp "border-bottom-width" v
-  | BorderCollapse v -> cssProp "border-collapse" v
-  | BorderColor v -> cssProp "border-color" v
-  | BorderCornerShape v -> cssProp "border-corner-shape" v
-  | BorderImage v -> cssProp "border-image" v
-  | BorderImageOutset v -> cssProp "border-image-outset" v
-  | BorderImageRepeat v -> cssProp "border-image-repeat" v
-  | BorderImageSlice v -> cssProp "border-image-slice" v
-  | BorderImageSource v -> cssProp "border-image-source" v
-  | BorderImageWidth v -> cssProp "border-image-width" v
-  | BorderInlineEnd v -> cssProp "border-inline-end" v
-  | BorderInlineEndColor v -> cssProp "border-inline-end-color" v
-  | BorderInlineEndStyle v -> cssProp "border-inline-end-style" v
-  | BorderInlineEndWidth v -> cssProp "border-inline-end-width" v
-  | BorderInlineStart v -> cssProp "border-inline-start" v
-  | BorderInlineStartColor v -> cssProp "border-inline-start-color" v
-  | BorderInlineStartStyle v -> cssProp "border-inline-start-style" v
-  | BorderInlineStartWidth v -> cssProp "border-inline-start-width" v
-  | BorderLeft v -> cssProp "border-left" v
-  | BorderLeftColor v -> cssProp "border-left-color" v
-  | BorderLeftStyle v -> cssProp "border-left-style" v
-  | BorderLeftWidth v -> cssProp "border-left-width" v
-  | BorderRadius v -> cssProp "border-radius" v
-  | BorderRight v -> cssProp "border-right" v
-  | BorderRightColor v -> cssProp "border-right-color" v
-  | BorderRightStyle v -> cssProp "border-right-style" v
-  | BorderRightWidth v -> cssProp "border-right-width" v
-  | BorderSpacing v -> cssProp "border-spacing" v
-  | BorderStyle v -> cssProp "border-style" v
-  | BorderTop v -> cssProp "border-top" v
-  | BorderTopColor v -> cssProp "border-top-color" v
-  | BorderTopLeftRadius v -> cssProp "border-top-left-radius" v
-  | BorderTopRightRadius v -> cssProp "border-top-right-radius" v
-  | BorderTopStyle v -> cssProp "border-top-style" v
-  | BorderTopWidth v -> cssProp "border-top-width" v
-  | BorderWidth v -> cssProp "border-width" v
-  | Bottom v -> cssProp "bottom" v
-  | BoxAlign v -> cssProp "box-align" v
-  | BoxDecorationBreak v -> cssProp "box-decoration-break" v
-  | BoxDirection v -> cssProp "box-direction" v
-  | BoxFlex v -> cssProp "box-flex" v
-  | BoxFlexGroup v -> cssProp "box-flex-group" v
-  | BoxLineProgression v -> cssProp "box-line-progression" v
-  | BoxLines v -> cssProp "box-lines" v
-  | BoxOrdinalGroup v -> cssProp "box-ordinal-group" v
-  | BoxShadow v -> cssProp "box-shadow" v
-  | BoxSizing v -> cssProp "box-sizing" v
-  | BreakAfter v -> cssProp "break-after" v
-  | BreakBefore v -> cssProp "break-before" v
-  | BreakInside v -> cssProp "break-inside" v
-  | CaptionSide v -> cssProp "caption-side" v
-  | CaretColor v -> cssProp "caret-color" v
-  | Clear v -> cssProp "clear" v
-  | Clip v -> cssProp "clip" v
-  | ClipPath v -> cssProp "clip-path" v
-  | ClipRule v -> cssProp "clip-rule" v
-  | Color v -> cssProp "color" v
-  | ColorInterpolation v -> cssProp "color-interpolation" v
-  | ColorInterpolationFilters v -> cssProp "color-interpolation-filters" v
-  | ColorProfile v -> cssProp "color-profile" v
-  | ColorRendering v -> cssProp "color-rendering" v
-  | ColumnCount v -> cssProp "column-count" v
-  | ColumnFill v -> cssProp "column-fill" v
-  | ColumnGap v -> cssProp "column-gap" v
-  | ColumnRule v -> cssProp "column-rule" v
-  | ColumnRuleColor v -> cssProp "column-rule-color" v
-  | ColumnRuleStyle v -> cssProp "column-rule-style" v
-  | ColumnRuleWidth v -> cssProp "column-rule-width" v
-  | ColumnSpan v -> cssProp "column-span" v
-  | ColumnWidth v -> cssProp "column-width" v
-  | Columns v -> cssProp "columns" v
-  | CSSProp.Content v -> cssProp "content" v
-  | CounterIncrement v -> cssProp "counter-increment" v
-  | CounterReset v -> cssProp "counter-reset" v
-  | Cue v -> cssProp "cue" v
-  | CueAfter v -> cssProp "cue-after" v
-  | Cursor v -> cssProp "cursor" v
-  | Direction v -> cssProp "direction" v
-  | Display v -> cssProp "display" v
-  | DominantBaseline v -> cssProp "dominant-baseline" v
-  | EmptyCells v -> cssProp "empty-cells" v
-  | EnableBackground v -> cssProp "enable-background" v
-  | Fill v -> cssProp "fill" v
-  | FillOpacity v -> cssProp "fill-opacity" v
-  | FillRule v -> cssProp "fill-rule" v
-  | Filter v -> cssProp "filter" v
-  | Flex v -> cssProp "flex" v
-  | FlexAlign v -> cssProp "flex-align" v
-  | FlexBasis v -> cssProp "flex-basis" v
-  | FlexDirection v -> cssProp "flex-direction" v
-  | FlexFlow v -> cssProp "flex-flow" v
-  | FlexGrow v -> cssProp "flex-grow" v
-  | FlexItemAlign v -> cssProp "flex-item-align" v
-  | FlexLinePack v -> cssProp "flex-line-pack" v
-  | FlexOrder v -> cssProp "flex-order" v
-  | FlexShrink v -> cssProp "flex-shrink" v
-  | FlexWrap v -> cssProp "flex-wrap" v
-  | Float v -> cssProp "float" v
-  | FloodColor v -> cssProp "flood-color" v
-  | FloodOpacity v -> cssProp "flood-opacity" v
-  | FlowFrom v -> cssProp "flow-from" v
-  | Font v -> cssProp "font" v
-  | FontFamily v -> cssProp "font-family" v
-  | FontFeatureSettings v -> cssProp "font-feature-settings" v
-  | FontKerning v -> cssProp "font-kerning" v
-  | FontLanguageOverride v -> cssProp "font-language-override" v
-  | FontSize v -> cssProp "font-size" v
-  | FontSizeAdjust v -> cssProp "font-size-adjust" v
-  | FontStretch v -> cssProp "font-stretch" v
-  | FontStyle v -> cssProp "font-style" v
-  | FontSynthesis v -> cssProp "font-synthesis" v
-  | FontVariant v -> cssProp "font-variant" v
-  | FontVariantAlternates v -> cssProp "font-variant-alternates" v
-  | FontVariantCaps v -> cssProp "font-variant-caps" v
-  | FontVariantEastAsian v -> cssProp "font-variant-east-asian" v
-  | FontVariantLigatures v -> cssProp "font-variant-ligatures" v
-  | FontVariantNumeric v -> cssProp "font-variant-numeric" v
-  | FontVariantPosition v -> cssProp "font-variant-position" v
-  | FontWeight v -> cssProp "font-weight" v
-  | GlyphOrientationHorizontal v -> cssProp "glyph-orientation-horizontal" v
-  | GlyphOrientationVertical v -> cssProp "glyph-orientation-vertical" v
-  | Grid v -> cssProp "grid" v
-  | GridArea v -> cssProp "grid-area" v
-  | GridAutoColumns v -> cssProp "grid-auto-columns" v
-  | GridAutoFlow v -> cssProp "grid-auto-flow" v
-  | GridAutoRows v -> cssProp "grid-auto-rows" v
-  | GridColumn v -> cssProp "grid-column" v
-  | GridColumnEnd v -> cssProp "grid-column-end" v
-  | GridColumnGap v -> cssProp "grid-column-gap" v
-  | GridColumnStart v -> cssProp "grid-column-start" v
-  | GridGap v -> cssProp "grid-gap" v
-  | GridRow v -> cssProp "grid-row" v
-  | GridRowEnd v -> cssProp "grid-row-end" v
-  | GridRowGap v -> cssProp "grid-row-gap" v
-  | GridRowPosition v -> cssProp "grid-row-position" v
-  | GridRowSpan v -> cssProp "grid-row-span" v
-  | GridRowStart v -> cssProp "grid-row-start" v
-  | GridTemplate v -> cssProp "grid-template" v
-  | GridTemplateAreas v -> cssProp "grid-template-areas" v
-  | GridTemplateColumns v -> cssProp "grid-template-columns" v
-  | GridTemplateRows v -> cssProp "grid-template-rows" v
-  | HangingPunctuation v -> cssProp "hanging-punctuation" v
-  | CSSProp.Height v -> cssProp "height" v
-  | HyphenateLimitChars v -> cssProp "hyphenate-limit-chars" v
-  | HyphenateLimitLines v -> cssProp "hyphenate-limit-lines" v
-  | HyphenateLimitZone v -> cssProp "hyphenate-limit-zone" v
-  | Hyphens v -> cssProp "hyphens" v
-  | ImageOrientation v -> cssProp "image-orientation" v
-  | ImageRendering v -> cssProp "image-rendering" v
-  | ImageResolution v -> cssProp "image-resolution" v
-  | ImeMode v -> cssProp "ime-mode" v
-  | InlineSize v -> cssProp "inline-size" v
-  | Isolation v -> cssProp "isolation" v
-  | JustifyContent v -> cssProp "justify-content" v
-  | Kerning v -> cssProp "kerning" v
-  | LayoutGrid v -> cssProp "layout-grid" v
-  | LayoutGridChar v -> cssProp "layout-grid-char" v
-  | LayoutGridLine v -> cssProp "layout-grid-line" v
-  | LayoutGridMode v -> cssProp "layout-grid-mode" v
-  | LayoutGridType v -> cssProp "layout-grid-type" v
-  | Left v -> cssProp "left" v
-  | LetterSpacing v -> cssProp "letter-spacing" v
-  | LightingColor v -> cssProp "lighting-color" v
-  | LineBreak v -> cssProp "line-break" v
-  | LineClamp v -> cssProp "line-clamp" v
-  | LineHeight v -> cssProp "line-height" v
-  | ListStyle v -> cssProp "list-style" v
-  | ListStyleImage v -> cssProp "list-style-image" v
-  | ListStylePosition v -> cssProp "list-style-position" v
-  | ListStyleType v -> cssProp "list-style-type" v
-  | Margin v -> cssProp "margin" v
-  | MarginBlockEnd v -> cssProp "margin-block-end" v
-  | MarginBlockStart v -> cssProp "margin-block-start" v
-  | MarginBottom v -> cssProp "margin-bottom" v
-  | MarginInlineEnd v -> cssProp "margin-inline-end" v
-  | MarginInlineStart v -> cssProp "margin-inline-start" v
-  | MarginLeft v -> cssProp "margin-left" v
-  | MarginRight v -> cssProp "margin-right" v
-  | MarginTop v -> cssProp "margin-top" v
-  | MarkerEnd v -> cssProp "marker-end" v
-  | MarkerMid v -> cssProp "marker-mid" v
-  | MarkerStart v -> cssProp "marker-start" v
-  | MarqueeDirection v -> cssProp "marquee-direction" v
-  | MarqueeStyle v -> cssProp "marquee-style" v
-  | Mask v -> cssProp "mask" v
-  | MaskBorder v -> cssProp "mask-border" v
-  | MaskBorderRepeat v -> cssProp "mask-border-repeat" v
-  | MaskBorderSlice v -> cssProp "mask-border-slice" v
-  | MaskBorderSource v -> cssProp "mask-border-source" v
-  | MaskBorderWidth v -> cssProp "mask-border-width" v
-  | MaskClip v -> cssProp "mask-clip" v
-  | MaskComposite v -> cssProp "mask-composite" v
-  | MaskImage v -> cssProp "mask-image" v
-  | MaskMode v -> cssProp "mask-mode" v
-  | MaskOrigin v -> cssProp "mask-origin" v
-  | MaskPosition v -> cssProp "mask-position" v
-  | MaskRepeat v -> cssProp "mask-repeat" v
-  | MaskSize v -> cssProp "mask-size" v
-  | MaskType v -> cssProp "mask-type" v
-  | MaxFontSize v -> cssProp "max-font-size" v
-  | MaxHeight v -> cssProp "max-height" v
-  | MaxWidth v -> cssProp "max-width" v
-  | MinBlockSize v -> cssProp "min-block-size" v
-  | MinHeight v -> cssProp "min-height" v
-  | MinInlineSize v -> cssProp "min-inline-size" v
-  | MinWidth v -> cssProp "min-width" v
-  | MixBlendMode v -> cssProp "mix-blend-mode" v
-  | ObjectFit v -> cssProp "object-fit" v
-  | ObjectPosition v -> cssProp "object-position" v
-  | OffsetBlockEnd v -> cssProp "offset-block-end" v
-  | OffsetBlockStart v -> cssProp "offset-block-start" v
-  | OffsetInlineEnd v -> cssProp "offset-inline-end" v
-  | OffsetInlineStart v -> cssProp "offset-inline-start" v
-  | Opacity v -> cssProp "opacity" v
-  | Order v -> cssProp "order" v
-  | Orphans v -> cssProp "orphans" v
-  | Outline v -> cssProp "outline" v
-  | OutlineColor v -> cssProp "outline-color" v
-  | OutlineOffset v -> cssProp "outline-offset" v
-  | OutlineStyle v -> cssProp "outline-style" v
-  | OutlineWidth v -> cssProp "outline-width" v
-  | Overflow v -> cssProp "overflow" v
-  | OverflowStyle v -> cssProp "overflow-style" v
-  | OverflowWrap v -> cssProp "overflow-wrap" v
-  | OverflowX v -> cssProp "overflow-x" v
-  | OverflowY v -> cssProp "overflow-y" v
-  | Padding v -> cssProp "padding" v
-  | PaddingBlockEnd v -> cssProp "padding-block-end" v
-  | PaddingBlockStart v -> cssProp "padding-block-start" v
-  | PaddingBottom v -> cssProp "padding-bottom" v
-  | PaddingInlineEnd v -> cssProp "padding-inline-end" v
-  | PaddingInlineStart v -> cssProp "padding-inline-start" v
-  | PaddingLeft v -> cssProp "padding-left" v
-  | PaddingRight v -> cssProp "padding-right" v
-  | PaddingTop v -> cssProp "padding-top" v
-  | PageBreakAfter v -> cssProp "page-break-after" v
-  | PageBreakBefore v -> cssProp "page-break-before" v
-  | PageBreakInside v -> cssProp "page-break-inside" v
-  | Pause v -> cssProp "pause" v
-  | PauseAfter v -> cssProp "pause-after" v
-  | PauseBefore v -> cssProp "pause-before" v
-  | Perspective v -> cssProp "perspective" v
-  | PerspectiveOrigin v -> cssProp "perspective-origin" v
-  | PointerEvents v -> cssProp "pointer-events" v
-  | Position v -> cssProp "position" v
-  | PunctuationTrim v -> cssProp "punctuation-trim" v
-  | Quotes v -> cssProp "quotes" v
-  | RegionFragment v -> cssProp "region-fragment" v
-  | Resize v -> cssProp "resize" v
-  | RestAfter v -> cssProp "rest-after" v
-  | RestBefore v -> cssProp "rest-before" v
-  | Right v -> cssProp "right" v
-  | RubyAlign v -> cssProp "ruby-align" v
-  | RubyMerge v -> cssProp "ruby-merge" v
-  | RubyPosition v -> cssProp "ruby-position" v
-  | ScrollBehavior v -> cssProp "scroll-behavior" v
-  | ScrollSnapCoordinate v -> cssProp "scroll-snap-coordinate" v
-  | ScrollSnapDestination v -> cssProp "scroll-snap-destination" v
-  | ScrollSnapType v -> cssProp "scroll-snap-type" v
-  | ShapeImageThreshold v -> cssProp "shape-image-threshold" v
-  | ShapeInside v -> cssProp "shape-inside" v
-  | ShapeMargin v -> cssProp "shape-margin" v
-  | ShapeOutside v -> cssProp "shape-outside" v
-  | ShapeRendering v -> cssProp "shape-rendering" v
-  | Speak v -> cssProp "speak" v
-  | SpeakAs v -> cssProp "speak-as" v
-  | StopColor v -> cssProp "stop-color" v
-  | StopOpacity v -> cssProp "stop-opacity" v
-  | Stroke v -> cssProp "stroke" v
-  | StrokeDasharray v -> cssProp "stroke-dasharray" v
-  | StrokeDashoffset v -> cssProp "stroke-dashoffset" v
-  | StrokeLinecap v -> cssProp "stroke-linecap" v
-  | StrokeLinejoin v -> cssProp "stroke-linejoin" v
-  | StrokeMiterlimit v -> cssProp "stroke-miterlimit" v
-  | StrokeOpacity v -> cssProp "stroke-opacity" v
-  | StrokeWidth v -> cssProp "stroke-width" v
-  | TabSize v -> cssProp "tab-size" v
-  | TableLayout v -> cssProp "table-layout" v
-  | TextAlign v -> cssProp "text-align" v
-  | TextAlignLast v -> cssProp "text-align-last" v
-  | TextAnchor v -> cssProp "text-anchor" v
-  | TextCombineUpright v -> cssProp "text-combine-upright" v
-  | TextDecoration v -> cssProp "text-decoration" v
-  | TextDecorationColor v -> cssProp "text-decoration-color" v
-  | TextDecorationLine v -> cssProp "text-decoration-line" v
-  | TextDecorationLineThrough v -> cssProp "text-decoration-line-through" v
-  | TextDecorationNone v -> cssProp "text-decoration-none" v
-  | TextDecorationOverline v -> cssProp "text-decoration-overline" v
-  | TextDecorationSkip v -> cssProp "text-decoration-skip" v
-  | TextDecorationStyle v -> cssProp "text-decoration-style" v
-  | TextDecorationUnderline v -> cssProp "text-decoration-underline" v
-  | TextEmphasis v -> cssProp "text-emphasis" v
-  | TextEmphasisColor v -> cssProp "text-emphasis-color" v
-  | TextEmphasisPosition v -> cssProp "text-emphasis-position" v
-  | TextEmphasisStyle v -> cssProp "text-emphasis-style" v
-  | TextHeight v -> cssProp "text-height" v
-  | TextIndent v -> cssProp "text-indent" v
-  | TextJustify v -> cssProp "text-justify" v
-  | TextJustifyTrim v -> cssProp "text-justify-trim" v
-  | TextKashidaSpace v -> cssProp "text-kashida-space" v
-  | TextLineThrough v -> cssProp "text-line-through" v
-  | TextLineThroughColor v -> cssProp "text-line-through-color" v
-  | TextLineThroughMode v -> cssProp "text-line-through-mode" v
-  | TextLineThroughStyle v -> cssProp "text-line-through-style" v
-  | TextLineThroughWidth v -> cssProp "text-line-through-width" v
-  | TextOrientation v -> cssProp "text-orientation" v
-  | TextOverflow v -> cssProp "text-overflow" v
-  | TextOverline v -> cssProp "text-overline" v
-  | TextOverlineColor v -> cssProp "text-overline-color" v
-  | TextOverlineMode v -> cssProp "text-overline-mode" v
-  | TextOverlineStyle v -> cssProp "text-overline-style" v
-  | TextOverlineWidth v -> cssProp "text-overline-width" v
-  | TextRendering v -> cssProp "text-rendering" v
-  | TextScript v -> cssProp "text-script" v
-  | TextShadow v -> cssProp "text-shadow" v
-  | TextTransform v -> cssProp "text-transform" v
-  | TextUnderlinePosition v -> cssProp "text-underline-position" v
-  | TextUnderlineStyle v -> cssProp "text-underline-style" v
-  | Top v -> cssProp "top" v
-  | TouchAction v -> cssProp "touch-action" v
-  | Transform v -> cssProp "transform" v
-  | TransformBox v -> cssProp "transform-box" v
-  | TransformOrigin v -> cssProp "transform-origin" v
-  | TransformOriginZ v -> cssProp "transform-origin-z" v
-  | TransformStyle v -> cssProp "transform-style" v
-  | Transition v -> cssProp "transition" v
-  | TransitionDelay v -> cssProp "transition-delay" v
-  | TransitionDuration v -> cssProp "transition-duration" v
-  | TransitionProperty v -> cssProp "transition-property" v
-  | TransitionTimingFunction v -> cssProp "transition-timing-function" v
-  | UnicodeBidi v -> cssProp "unicode-bidi" v
-  | UnicodeRange v -> cssProp "unicode-range" v
-  | UserFocus v -> cssProp "user-focus" v
-  | UserInput v -> cssProp "user-input" v
-  | VerticalAlign v -> cssProp "vertical-align" v
-  | Visibility v -> cssProp "visibility" v
-  | VoiceBalance v -> cssProp "voice-balance" v
-  | VoiceDuration v -> cssProp "voice-duration" v
-  | VoiceFamily v -> cssProp "voice-family" v
-  | VoicePitch v -> cssProp "voice-pitch" v
-  | VoiceRange v -> cssProp "voice-range" v
-  | VoiceRate v -> cssProp "voice-rate" v
-  | VoiceStress v -> cssProp "voice-stress" v
-  | VoiceVolume v -> cssProp "voice-volume" v
-  | WhiteSpace v -> cssProp "white-space" v
-  | WhiteSpaceTreatment v -> cssProp "white-space-treatment" v
-  | Widows v -> cssProp "widows" v
-  | CSSProp.Width v -> cssProp "width" v
-  | WillChange v -> cssProp "will-change" v
-  | WordBreak v -> cssProp "word-break" v
-  | WordSpacing v -> cssProp "word-spacing" v
-  | WordWrap v -> cssProp "word-wrap" v
-  | WrapFlow v -> cssProp "wrap-flow" v
-  | WrapMargin v -> cssProp "wrap-margin" v
-  | WrapOption v -> cssProp "wrap-option" v
-  | WritingMode v -> cssProp "writing-mode" v
-  | ZIndex v -> cssProp "z-index" v
-  | Zoom v -> cssProp "zoom" v
-  | CSSProp.Custom (key, value) -> cssProp (slugKey key) value
+  | AlignContent v -> cssProp html "align-content" v
+  | AlignItems v -> cssProp html "align-items" v
+  | AlignSelf v -> cssProp html "align-self" v
+  | AlignmentAdjust v -> cssProp html "alignment-adjust" v
+  | AlignmentBaseline v -> cssProp html "alignment-baseline" v
+  | All v -> cssProp html "all" v
+  | Animation v -> cssProp html "animation" v
+  | AnimationDelay v -> cssProp html "animation-delay" v
+  | AnimationDirection v -> cssProp html "animation-direction" v
+  | AnimationDuration v -> cssProp html "animation-duration" v
+  | AnimationFillMode v -> cssProp html "animation-fill-mode" v
+  | AnimationIterationCount v -> cssProp html "animation-iteration-count" v
+  | AnimationName v -> cssProp html "animation-name" v
+  | AnimationPlayState v -> cssProp html "animation-play-state" v
+  | AnimationTimingFunction v -> cssProp html "animation-timing-function" v
+  | Appearance v -> cssProp html "appearance" v
+  | BackfaceVisibility v -> cssProp html "backface-visibility" v
+  | Background v -> cssProp html "background" v
+  | BackgroundAttachment v -> cssProp html "background-attachment" v
+  | BackgroundBlendMode v -> cssProp html "background-blend-mode" v
+  | BackgroundClip v -> cssProp html "background-clip" v
+  | BackgroundColor v -> cssProp html "background-color" v
+  | BackgroundComposite v -> cssProp html "background-composite" v
+  | BackgroundImage v -> cssProp html "background-image" v
+  | BackgroundOrigin v -> cssProp html "background-origin" v
+  | BackgroundPosition v -> cssProp html "background-position" v
+  | BackgroundPositionX v -> cssProp html "background-position-x" v
+  | BackgroundPositionY v -> cssProp html "background-position-y" v
+  | BackgroundRepeat v -> cssProp html "background-repeat" v
+  | BackgroundSize v -> cssProp html "background-size" v
+  | BaselineShift v -> cssProp html "baseline-shift" v
+  | Behavior v -> cssProp html "behavior" v
+  | BlockSize v -> cssProp html "block-size" v
+  | Border v -> cssProp html "border" v
+  | BorderBlockEnd v -> cssProp html "border-block-end" v
+  | BorderBlockEndColor v -> cssProp html "border-block-end-color" v
+  | BorderBlockEndStyle v -> cssProp html "border-block-end-style" v
+  | BorderBlockEndWidth v -> cssProp html "border-block-end-width" v
+  | BorderBlockStart v -> cssProp html "border-block-start" v
+  | BorderBlockStartColor v -> cssProp html "border-block-start-color" v
+  | BorderBlockStartStyle v -> cssProp html "border-block-start-style" v
+  | BorderBlockStartWidth v -> cssProp html "border-block-start-width" v
+  | BorderBottom v -> cssProp html "border-bottom" v
+  | BorderBottomColor v -> cssProp html "border-bottom-color" v
+  | BorderBottomLeftRadius v -> cssProp html "border-bottom-left-radius" v
+  | BorderBottomRightRadius v -> cssProp html "border-bottom-right-radius" v
+  | BorderBottomStyle v -> cssProp html "border-bottom-style" v
+  | BorderBottomWidth v -> cssProp html "border-bottom-width" v
+  | BorderCollapse v -> cssProp html "border-collapse" v
+  | BorderColor v -> cssProp html "border-color" v
+  | BorderCornerShape v -> cssProp html "border-corner-shape" v
+  | BorderImage v -> cssProp html "border-image" v
+  | BorderImageOutset v -> cssProp html "border-image-outset" v
+  | BorderImageRepeat v -> cssProp html "border-image-repeat" v
+  | BorderImageSlice v -> cssProp html "border-image-slice" v
+  | BorderImageSource v -> cssProp html "border-image-source" v
+  | BorderImageWidth v -> cssProp html "border-image-width" v
+  | BorderInlineEnd v -> cssProp html "border-inline-end" v
+  | BorderInlineEndColor v -> cssProp html "border-inline-end-color" v
+  | BorderInlineEndStyle v -> cssProp html "border-inline-end-style" v
+  | BorderInlineEndWidth v -> cssProp html "border-inline-end-width" v
+  | BorderInlineStart v -> cssProp html "border-inline-start" v
+  | BorderInlineStartColor v -> cssProp html "border-inline-start-color" v
+  | BorderInlineStartStyle v -> cssProp html "border-inline-start-style" v
+  | BorderInlineStartWidth v -> cssProp html "border-inline-start-width" v
+  | BorderLeft v -> cssProp html "border-left" v
+  | BorderLeftColor v -> cssProp html "border-left-color" v
+  | BorderLeftStyle v -> cssProp html "border-left-style" v
+  | BorderLeftWidth v -> cssProp html "border-left-width" v
+  | BorderRadius v -> cssProp html "border-radius" v
+  | BorderRight v -> cssProp html "border-right" v
+  | BorderRightColor v -> cssProp html "border-right-color" v
+  | BorderRightStyle v -> cssProp html "border-right-style" v
+  | BorderRightWidth v -> cssProp html "border-right-width" v
+  | BorderSpacing v -> cssProp html "border-spacing" v
+  | BorderStyle v -> cssProp html "border-style" v
+  | BorderTop v -> cssProp html "border-top" v
+  | BorderTopColor v -> cssProp html "border-top-color" v
+  | BorderTopLeftRadius v -> cssProp html "border-top-left-radius" v
+  | BorderTopRightRadius v -> cssProp html "border-top-right-radius" v
+  | BorderTopStyle v -> cssProp html "border-top-style" v
+  | BorderTopWidth v -> cssProp html "border-top-width" v
+  | BorderWidth v -> cssProp html "border-width" v
+  | Bottom v -> cssProp html "bottom" v
+  | BoxAlign v -> cssProp html "box-align" v
+  | BoxDecorationBreak v -> cssProp html "box-decoration-break" v
+  | BoxDirection v -> cssProp html "box-direction" v
+  | BoxFlex v -> cssProp html "box-flex" v
+  | BoxFlexGroup v -> cssProp html "box-flex-group" v
+  | BoxLineProgression v -> cssProp html "box-line-progression" v
+  | BoxLines v -> cssProp html "box-lines" v
+  | BoxOrdinalGroup v -> cssProp html "box-ordinal-group" v
+  | BoxShadow v -> cssProp html "box-shadow" v
+  | BoxSizing v -> cssProp html "box-sizing" v
+  | BreakAfter v -> cssProp html "break-after" v
+  | BreakBefore v -> cssProp html "break-before" v
+  | BreakInside v -> cssProp html "break-inside" v
+  | CaptionSide v -> cssProp html "caption-side" v
+  | CaretColor v -> cssProp html "caret-color" v
+  | Clear v -> cssProp html "clear" v
+  | Clip v -> cssProp html "clip" v
+  | ClipPath v -> cssProp html "clip-path" v
+  | ClipRule v -> cssProp html "clip-rule" v
+  | Color v -> cssProp html "color" v
+  | ColorInterpolation v -> cssProp html "color-interpolation" v
+  | ColorInterpolationFilters v -> cssProp html "color-interpolation-filters" v
+  | ColorProfile v -> cssProp html "color-profile" v
+  | ColorRendering v -> cssProp html "color-rendering" v
+  | ColumnCount v -> cssProp html "column-count" v
+  | ColumnFill v -> cssProp html "column-fill" v
+  | ColumnGap v -> cssProp html "column-gap" v
+  | ColumnRule v -> cssProp html "column-rule" v
+  | ColumnRuleColor v -> cssProp html "column-rule-color" v
+  | ColumnRuleStyle v -> cssProp html "column-rule-style" v
+  | ColumnRuleWidth v -> cssProp html "column-rule-width" v
+  | ColumnSpan v -> cssProp html "column-span" v
+  | ColumnWidth v -> cssProp html "column-width" v
+  | Columns v -> cssProp html "columns" v
+  | CSSProp.Content v -> cssProp html "content" v
+  | CounterIncrement v -> cssProp html "counter-increment" v
+  | CounterReset v -> cssProp html "counter-reset" v
+  | Cue v -> cssProp html "cue" v
+  | CueAfter v -> cssProp html "cue-after" v
+  | Cursor v -> cssProp html "cursor" v
+  | Direction v -> cssProp html "direction" v
+  | Display v -> cssProp html "display" v
+  | DominantBaseline v -> cssProp html "dominant-baseline" v
+  | EmptyCells v -> cssProp html "empty-cells" v
+  | EnableBackground v -> cssProp html "enable-background" v
+  | Fill v -> cssProp html "fill" v
+  | FillOpacity v -> cssProp html "fill-opacity" v
+  | FillRule v -> cssProp html "fill-rule" v
+  | Filter v -> cssProp html "filter" v
+  | Flex v -> cssProp html "flex" v
+  | FlexAlign v -> cssProp html "flex-align" v
+  | FlexBasis v -> cssProp html "flex-basis" v
+  | FlexDirection v -> cssProp html "flex-direction" v
+  | FlexFlow v -> cssProp html "flex-flow" v
+  | FlexGrow v -> cssProp html "flex-grow" v
+  | FlexItemAlign v -> cssProp html "flex-item-align" v
+  | FlexLinePack v -> cssProp html "flex-line-pack" v
+  | FlexOrder v -> cssProp html "flex-order" v
+  | FlexShrink v -> cssProp html "flex-shrink" v
+  | FlexWrap v -> cssProp html "flex-wrap" v
+  | Float v -> cssProp html "float" v
+  | FloodColor v -> cssProp html "flood-color" v
+  | FloodOpacity v -> cssProp html "flood-opacity" v
+  | FlowFrom v -> cssProp html "flow-from" v
+  | Font v -> cssProp html "font" v
+  | FontFamily v -> cssProp html "font-family" v
+  | FontFeatureSettings v -> cssProp html "font-feature-settings" v
+  | FontKerning v -> cssProp html "font-kerning" v
+  | FontLanguageOverride v -> cssProp html "font-language-override" v
+  | FontSize v -> cssProp html "font-size" v
+  | FontSizeAdjust v -> cssProp html "font-size-adjust" v
+  | FontStretch v -> cssProp html "font-stretch" v
+  | FontStyle v -> cssProp html "font-style" v
+  | FontSynthesis v -> cssProp html "font-synthesis" v
+  | FontVariant v -> cssProp html "font-variant" v
+  | FontVariantAlternates v -> cssProp html "font-variant-alternates" v
+  | FontVariantCaps v -> cssProp html "font-variant-caps" v
+  | FontVariantEastAsian v -> cssProp html "font-variant-east-asian" v
+  | FontVariantLigatures v -> cssProp html "font-variant-ligatures" v
+  | FontVariantNumeric v -> cssProp html "font-variant-numeric" v
+  | FontVariantPosition v -> cssProp html "font-variant-position" v
+  | FontWeight v -> cssProp html "font-weight" v
+  | GlyphOrientationHorizontal v -> cssProp html "glyph-orientation-horizontal" v
+  | GlyphOrientationVertical v -> cssProp html "glyph-orientation-vertical" v
+  | Grid v -> cssProp html "grid" v
+  | GridArea v -> cssProp html "grid-area" v
+  | GridAutoColumns v -> cssProp html "grid-auto-columns" v
+  | GridAutoFlow v -> cssProp html "grid-auto-flow" v
+  | GridAutoRows v -> cssProp html "grid-auto-rows" v
+  | GridColumn v -> cssProp html "grid-column" v
+  | GridColumnEnd v -> cssProp html "grid-column-end" v
+  | GridColumnGap v -> cssProp html "grid-column-gap" v
+  | GridColumnStart v -> cssProp html "grid-column-start" v
+  | GridGap v -> cssProp html "grid-gap" v
+  | GridRow v -> cssProp html "grid-row" v
+  | GridRowEnd v -> cssProp html "grid-row-end" v
+  | GridRowGap v -> cssProp html "grid-row-gap" v
+  | GridRowPosition v -> cssProp html "grid-row-position" v
+  | GridRowSpan v -> cssProp html "grid-row-span" v
+  | GridRowStart v -> cssProp html "grid-row-start" v
+  | GridTemplate v -> cssProp html "grid-template" v
+  | GridTemplateAreas v -> cssProp html "grid-template-areas" v
+  | GridTemplateColumns v -> cssProp html "grid-template-columns" v
+  | GridTemplateRows v -> cssProp html "grid-template-rows" v
+  | HangingPunctuation v -> cssProp html "hanging-punctuation" v
+  | CSSProp.Height v -> cssProp html "height" v
+  | HyphenateLimitChars v -> cssProp html "hyphenate-limit-chars" v
+  | HyphenateLimitLines v -> cssProp html "hyphenate-limit-lines" v
+  | HyphenateLimitZone v -> cssProp html "hyphenate-limit-zone" v
+  | Hyphens v -> cssProp html "hyphens" v
+  | ImageOrientation v -> cssProp html "image-orientation" v
+  | ImageRendering v -> cssProp html "image-rendering" v
+  | ImageResolution v -> cssProp html "image-resolution" v
+  | ImeMode v -> cssProp html "ime-mode" v
+  | InlineSize v -> cssProp html "inline-size" v
+  | Isolation v -> cssProp html "isolation" v
+  | JustifyContent v -> cssProp html "justify-content" v
+  | Kerning v -> cssProp html "kerning" v
+  | LayoutGrid v -> cssProp html "layout-grid" v
+  | LayoutGridChar v -> cssProp html "layout-grid-char" v
+  | LayoutGridLine v -> cssProp html "layout-grid-line" v
+  | LayoutGridMode v -> cssProp html "layout-grid-mode" v
+  | LayoutGridType v -> cssProp html "layout-grid-type" v
+  | Left v -> cssProp html "left" v
+  | LetterSpacing v -> cssProp html "letter-spacing" v
+  | LightingColor v -> cssProp html "lighting-color" v
+  | LineBreak v -> cssProp html "line-break" v
+  | LineClamp v -> cssProp html "line-clamp" v
+  | LineHeight v -> cssProp html "line-height" v
+  | ListStyle v -> cssProp html "list-style" v
+  | ListStyleImage v -> cssProp html "list-style-image" v
+  | ListStylePosition v -> cssProp html "list-style-position" v
+  | ListStyleType v -> cssProp html "list-style-type" v
+  | Margin v -> cssProp html "margin" v
+  | MarginBlockEnd v -> cssProp html "margin-block-end" v
+  | MarginBlockStart v -> cssProp html "margin-block-start" v
+  | MarginBottom v -> cssProp html "margin-bottom" v
+  | MarginInlineEnd v -> cssProp html "margin-inline-end" v
+  | MarginInlineStart v -> cssProp html "margin-inline-start" v
+  | MarginLeft v -> cssProp html "margin-left" v
+  | MarginRight v -> cssProp html "margin-right" v
+  | MarginTop v -> cssProp html "margin-top" v
+  | MarkerEnd v -> cssProp html "marker-end" v
+  | MarkerMid v -> cssProp html "marker-mid" v
+  | MarkerStart v -> cssProp html "marker-start" v
+  | MarqueeDirection v -> cssProp html "marquee-direction" v
+  | MarqueeStyle v -> cssProp html "marquee-style" v
+  | Mask v -> cssProp html "mask" v
+  | MaskBorder v -> cssProp html "mask-border" v
+  | MaskBorderRepeat v -> cssProp html "mask-border-repeat" v
+  | MaskBorderSlice v -> cssProp html "mask-border-slice" v
+  | MaskBorderSource v -> cssProp html "mask-border-source" v
+  | MaskBorderWidth v -> cssProp html "mask-border-width" v
+  | MaskClip v -> cssProp html "mask-clip" v
+  | MaskComposite v -> cssProp html "mask-composite" v
+  | MaskImage v -> cssProp html "mask-image" v
+  | MaskMode v -> cssProp html "mask-mode" v
+  | MaskOrigin v -> cssProp html "mask-origin" v
+  | MaskPosition v -> cssProp html "mask-position" v
+  | MaskRepeat v -> cssProp html "mask-repeat" v
+  | MaskSize v -> cssProp html "mask-size" v
+  | MaskType v -> cssProp html "mask-type" v
+  | MaxFontSize v -> cssProp html "max-font-size" v
+  | MaxHeight v -> cssProp html "max-height" v
+  | MaxWidth v -> cssProp html "max-width" v
+  | MinBlockSize v -> cssProp html "min-block-size" v
+  | MinHeight v -> cssProp html "min-height" v
+  | MinInlineSize v -> cssProp html "min-inline-size" v
+  | MinWidth v -> cssProp html "min-width" v
+  | MixBlendMode v -> cssProp html "mix-blend-mode" v
+  | ObjectFit v -> cssProp html "object-fit" v
+  | ObjectPosition v -> cssProp html "object-position" v
+  | OffsetBlockEnd v -> cssProp html "offset-block-end" v
+  | OffsetBlockStart v -> cssProp html "offset-block-start" v
+  | OffsetInlineEnd v -> cssProp html "offset-inline-end" v
+  | OffsetInlineStart v -> cssProp html "offset-inline-start" v
+  | Opacity v -> cssProp html "opacity" v
+  | Order v -> cssProp html "order" v
+  | Orphans v -> cssProp html "orphans" v
+  | Outline v -> cssProp html "outline" v
+  | OutlineColor v -> cssProp html "outline-color" v
+  | OutlineOffset v -> cssProp html "outline-offset" v
+  | OutlineStyle v -> cssProp html "outline-style" v
+  | OutlineWidth v -> cssProp html "outline-width" v
+  | Overflow v -> cssProp html "overflow" v
+  | OverflowStyle v -> cssProp html "overflow-style" v
+  | OverflowWrap v -> cssProp html "overflow-wrap" v
+  | OverflowX v -> cssProp html "overflow-x" v
+  | OverflowY v -> cssProp html "overflow-y" v
+  | Padding v -> cssProp html "padding" v
+  | PaddingBlockEnd v -> cssProp html "padding-block-end" v
+  | PaddingBlockStart v -> cssProp html "padding-block-start" v
+  | PaddingBottom v -> cssProp html "padding-bottom" v
+  | PaddingInlineEnd v -> cssProp html "padding-inline-end" v
+  | PaddingInlineStart v -> cssProp html "padding-inline-start" v
+  | PaddingLeft v -> cssProp html "padding-left" v
+  | PaddingRight v -> cssProp html "padding-right" v
+  | PaddingTop v -> cssProp html "padding-top" v
+  | PageBreakAfter v -> cssProp html "page-break-after" v
+  | PageBreakBefore v -> cssProp html "page-break-before" v
+  | PageBreakInside v -> cssProp html "page-break-inside" v
+  | Pause v -> cssProp html "pause" v
+  | PauseAfter v -> cssProp html "pause-after" v
+  | PauseBefore v -> cssProp html "pause-before" v
+  | Perspective v -> cssProp html "perspective" v
+  | PerspectiveOrigin v -> cssProp html "perspective-origin" v
+  | PointerEvents v -> cssProp html "pointer-events" v
+  | Position v -> cssProp html "position" v
+  | PunctuationTrim v -> cssProp html "punctuation-trim" v
+  | Quotes v -> cssProp html "quotes" v
+  | RegionFragment v -> cssProp html "region-fragment" v
+  | Resize v -> cssProp html "resize" v
+  | RestAfter v -> cssProp html "rest-after" v
+  | RestBefore v -> cssProp html "rest-before" v
+  | Right v -> cssProp html "right" v
+  | RubyAlign v -> cssProp html "ruby-align" v
+  | RubyMerge v -> cssProp html "ruby-merge" v
+  | RubyPosition v -> cssProp html "ruby-position" v
+  | ScrollBehavior v -> cssProp html "scroll-behavior" v
+  | ScrollSnapCoordinate v -> cssProp html "scroll-snap-coordinate" v
+  | ScrollSnapDestination v -> cssProp html "scroll-snap-destination" v
+  | ScrollSnapType v -> cssProp html "scroll-snap-type" v
+  | ShapeImageThreshold v -> cssProp html "shape-image-threshold" v
+  | ShapeInside v -> cssProp html "shape-inside" v
+  | ShapeMargin v -> cssProp html "shape-margin" v
+  | ShapeOutside v -> cssProp html "shape-outside" v
+  | ShapeRendering v -> cssProp html "shape-rendering" v
+  | Speak v -> cssProp html "speak" v
+  | SpeakAs v -> cssProp html "speak-as" v
+  | StopColor v -> cssProp html "stop-color" v
+  | StopOpacity v -> cssProp html "stop-opacity" v
+  | Stroke v -> cssProp html "stroke" v
+  | StrokeDasharray v -> cssProp html "stroke-dasharray" v
+  | StrokeDashoffset v -> cssProp html "stroke-dashoffset" v
+  | StrokeLinecap v -> cssProp html "stroke-linecap" v
+  | StrokeLinejoin v -> cssProp html "stroke-linejoin" v
+  | StrokeMiterlimit v -> cssProp html "stroke-miterlimit" v
+  | StrokeOpacity v -> cssProp html "stroke-opacity" v
+  | StrokeWidth v -> cssProp html "stroke-width" v
+  | TabSize v -> cssProp html "tab-size" v
+  | TableLayout v -> cssProp html "table-layout" v
+  | TextAlign v -> cssProp html "text-align" v
+  | TextAlignLast v -> cssProp html "text-align-last" v
+  | TextAnchor v -> cssProp html "text-anchor" v
+  | TextCombineUpright v -> cssProp html "text-combine-upright" v
+  | TextDecoration v -> cssProp html "text-decoration" v
+  | TextDecorationColor v -> cssProp html "text-decoration-color" v
+  | TextDecorationLine v -> cssProp html "text-decoration-line" v
+  | TextDecorationLineThrough v -> cssProp html "text-decoration-line-through" v
+  | TextDecorationNone v -> cssProp html "text-decoration-none" v
+  | TextDecorationOverline v -> cssProp html "text-decoration-overline" v
+  | TextDecorationSkip v -> cssProp html "text-decoration-skip" v
+  | TextDecorationStyle v -> cssProp html "text-decoration-style" v
+  | TextDecorationUnderline v -> cssProp html "text-decoration-underline" v
+  | TextEmphasis v -> cssProp html "text-emphasis" v
+  | TextEmphasisColor v -> cssProp html "text-emphasis-color" v
+  | TextEmphasisPosition v -> cssProp html "text-emphasis-position" v
+  | TextEmphasisStyle v -> cssProp html "text-emphasis-style" v
+  | TextHeight v -> cssProp html "text-height" v
+  | TextIndent v -> cssProp html "text-indent" v
+  | TextJustify v -> cssProp html "text-justify" v
+  | TextJustifyTrim v -> cssProp html "text-justify-trim" v
+  | TextKashidaSpace v -> cssProp html "text-kashida-space" v
+  | TextLineThrough v -> cssProp html "text-line-through" v
+  | TextLineThroughColor v -> cssProp html "text-line-through-color" v
+  | TextLineThroughMode v -> cssProp html "text-line-through-mode" v
+  | TextLineThroughStyle v -> cssProp html "text-line-through-style" v
+  | TextLineThroughWidth v -> cssProp html "text-line-through-width" v
+  | TextOrientation v -> cssProp html "text-orientation" v
+  | TextOverflow v -> cssProp html "text-overflow" v
+  | TextOverline v -> cssProp html "text-overline" v
+  | TextOverlineColor v -> cssProp html "text-overline-color" v
+  | TextOverlineMode v -> cssProp html "text-overline-mode" v
+  | TextOverlineStyle v -> cssProp html "text-overline-style" v
+  | TextOverlineWidth v -> cssProp html "text-overline-width" v
+  | TextRendering v -> cssProp html "text-rendering" v
+  | TextScript v -> cssProp html "text-script" v
+  | TextShadow v -> cssProp html "text-shadow" v
+  | TextTransform v -> cssProp html "text-transform" v
+  | TextUnderlinePosition v -> cssProp html "text-underline-position" v
+  | TextUnderlineStyle v -> cssProp html "text-underline-style" v
+  | Top v -> cssProp html "top" v
+  | TouchAction v -> cssProp html "touch-action" v
+  | Transform v -> cssProp html "transform" v
+  | TransformBox v -> cssProp html "transform-box" v
+  | TransformOrigin v -> cssProp html "transform-origin" v
+  | TransformOriginZ v -> cssProp html "transform-origin-z" v
+  | TransformStyle v -> cssProp html "transform-style" v
+  | Transition v -> cssProp html "transition" v
+  | TransitionDelay v -> cssProp html "transition-delay" v
+  | TransitionDuration v -> cssProp html "transition-duration" v
+  | TransitionProperty v -> cssProp html "transition-property" v
+  | TransitionTimingFunction v -> cssProp html "transition-timing-function" v
+  | UnicodeBidi v -> cssProp html "unicode-bidi" v
+  | UnicodeRange v -> cssProp html "unicode-range" v
+  | UserFocus v -> cssProp html "user-focus" v
+  | UserInput v -> cssProp html "user-input" v
+  | VerticalAlign v -> cssProp html "vertical-align" v
+  | Visibility v -> cssProp html "visibility" v
+  | VoiceBalance v -> cssProp html "voice-balance" v
+  | VoiceDuration v -> cssProp html "voice-duration" v
+  | VoiceFamily v -> cssProp html "voice-family" v
+  | VoicePitch v -> cssProp html "voice-pitch" v
+  | VoiceRange v -> cssProp html "voice-range" v
+  | VoiceRate v -> cssProp html "voice-rate" v
+  | VoiceStress v -> cssProp html "voice-stress" v
+  | VoiceVolume v -> cssProp html "voice-volume" v
+  | WhiteSpace v -> cssProp html "white-space" v
+  | WhiteSpaceTreatment v -> cssProp html "white-space-treatment" v
+  | Widows v -> cssProp html "widows" v
+  | CSSProp.Width v -> cssProp html "width" v
+  | WillChange v -> cssProp html "will-change" v
+  | WordBreak v -> cssProp html "word-break" v
+  | WordSpacing v -> cssProp html "word-spacing" v
+  | WordWrap v -> cssProp html "word-wrap" v
+  | WrapFlow v -> cssProp html "wrap-flow" v
+  | WrapMargin v -> cssProp html "wrap-margin" v
+  | WrapOption v -> cssProp html "wrap-option" v
+  | WritingMode v -> cssProp html "writing-mode" v
+  | ZIndex v -> cssProp html "z-index" v
+  | Zoom v -> cssProp html "zoom" v
+  | CSSProp.Custom (key, value) -> cssProp html (slugKey key) value
 
-let inline boolAttr (key: string) (value: bool) = if value then key else ""
-let inline strAttr (key: string) (value: string) = key + "=\"" + (escapeHtml value) + "\""
-let inline objAttr (key: string) (value: obj) = strAttr key (string value)
-let private renderHtmlAttr (attr: HTMLAttr): string =
+let inline boolAttr (html:StringBuilder) (key: string) (value: bool) = if value then html.Append key |> ignore
+
+let inline strAttr (html:StringBuilder) (key: string) (value: string) = 
+  html.Append key |> ignore
+  html.Append "=\"" |> ignore
+  escapeHtml html value
+  html.Append "\"" |> ignore
+
+let inline objAttr (html:StringBuilder) (key: string) (value: obj) = strAttr html key (string value)
+
+let private renderHtmlAttr (html:StringBuilder) (attr: HTMLAttr) =
   match attr with
-  | DefaultChecked v | Checked v -> boolAttr "checked" v
-  | DefaultValue v |  Value v -> strAttr "value" v
-  | Accept v -> strAttr "accept" v
-  | AcceptCharset v -> strAttr "accept-charset" v
-  | AccessKey v -> strAttr "accesskey" v
-  | Action v -> strAttr "action" v
-  | AllowFullScreen v -> boolAttr "allowfullscreen" v
-  | AllowTransparency v -> boolAttr "allowtransparency" v
-  | Alt v -> strAttr "alt" v
-  | AriaHasPopup v -> boolAttr "aria-haspopup" v
-  | AriaExpanded v -> boolAttr "aria-expanded" v
-  | Async v -> boolAttr "async" v
-  | AutoComplete v -> strAttr "autocomplete" v
-  | AutoFocus v -> boolAttr "autofocus" v
-  | AutoPlay v -> boolAttr "autoplay" v
-  | Capture v -> boolAttr "capture" v
-  | CellPadding v -> strAttr "cellpadding" (string v)
-  | CellSpacing v -> strAttr "cellspacing" (string v)
-  | CharSet v -> strAttr "charset" v
-  | Challenge v -> strAttr "challenge" v
-  | ClassID v -> strAttr "class-id" v
-  | ClassName v -> strAttr "class" v
-  | Class v -> strAttr "class" v
-  | Cols v -> strAttr "cols" (string v)
-  | ColSpan v -> strAttr "colspan" (string v)
-  | HTMLAttr.Content v -> strAttr "content" v
-  | ContentEditable v -> boolAttr "contenteditable" v
-  | ContextMenu v -> strAttr "contextmenu" v
-  | Controls v -> boolAttr "controls" v
-  | Coords v -> strAttr "coords" v
-  | CrossOrigin v -> strAttr "crossorigin" v
+  | DefaultChecked v | Checked v -> boolAttr html "checked" v
+  | DefaultValue v |  Value v -> strAttr html "value" v
+  | Accept v -> strAttr html "accept" v
+  | AcceptCharset v -> strAttr html "accept-charset" v
+  | AccessKey v -> strAttr html "accesskey" v
+  | Action v -> strAttr html "action" v
+  | AllowFullScreen v -> boolAttr html "allowfullscreen" v
+  | AllowTransparency v -> boolAttr html "allowtransparency" v
+  | Alt v -> strAttr html "alt" v
+  | AriaHasPopup v -> boolAttr html "aria-haspopup" v
+  | AriaExpanded v -> boolAttr html "aria-expanded" v
+  | Async v -> boolAttr html "async" v
+  | AutoComplete v -> strAttr html "autocomplete" v
+  | AutoFocus v -> boolAttr html "autofocus" v
+  | AutoPlay v -> boolAttr html "autoplay" v
+  | Capture v -> boolAttr html "capture" v
+  | CellPadding v -> strAttr html "cellpadding" (string v)
+  | CellSpacing v -> strAttr html "cellspacing" (string v)
+  | CharSet v -> strAttr html "charset" v
+  | Challenge v -> strAttr html "challenge" v
+  | ClassID v -> strAttr html "class-id" v
+  | ClassName v -> strAttr html "class" v
+  | Class v -> strAttr html "class" v
+  | Cols v -> strAttr html "cols" (string v)
+  | ColSpan v -> strAttr html "colspan" (string v)
+  | HTMLAttr.Content v -> strAttr html "content" v
+  | ContentEditable v -> boolAttr html "contenteditable" v
+  | ContextMenu v -> strAttr html "contextmenu" v
+  | Controls v -> boolAttr html "controls" v
+  | Coords v -> strAttr html "coords" v
+  | CrossOrigin v -> strAttr html  "crossorigin" v
   // | Data v -> pair "data" v
-  | DataToggle v -> strAttr "data-toggle" v
-  | DateTime v -> strAttr "datetime" v
-  | Default v -> boolAttr "default" v
-  | Defer v -> boolAttr "defer" v
-  | Dir v -> strAttr "dir" v
-  | Disabled v -> boolAttr "disabled" v
-  | Download v -> strAttr "download" (string v)
-  | Draggable v -> boolAttr "draggable" v
-  | EncType v -> strAttr "enctype" v
-  | Form v -> strAttr "form" v
-  | FormAction v -> strAttr "formaction" v
-  | FormEncType v -> strAttr "formenctype" v
-  | FormMethod v -> strAttr "formmethod" v
-  | FormNoValidate v -> boolAttr "formnovalidate" v
-  | FormTarget v -> strAttr "formtarget" v
-  | FrameBorder v -> strAttr "frameborder" (string v)
-  | Headers v -> strAttr "headers" v
-  | HTMLAttr.Height v -> strAttr "height" (string v)
-  | Hidden v -> boolAttr "hidden" v
+  | DataToggle v -> strAttr html "data-toggle" v
+  | DateTime v -> strAttr html "datetime" v
+  | Default v -> boolAttr html "default" v
+  | Defer v -> boolAttr html "defer" v
+  | Dir v -> strAttr html "dir" v
+  | Disabled v -> boolAttr html "disabled" v
+  | Download v -> strAttr html "download" (string v)
+  | Draggable v -> boolAttr html "draggable" v
+  | EncType v -> strAttr html "enctype" v
+  | Form v -> strAttr html "form" v
+  | FormAction v -> strAttr html "formaction" v
+  | FormEncType v -> strAttr html "formenctype" v
+  | FormMethod v -> strAttr html "formmethod" v
+  | FormNoValidate v -> boolAttr html  "formnovalidate" v
+  | FormTarget v -> strAttr html "formtarget" v
+  | FrameBorder v -> strAttr html "frameborder" (string v)
+  | Headers v -> strAttr html "headers" v
+  | HTMLAttr.Height v -> strAttr html "height" (string v)
+  | Hidden v -> boolAttr html "hidden" v
   // -----
-  | High v -> strAttr "high" (string v)
-  | Href v -> strAttr "href" v
-  | HrefLang v -> strAttr "hreflang" v
-  | HtmlFor v -> strAttr "for" v
-  | HttpEquiv v -> strAttr "http-equiv" v
-  | Icon v -> strAttr "icon" v
-  | Id v -> strAttr "id" v
-  | InputMode v -> strAttr "inputmode" v
-  | Integrity v -> strAttr "integrity" v
-  | Is v -> strAttr "is" v
-  | KeyParams v -> strAttr "keyparams" v
-  | KeyType v -> strAttr "keytype" v
-  | Kind v -> strAttr "kind" v
-  | Label v -> strAttr "label" v
-  | Lang v -> strAttr "lang" v
-  | List v -> strAttr "list" v
-  | Loop v -> boolAttr "loop" v
-  | Low v -> strAttr "low" (string v)
-  | Manifest v -> strAttr "manifest" v
-  | MarginHeight v -> strAttr "marginheight" (string v)
-  | MarginWidth v -> strAttr "marginwidth" (string v)
-  | Max v -> strAttr "max" (string v)
-  | MaxLength v -> strAttr "maxlength" (string v)
-  | Media v -> strAttr "media" v
-  | MediaGroup v -> strAttr "mediagroup" v
-  | Method v -> strAttr "method" v
-  | Min v -> strAttr "min" (string v)
-  | MinLength v -> strAttr "minlength" (string v)
-  | Multiple v -> boolAttr "multiple" v
-  | Muted v -> strAttr "muted" (string v)
-  | Name v -> strAttr "name" v
-  | NoValidate v -> boolAttr "novalidate" v
-  | Open v -> boolAttr "open" v
-  | Optimum v -> strAttr "optimum" (string v)
-  | Pattern v -> strAttr "pattern" v
-  | Placeholder v -> strAttr "placeholder" v
-  | Poster v -> strAttr "poster" v
-  | Preload v -> strAttr "preload" v
-  | RadioGroup v -> strAttr "radiogroup" v
-  | ReadOnly v -> boolAttr "readonly" v
-  | Rel v -> strAttr "rel" v
-  | Required v -> boolAttr "required" v
-  | Role v -> strAttr "role" v
-  | Rows v -> strAttr "rows" (string v)
-  | RowSpan v -> strAttr "row-span" (string v)
-  | Sandbox v -> strAttr "sandbox" v
-  | Scope v -> strAttr "scope" v
-  | Scoped v -> boolAttr "scoped" v
-  | Scrolling v -> strAttr "scrolling" v
-  | Seamless v -> boolAttr "seamless" v
-  | Selected v -> boolAttr "selected" v
-  | Shape v -> strAttr "shape" v
-  | Size v -> strAttr "size" (string v)
-  | Sizes v -> strAttr "sizes" v
-  | Span v -> strAttr "span" (string v)
-  | SpellCheck v -> boolAttr "spellcheck" v
-  | Src v -> strAttr "src" v
-  | SrcDoc v -> strAttr "srcdoc" v
-  | SrcLang v -> strAttr "srclang" v
-  | SrcSet v -> strAttr "srcset" v
-  | Start v -> strAttr "start" (string v)
-  | Step v -> strAttr "step" (string v)
-  | Summary v -> strAttr "summary" v
-  | TabIndex v -> strAttr "tabindex" (string v)
-  | Target v -> strAttr "target" v
-  | Title v -> strAttr "title" v
-  | Type v -> strAttr "type" v
-  | UseMap v -> strAttr "use-map" v
-  | HTMLAttr.Width v -> strAttr "width" (string v)
-  | Wmode v -> strAttr "wmode" v
-  | Wrap v -> strAttr "wrap" v
-  | About v -> strAttr "about" v
-  | Datatype v -> strAttr "datatype" v
-  | Inlist v -> strAttr "inlist" (string v)
-  | Prefix v -> strAttr "prefix" v
-  | Property v -> strAttr "property" v
-  | Resource v -> strAttr "resource" v
-  | Typeof v -> strAttr "typeof" v
-  | Vocab v -> strAttr "vocab" v
-  | AutoCapitalize v -> strAttr "auto-capitalize" v
-  | AutoCorrect v -> strAttr "auto-correct" v
-  | AutoSave v -> strAttr "auto-save" v
+  | High v -> strAttr html "high" (string v)
+  | Href v -> strAttr html "href" v
+  | HrefLang v -> strAttr html "hreflang" v
+  | HtmlFor v -> strAttr html "for" v
+  | HttpEquiv v -> strAttr html "http-equiv" v
+  | Icon v -> strAttr html "icon" v
+  | Id v -> strAttr html "id" v
+  | InputMode v -> strAttr html "inputmode" v
+  | Integrity v -> strAttr html "integrity" v
+  | Is v -> strAttr html "is" v
+  | KeyParams v -> strAttr html "keyparams" v
+  | KeyType v -> strAttr html "keytype" v
+  | Kind v -> strAttr html "kind" v
+  | Label v -> strAttr html "label" v
+  | Lang v -> strAttr html "lang" v
+  | List v -> strAttr html "list" v
+  | Loop v -> boolAttr html "loop" v
+  | Low v -> strAttr html "low" (string v)
+  | Manifest v -> strAttr html "manifest" v
+  | MarginHeight v -> strAttr html "marginheight" (string v)
+  | MarginWidth v -> strAttr html "marginwidth" (string v)
+  | Max v -> strAttr html "max" (string v)
+  | MaxLength v -> strAttr html "maxlength" (string v)
+  | Media v -> strAttr html "media" v
+  | MediaGroup v -> strAttr html "mediagroup" v
+  | Method v -> strAttr html "method" v
+  | Min v -> strAttr html "min" (string v)
+  | MinLength v -> strAttr html "minlength" (string v)
+  | Multiple v -> boolAttr html "multiple" v
+  | Muted v -> strAttr html "muted" (string v)
+  | Name v -> strAttr html "name" v
+  | NoValidate v -> boolAttr html "novalidate" v
+  | Open v -> boolAttr html "open" v
+  | Optimum v -> strAttr html "optimum" (string v)
+  | Pattern v -> strAttr html "pattern" v
+  | Placeholder v -> strAttr html "placeholder" v
+  | Poster v -> strAttr html "poster" v
+  | Preload v -> strAttr html "preload" v
+  | RadioGroup v -> strAttr html "radiogroup" v
+  | ReadOnly v -> boolAttr html "readonly" v
+  | Rel v -> strAttr html "rel" v
+  | Required v -> boolAttr html "required" v
+  | Role v -> strAttr html "role" v
+  | Rows v -> strAttr html "rows" (string v)
+  | RowSpan v -> strAttr html "row-span" (string v)
+  | Sandbox v -> strAttr html "sandbox" v
+  | Scope v -> strAttr html "scope" v
+  | Scoped v -> boolAttr html  "scoped" v
+  | Scrolling v -> strAttr html "scrolling" v
+  | Seamless v -> boolAttr html "seamless" v
+  | Selected v -> boolAttr html "selected" v
+  | Shape v -> strAttr html "shape" v
+  | Size v -> strAttr html "size" (string v)
+  | Sizes v -> strAttr html "sizes" v
+  | Span v -> strAttr html "span" (string v)
+  | SpellCheck v -> boolAttr html "spellcheck" v
+  | Src v -> strAttr html "src" v
+  | SrcDoc v -> strAttr html "srcdoc" v
+  | SrcLang v -> strAttr html "srclang" v
+  | SrcSet v -> strAttr html "srcset" v
+  | Start v -> strAttr html "start" (string v)
+  | Step v -> strAttr html "step" (string v)
+  | Summary v -> strAttr html "summary" v
+  | TabIndex v -> strAttr html "tabindex" (string v)
+  | Target v -> strAttr html "target" v
+  | Title v -> strAttr html "title" v
+  | Type v -> strAttr html "type" v
+  | UseMap v -> strAttr html "use-map" v
+  | HTMLAttr.Width v -> strAttr html "width" (string v)
+  | Wmode v -> strAttr html "wmode" v
+  | Wrap v -> strAttr html "wrap" v
+  | About v -> strAttr html "about" v
+  | Datatype v -> strAttr html "datatype" v
+  | Inlist v -> strAttr html "inlist" (string v)
+  | Prefix v -> strAttr html "prefix" v
+  | Property v -> strAttr html "property" v
+  | Resource v -> strAttr html "resource" v
+  | Typeof v -> strAttr html "typeof" v
+  | Vocab v -> strAttr html "vocab" v
+  | AutoCapitalize v -> strAttr html "auto-capitalize" v
+  | AutoCorrect v -> strAttr html "auto-correct" v
+  | AutoSave v -> strAttr html "auto-save" v
   // | Color v -> pair "color" v // Conflicts with CSSProp, shouldn't be used in HTML5
-  | ItemProp v -> strAttr "itemprop" v
-  | ItemScope v -> boolAttr "itemscope" v
-  | ItemType v -> strAttr "itemtype" v
-  | ItemID v -> strAttr "itemid" v
-  | ItemRef v -> strAttr "itemref" v
-  | Results v -> strAttr "results" (string v)
-  | Security v -> strAttr "security" v
-  | Unselectable v -> boolAttr "unselectable" v
+  | ItemProp v -> strAttr html "itemprop" v
+  | ItemScope v -> boolAttr html "itemscope" v
+  | ItemType v -> strAttr html "itemtype" v
+  | ItemID v -> strAttr html "itemid" v
+  | ItemRef v -> strAttr html "itemref" v
+  | Results v -> strAttr html "results" (string v)
+  | Security v -> strAttr html "security" v
+  | Unselectable v -> boolAttr html "unselectable" v
   | Style cssList ->
-    let css = StringBuilder()
+    html.Append "style" |> ignore
+    html.Append "=\"" |> ignore
+
     for cssProp in cssList do
-      css.Append(renderCssProp cssProp) |> ignore
-    let css = css.ToString().Trim()
-    let css = css.[0..css.Length - 2]
-    strAttr "style" css
+      renderCssProp html cssProp
+    
+    html.Append "\"" |> ignore
 
-  | HTMLAttr.Custom (key, value) -> strAttr (key.ToLower()) (string value)
-  | Data (key, value) -> strAttr ("data-" + key) (string value)
+  | HTMLAttr.Custom (key, value) -> strAttr html (key.ToLower()) (string value)
+  | Data (key, value) -> strAttr html ("data-" + key) (string value)
 
-let private renderSVGAttr (attr: SVGAttr): string =
+let private renderSVGAttr (html:StringBuilder) (attr: SVGAttr) =
   match attr with
-  | SVGAttr.ClipPath v -> objAttr "clip-path" v
-  | SVGAttr.Cx v -> objAttr "cx" v
-  | SVGAttr.Cy v -> objAttr "cy" v
-  | SVGAttr.D v -> objAttr "d" v
-  | SVGAttr.Dx v -> objAttr "dx" v
-  | SVGAttr.Dy v -> objAttr "dy" v
-  | SVGAttr.Fill v -> objAttr "fill" v
-  | SVGAttr.FillOpacity v -> objAttr "fill-opacity" v
-  | SVGAttr.FontFamily v -> objAttr "font-family" v
-  | SVGAttr.FontSize v -> objAttr "font-size" v
-  | SVGAttr.Fx v -> objAttr "fx" v
-  | SVGAttr.Fy v -> objAttr "fy" v
-  | SVGAttr.GradientTransform v -> objAttr "gradient-transform" v
-  | SVGAttr.GradientUnits v -> objAttr "gradient-units" v
-  | SVGAttr.Height v -> objAttr "height" v
-  | SVGAttr.MarkerEnd v -> objAttr "marker-end" v
-  | SVGAttr.MarkerMid v -> objAttr "marker-mid" v
-  | SVGAttr.MarkerStart v -> objAttr "marker-start" v
-  | SVGAttr.Offset v -> objAttr "offset" v
-  | SVGAttr.Opacity v -> objAttr "opacity" v
-  | SVGAttr.PatternContentUnits v -> objAttr "pattern-content-units" v
-  | SVGAttr.PatternUnits v -> objAttr "pattern-units" v
-  | SVGAttr.Points v -> objAttr "points" v
-  | SVGAttr.PreserveAspectRatio v -> objAttr "preserve-aspect-ratio" v
-  | SVGAttr.R v -> objAttr "r" v
-  | SVGAttr.Rx v -> objAttr "rx" v
-  | SVGAttr.Ry v -> objAttr "ry" v
-  | SVGAttr.SpreadMethod v -> objAttr "spread-method" v
-  | SVGAttr.StopColor v -> objAttr "stop-color" v
-  | SVGAttr.StopOpacity v -> objAttr "stop-opacity" v
-  | SVGAttr.Stroke v -> objAttr "stroke" v
-  | SVGAttr.StrokeDasharray v -> objAttr "stroke-dasharray" v
-  | SVGAttr.StrokeLinecap v -> objAttr "stroke-linecap" v
-  | SVGAttr.StrokeMiterlimit v -> objAttr "stroke-miterlimit" v
-  | SVGAttr.StrokeOpacity v -> objAttr "stroke-opacity" v
-  | SVGAttr.StrokeWidth v -> objAttr "stroke-width" v
-  | SVGAttr.TextAnchor v -> objAttr "text-anchor" v
-  | SVGAttr.Transform v -> objAttr "transform" v
-  | SVGAttr.Version v -> objAttr "version" v
-  | SVGAttr.ViewBox v -> objAttr "view-box" v
-  | SVGAttr.Width v -> objAttr "width" v
-  | SVGAttr.X1 v -> objAttr "x1" v
-  | SVGAttr.X2 v -> objAttr "x2" v
-  | SVGAttr.X v -> objAttr "x" v
-  | SVGAttr.XlinkActuate v -> objAttr "xlink:actuate" v
-  | SVGAttr.XlinkArcrole v -> objAttr "xlink:arcrole" v
-  | SVGAttr.XlinkHref v -> objAttr "xlink:href" v
-  | SVGAttr.XlinkRole v -> objAttr "xlink:role" v
-  | SVGAttr.XlinkShow v -> objAttr "xlink:show" v
-  | SVGAttr.XlinkTitle v -> objAttr "xlink:title" v
-  | SVGAttr.XlinkType v -> objAttr "xlink:type" v
-  | SVGAttr.XmlBase v -> objAttr "xml:base" v
-  | SVGAttr.XmlLang v -> objAttr "xml:lang" v
-  | SVGAttr.XmlSpace v -> objAttr "xml:space" v
-  | SVGAttr.Y1 v -> objAttr "y1" v
-  | SVGAttr.Y2 v -> objAttr "y2" v
-  | SVGAttr.Y v -> objAttr "y" v
-  | SVGAttr.Custom (key, value) -> objAttr (slugKey key) value
+  | SVGAttr.ClipPath v -> objAttr html "clip-path" v
+  | SVGAttr.Cx v -> objAttr html "cx" v
+  | SVGAttr.Cy v -> objAttr html "cy" v
+  | SVGAttr.D v -> objAttr html "d" v
+  | SVGAttr.Dx v -> objAttr html "dx" v
+  | SVGAttr.Dy v -> objAttr html "dy" v
+  | SVGAttr.Fill v -> objAttr html "fill" v
+  | SVGAttr.FillOpacity v -> objAttr html "fill-opacity" v
+  | SVGAttr.FontFamily v -> objAttr html "font-family" v
+  | SVGAttr.FontSize v -> objAttr html "font-size" v
+  | SVGAttr.Fx v -> objAttr html "fx" v
+  | SVGAttr.Fy v -> objAttr html "fy" v
+  | SVGAttr.GradientTransform v -> objAttr html "gradient-transform" v
+  | SVGAttr.GradientUnits v -> objAttr html "gradient-units" v
+  | SVGAttr.Height v -> objAttr html "height" v
+  | SVGAttr.MarkerEnd v -> objAttr html "marker-end" v
+  | SVGAttr.MarkerMid v -> objAttr html "marker-mid" v
+  | SVGAttr.MarkerStart v -> objAttr html "marker-start" v
+  | SVGAttr.Offset v -> objAttr html "offset" v
+  | SVGAttr.Opacity v -> objAttr html "opacity" v
+  | SVGAttr.PatternContentUnits v -> objAttr html "pattern-content-units" v
+  | SVGAttr.PatternUnits v -> objAttr html "pattern-units" v
+  | SVGAttr.Points v -> objAttr html "points" v
+  | SVGAttr.PreserveAspectRatio v -> objAttr html "preserve-aspect-ratio" v
+  | SVGAttr.R v -> objAttr html "r" v
+  | SVGAttr.Rx v -> objAttr html "rx" v
+  | SVGAttr.Ry v -> objAttr html "ry" v
+  | SVGAttr.SpreadMethod v -> objAttr html "spread-method" v
+  | SVGAttr.StopColor v -> objAttr html "stop-color" v
+  | SVGAttr.StopOpacity v -> objAttr html "stop-opacity" v
+  | SVGAttr.Stroke v -> objAttr html "stroke" v
+  | SVGAttr.StrokeDasharray v -> objAttr html "stroke-dasharray" v
+  | SVGAttr.StrokeLinecap v -> objAttr html "stroke-linecap" v
+  | SVGAttr.StrokeMiterlimit v -> objAttr html "stroke-miterlimit" v
+  | SVGAttr.StrokeOpacity v -> objAttr html "stroke-opacity" v
+  | SVGAttr.StrokeWidth v -> objAttr html "stroke-width" v
+  | SVGAttr.TextAnchor v -> objAttr html "text-anchor" v
+  | SVGAttr.Transform v -> objAttr html "transform" v
+  | SVGAttr.Version v -> objAttr html "version" v
+  | SVGAttr.ViewBox v -> objAttr html "view-box" v
+  | SVGAttr.Width v -> objAttr html "width" v
+  | SVGAttr.X1 v -> objAttr html "x1" v
+  | SVGAttr.X2 v -> objAttr html "x2" v
+  | SVGAttr.X v -> objAttr html "x" v
+  | SVGAttr.XlinkActuate v -> objAttr html "xlink:actuate" v
+  | SVGAttr.XlinkArcrole v -> objAttr html "xlink:arcrole" v
+  | SVGAttr.XlinkHref v -> objAttr html "xlink:href" v
+  | SVGAttr.XlinkRole v -> objAttr html "xlink:role" v
+  | SVGAttr.XlinkShow v -> objAttr html "xlink:show" v
+  | SVGAttr.XlinkTitle v -> objAttr html "xlink:title" v
+  | SVGAttr.XlinkType v -> objAttr html "xlink:type" v
+  | SVGAttr.XmlBase v -> objAttr html "xml:base" v
+  | SVGAttr.XmlLang v -> objAttr html "xml:lang" v
+  | SVGAttr.XmlSpace v -> objAttr html "xml:space" v
+  | SVGAttr.Y1 v -> objAttr html "y1" v
+  | SVGAttr.Y2 v -> objAttr html "y2" v
+  | SVGAttr.Y v -> objAttr html "y" v
+  | SVGAttr.Custom (key, value) -> objAttr html (slugKey key) value
 
-let private renderAttrs (append:string -> unit) (attrs: IProp seq) tag =
+let private renderAttrs (html:StringBuilder) (attrs: IProp seq) tag =
   let mutable childHtml = None
   for attr in attrs do
     match attr with
@@ -697,11 +705,11 @@ let private renderAttrs (append:string -> unit) (attrs: IProp seq) tag =
       | "textarea", DefaultValue v ->
           childHtml <- Some v
       | _, _ ->
-        append(renderHtmlAttr attr)
-        append(" ") |> ignore
+        renderHtmlAttr html attr
+        html.Append(" ") |> ignore
     | :? SVGAttr as attr ->
-      append(renderSVGAttr attr) 
-      append(" ")
+      renderSVGAttr html attr
+      html.Append(" ")|> ignore
     | _ -> ()
 
   childHtml
@@ -728,13 +736,13 @@ let renderToString (htmlNode: ReactElement): string =
 
   let rec render (htmlNode: HTMLNode) : unit =
     match htmlNode with
-    | HTMLNode.Text str -> html.Append(escapeHtml str)
-    | HTMLNode.RawText str -> html.Append(str)
+    | HTMLNode.Text str -> escapeHtml html str
+    | HTMLNode.RawText str -> append str
     | HTMLNode.Node (tag, attrs, children) ->
       append "<"
       append tag
 
-      let child = renderAttrs append attrs tag
+      let child = renderAttrs html attrs tag
 
       if voidTags.Contains tag then 
         append "/>"
@@ -752,7 +760,7 @@ let renderToString (htmlNode: ReactElement): string =
         append ">"
     | HTMLNode.List nodes ->
         for node in nodes do
-          render node
+          render (castHTMLNode node)
     | HTMLNode.Empty -> ()
 
   render htmlNode
