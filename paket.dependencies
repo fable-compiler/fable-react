@@ -3,7 +3,9 @@ storage: none
 
 clitool dotnet-Fable
 nuget Fable.Core
+nuget Fable.Geojson
 nuget Fable.Import.Browser
+nuget Fable.Leaflet
 
 group Build
 framework: net46

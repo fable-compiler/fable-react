@@ -1,3 +1,5 @@
 FSharp.Core
 Fable.Core
 Fable.Import.Browser
+Fable.Leaflet
+Fable.Geojson

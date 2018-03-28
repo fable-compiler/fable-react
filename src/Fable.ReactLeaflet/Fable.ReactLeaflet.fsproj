@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>0.1.0-beta-001</Version>
+    <Version>0.2.0</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Fable.Helpers.ReactLeaflet.fs" />
+    <Compile Include="ReactLeaflet.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Fable.React/Fable.React.fsproj" />
