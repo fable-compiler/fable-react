@@ -1,3 +1,8 @@
+### 3.1.0
+
+* Speed-up Server-Side rendering @forki
+* Make escapeHtml faster @zaaack
+
 ### 3.0.0
 
 * Stable version
