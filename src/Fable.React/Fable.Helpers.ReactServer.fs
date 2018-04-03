@@ -37,7 +37,7 @@ let private cssProp (html:StringBuilder) (key: string) (value: obj) =
   match value with
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
-  | _ -> html.Append value |> ignore
+  | _ -> escapeHtml html (value.ToString()) |> ignore
 
   html.Append ';' |> ignore
 
@@ -615,7 +615,8 @@ let private renderHtmlAttr (html:StringBuilder) (attr: HTMLAttr) =
 
     for cssProp in cssList do
       renderCssProp html cssProp
-
+    if not(List.isEmpty cssList) then
+      html.Remove (html.Length - 1, 1) |> ignore
     html.Append '"' |> ignore
 
   | HTMLAttr.Custom (key, value) -> strAttr html (key.ToLower()) (string value)

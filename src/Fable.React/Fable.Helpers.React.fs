@@ -783,13 +783,21 @@ module ServerRenderingInternal =
         | ServerElementType.Component ->
             let tag = tag :?> System.Type
             let comp = System.Activator.CreateInstance(tag, props)
+#if NETSTANDARD1_6
+            let tag = tag.GetTypeInfo()
+#endif
             let childrenProp = tag.GetProperty(ChildrenName)
             childrenProp.SetValue(comp, children |> Seq.toArray)
             let render = tag.GetMethod("render")
             render.Invoke(comp, null) :?> ReactElement
 
     let createServerElementByFn = fun (f, props, children) ->
+#if NETSTANDARD1_6
+        let propsType' = props.GetType()
+        let propsType = propsType'.GetTypeInfo()
+#else
         let propsType = props.GetType()
+#endif
         let props =
             if propsType.GetProperty (ChildrenName) |> isNull then
                 props
@@ -801,6 +809,9 @@ module ServerRenderingInternal =
                         values.Add (children |> Seq.toArray)
                     else
                         values.Add (FSharpValue.GetRecordField(props, p))
+#if NETSTANDARD1_6
+                let propsType = propsType'
+#endif
                 FSharpValue.MakeRecord(propsType, values.ToArray()) :?> 'P
         f props
 
