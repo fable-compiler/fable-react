@@ -1119,7 +1119,6 @@ module ReactiveComponents =
     }
 
     and [<Pojo>] Model<'P, 'S> = {
-        key: string
         props: 'P
         state: 'S
         children: ReactElement[]
@@ -1133,8 +1132,7 @@ type ReactiveCom<'P, 'S, 'Msg>(initProps) =
 
     override this.render() =
         let model =
-            { key = this.props.key
-              props = this.props.props
+            { props = this.props.props
               state = this.state.value
               children = this.children }
         this.props.view model (fun msg ->
