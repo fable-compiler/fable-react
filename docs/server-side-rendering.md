@@ -8,7 +8,7 @@
 
 Commonly speaking SSR means the majority of your app's code can run on both the server and the client, it is also as known as "isomorphic app" or "universal app". In React, you can render your components to html on the server side (usually a nodejs server) by `ReactDOMServer.renderToString`, reuse the server-rendered html and bind events on the client side by `React.hydrate`.
 
-#### Props
+#### Pros
 
 * Better SEO, as the search engine crawlers will directly see the fully rendered page.
 * Faster time-to-content, especially on slow internet or slow devices.
