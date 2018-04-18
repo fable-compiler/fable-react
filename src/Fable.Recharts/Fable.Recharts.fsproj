@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Version>0.1.0-beta-002</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Fable.Recharts.fs" />

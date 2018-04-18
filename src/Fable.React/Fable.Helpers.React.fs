@@ -1104,6 +1104,12 @@ let inline mountById (domElId: string) (reactEl: ReactElement): unit =
 let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit =
     ReactDom.render(reactEl, Browser.document.querySelector(domElSelector))
 
+type Fable.Import.React.FormEvent with
+    /// Access the value from target
+    /// Equivalent to `unbox<string> this.target?value`
+    member this.Value =
+        unbox<string> this.target?value
+
 // Helpers for ReactiveComponents (see #44)
 module ReactiveComponents =
     type [<Pojo>] Props<'P, 'S, 'Msg> = {
