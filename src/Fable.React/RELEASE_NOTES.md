@@ -1,3 +1,8 @@
+### 3.1.2
+
+* Include documentation in the package
+* Add `FromEvent.Value` helper
+
 ### 3.1.1
 
 * Remove ReactiveComponents.Model.key as React doesn't allow access to props.key
