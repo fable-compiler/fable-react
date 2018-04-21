@@ -5,6 +5,7 @@ Fable bindings and helpers for React projects
 ## Documents
 
 * [Server-Side Rendering tutorial](docs/server-side-rendering.md): A **Pure F#** solution for SSR, **No NodeJS Required!**
+* [Using third party React components](docs/using-third-party-react-components.md): How to create binding so that third party Javascript React components can be used like stock React components in Fable code.
 
 
 
