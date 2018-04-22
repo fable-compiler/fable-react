@@ -2,7 +2,9 @@
 
 Using a third party (Javascript) React component is straightforward for most components. There are two ways of declaring a third party React component in F# - either by declaring a Pojo record for the props or by declaring a Discriminated Union where each case has one field.
 
-Some components have a [Typescript](https://www.typescriptlang.org/) definition available, either because the component was authored in Typescript or someone created a type definition for the [Definitely Typed project](https://definitelytyped.org/). If this is the case then you can try the [ts2fable tool](https://github.com/fable-compiler/ts2fable) to convert this React component type definition from Typescript to a Fable type declaration - it might need some tweaking but for components with a big API surface this can be a real time safer.
+Some components have a [Typescript](https://www.typescriptlang.org/) definition available, either because the component was authored in Typescript or someone created a type definition for the [Definitely Typed project](https://definitelytyped.org/). If this is the case then you can try the [ts2fable tool](https://github.com/fable-compiler/ts2fable) to convert this React component type definition from Typescript to a Fable type declaration - it might need some tweaking but for components with a big API surface this can be a real time saver.
+
+## Using a React component by declaring a Discriminated Union props type
 
 The basic steps when working with a Discriminated Union are:
 
