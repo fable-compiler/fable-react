@@ -89,4 +89,4 @@ let inline progressLine (props : ProgressProps) (elems : ReactElement list) : Re
 
 ## Edgecases
 
-This documentation needs to be extended to cover [Higher Order Components](https://reactjs.org/docs/higher-order-components.html) and maybe [Context]()https://reactjs.org/docs/context.html, [Fragments](https://reactjs.org/docs/fragments.html) etc. Contributions are welcome!
+This documentation needs to be extended to cover [Higher Order Components](https://reactjs.org/docs/higher-order-components.html) and maybe [Context](https://reactjs.org/docs/context.html), [Fragments](https://reactjs.org/docs/fragments.html) etc. Contributions are welcome!
