@@ -89,7 +89,7 @@ To use the component in a [Fable-Elmish](https://fable-elmish.github.io/elmish/)
 let view (model : Model) (dispatch : Msg -> unit) =
   div
     []
-    [ progressLine [ percent model.currentProgress; strokeColor: "red" ] [] ]
+    [ progressLine [ percent model.currentProgress; strokeColor "red" ] [] ]
 ```
 
 ## Importing using a Pojo (plain old JS object) record
