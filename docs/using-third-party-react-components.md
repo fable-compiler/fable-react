@@ -32,7 +32,7 @@ Using yarn or npm, install the react component you want to use.
 For example to use the [rc-progress React components](https://github.com/react-component/progress), run the following in your Fable project root:
 
 ```bash
-yarn install rc-progress
+yarn add rc-progress
 ```
 
 ### 2. Define the props type
