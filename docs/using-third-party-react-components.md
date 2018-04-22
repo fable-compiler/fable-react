@@ -31,7 +31,7 @@ type ProgressProps =
   | StrokeColor of string
 ```
 
-If one of the props is treated as a string enum in Javascript (e.g. if there is a size prop with the supported values "small", "normal" and "big"), then the `[<StringEnum>]` attribute can be very useful for defining helper types:
+If one of the props is treated as a string enum in Javascript (e.g. if there is a size prop with the supported values "small", "normal" and "big"), then the `[<StringEnum>]` attribute can be very useful for defining helper types (see the [StringEnum docs](http://fable.io/docs/interacting.html#stringenum-attribute) for more info):
 
 ```fsharp
 [<StringEnum>]
