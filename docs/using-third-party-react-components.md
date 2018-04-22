@@ -66,14 +66,18 @@ type SomeComponentProps =
 
 Using the `ofImport` function you instruct Fable which component should be instantiated when the creation function is called.
 
-In the example of rc-progress, to declare a `progressLine` creation function that imports the `Line` component from the library `rc-progress`, you would declare it as follows.
+There are several different ways to declare exports in Javascript (default imports, member imports, namespace imports); depending on how the Javascript React component was declared, you have to choose the right import. Refer to the [Fable docs](http://fable.io/docs/interacting.html#importing-javascript-code) for more information on imports.
 
-Note the `keyValueList` function that is used to convert the props of type `IProgressProps list` to a Javascript object where they key is the lower case name of the DU case identifier and the value is the field value of the DU (e.g. if the list that is passed into the function is `[Percent 40; StrokeColor "red"]`, the Javascript object that will be passed to the `props` of the `Line` react component would look like this: `{ percent: 40, strokeColor: "red" }`)
+In the example of rc-progress, to declare a `progressLine` creation function that imports the `Line` component from the library `rc-progress`, you would declare it as follows.
 
 ```fsharp
 let inline progressLine (props : ProgressProps list) (elems : ReactElement list) : ReactElement =
     ofImport "Line" "rc-progress" (keyValueList CaseRules.LowerFirst props) elems
 ```
+
+Note the `keyValueList` function that is used to convert the props of type `IProgressProps list` to a Javascript object where they key is the lower case name of the DU case identifier and the value is the field value of the DU (e.g. if the list that is passed into the function is `[Percent 40; StrokeColor "red"]`, the Javascript object that will be passed to the `props` of the `Line` react component would look like this: `{ percent: 40, strokeColor: "red" }`)
+
+In the docs of the [rc-progress React components](https://github.com/react-component/progress) the import styled used is a *member import*, so we use refer to the component member directly in the ofImport expression.
 
 ### 4. Use the creation function in your view code
 
