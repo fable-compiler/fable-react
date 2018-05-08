@@ -27,7 +27,9 @@ The basic steps when working with a Discriminated Union are:
 
 ### 1. Install the react component
 
-Using yarn or npm, install the react component you want to use (we'll be using the [rc-progress](https://github.com/react-component/progress) React component in this tutorial). Run the following command inside your Fable project directory:
+Using yarn or npm, install the react component you want to use.
+
+For example to use the [rc-progress](https://github.com/react-component/progress) React component which we'll be using in this tutorial, run the following command inside your Fable project root folder:
 
 ```bash
 yarn add rc-progress
