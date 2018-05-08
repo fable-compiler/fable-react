@@ -29,7 +29,7 @@ The basic steps when working with a Discriminated Union are:
 
 Using yarn or npm, install the react component you want to use.
 
-For example to use the [rc-progress React components](https://github.com/react-component/progress), run the following in your Fable project root:
+For example to use the [rc-progress](https://github.com/react-component/progress) React component which we'll be using in this tutorial, run the following command inside your Fable project root folder:
 
 ```bash
 yarn add rc-progress
@@ -71,13 +71,18 @@ There are several different ways to declare exports in Javascript (default impor
 In the example of rc-progress, to declare a `progressLine` creation function that imports the `Line` component from the library `rc-progress`, you would declare it as follows.
 
 ```fsharp
+open Fable.Core
+open Fable.React
+open Fable.Import.React
+open Fable.Core.JsInterop
+
 let inline progressLine (props : ProgressProps list) (elems : ReactElement list) : ReactElement =
     ofImport "Line" "rc-progress" (keyValueList CaseRules.LowerFirst props) elems
 ```
 
-Note the `keyValueList` function that is used to convert the props of type `IProgressProps list` to a Javascript object where they key is the lower case name of the DU case identifier and the value is the field value of the DU (e.g. if the list that is passed into the function is `[Percent 40; StrokeColor "red"]`, the Javascript object that will be passed to the `props` of the `Line` react component would look like this: `{ percent: 40, strokeColor: "red" }`)
+The `keyValueList` function is used to convert the props of type `IProgressProps list` to a JavaScript object where the key is the lower case name of the discriminated union case identifier and the value is the field value of the discriminated union (e.g. if the list that is passed into the function is `[Percent 40; StrokeColor "red"]`, the Javascript object that will be passed to the `props` of the `Line` react component would look like this: `{ percent: 40, strokeColor: "red" }`)
 
-In the docs of the [rc-progress React components](https://github.com/react-component/progress) the import styled used is a *member import*, so we use refer to the component member directly in the ofImport expression.
+In the docs of the [rc-progress](https://github.com/react-component/progress) React component the import style used is a *member import* (e.g. `import { Line, Circle } from 'rc-progress';`), so we refer to the component member `Line` directly in the ofImport expression.
 
 ### 4. Use the creation function in your view code
 
@@ -89,7 +94,7 @@ To use the component in a [Fable-Elmish](https://fable-elmish.github.io/elmish/)
 let view (model : Model) (dispatch : Msg -> unit) =
   div
     []
-    [ progressLine [ percent model.currentProgress; strokeColor "red" ] [] ]
+    [ progressLine [ Percent model.currentProgress; StrokeColor "red" ] [] ]
 ```
 
 ## Importing using a Pojo (plain old JS object) record
@@ -119,7 +124,6 @@ open Fable.Core.JsInterop
 
 ofImport "Line" "rc-progress" (createObj ["strokeWidth" ==> 5]) []
 ```
-
 
 ## Edgecases
 
