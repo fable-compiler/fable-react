@@ -1,6 +1,5 @@
 module Fable.Helpers.React
 
-open System.Reflection
 open FSharp.Reflection
 open Fable.Core
 open Fable.Core.JsInterop
@@ -24,7 +23,7 @@ module rec Props =
         | Key of string
         | Ref of (Browser.Element->unit)
         interface IHTMLProp
-    [<Pojo>]
+
     type DangerousHtml = {
         __html: string
     }
@@ -735,7 +734,7 @@ module rec Props =
 #endif
 
 #if FABLE_COMPILER
-    let inline Style (css: CSSProp list): HTMLAttr =
+    let inline Style (css: CSSProp seq): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
 
     let inline Data (key: string, value: obj): IHTMLProp =
@@ -769,12 +768,12 @@ let [<Literal>] private ChildrenName = "children"
 module ServerRenderingInternal =
 
 #if FABLE_COMPILER
-    let inline createServerElement (tag: obj, props: obj, children: ReactElement list, elementType: ServerElementType) =
+    let inline createServerElement (tag: obj, props: obj, children: ReactElement seq, elementType: ServerElementType) =
         createElement(tag, props, children)
     let inline createServerElementByFn (f, props, children) =
         createElement(f, props, children)
 #else
-    let createServerElement (tag: obj, props: obj, children: ReactElement list, elementType: ServerElementType) =
+    let createServerElement (tag: obj, props: obj, children: ReactElement seq, elementType: ServerElementType) =
         match elementType with
         | ServerElementType.Tag ->
             HTMLNode.Node (string tag, props :?> IProp seq, children) :> ReactElement
@@ -820,14 +819,14 @@ module ServerRenderingInternal =
 open ServerRenderingInternal
 
 /// Instantiate an imported React component
-let inline from<[<Pojo>]'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement list): ReactElement =
+let inline from<'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement seq): ReactElement =
     createElement(com, props, children)
 
 /// Instantiate a component from a type inheriting React.Component
 /// Example: `ofType<MyComponent,_,_> { myProps = 5 } []`
-let inline ofType<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
+let inline ofType<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
-    createElement(typedefof<'T>, props, children)
+    createElement(jsConstructor<'T>, props, children)
 #else
     createServerElement(typeof<'T>, props, children, ServerElementType.Component)
 #endif
@@ -835,7 +834,7 @@ let inline ofType<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 
 
 /// OBSOLETE: Use `ofType`
 [<System.Obsolete("Use ofType")>]
-let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement list): ReactElement =
+let inline com<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement seq): ReactElement =
     ofType<'T, 'P, 'S> props children
 
 /// Instantiate a stateless component from a function
@@ -844,7 +843,7 @@ let inline com<'T,[<Pojo>]'P,[<Pojo>]'S when 'T :> Component<'P,'S>> (props: 'P)
 /// let Hello (p: MyProps) = div [] [ofString ("Hello " + p.name)]
 /// ofFunction Hello { name = "Maxime" } []
 /// ```
-let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
+let inline ofFunction<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
     createElement(f, props, children)
 #else
@@ -853,12 +852,12 @@ let inline ofFunction<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children:
 
 /// OBSOLETE: Use `ofFunction`
 [<System.Obsolete("Use ofFunction")>]
-let inline fn<[<Pojo>]'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement list): ReactElement =
+let inline fn<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement seq): ReactElement =
     ofFunction f props children
 
 /// Instantiate an imported React component. The first two arguments must be string literals, "default" can be used for the first one.
 /// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
-let inline ofImport<[<Pojo>]'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement list): ReactElement =
+let inline ofImport<'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement seq): ReactElement =
     createElement(import importMember importPath, props, children)
 
 #if FABLE_COMPILER
@@ -919,7 +918,7 @@ let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :
 
 
 /// Instantiate a DOM React element
-let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement list): ReactElement =
+let inline domEl (tag: string) (props: IHTMLProp seq) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
     createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 #else
@@ -927,7 +926,7 @@ let inline domEl (tag: string) (props: IHTMLProp list) (children: ReactElement l
 #endif
 
 /// Instantiate a DOM React element (void)
-let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
+let inline voidEl (tag: string) (props: IHTMLProp seq) : ReactElement =
 #if FABLE_COMPILER
     createElement(tag, keyValueList CaseRules.LowerFirst props, [])
 #else
@@ -935,7 +934,7 @@ let inline voidEl (tag: string) (props: IHTMLProp list) : ReactElement =
 #endif
 
 /// Instantiate an SVG React element
-let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list): ReactElement =
+let inline svgEl (tag: string) (props: IProp seq) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
     createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 #else
@@ -943,11 +942,11 @@ let inline svgEl (tag: string) (props: IProp list) (children: ReactElement list)
 #endif
 
 /// Instantiate a React fragment
-let inline fragment (props: IFragmentProp list) (children: ReactElement list): ReactElement =
+let inline fragment (props: IFragmentProp seq) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
-    createElement(typedefof<Fragment>, keyValueList CaseRules.LowerFirst props, children)
+    createElement(jsConstructor<Fragment>, keyValueList CaseRules.LowerFirst props, children)
 #else
-    createServerElement(typedefof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
+    createServerElement(typeof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
 #endif
 
 // Standard elements
@@ -1112,7 +1111,7 @@ type Fable.Import.React.FormEvent with
 
 // Helpers for ReactiveComponents (see #44)
 module ReactiveComponents =
-    type [<Pojo>] Props<'P, 'S, 'Msg> = {
+    type Props<'P, 'S, 'Msg> = {
         key: string
         props: 'P
         update: 'Msg -> 'S -> 'S
@@ -1120,11 +1119,11 @@ module ReactiveComponents =
         init: 'P -> 'S
     }
 
-    and [<Pojo>] State<'T> = {
+    and State<'T> = {
         value: 'T
     }
 
-    and [<Pojo>] Model<'P, 'S> = {
+    and Model<'P, 'S> = {
         props: 'P
         state: 'S
         children: ReactElement[]
@@ -1158,7 +1157,7 @@ let reactiveCom<'P, 'S, 'Msg>
         (view: Model<'P, 'S> -> ('Msg->unit) -> ReactElement)
         (key: string)
         (props: 'P)
-        (children: ReactElement list): ReactElement =
+        (children: ReactElement seq): ReactElement =
     ofType<ReactiveCom<'P, 'S, 'Msg>, Props<'P, 'S, 'Msg>, State<'S>>
         { key=key; props=props; update=update; view=view; init=init }
         children

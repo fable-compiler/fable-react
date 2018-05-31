@@ -1,3 +1,7 @@
+### 4.0.0-alpha-001
+
+Alpha version for Fable 2
+
 ### 3.1.2
 
 * Include documentation in the package

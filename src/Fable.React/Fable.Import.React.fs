@@ -76,7 +76,7 @@ module React =
     ///                     this.props.name this.state.value
     ///         div [] [ofString msg]
     /// ```
-    and [<AbstractClass; Import("Component", "react")>] Component<[<Pojo>]'P, [<Pojo>]'S>(initProps: 'P) =
+    and [<AbstractClass; Import("Component", "react")>] Component<'P,'S>(initProps: 'P) =
         [<Emit("$0.props")>]
         member __.props: 'P = initProps
 
@@ -182,7 +182,7 @@ module React =
     ///                     this.props.name this.state.value
     ///         div [] [ofString msg]
     /// ```
-    and [<AbstractClass; Import("PureComponent", "react")>] PureComponent<[<Pojo>]'P, [<Pojo>]'S>(props: 'P) =
+    and [<AbstractClass; Import("PureComponent", "react")>] PureComponent<'P, 'S>(props: 'P) =
         inherit Component<'P, 'S>(props)
 
     /// A react component that implements `shouldComponentUpdate()` with a shallow prop comparison.
@@ -196,7 +196,7 @@ module React =
     ///                     this.props.name this.props.value
     ///         div [] [ofString msg]
     /// ```
-    and [<AbstractClass; Import("PureComponent", "react")>] PureStatelessComponent<[<Pojo>]'P>(props: 'P) =
+    and [<AbstractClass; Import("PureComponent", "react")>] PureStatelessComponent<'P>(props: 'P) =
         inherit Component<'P, obj>(props)
 
     and FragmentProps = { key: string }

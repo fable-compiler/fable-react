@@ -7,10 +7,10 @@ open Fable.Import
 open Fable.Import.React
 
 module Components =
-    type [<Pojo>] HybridState = {
+    type HybridState = {
         isClient: bool
     }
-    type [<Pojo>] HybridProps<'P> = {
+    type HybridProps<'P> = {
         clientView: 'P -> ReactElement
         serverView: 'P -> ReactElement
         model: 'P
