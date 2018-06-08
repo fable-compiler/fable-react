@@ -1,3 +1,7 @@
+### 3.1.3
+
+* Make `Custom` another DU case instead of static member (see #89)
+
 ### 3.1.2
 
 * Include documentation in the package

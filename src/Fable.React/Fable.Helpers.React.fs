@@ -158,12 +158,8 @@ module rec Props =
         | Y1 of obj
         | Y2 of obj
         | Y of obj
-#if !FABLE_COMPILER
-        | Custom of string * obj
-#else
         /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
-        static member inline Custom (key: string, value: obj) : SVGAttr = !!(key, value)
-#endif
+        | [<Erase>] Custom of string * obj
         interface IProp
 
     type HTMLAttr =
@@ -312,12 +308,10 @@ module rec Props =
         | Results of float
         | Security of string
         | Unselectable of bool
+        | [<Erase>] Custom of string * obj
 #if !FABLE_COMPILER
-        | Custom of string * obj
         | Style of CSSProp list
         | Data of string * obj
-#else
-        static member inline Custom (key: string, value: obj) : HTMLAttr = !!(key, value)
 #endif
         interface IHTMLProp
 
@@ -727,12 +721,8 @@ module rec Props =
         | WritingMode of obj
         | ZIndex of obj
         | Zoom of obj
-#if !FABLE_COMPILER
-        | Custom of string * obj
-#else
         /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
-        static member inline Custom (key: string, value: obj) : CSSProp = !!(key, value)
-#endif
+        | [<Erase>] Custom of string * obj
 
 #if FABLE_COMPILER
     let inline Style (css: CSSProp list): HTMLAttr =
