@@ -64,11 +64,13 @@ type SomeComponentProps =
 
 ### 3. Define the React component creation function
 
-Using the `ofImport` function you instruct Fable which component should be instantiated when the creation function is called.
-
 There are several different ways to declare exports in Javascript (default imports, member imports, namespace imports); depending on how the Javascript React component was declared, you have to choose the right import. Refer to the [Fable docs](http://fable.io/docs/interacting.html#importing-javascript-code) for more information on imports.
 
+#### Member Import
+
 In the example of rc-progress, to declare a `progressLine` creation function that imports the `Line` component from the library `rc-progress`, you would declare it as follows.
+
+Using the `ofImport` function you instruct Fable which component should be instantiated when the creation function is called.
 
 ```fsharp
 open Fable.Core
@@ -83,6 +85,22 @@ let inline progressLine (props : ProgressProps list) (elems : ReactElement list)
 The `keyValueList` function is used to convert the props of type `IProgressProps list` to a JavaScript object where the key is the lower case name of the discriminated union case identifier and the value is the field value of the discriminated union (e.g. if the list that is passed into the function is `[Percent 40; StrokeColor "red"]`, the Javascript object that will be passed to the `props` of the `Line` react component would look like this: `{ percent: 40, strokeColor: "red" }`)
 
 In the docs of the [rc-progress](https://github.com/react-component/progress) React component the import style used is a *member import* (e.g. `import { Line, Circle } from 'rc-progress';`), so we refer to the component member `Line` directly in the ofImport expression.
+
+#### Default Import
+
+In contrast, if the export werde declard as a default export, then you would need to use ``importDefault`` and ``createElement``.
+Taking [react-native-qrcode-scanner](https://github.com/moaazsidat/react-native-qrcode-scanner) as an example:
+
+To translate the example
+```js
+import QRCodeScanner from 'react-native-qrcode-scanner';
+```
+you would declare your function like 
+
+```fsharp
+let inline qr_code_scanner (props : QRCodeScannerProps list) : ReactElement =
+    createElement(importDefault "react-native-qrcode-scanner", props, [])
+```
 
 ### 4. Use the creation function in your view code
 
