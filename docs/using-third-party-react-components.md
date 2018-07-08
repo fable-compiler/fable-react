@@ -99,7 +99,7 @@ you would declare your function like
 
 ```fsharp
 let inline qr_code_scanner (props : QRCodeScannerProps list) : ReactElement =
-    createElement(importDefault "react-native-qrcode-scanner", props, [])
+    createElement(importDefault "react-native-qrcode-scanner", (keyValueList CaseRules.LowerFirst props), [])
 ```
 
 ### 4. Use the creation function in your view code
