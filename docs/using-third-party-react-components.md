@@ -66,11 +66,11 @@ type SomeComponentProps =
 
 There are several different ways to declare exports in Javascript (default imports, member imports, namespace imports); depending on how the Javascript React component was declared, you have to choose the right import. Refer to the [Fable docs](http://fable.io/docs/interacting.html#importing-javascript-code) for more information on imports.
 
+Using the `ofImport` function you instruct Fable which component should be instantiated when the creation function is called.
+
 #### Member Import
 
 In the example of rc-progress, to declare a `progressLine` creation function that imports the `Line` component from the library `rc-progress`, you would declare it as follows.
-
-Using the `ofImport` function you instruct Fable which component should be instantiated when the creation function is called.
 
 ```fsharp
 open Fable.Core
@@ -88,7 +88,7 @@ In the docs of the [rc-progress](https://github.com/react-component/progress) Re
 
 #### Default Import
 
-In contrast, if the export werde declard as a default export, then you would need to use ``importDefault`` and ``createElement``.
+If the export is declard as a default export, then you would use ``"default"`` as the member name.
 Taking [react-native-qrcode-scanner](https://github.com/moaazsidat/react-native-qrcode-scanner) as an example:
 
 To translate the example
@@ -99,7 +99,18 @@ you would declare your function like
 
 ```fsharp
 let inline qr_code_scanner (props : QRCodeScannerProps list) : ReactElement =
-    createElement(importDefault "react-native-qrcode-scanner", (keyValueList CaseRules.LowerFirst props), [])
+    ofImport "default" "react-native-qrcode-scanner" (keyValueList CaseRules.LowerFirst props) []
+```
+
+#### Directly creating the element
+
+If you already have a reference to the imported component, then you can also use ``createElement``.
+
+The default import above could also be rewritten like this:
+
+```fsharp
+let rnqs = importDefault "react-native-qrcode-scanner"
+createElement(rnqs, (keyValueList CaseRules.LowerFirst props), [])
 ```
 
 ### 4. Use the creation function in your view code
