@@ -92,14 +92,35 @@ If the export is declard as a default export, then you would use ``"default"`` a
 Taking [react-native-qrcode-scanner](https://github.com/moaazsidat/react-native-qrcode-scanner) as an example:
 
 To translate the example
+
 ```js
 import QRCodeScanner from 'react-native-qrcode-scanner';
 ```
-you would declare your function like 
+
+you would declare your function like
 
 ```fsharp
 let inline qr_code_scanner (props : QRCodeScannerProps list) : ReactElement =
     ofImport "default" "react-native-qrcode-scanner" (keyValueList CaseRules.LowerFirst props) []
+```
+
+#### Fields of imported items
+
+Some React components must be instantiated as follows in JS:
+
+```js
+import { Select } from 'react-select'
+let render = () => <Select.Creatable options={...} />
+```
+
+In this case, you can also use `ofImport` to directly access the field of the imported item:
+
+```fsharp
+// Import { Select } from "react-select" and then access the "Creatable" field
+ofImport "Select.Creatable" "react-select" myOptions []
+
+// Also compatible with default imports
+ofImport "default.Creatable" "react-select" myOptions []
 ```
 
 #### Directly creating the element
@@ -111,6 +132,13 @@ The default import above could also be rewritten like this:
 ```fsharp
 let rnqs = importDefault "react-native-qrcode-scanner"
 createElement(rnqs, (keyValueList CaseRules.LowerFirst props), [])
+```
+
+> Please note it's also OK to duplicate `ofImport` with same member and path. In this case, Fable will automatically group the imports.
+
+```fsharp
+let foo1 = ofImport "default" "react-foo" { height = 25 } []
+let foo2 = ofImport "default" "react-foo" { height = 50 } []
 ```
 
 ### 4. Use the creation function in your view code
