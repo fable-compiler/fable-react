@@ -41,6 +41,7 @@ module rec Props =
         | OnChange of (React.FormEvent -> unit)
         | OnInput of (React.FormEvent -> unit)
         | OnSubmit of (React.FormEvent -> unit)
+        | OnReset of (React.FormEvent -> unit)
         | OnLoad of (React.SyntheticEvent -> unit)
         | OnError of (React.SyntheticEvent -> unit)
         | OnKeyDown of (React.KeyboardEvent -> unit)
