@@ -432,6 +432,7 @@ module React =
         abstract onChange: FormEventHandler option with get, set
         abstract onInput: FormEventHandler option with get, set
         abstract onSubmit: FormEventHandler option with get, set
+        abstract onReset: FormEventHandler option with get, set
         abstract onLoad: ReactEventHandler option with get, set
         abstract onError: ReactEventHandler option with get, set
         abstract onKeyDown: KeyboardEventHandler option with get, set
