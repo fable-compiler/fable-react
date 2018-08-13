@@ -15,6 +15,7 @@ let private voidTags = System.Collections.Generic.HashSet<_>(["area"; "base"; "b
 
 // Adapted from https://github.com/facebook/react/blob/37e4329bc81def4695211d6e3795a654ef4d84f5/packages/react-dom/src/server/escapeTextForBrowser.js#L49
 let escapeHtml (sb:StringBuilder) (str: string) =
+  if isNull str then () else
   for c in str.ToCharArray() do
     match c with
     | '"' -> sb.Append("&quot")
