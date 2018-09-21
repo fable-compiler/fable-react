@@ -143,7 +143,7 @@ let MarkerClusterer: RCom = import "MarkerClusterer" "react-google-maps/lib/comp
 let markerClusterer (props:Props.IMarkerClustererProperties list) (markers:React.ReactElement list) : React.ReactElement =
     R.from MarkerClusterer (keyValueList CaseRules.LowerFirst props) markers
 
-let GoogleMapComponent: RCom = import "GoogleMapComponent" "./js/mapComponent.js"
+let GoogleMapComponent: RCom = import "GoogleMapComponent" "./mapComponent.js"
 
 
 /// A wrapper around google.maps.Map
@@ -152,21 +152,15 @@ let googleMap (props:Props.IMapProperties list) : React.ReactElement =
     R.from GoogleMapComponent (keyValueList CaseRules.LowerFirst props) []
 
 
-//
-// export function getPosition (options) {
-//     return new Promise(function (resolve, reject) {
-//       navigator.geolocation.getCurrentPosition(resolve, reject, options);
-//     });
-//   }
 
-// let getPosition (options: obj) : JS.Promise<obj> = importMember "./js/location.js"
+let getPosition (options: obj) : JS.Promise<obj> = importMember "./location.js"
 
-// open Fable.PowerPack
+open Fable.PowerPack
 
-// let getGeoPosition () =
-//     promise {
-//         let! pos = getPosition()
-//         let c = pos?coords
-//         return Coordinates.newPos (c?latitude |> unbox) (c?longitude |> unbox)
-//     }
+let getGeoPosition () =
+    promise {
+        let! pos = getPosition()
+        let c = pos?coords
+        return Coordinates.newPos (c?latitude |> unbox) (c?longitude |> unbox)
+    }
 
