@@ -19,6 +19,7 @@ let gitOwner = "fable-compiler"
 let packages =
     [ "src/Fable.React/Fable.React.fsproj"
       "src/Fable.ReactLeaflet/Fable.ReactLeaflet.fsproj"
+      "src/Fable.ReactGoogleMaps/Fable.ReactGoogleMaps.fsproj"
       "src/Fable.Recharts/Fable.Recharts.fsproj"
     ]
 
