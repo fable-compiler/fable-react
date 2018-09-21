@@ -3,38 +3,42 @@ const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox
 import React from 'react';
 
 const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
-
-  var inputBox =
-    React.createElement("input",
-        { type:"text",
-          placeholder : props.searchBoxText,
-          style : {
-            boxSizing: `border-box`,
-            border: `1px solid transparent`,
-            width: `240px`,
-            height: `30px`,
-            marginTop: `10px`,
-            padding: `0 12px`,
-            borderRadius: `3px`,
-            boxShadow: `0 1px 6px rgba(0, 0, 0, 0.3)`,
-            fontSize: `14px`,
-            outline: `none`,
-            textOverflow: `ellipses`}
-        });
+  var childs = [ props.markers ];
+  if(props.showSearchBox) {
+    var inputBox =
+        React.createElement("input",
+            { type:"text",
+            placeholder : props.searchBoxText,
+            style : {
+                boxSizing: `border-box`,
+                border: `1px solid transparent`,
+                width: `240px`,
+                height: `30px`,
+                marginTop: `10px`,
+                padding: `0 12px`,
+                borderRadius: `3px`,
+                boxShadow: `0 1px 6px rgba(0, 0, 0, 0.3)`,
+                fontSize: `14px`,
+                outline: `none`,
+                textOverflow: `ellipses`}
+            });
 
     var searchBox =
         React.createElement(SearchBox,
             { ref : props.onSearchBoxMounted,
-              bounds : props.bounds,
-              controlPosition : google.maps.ControlPosition.TOP_LEFT,
-              onPlacesChanged : props.onPlacesChanged },
+            bounds : props.bounds,
+            controlPosition : google.maps.ControlPosition.TOP_LEFT,
+            onPlacesChanged : props.onPlacesChanged },
             inputBox
         );
 
-  var traffic = React.createElement(TrafficLayer, {  });
-  var childs = [props.markers ];
-  if(props.showSearchBox) { childs = [ searchBox, ...childs ] };
-  if(props.showTrafficLayer) { childs = [ traffic, ...childs ] };
+    childs = [ searchBox, ...childs ];
+  };
+
+  if(props.showTrafficLayer) {
+      var traffic = React.createElement(TrafficLayer, {  });
+      childs = [ traffic, ...childs ]
+  };
 
   return (
     React.createElement(
