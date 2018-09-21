@@ -1,0 +1,107 @@
+import { withScriptjs, withGoogleMap, GoogleMap, TrafficLayer } from "react-google-maps";
+const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
+import React from 'react';
+
+const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
+  var childs = [ props.markers ];
+  if(props.showSearchBox) {
+    var inputBox =
+        React.createElement("input",
+            { type:"text",
+            placeholder : props.searchBoxText,
+            style : {
+                boxSizing: `border-box`,
+                border: `1px solid transparent`,
+                width: `240px`,
+                height: `30px`,
+                marginTop: `10px`,
+                padding: `0 12px`,
+                borderRadius: `3px`,
+                boxShadow: `0 1px 6px rgba(0, 0, 0, 0.3)`,
+                fontSize: `14px`,
+                outline: `none`,
+                textOverflow: `ellipses`}
+            });
+
+    var searchBox =
+        React.createElement(SearchBox,
+            { ref : props.onSearchBoxMounted,
+            bounds : props.bounds,
+            controlPosition : google.maps.ControlPosition.TOP_LEFT,
+            onPlacesChanged : props.onPlacesChanged },
+            inputBox
+        );
+
+    childs = [ searchBox, ...childs ];
+  };
+
+  if(props.showTrafficLayer) {
+      var traffic = React.createElement(TrafficLayer, {  });
+      childs = [ traffic, ...childs ]
+  };
+
+  return (
+    React.createElement(
+        GoogleMap,
+        { defaultZoom : props.defaultZoom,
+          onZoomChanged : props.onZoomChanged,
+          onIdle : props.onIdle,
+          defaultCenter : props.defaultCenter,
+          center : props.center,
+          ref : props.onMapMounted },
+        childs))
+}));
+
+export class GoogleMapComponent extends React.PureComponent {
+    refs = {}
+    searchBoxRef = {}
+    state = {
+      isMarkerShown: false,
+    }
+
+    componentDidMount() {
+      this.delayedShowMarker()
+    }
+
+    delayedShowMarker = () => {
+      setTimeout(() => {
+        this.setState({ isMarkerShown: true })
+      }, 3000)
+    }
+
+    render() {
+      var loading = React.createElement("div", { className : this.props.mapLoadingContainer, style : { width: `100%` }}, "Loading");
+      var container = React.createElement("div", { className : this.props.mapContainer});
+      var mapElement = React.createElement("div", { style : { height: `100%` }});
+      return (
+        React.createElement(
+          TrafficMapComponent,
+          { key:"map",
+            isMarkerShown: this.state.isMarkerShown,
+            defaultZoom: this.props.defaultZoom,
+            onZoomChanged: this.props.onZoomChanged,
+            defaultCenter: this.props.defaultCenter,
+            searchBoxText: this.props.searchBoxText,
+            showSearchBox: this.props.showSearchBox,
+            showTrafficLayer: this.props.showTrafficLayer,
+            center: this.props.center,
+            onPlacesChanged: () => {
+                this.props.onPlacesChanged(this.searchBoxRef.getPlaces())
+            },
+            onIdle: this.props.onIdle,
+            onMapMounted: this.props.setRef,
+            onSearchBoxMounted: ref => {
+                this.searchBoxRef = ref;
+            },
+            markers: this.props.markers,
+            onMarkerClick: () => {
+                this.setState({ isMarkerShown: false })
+                this.delayedShowMarker()
+            },
+            googleMapURL: "https://maps.googleapis.com/maps/api/js?key=" + this.props.apiKey + "&v=3.exp&libraries=geometry,drawing,places",
+            loadingElement: loading,
+            containerElement: container,
+            mapElement: mapElement
+          }))
+    }
+  }
