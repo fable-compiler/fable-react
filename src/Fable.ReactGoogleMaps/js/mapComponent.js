@@ -1,6 +1,6 @@
-import { withScriptjs, withGoogleMap, GoogleMap, TrafficLayer, Marker } from "react-google-maps";
+import { withScriptjs, withGoogleMap, GoogleMap, TrafficLayer } from "react-google-maps";
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
-import React, {Component, Children} from 'react';
+import React from 'react';
 
 const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
 
@@ -32,18 +32,20 @@ const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
         );
 
   var traffic = React.createElement(TrafficLayer, {  });
+  var childs = [props.markers ];
+  if(props.showSearchBox) { childs = [ searchBox, ...childs ] };
+  if(props.showTrafficLayer) { childs = [ traffic, ...childs ] };
+
   return (
-    <GoogleMap
-        defaultZoom={props.defaultZoom}
-        onZoomChanged={props.onZoomChanged}
-        onIdle={props.onIdle}
-        defaultCenter={props.defaultCenter}
-        center={props.center}
-        ref={props.onMapMounted} >
-        {props.showSearchBox && searchBox}
-        {props.showTrafficLayer && traffic }
-        {props.markers}
-    </GoogleMap>)
+    React.createElement(
+        GoogleMap,
+        { defaultZoom : props.defaultZoom,
+          onZoomChanged : props.onZoomChanged,
+          onIdle : props.onIdle,
+          defaultCenter : props.defaultCenter,
+          center : props.center,
+          ref : props.onMapMounted },
+        childs))
 }));
 
 export class GoogleMapComponent extends React.PureComponent {
