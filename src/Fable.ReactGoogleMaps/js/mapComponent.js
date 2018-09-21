@@ -2,42 +2,49 @@ import { withScriptjs, withGoogleMap, GoogleMap, TrafficLayer, Marker } from "re
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
 import React, {Component, Children} from 'react';
 
-const TrafficMapComponent = withScriptjs(withGoogleMap((props) =>
-  <GoogleMap
-    defaultZoom={props.defaultZoom}
-    onZoomChanged={props.onZoomChanged}
-    onIdle={props.onIdle}
-    defaultCenter={props.defaultCenter}
-    center={props.center}
-    ref={props.onMapMounted} >
-    {props.showSearchBox && <SearchBox
-      ref={props.onSearchBoxMounted}
-      bounds={props.bounds}
-      controlPosition={google.maps.ControlPosition.TOP_LEFT}
-      onPlacesChanged={props.onPlacesChanged}
-    >
-      <input
-        type="text"
-        placeholder={props.searchBoxText}
-        style={{
-          boxSizing: `border-box`,
-          border: `1px solid transparent`,
-          width: `240px`,
-          height: `30px`,
-          marginTop: `10px`,
-          padding: `0 12px`,
-          borderRadius: `3px`,
-          boxShadow: `0 1px 6px rgba(0, 0, 0, 0.3)`,
-          fontSize: `14px`,
-          outline: `none`,
-          textOverflow: `ellipses`,
-        }}
-      />
-    </SearchBox>}
-    {props.showTrafficLayer &&  <TrafficLayer autoUpdate /> }
-    {props.markers}
-  </GoogleMap>
-));
+const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
+
+  var inputBox =
+    React.createElement("input",
+        { type:"text",
+          placeholder : props.searchBoxText,
+          style : {
+            boxSizing: `border-box`,
+            border: `1px solid transparent`,
+            width: `240px`,
+            height: `30px`,
+            marginTop: `10px`,
+            padding: `0 12px`,
+            borderRadius: `3px`,
+            boxShadow: `0 1px 6px rgba(0, 0, 0, 0.3)`,
+            fontSize: `14px`,
+            outline: `none`,
+            textOverflow: `ellipses`}
+        });
+
+    var searchBox =
+        React.createElement(SearchBox,
+            { ref : props.onSearchBoxMounted,
+              bounds : props.bounds,
+              controlPosition : google.maps.ControlPosition.TOP_LEFT,
+              onPlacesChanged : props.onPlacesChanged },
+            inputBox
+        );
+
+  var traffic = React.createElement(TrafficLayer, {  });
+  return (
+    <GoogleMap
+        defaultZoom={props.defaultZoom}
+        onZoomChanged={props.onZoomChanged}
+        onIdle={props.onIdle}
+        defaultCenter={props.defaultCenter}
+        center={props.center}
+        ref={props.onMapMounted} >
+        {props.showSearchBox && searchBox}
+        {props.showTrafficLayer && traffic }
+        {props.markers}
+    </GoogleMap>)
+}));
 
 export class GoogleMapComponent extends React.PureComponent {
     refs = {}
