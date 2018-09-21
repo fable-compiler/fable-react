@@ -57,35 +57,38 @@ export class GoogleMapComponent extends React.PureComponent {
     }
 
     render() {
+      var loading = React.createElement("div", { className : this.props.mapLoadingContainer, style : { width: `100%` }}, "Loading");
+      var container = React.createElement("div", { className : this.props.mapContainer});
+      var mapElement = React.createElement("div", { style : { height: `100%` }});
       return (
-        <TrafficMapComponent
-          key="map"
-          isMarkerShown={this.state.isMarkerShown}
-          defaultZoom={this.props.defaultZoom}
-          onZoomChanged={this.props.onZoomChanged}
-          defaultCenter={this.props.defaultCenter}
-          searchBoxText={this.props.searchBoxText}
-          showSearchBox={this.props.showSearchBox}
-          showTrafficLayer={this.props.showTrafficLayer}
-          center={this.props.center}
-          onPlacesChanged={() => {
-            this.props.onPlacesChanged(this.searchBoxRef.getPlaces())
-          }}
-          onIdle={this.props.onIdle}
-          onMapMounted={this.props.setRef}
-          onSearchBoxMounted={ref => {
-            this.searchBoxRef = ref;
-          }}
-          markers={this.props.markers}
-          onMarkerClick={() => {
-            this.setState({ isMarkerShown: false })
-            this.delayedShowMarker()
-          }}
-          googleMapURL={"https://maps.googleapis.com/maps/api/js?key=" + this.props.apiKey + "&v=3.exp&libraries=geometry,drawing,places"}
-          loadingElement={<div className={this.props.mapLoadingContainer} style={{ width: `100%` }} >Loading</div>}
-          containerElement={<div className={this.props.mapContainer} style={{ width: `100%` }} /> }
-          mapElement={<div style={{ height: `100%` }} />}
-        />
-      )
+        React.createElement(
+          TrafficMapComponent,
+          { key:"map",
+            isMarkerShown: this.state.isMarkerShown,
+            defaultZoom: this.props.defaultZoom,
+            onZoomChanged: this.props.onZoomChanged,
+            defaultCenter: this.props.defaultCenter,
+            searchBoxText: this.props.searchBoxText,
+            showSearchBox: this.props.showSearchBox,
+            showTrafficLayer: this.props.showTrafficLayer,
+            center: this.props.center,
+            onPlacesChanged: () => {
+                this.props.onPlacesChanged(this.searchBoxRef.getPlaces())
+            },
+            onIdle: this.props.onIdle,
+            onMapMounted: this.props.setRef,
+            onSearchBoxMounted: ref => {
+                this.searchBoxRef = ref;
+            },
+            markers: this.props.markers,
+            onMarkerClick: () => {
+                this.setState({ isMarkerShown: false })
+                this.delayedShowMarker()
+            },
+            googleMapURL: "https://maps.googleapis.com/maps/api/js?key=" + this.props.apiKey + "&v=3.exp&libraries=geometry,drawing,places",
+            loadingElement: loading,
+            containerElement: container,
+            mapElement: mapElement
+          }))
     }
   }
