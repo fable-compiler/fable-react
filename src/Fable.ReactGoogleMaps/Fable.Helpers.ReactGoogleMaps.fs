@@ -151,15 +151,14 @@ let googleMap (props:Props.IMapProperties list) : React.ReactElement =
 
     R.from GoogleMapComponent (keyValueList CaseRules.LowerFirst props) []
 
+open Fable.Import.JS
 
-let getPosition (options: obj) : JS.Promise<obj> = importMember "./location.js"
+let getGeoPosition () =
+    Promise.Create (fun resolve reject ->
+        let onSucces (position:Browser.Position) =
+            resolve (Coordinates.newPos position.coords.latitude position.coords.longitude )
+        let onError (posError:Browser.PositionError) =
+            reject (System.Exception("Could not determine location", System.Exception(sprintf "%A" posError)))
 
-// open Fable.PowerPack
-
-// let getGeoPosition () =
-//     promise {
-//         let! pos = getPosition()
-//         let c = pos?coords
-//         return Coordinates.newPos (c?latitude |> unbox) (c?longitude |> unbox)
-//     }
-
+        Browser.navigator.geolocation.getCurrentPosition(onSucces, onError)
+    )
