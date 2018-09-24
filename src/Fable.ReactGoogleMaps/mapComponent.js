@@ -47,7 +47,9 @@ const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
           onZoomChanged : props.onZoomChanged,
           onIdle : props.onIdle,
           defaultCenter : props.defaultCenter,
+          onClick: props.onClick,
           center : props.center,
+          options: props.options,
           ref : props.onMapMounted },
         childs))
 }));
@@ -84,7 +86,8 @@ export class GoogleMapComponent extends React.PureComponent {
             searchBoxText: this.props.searchBoxText,
             showSearchBox: this.props.showSearchBox,
             showTrafficLayer: this.props.showTrafficLayer,
-            center: this.props.center,
+            center: this.props.center, 
+            options: this.props.options,
             onPlacesChanged: () => {
                 this.props.onPlacesChanged(this.searchBoxRef.getPlaces())
             },
@@ -97,7 +100,8 @@ export class GoogleMapComponent extends React.PureComponent {
             onMarkerClick: () => {
                 this.setState({ isMarkerShown: false })
                 this.delayedShowMarker()
-            },
+            }, 
+            onClick: this.props.onClick,
             googleMapURL: "https://maps.googleapis.com/maps/api/js?key=" + this.props.apiKey + "&v=3.exp&libraries=geometry,drawing,places",
             loadingElement: loading,
             containerElement: container,
