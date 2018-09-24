@@ -152,15 +152,14 @@ let googleMap (props:Props.IMapProperties list) : React.ReactElement =
     R.from GoogleMapComponent (keyValueList CaseRules.LowerFirst props) []
 
 
-
 let getPosition (options: obj) : JS.Promise<obj> = importMember "./location.js"
 
-open Fable.PowerPack
+// open Fable.PowerPack
 
-let getGeoPosition () =
-    promise {
-        let! pos = getPosition()
-        let c = pos?coords
-        return Coordinates.newPos (c?latitude |> unbox) (c?longitude |> unbox)
-    }
+// let getGeoPosition () =
+//     promise {
+//         let! pos = getPosition()
+//         let c = pos?coords
+//         return Coordinates.newPos (c?latitude |> unbox) (c?longitude |> unbox)
+//     }
 
