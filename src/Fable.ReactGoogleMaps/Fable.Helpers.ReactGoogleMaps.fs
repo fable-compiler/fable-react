@@ -151,15 +151,3 @@ let googleMap (props:Props.IMapProperties list) : React.ReactElement =
 
     R.from GoogleMapComponent (keyValueList CaseRules.LowerFirst props) []
 
-open Fable.Import.JS
-
-let getGeoPosition () : Promise<Coordinates.Position> =
-    Promise.Create (fun resolve reject ->
-        let onSucces (position:Browser.Position) =
-            let pos = Coordinates.newPos position.coords.latitude position.coords.longitude
-            resolve pos
-        let onError (posError:Browser.PositionError) =
-            reject (System.Exception("Could not determine location", System.Exception(sprintf "%A" posError)))
-
-        Browser.navigator.geolocation.getCurrentPosition(onSucces, onError)
-    )
