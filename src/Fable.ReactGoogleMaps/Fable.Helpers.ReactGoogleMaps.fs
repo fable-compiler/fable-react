@@ -6,25 +6,28 @@ open Fable.Core.JsInterop
 
 module Coordinates =
 
-    type [<Pojo>] Position = {
-        lat: float
-        lng: float
-    }
+    /// GoogleMaps Position
+    /// see https://developers.google.com/maps/documentation/javascript/reference/coordinates
+    type IPosition =
+        abstract member lat: unit -> float
+        abstract member lng: unit -> float
 
     let newPos lat lng =
-        { lat = lat
-          lng = lng }
+        { new IPosition 
+            with 
+                member __.lat() = lat
+                member __.lng() = lng }
 
     type [<Pojo>] Bounds = {
-        NE : Position
-        SW : Position
+        NE : IPosition
+        SW : IPosition
     }
 
 
 module Places =
 
     type [<Pojo>] Geometry = {
-        location: Coordinates.Position
+        location: Coordinates.IPosition
     }
 
     type [<Pojo>] Place = {
@@ -50,7 +53,7 @@ type MapRef(mapRef) =
     member __.GetZoom() : int =
         mapRef?getZoom() |> unbox
 
-    member __.GetCenter() : Coordinates.Position =
+    member __.GetCenter() : Coordinates.IPosition =
         mapRef?getCenter() |> unbox
 
 module Props =
@@ -81,7 +84,7 @@ module Props =
     | Title of string
     | Icon of string
     | OnClick of (unit -> unit)
-    | Position of Coordinates.Position
+    | Position of Coordinates.IPosition
         interface IMarkerProperties
 
     type IMarkerClustererProperties =
@@ -99,14 +102,11 @@ module Props =
     type IMapProperties =
         interface end
         
-    // https://developers.google.com/maps/documentation/javascript/reference/coordinates
-    type LatLng =
-        abstract member lat: unit -> float
-        abstract member lng: unit -> float
+
         
     // https://developers.google.com/maps/documentation/javascript/events#EventArguments
     type GoogleMapsMouseEvent =
-        { latLng: LatLng }
+        { latLng: Coordinates.IPosition }
 
     [<RequireQualifiedAccess>]
     type MapProperties =
@@ -116,8 +116,8 @@ module Props =
     | SearchBoxText of string
     | ShowSearchBox of bool
     | ShowTrafficLayer of bool
-    | DefaultCenter of Coordinates.Position
-    | Center of Coordinates.Position
+    | DefaultCenter of Coordinates.IPosition
+    | Center of Coordinates.IPosition
     | OnCenterChanged of (unit -> unit)
     | OnPlacesChanged of (Places.Place [] -> unit)
     | OnZoomChanged of (unit -> unit)
