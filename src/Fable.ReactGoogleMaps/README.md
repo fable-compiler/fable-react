@@ -26,7 +26,28 @@ and in your F# code you can create the map like this:
     let myMap =
         googleMap [ 
             MapProperties.ApiKey googleMapApiKey
-            MapProperties.MapContainer "mapContainer"
+            MapProperties.MapLoadingContainer "maploadercontainer"
+            MapProperties.MapContainer "mapcontainer"
             MapProperties.DefaultZoom 9
             MapProperties.DefaultCenter defaultCenter
             MapProperties.Center defaultCenter ]
+
+## Markers
+
+If you want to show markers on the map then you can create them like this:
+
+    let markers =
+        locations
+        |> Array.map (fun location ->
+            marker [
+                MarkerProperties.Key location.ID
+                MarkerProperties.Position (Coordinates.newPos location.X location.Y)
+                MarkerProperties.Icon (sprintf "Images/markers/%s.png" location.Color)
+                MarkerProperties.Title location.Title] []))
+
+
+    let myMap =
+        googleMap [ 
+            MapProperties.ApiKey googleMapApiKey
+            // ..
+            MapProperties.Markers (unbox markers) ]
