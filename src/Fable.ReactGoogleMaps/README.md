@@ -26,7 +26,7 @@ In your css add the following:
 and in your F# code you can create the map like this:
 
 ```fs
-let defaultCenter:Position = { lat = 40.6892494 ; lng = -74.0445004 }
+let defaultCenter:Position = Coordinates.newPos 40.6892494 -74.0445004
 
 let myMap =
     googleMap [ 
