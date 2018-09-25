@@ -67,7 +67,7 @@ let myMap =
     googleMap [ 
         MapProperties.ApiKey googleMapApiKey
         // ..
-        MapProperties.Markers (unbox markers) ]
+        MapProperties.Markers markers ]
 ```
 
 ## MarkerClusterer
@@ -87,5 +87,5 @@ let myMap =
     googleMap [ 
         MapProperties.ApiKey googleMapApiKey
         // ..
-        MapProperties.Markers clustered ]
+        MapProperties.Clusterer clustered ]
 ```

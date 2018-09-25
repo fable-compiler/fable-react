@@ -129,7 +129,8 @@ module Props =
     | OnZoomChanged of (unit -> unit)
     | OnIdle of (unit -> unit)
     | OnClick of (GoogleMapsMouseEvent -> unit)
-    | Markers of React.ReactElement list
+    | Markers of React.ReactElement seq
+    | [<CompiledName("Markers")>] Clusterer of React.ReactElement
     | MapLoadingContainer of string
     | MapContainer of string
     | Options of obj
