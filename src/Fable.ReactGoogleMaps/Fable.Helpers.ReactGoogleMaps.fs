@@ -150,3 +150,6 @@ let GoogleMapComponent: RCom = import "GoogleMapComponent" "./mapComponent.js"
 let googleMap (props:Props.IMapProperties list) : React.ReactElement =
 
     R.from GoogleMapComponent (keyValueList CaseRules.LowerFirst props) []
+
+
+let getPosition (options: obj) : Fable.Import.JS.Promise<Fable.Import.Browser.Position> = importMember "./location.js"
