@@ -42,11 +42,14 @@ let myMap =
 
 Google Maps allows you to activate the traffic layer. The map component has a simple property for that:
 
-    let myMap =
-        googleMap [ 
-            MapProperties.ApiKey googleMapApiKey
-            // ..
-            MapProperties.ShowTrafficLayer true ]
+
+```fs
+let myMap =
+    googleMap [ 
+        MapProperties.ApiKey googleMapApiKey
+        // ..
+        MapProperties.ShowTrafficLayer true ]
+```
 
 ## Markers
 
