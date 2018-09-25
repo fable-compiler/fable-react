@@ -92,3 +92,29 @@ let myMap =
         // ..
         MapProperties.Clusterer clustered ]
 ```
+
+
+## Getting properties from the map
+
+It's possible to retrieve properties like current center or current bounds from the GoogleMaps component. You need to use a MapRef like the following:
+
+```fs
+
+let mutable mapRef = MapRef null
+let setMapRef (ref:obj) =
+    mapRef <- MapRef ref
+
+// ...
+
+
+let myMap =
+    googleMap [ 
+        MapProperties.ApiKey googleMapApiKey
+        // ..
+        MapProperties.SetRef setMapRef ]
+
+// ...
+
+let bounds = mapRef.GetBounds()
+
+```

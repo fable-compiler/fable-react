@@ -12,15 +12,10 @@ module Coordinates =
         abstract member lat: unit -> float
         abstract member lng: unit -> float
 
-    type [<Pojo>] Position = 
-        {
-            lat: float
-            lng: float
-        }
-        interface LatLng with
-            member this.lat() = this.lat
-            member this.lng() = this.lng
-
+    type [<Pojo>] Position = {
+        lat: float
+        lng: float
+    }
 
     let newPos lat lng =
         { lat = lat
