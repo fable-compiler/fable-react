@@ -55,7 +55,6 @@ type MapRef(mapRef) =
 
 module Props =
 
-
     type IInfoWindowProperties =
         interface end
 
@@ -99,6 +98,15 @@ module Props =
 
     type IMapProperties =
         interface end
+        
+    // https://developers.google.com/maps/documentation/javascript/reference/coordinates
+    type LatLng =
+        abstract member lat: unit -> float
+        abstract member lng: unit -> float
+        
+    // https://developers.google.com/maps/documentation/javascript/events#EventArguments
+    type GoogleMapsMouseEvent =
+        { latLng: LatLng }
 
     [<RequireQualifiedAccess>]
     type MapProperties =
@@ -114,9 +122,11 @@ module Props =
     | OnPlacesChanged of (Places.Place [] -> unit)
     | OnZoomChanged of (unit -> unit)
     | OnIdle of (unit -> unit)
-    | Markers of React.ReactElement
+    | OnClick of (GoogleMapsMouseEvent -> unit)
+    | Markers of React.ReactElement list
     | MapLoadingContainer of string
     | MapContainer of string
+    | Options of obj
         interface IMapProperties
 let InfoWindow: RCom = import "InfoWindow" "react-google-maps"
 
