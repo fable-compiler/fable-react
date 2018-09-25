@@ -25,7 +25,17 @@ module Coordinates =
         NE : Position
         SW : Position
     }
-
+    
+    // https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
+    
+    type LatLngBounds =
+        abstract member extend : U2<LatLngBounds, Position> -> LatLngBounds
+        
+    [<Emit("new window.google.maps.LatLngBounds()")>]
+    let newLatLngBounds () : LatLngBounds = jsNative
+    
+    [<Emit("new window.google.maps.LatLngBounds($0, $1)")>]
+    let newLatLngBoundsWith (sw: U2<LatLng, Position>, ne: U2<LatLng, Position>) : LatLngBounds = jsNative
 
 module Places =
 
@@ -58,6 +68,9 @@ type MapRef(mapRef) =
 
     member __.GetCenter() : Coordinates.Position =
         mapRef?getCenter() |> unbox
+        
+    member __.FitBounds(bounds: Coordinates.LatLngBounds) : unit =
+        mapRef?fitBounds(bounds)
 
 module Props =
 

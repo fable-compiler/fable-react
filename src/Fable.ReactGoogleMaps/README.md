@@ -134,3 +134,33 @@ let myMap =
 let bounds = mapRef.GetBounds()
 
 ```
+
+### Set bounds of map to fit all the markers
+
+```fs
+    // ...
+    let markerPositions: Position list = // ...
+        
+    // In some scenarios ref can be null, f.ex. slow network when the google maps isn't fully loaded yet.
+    let setRef (ref:obj) =
+        let bounds = ReactGoogleMaps.Coordinates.newLatLngBounds()
+        
+        match markerPositions, Option.ofObj ref with
+        | multiple, Some ref ->
+            multiple
+            |> List.fold (fun (acc:LatLngBounds) pos ->
+                acc.extend( !^ pos)
+            ) bounds
+            |> (MapRef ref).FitBounds
+        | _ ->
+            ()
+            
+    googleMap [ MapProperties.ApiKey googleMapApiKey
+                    MapProperties.MapContainer "mapContainer"
+                    MapProperties.DefaultZoom 9
+                    MapProperties.DefaultCenter defaultCenter
+                    MapProperties.Center defaultCenter
+                    MapProperties.Options mapStyle
+                    MapProperties.Markers markers
+                    MapProperties.SetRef setRef ]
+```
