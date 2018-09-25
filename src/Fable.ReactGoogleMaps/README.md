@@ -51,3 +51,21 @@ If you want to show markers on the map then you can create them like this:
             MapProperties.ApiKey googleMapApiKey
             // ..
             MapProperties.Markers (unbox markers) ]
+
+## MarkerClusterer
+
+The map component allows you to use a [MarkerClusterer](https://tomchentw.github.io/react-google-maps/#markerclusterer):
+
+    let clustered =
+        markers
+        |> markerClusterer [
+            MarkerClustererProperties.AverageCenter true
+            MarkerClustererProperties.MaxZoom 15
+            MarkerClustererProperties.EnableRetinaIcons true
+            MarkerClustererProperties.GridSize 60.]
+
+    let myMap =
+        googleMap [ 
+            MapProperties.ApiKey googleMapApiKey
+            // ..
+            MapProperties.Markers clustered ]
