@@ -32,6 +32,16 @@ and in your F# code you can create the map like this:
             MapProperties.DefaultCenter defaultCenter
             MapProperties.Center defaultCenter ]
 
+## Traffic Layer
+
+Google Maps allows you to activate the traffic layer. The map component has a simple property for that:
+
+    let myMap =
+        googleMap [ 
+            MapProperties.ApiKey googleMapApiKey
+            // ..
+            MapProperties.ShowTrafficLayer true ]
+
 ## Markers
 
 If you want to show markers on the map then you can create them like this:
