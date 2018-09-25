@@ -38,7 +38,7 @@ let myMap =
         MapProperties.Center defaultCenter ]
 ```
 
-## Traffic Layer
+### Traffic Layer
 
 Google Maps allows you to activate the traffic layer. The map component has a simple property for that:
 
@@ -51,7 +51,21 @@ let myMap =
         MapProperties.ShowTrafficLayer true ]
 ```
 
-## Markers
+### SearchBox
+
+If you want to show a searchbox in Google Maps then use the following properties:
+
+
+```fs
+let myMap =
+    googleMap [ 
+        MapProperties.ApiKey googleMapApiKey
+        // ..
+        MapProperties.SearchBoxText "Search"
+        MapProperties.ShowSearchBox true ]
+```
+
+### Markers
 
 If you want to show markers on the map then you can create them like this:
 
@@ -73,7 +87,7 @@ let myMap =
         MapProperties.Markers markers ]
 ```
 
-## MarkerClusterer
+### MarkerClusterer
 
 The map component allows you to use a [MarkerClusterer](https://tomchentw.github.io/react-google-maps/#markerclusterer):
 
@@ -94,7 +108,7 @@ let myMap =
 ```
 
 
-## Getting properties from the map
+### Getting properties from the map
 
 It's possible to retrieve properties like current center or current bounds from the GoogleMaps component. You need to use a MapRef like the following:
 
