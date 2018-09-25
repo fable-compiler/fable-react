@@ -87,6 +87,8 @@ let myMap =
         MapProperties.Markers markers ]
 ```
 
+If your markers are changing over time, then it's important to set the key property to some stable ID. This allows React to keep track of which markers actually changed and reduces flickering.
+
 ### MarkerClusterer
 
 The map component allows you to use a [MarkerClusterer](https://tomchentw.github.io/react-google-maps/#markerclusterer):
