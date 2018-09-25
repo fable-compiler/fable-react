@@ -156,11 +156,11 @@ let bounds = mapRef.GetBounds()
             ()
             
     googleMap [ MapProperties.ApiKey googleMapApiKey
-                    MapProperties.MapContainer "mapContainer"
-                    MapProperties.DefaultZoom 9
-                    MapProperties.DefaultCenter defaultCenter
-                    MapProperties.Center defaultCenter
-                    MapProperties.Options mapStyle
-                    MapProperties.Markers markers
-                    MapProperties.SetRef setRef ]
+                MapProperties.MapContainer "mapContainer"
+                MapProperties.DefaultZoom 9
+                MapProperties.DefaultCenter defaultCenter
+                MapProperties.Center defaultCenter
+                MapProperties.Options mapStyle
+                MapProperties.Markers markers
+                MapProperties.SetRef setRef ]
 ```
