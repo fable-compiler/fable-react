@@ -150,4 +150,3 @@ let GoogleMapComponent: RCom = import "GoogleMapComponent" "./mapComponent.js"
 let googleMap (props:Props.IMapProperties list) : React.ReactElement =
 
     R.from GoogleMapComponent (keyValueList CaseRules.LowerFirst props) []
-
