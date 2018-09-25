@@ -8,26 +8,34 @@ module Coordinates =
 
     /// GoogleMaps Position
     /// see https://developers.google.com/maps/documentation/javascript/reference/coordinates
-    type IPosition =
+    type LatLng =
         abstract member lat: unit -> float
         abstract member lng: unit -> float
 
+    type [<Pojo>] Position = 
+        {
+            lat: float
+            lng: float
+        }
+        interface LatLng with
+            member this.lat() = this.lat
+            member this.lng() = this.lng
+
+
     let newPos lat lng =
-        { new IPosition 
-            with 
-                member __.lat() = lat
-                member __.lng() = lng }
+        { lat = lat
+          lng = lng }
 
     type [<Pojo>] Bounds = {
-        NE : IPosition
-        SW : IPosition
+        NE : Position
+        SW : Position
     }
 
 
 module Places =
 
     type [<Pojo>] Geometry = {
-        location: Coordinates.IPosition
+        location: Coordinates.Position
     }
 
     type [<Pojo>] Place = {
@@ -53,7 +61,7 @@ type MapRef(mapRef) =
     member __.GetZoom() : int =
         mapRef?getZoom() |> unbox
 
-    member __.GetCenter() : Coordinates.IPosition =
+    member __.GetCenter() : Coordinates.Position =
         mapRef?getCenter() |> unbox
 
 module Props =
@@ -84,7 +92,7 @@ module Props =
     | Title of string
     | Icon of string
     | OnClick of (unit -> unit)
-    | Position of Coordinates.IPosition
+    | Position of Coordinates.Position
         interface IMarkerProperties
 
     type IMarkerClustererProperties =
@@ -102,11 +110,9 @@ module Props =
     type IMapProperties =
         interface end
         
-
-        
     // https://developers.google.com/maps/documentation/javascript/events#EventArguments
     type GoogleMapsMouseEvent =
-        { latLng: Coordinates.IPosition }
+        { latLng: Coordinates.LatLng }
 
     [<RequireQualifiedAccess>]
     type MapProperties =
@@ -116,8 +122,8 @@ module Props =
     | SearchBoxText of string
     | ShowSearchBox of bool
     | ShowTrafficLayer of bool
-    | DefaultCenter of Coordinates.IPosition
-    | Center of Coordinates.IPosition
+    | DefaultCenter of Coordinates.Position
+    | Center of Coordinates.Position
     | OnCenterChanged of (unit -> unit)
     | OnPlacesChanged of (Places.Place [] -> unit)
     | OnZoomChanged of (unit -> unit)
