@@ -12,8 +12,11 @@ module Coordinates =
         abstract member lat: unit -> float
         abstract member lng: unit -> float
 
-     [<Emit("new window.google.maps.LatLng($0, $1)")>]
-    let newLatLng (lat: float, lng: float) : LatLng = jsNative
+    let newLatLng (lat: float, lng: float) : LatLng =
+        let pos = obj()
+        pos?lat <- lat
+        pos?lng <- lng
+        pos |> unbox
 
 
     // https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
@@ -21,13 +24,23 @@ module Coordinates =
     type LatLngBounds =
         abstract member extend : LatLngBounds -> LatLngBounds
         abstract member extend : LatLng -> LatLngBounds
-    
-    [<Emit("new window.google.maps.LatLngBounds($0, $1)")>]
-    let newLatLngBounds (sw: LatLng, ne: LatLng) : LatLngBounds = jsNative
+        abstract member getSouthWest : unit -> LatLng
+        abstract member getNorthEast : unit -> LatLng
+
+
+    let newLatLngBounds (sw: LatLng, ne: LatLng) : LatLng =
+        let bounds = obj()
+        bounds?sw <- sw
+        bounds?ne <- ne
+        bounds |> unbox
 
         
     [<Emit("new window.google.maps.LatLngBounds()")>]
     let newEmptyLatLngBounds () : LatLngBounds = jsNative
+
+    let emptyLatLngBounds () : LatLng =
+        let bounds = obj()
+        bounds |> unbox
 
 module Places =
 
