@@ -34,13 +34,16 @@ module Coordinates =
         bounds?ne <- ne
         bounds |> unbox
 
-        
-    [<Emit("new window.google.maps.LatLngBounds()")>]
-    let newEmptyLatLngBounds () : LatLngBounds = jsNative
 
-    let emptyLatLngBounds () : LatLng =
+    let emptyLatLngBounds () : LatLngBounds =
         let bounds = obj()
         bounds |> unbox
+
+    let getBoundsFromLatLngs(positions:LatLng seq) : LatLngBounds =
+        let mutable b = emptyLatLngBounds()
+        for pos in positions do
+            b <- b.extend pos
+        b
 
 module Places =
 
