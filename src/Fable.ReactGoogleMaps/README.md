@@ -117,7 +117,7 @@ It's possible to retrieve properties like current center or current bounds from 
 ```fs
 
 let mutable mapRef = MapRef null
-let setMapRef (ref:obj) =
+let onMapMounted (ref:obj) =
     mapRef <- MapRef ref
 
 // ...
@@ -127,7 +127,7 @@ let myMap =
     googleMap [ 
         MapProperties.ApiKey googleMapApiKey
         // ..
-        MapProperties.SetRef setMapRef ]
+        MapProperties.OnMapMounted onMapMounted ]
 
 // ...
 
@@ -138,29 +138,24 @@ let bounds = mapRef.GetBounds()
 ### Set bounds of map to fit all the markers
 
 ```fs
-    // ...
-    let markerPositions: Position list = // ...
-        
-    // In some scenarios ref can be null, f.ex. slow network when the google maps isn't fully loaded yet.
-    let setRef (ref:obj) =
-        let bounds = ReactGoogleMaps.Coordinates.newLatLngBounds()
-        
-        match Option.ofObj ref with
-        | Some ref ->
-            markerPositions
-            |> List.fold (fun (acc:LatLngBounds) pos ->
-                acc.extend(!^ pos)
-            ) bounds
-            |> (MapRef ref).FitBounds
-        | _ ->
-            ()
-            
-    googleMap [ MapProperties.ApiKey googleMapApiKey
-                MapProperties.MapContainer "mapContainer"
-                MapProperties.DefaultZoom 9
-                MapProperties.DefaultCenter defaultCenter
-                MapProperties.Center defaultCenter
-                MapProperties.Options mapStyle
-                MapProperties.Markers markers
-                MapProperties.SetRef setRef ]
+// ...
+let markerPositions: Position list = // ...
+
+
+let mutable mapRef = MapRef null
+let onMapMounted (ref:obj) =
+    mapRef <- MapRef ref
+
+    let bounds = ReactGoogleMaps.Coordinates.newEmptyLatLngBounds()
+    
+    markerPositions
+    |> List.fold (fun (acc:LatLngBounds) pos -> acc.extend pos) bounds           
+
+let myMap =
+    googleMap [ 
+        MapProperties.ApiKey googleMapApiKey
+        // ..    
+        MapProperties.Markers markers
+        MapProperties.OnMapMounted onMapMounted ]
+
 ```

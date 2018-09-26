@@ -92,7 +92,7 @@ export class GoogleMapComponent extends React.PureComponent {
                 this.props.onPlacesChanged(this.searchBoxRef.getPlaces())
             },
             onIdle: this.props.onIdle,
-            onMapMounted: this.props.setRef,
+            onMapMounted: this.props.onMapMounted,
             onSearchBoxMounted: ref => {
                 this.searchBoxRef = ref;
             },

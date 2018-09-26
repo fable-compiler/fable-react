@@ -12,35 +12,27 @@ module Coordinates =
         abstract member lat: unit -> float
         abstract member lng: unit -> float
 
-    type [<Pojo>] Position = {
-        lat: float
-        lng: float
-    }
+     [<Emit("new window.google.maps.LatLng($0, $1)")>]
+    let newLatLng (lat: float, lng: float) : LatLng = jsNative
 
-    let newPos lat lng =
-        { lat = lat
-          lng = lng }
 
-    type [<Pojo>] Bounds = {
-        NE : Position
-        SW : Position
-    }
-    
     // https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
     
     type LatLngBounds =
-        abstract member extend : U2<LatLngBounds, Position> -> LatLngBounds
-        
-    [<Emit("new window.google.maps.LatLngBounds()")>]
-    let newLatLngBounds () : LatLngBounds = jsNative
+        abstract member extend : LatLngBounds -> LatLngBounds
+        abstract member extend : LatLng -> LatLngBounds
     
     [<Emit("new window.google.maps.LatLngBounds($0, $1)")>]
-    let newLatLngBoundsWith (sw: U2<LatLng, Position>, ne: U2<LatLng, Position>) : LatLngBounds = jsNative
+    let newLatLngBounds (sw: LatLng, ne: LatLng) : LatLngBounds = jsNative
+
+        
+    [<Emit("new window.google.maps.LatLngBounds()")>]
+    let newEmptyLatLngBounds () : LatLngBounds = jsNative
 
 module Places =
 
     type [<Pojo>] Geometry = {
-        location: Coordinates.Position
+        location: Coordinates.LatLng
     }
 
     type [<Pojo>] Place = {
@@ -55,22 +47,28 @@ type RCom = React.ComponentClass<obj>
 type MapRef(mapRef) =
 
     /// Get the current bounds of the Map
-    member __.GetBounds() : Coordinates.Bounds =
-        let bounds = mapRef?getBounds()
-        let ne = bounds?getNorthEast()
-        let sw = bounds?getSouthWest()
+    member __.GetBounds() : Coordinates.LatLngBounds option =
+        if isNull mapRef then
+            None
+        else
+            Some(mapRef?getBounds() |> unbox)
 
-        { NE = Coordinates.newPos (ne?lat() |> unbox) (ne?lng() |> unbox)
-          SW = Coordinates.newPos (sw?lat() |> unbox) (sw?lng() |> unbox) }
+    member __.GetZoom() : int option =
+        if isNull mapRef then
+            None
+        else
+            Some(mapRef?getZoom() |> unbox)
 
-    member __.GetZoom() : int =
-        mapRef?getZoom() |> unbox
 
-    member __.GetCenter() : Coordinates.Position =
-        mapRef?getCenter() |> unbox
-        
-    member __.FitBounds(bounds: U2<Coordinates.LatLngBounds, Coordinates.Bounds>, ?padding: float) : unit =
-        mapRef?fitBounds(bounds, padding)
+    member __.GetCenter() : Coordinates.LatLng option =
+        if isNull mapRef then
+            None
+        else
+            Some(mapRef?getCenter() |> unbox)
+
+    member __.FitBounds(bounds: Coordinates.LatLngBounds, ?padding: float) : unit =
+        if not(isNull mapRef) then
+            mapRef?fitBounds(bounds, padding) |> ignore
 
 module Props =
 
@@ -100,7 +98,7 @@ module Props =
     | Title of string
     | Icon of string
     | OnClick of (unit -> unit)
-    | Position of Coordinates.Position
+    | Position of Coordinates.LatLng
         interface IMarkerProperties
 
     type IMarkerClustererProperties =
@@ -124,14 +122,14 @@ module Props =
 
     [<RequireQualifiedAccess>]
     type MapProperties =
-    | SetRef of (obj -> unit)
+    | OnMapMounted of (obj -> unit)
     | ApiKey of string
     | DefaultZoom of int
     | SearchBoxText of string
     | ShowSearchBox of bool
     | ShowTrafficLayer of bool
-    | DefaultCenter of Coordinates.Position
-    | Center of Coordinates.Position
+    | DefaultCenter of Coordinates.LatLng
+    | Center of Coordinates.LatLng
     | OnCenterChanged of (unit -> unit)
     | OnPlacesChanged of (Places.Place [] -> unit)
     | OnZoomChanged of (unit -> unit)
