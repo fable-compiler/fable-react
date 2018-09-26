@@ -144,11 +144,14 @@ let bounds = mapRef.GetBounds()
     let setRef (ref:obj) =
         let bounds = ReactGoogleMaps.Coordinates.newLatLngBounds()
 
-    markerPositions
-    |> List.fold (fun (acc:LatLngBounds) pos ->
-        acc.extend(!^ pos)
-    ) bounds
-    |> (MapRef ref).FitBounds
+        let mapRef = (MapRef ref)
+
+        markerPositions
+        |> List.fold (fun (acc:LatLngBounds) pos ->
+            acc.extend(!^ pos)
+        ) bounds
+        |> fun mapBounds ->
+            mapRef.FitBounds(!^ mapBounds)
             
     googleMap [ MapProperties.ApiKey googleMapApiKey
                 MapProperties.MapContainer "mapContainer"
