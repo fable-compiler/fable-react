@@ -146,10 +146,11 @@ let mutable mapRef = MapRef null
 let onMapMounted (ref:obj) =
     mapRef <- MapRef ref
 
-    let bounds = ReactGoogleMaps.Coordinates.newEmptyLatLngBounds()
-    
-    markerPositions
-    |> List.fold (fun (acc:LatLngBounds) pos -> acc.extend pos) bounds           
+    let bounds = 
+        let mutable b = ReactGoogleMaps.Coordinates.newEmptyLatLngBounds()
+        for pos in markerPositions do
+            bunds.extend pos
+    mapRef.FitBounds bounds
 
 let myMap =
     googleMap [ 
