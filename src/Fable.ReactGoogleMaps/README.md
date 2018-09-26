@@ -141,19 +141,14 @@ let bounds = mapRef.GetBounds()
     // ...
     let markerPositions: Position list = // ...
         
-    // In some scenarios ref can be null, f.ex. slow network when the google maps isn't fully loaded yet.
     let setRef (ref:obj) =
         let bounds = ReactGoogleMaps.Coordinates.newLatLngBounds()
-        
-        match Option.ofObj ref with
-        | Some ref ->
-            markerPositions
-            |> List.fold (fun (acc:LatLngBounds) pos ->
-                acc.extend(!^ pos)
-            ) bounds
-            |> (MapRef ref).FitBounds
-        | _ ->
-            ()
+
+    markerPositions
+    |> List.fold (fun (acc:LatLngBounds) pos ->
+        acc.extend(!^ pos)
+    ) bounds
+    |> (MapRef ref).FitBounds
             
     googleMap [ MapProperties.ApiKey googleMapApiKey
                 MapProperties.MapContainer "mapContainer"
