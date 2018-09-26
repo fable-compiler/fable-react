@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Version>0.4.2</Version>
@@ -9,6 +9,7 @@
     <ProjectReference Include="../Fable.React/Fable.React.fsproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="GoogleMaps.fs" />
     <Compile Include="Fable.Helpers.ReactGoogleMaps.fs" />
   </ItemGroup>
   <ItemGroup>
