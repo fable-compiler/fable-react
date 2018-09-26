@@ -69,8 +69,8 @@ type MapRef(mapRef) =
     member __.GetCenter() : Coordinates.Position =
         mapRef?getCenter() |> unbox
         
-    member __.FitBounds(bounds: Coordinates.LatLngBounds) : unit =
-        mapRef?fitBounds(bounds)
+    member __.FitBounds(bounds: U2<Coordinates.LatLngBounds, Coordinates.Bounds>, ?padding: float) : unit =
+        mapRef?fitBounds(bounds, padding)
 
 module Props =
 
