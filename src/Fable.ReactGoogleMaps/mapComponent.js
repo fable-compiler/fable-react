@@ -2,7 +2,7 @@ import { withScriptjs, withGoogleMap, GoogleMap, TrafficLayer } from "react-goog
 const { SearchBox } = require("react-google-maps/lib/components/places/SearchBox");
 import React from 'react';
 
-const TrafficMapComponent = /*withScriptjs(*/withGoogleMap((props) => {
+const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
   var childs = [ props.markers ];
   if(props.showSearchBox) {
     var inputBox =
@@ -52,7 +52,7 @@ const TrafficMapComponent = /*withScriptjs(*/withGoogleMap((props) => {
           options: props.options,
           ref : props.onMapMounted },
         childs))
-})/*)*/;
+}));
 
 export class GoogleMapComponent extends React.PureComponent {
     refs = {}
