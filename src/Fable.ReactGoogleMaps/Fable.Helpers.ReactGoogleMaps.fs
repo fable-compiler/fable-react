@@ -3,7 +3,7 @@ module Fable.Helpers.ReactGoogleMaps
 open Fable.Core
 open Fable.Import
 open Fable.Core.JsInterop
-open Google.Maps
+open Fable.Import.GoogleMaps
 
 module R = Fable.Helpers.React
 
@@ -63,7 +63,7 @@ module Props =
     | Title of string
     | Icon of string
     | OnClick of (unit -> unit)
-    | Position of LatLng
+    | Position of U2<LatLng, LatLngLiteral>
         interface IMarkerProperties
 
     type IMarkerClustererProperties =
@@ -90,8 +90,8 @@ module Props =
     | SearchBoxText of string
     | ShowSearchBox of bool
     | ShowTrafficLayer of bool
-    | DefaultCenter of LatLng
-    | Center of LatLng
+    | DefaultCenter of U2<LatLng,LatLngLiteral>
+    | Center of U2<LatLng, LatLngLiteral>
     | OnCenterChanged of (unit -> unit)
     | OnPlacesChanged of (Place [] -> unit)
     | OnZoomChanged of (unit -> unit)
