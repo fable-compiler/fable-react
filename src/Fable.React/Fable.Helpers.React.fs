@@ -728,7 +728,7 @@ module rec Props =
     let inline Style (css: CSSProp seq): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
 
-    let inline Data (key: string, value: obj): IHTMLProp =
+    let inline Data (key: string, value: obj): HTMLAttr =
         !!("data-" + key, value)
 #endif
 
