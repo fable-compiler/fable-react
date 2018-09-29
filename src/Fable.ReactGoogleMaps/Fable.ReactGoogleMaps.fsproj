@@ -9,7 +9,8 @@
     <ProjectReference Include="../Fable.React/Fable.React.fsproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GoogleMaps.fs" />
+      <Compile Include="C:\Users\nojaf\Projects\fable-import\GoogleMaps\Fable.Import.GoogleMaps.fs" />
+      <Compile Include="C:\Users\nojaf\Projects\fable-import\GoogleMaps\Fable.Helper.GoogleMaps.fs" />
     <Compile Include="Fable.Helpers.ReactGoogleMaps.fs" />
   </ItemGroup>
   <ItemGroup>
