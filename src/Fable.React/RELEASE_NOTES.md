@@ -1,3 +1,7 @@
+### 4.0.1
+
+* Update Fable 2 deps to stable version
+
 ### 4.0.0
 
 * Release stable version
