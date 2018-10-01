@@ -20,7 +20,7 @@ module Coordinates =
 
 
     // https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
-    
+
     type LatLngBounds =
         abstract member extend : LatLngBounds -> LatLngBounds
         abstract member extend : LatLng -> LatLngBounds
@@ -47,11 +47,11 @@ module Coordinates =
 
 module Places =
 
-    type [<Pojo>] Geometry = {
+    type Geometry = {
         location: Coordinates.LatLng
     }
 
-    type [<Pojo>] Place = {
+    type Place = {
         geometry: Geometry
     }
 
@@ -131,7 +131,7 @@ module Props =
 
     type IMapProperties =
         interface end
-        
+
     // https://developers.google.com/maps/documentation/javascript/events#EventArguments
     type GoogleMapsMouseEvent =
         { latLng: Coordinates.LatLng }
