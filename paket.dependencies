@@ -5,6 +5,7 @@ clitool dotnet-Fable 2.0.0-alpha-007
 nuget Fable.Core 2.0.0-alpha-006
 nuget Fable.Geojson
 nuget Fable.Import.Browser
+nuget Fable.Import.GoogleMaps 0.1.0
 nuget Fable.Leaflet
 
 group Build
