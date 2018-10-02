@@ -1,3 +1,12 @@
+### 4.0.1
+
+* Update Fable 2 deps to stable version
+
+### 4.0.0
+
+* Release stable version
+* Make `Data` type consistent across compiler directive
+
 ### 4.0.0-alpha-001
 
 Alpha version for Fable 2

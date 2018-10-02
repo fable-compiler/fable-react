@@ -80,7 +80,6 @@ module Props =
 
     type IMapProperties =
         interface end
-        
 
     [<RequireQualifiedAccess>]
     type MapProperties =
