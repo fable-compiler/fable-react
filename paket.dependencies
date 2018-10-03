@@ -5,6 +5,7 @@ clitool dotnet-Fable
 nuget Fable.Core
 nuget Fable.Geojson
 nuget Fable.Import.Browser
+nuget Fable.Import.GoogleMaps
 nuget Fable.Leaflet
 
 group Build

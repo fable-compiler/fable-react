@@ -3,58 +3,7 @@ module Fable.Helpers.ReactGoogleMaps
 open Fable.Core
 open Fable.Import
 open Fable.Core.JsInterop
-
-module Coordinates =
-
-    /// GoogleMaps Position
-    /// see https://developers.google.com/maps/documentation/javascript/reference/coordinates
-    type LatLng =
-        abstract member lat: unit -> float
-        abstract member lng: unit -> float
-
-    let newLatLng (lat: float, lng: float) : LatLng =
-        let pos = obj()
-        pos?lat <- lat
-        pos?lng <- lng
-        pos |> unbox
-
-
-    // https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
-
-    type LatLngBounds =
-        abstract member extend : LatLngBounds -> LatLngBounds
-        abstract member extend : LatLng -> LatLngBounds
-        abstract member getSouthWest : unit -> LatLng
-        abstract member getNorthEast : unit -> LatLng
-
-
-    let newLatLngBounds (sw: LatLng, ne: LatLng) : LatLng =
-        let bounds = obj()
-        bounds?sw <- sw
-        bounds?ne <- ne
-        bounds |> unbox
-
-
-    let emptyLatLngBounds () : LatLngBounds =
-        let bounds = obj()
-        bounds |> unbox
-
-    let getBoundsFromLatLngs(positions:LatLng seq) : LatLngBounds =
-        let mutable b = emptyLatLngBounds()
-        for pos in positions do
-            b <- b.extend pos
-        b
-
-module Places =
-
-    type Geometry = {
-        location: Coordinates.LatLng
-    }
-
-    type Place = {
-        geometry: Geometry
-    }
-
+open Fable.Import.GoogleMaps
 
 module R = Fable.Helpers.React
 
@@ -63,7 +12,7 @@ type RCom = React.ComponentClass<obj>
 type MapRef(mapRef) =
 
     /// Get the current bounds of the Map
-    member __.GetBounds() : Coordinates.LatLngBounds option =
+    member __.GetBounds() : LatLngBounds option =
         if isNull mapRef then
             None
         else
@@ -76,13 +25,13 @@ type MapRef(mapRef) =
             Some(mapRef?getZoom() |> unbox)
 
 
-    member __.GetCenter() : Coordinates.LatLng option =
+    member __.GetCenter() : LatLng option =
         if isNull mapRef then
             None
         else
             Some(mapRef?getCenter() |> unbox)
 
-    member __.FitBounds(bounds: Coordinates.LatLngBounds, ?padding: float) : unit =
+    member __.FitBounds(bounds: LatLngBounds, ?padding: float) : unit =
         if not(isNull mapRef) then
             mapRef?fitBounds(bounds, padding) |> ignore
 
@@ -114,7 +63,7 @@ module Props =
     | Title of string
     | Icon of string
     | OnClick of (unit -> unit)
-    | Position of Coordinates.LatLng
+    | Position of U2<LatLng, LatLngLiteral>
         interface IMarkerProperties
 
     type IMarkerClustererProperties =
@@ -132,10 +81,6 @@ module Props =
     type IMapProperties =
         interface end
 
-    // https://developers.google.com/maps/documentation/javascript/events#EventArguments
-    type GoogleMapsMouseEvent =
-        { latLng: Coordinates.LatLng }
-
     [<RequireQualifiedAccess>]
     type MapProperties =
     | OnMapMounted of (obj -> unit)
@@ -144,13 +89,13 @@ module Props =
     | SearchBoxText of string
     | ShowSearchBox of bool
     | ShowTrafficLayer of bool
-    | DefaultCenter of Coordinates.LatLng
-    | Center of Coordinates.LatLng
+    | DefaultCenter of U2<LatLng,LatLngLiteral>
+    | Center of U2<LatLng, LatLngLiteral>
     | OnCenterChanged of (unit -> unit)
-    | OnPlacesChanged of (Places.Place [] -> unit)
+    | OnPlacesChanged of (Place [] -> unit)
     | OnZoomChanged of (unit -> unit)
     | OnIdle of (unit -> unit)
-    | OnClick of (GoogleMapsMouseEvent -> unit)
+    | OnClick of (MouseEvent -> unit)
     | Markers of React.ReactElement seq
     | [<CompiledName("Markers")>] Clusterer of React.ReactElement
     | MapLoadingContainer of string
