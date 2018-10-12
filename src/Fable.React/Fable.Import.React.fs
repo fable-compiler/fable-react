@@ -91,7 +91,7 @@ module React =
         /// Think of setState() as a request rather than an immediate command to update the component. For better perceived performance, React may delay it, and then update several components in a single pass. React does not guarantee that the state changes are applied immediately.
         /// setState() does not always immediately update the component. It may batch or defer the update until later. This makes reading this.state right after calling setState() a potential pitfall. Instead, use componentDidUpdate or a setState callback (setState(updater, callback)), either of which are guaranteed to fire after the update has been applied. If you need to set the state based on the previous state, read about the updater argument below.
         /// setState() will always lead to a re-render unless shouldComponentUpdate() returns false. If mutable objects are being used and conditional rendering logic cannot be implemented in shouldComponentUpdate(), calling setState() only when the new state differs from the previous state will avoid unnecessary re-renders.
-        [<Obsolete("This overload is unsafe because it forces use of this.state. Use setState(updater: 'S->'P->'S) instead.")>]
+        [<Obsolete("This overload is unsafe because it forces use of this.state. Use this.setState(updater: 'S->'P->'S) instead.")>]
         [<Emit("$0.setState($1)")>]
         member x.setState(value: 'S): unit = x.state <- value
 
