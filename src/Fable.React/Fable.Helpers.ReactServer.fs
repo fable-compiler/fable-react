@@ -1,7 +1,7 @@
 module Fable.Helpers.ReactServer
 
 open System
-open System.Text
+open System.IO
 open System.Text.RegularExpressions
 
 open Fable.Import.React
@@ -14,39 +14,36 @@ let private unitlessCssProps = System.Collections.Generic.HashSet<_>([ "animatio
 let private voidTags = System.Collections.Generic.HashSet<_>(["area"; "base"; "br"; "col"; "embed"; "hr"; "img"; "input"; "keygen"; "link"; "menuitem"; "meta"; "param"; "source"; "track"; "wbr"])
 
 // Adapted from https://github.com/facebook/react/blob/37e4329bc81def4695211d6e3795a654ef4d84f5/packages/react-dom/src/server/escapeTextForBrowser.js#L49
-let escapeHtml (sb:StringBuilder) (str: string) =
+let escapeHtml (sb:TextWriter) (str: string) =
   if isNull str then () else
   for c in str.ToCharArray() do
     match c with
-    | '"' -> sb.Append("&quot")
-    | '&' -> sb.Append("&amp;")
-    | ''' -> sb.Append("&#x27;") // modified from escape-html; used to be '&#39'
-    | '<' -> sb.Append("&lt;")
-    | '>' -> sb.Append("&gt;")
-    | c   -> sb.Append(c)
-    |> ignore
+    | '"' -> sb.Write("&quot")
+    | '&' -> sb.Write("&amp;")
+    | ''' -> sb.Write("&#x27;") // modified from escape-html; used to be '&#39'
+    | '<' -> sb.Write("&lt;")
+    | '>' -> sb.Write("&gt;")
+    | c   -> sb.Write(c)
 
-let inline private addUnit (html:StringBuilder) (key: string) (value: string) =
-  html.Append value |> ignore
+let inline private addUnit (html:TextWriter) (key: string) (value: string) =
+  html.Write value
   if not (unitlessCssProps.Contains key) then
-    html.Append "px" |> ignore
+    html.Write "px"
 
-let private cssProp (html:StringBuilder) (key: string) (value: obj) =
-  html.Append key |> ignore
-  html.Append ':' |> ignore
+let private cssProp (html:TextWriter) (key: string) (value: obj) =
+  html.Write key
+  html.Write ':'
 
   match value with
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
-  | _ -> escapeHtml html (value.ToString()) |> ignore
-
-  html.Append ';' |> ignore
+  | _ -> escapeHtml html (value.ToString())
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
 let inline private slugKey key =
   slugRegex.Replace(string key, "-$1").ToLower()
 
-let private renderCssProp (html:StringBuilder) (prop: CSSProp) =
+let private renderCssProp (html:TextWriter) (prop: CSSProp) =
   match prop with
   | AlignContent v -> cssProp html "align-content" v
   | AlignItems v -> cssProp html "align-items" v
@@ -457,17 +454,17 @@ let private renderCssProp (html:StringBuilder) (prop: CSSProp) =
   | CSSProp.Custom (key, value) -> cssProp html (slugKey key) value
   #endif
 
-let inline boolAttr (html:StringBuilder) (key: string) (value: bool) = if value then html.Append key |> ignore
+let inline boolAttr (html:TextWriter) (key: string) (value: bool) = if value then html.Write key
 
-let inline strAttr (html:StringBuilder) (key: string) (value: string) =
-  html.Append key |> ignore
-  html.Append "=\"" |> ignore
+let inline strAttr (html:TextWriter) (key: string) (value: string) =
+  html.Write key
+  html.Write "=\""
   escapeHtml html value
-  html.Append '"' |> ignore
+  html.Write '"'
 
-let inline objAttr (html:StringBuilder) (key: string) (value: obj) = strAttr html key (string value)
+let inline objAttr (html:TextWriter) (key: string) (value: obj) = strAttr html key (string value)
 
-let private renderHtmlAttr (html:StringBuilder) (attr: HTMLAttr) =
+let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
   match attr with
   | DefaultChecked v | Checked v -> boolAttr html "checked" v
   | DefaultValue v |  Value v -> strAttr html "value" v
@@ -614,20 +611,20 @@ let private renderHtmlAttr (html:StringBuilder) (attr: HTMLAttr) =
   | Unselectable v -> boolAttr html "unselectable" v
   #if !FABLE_COMPILER
   | Style cssList ->
-    html.Append "style" |> ignore
-    html.Append "=\"" |> ignore
+    html.Write "style"
+    html.Write "=\""
 
-    for cssProp in cssList do
-      renderCssProp html cssProp
-    if not(List.isEmpty cssList) then
-      html.Remove (html.Length - 1, 1) |> ignore
-    html.Append '"' |> ignore
+    cssList
+    |> List.iteri( fun i cssProp ->
+        if i > 0 then html.Write(';')
+        renderCssProp html cssProp)
+    html.Write '"'
 
   | HTMLAttr.Custom (key, value) -> strAttr html (key.ToLower()) (string value)
   | Data (key, value) -> strAttr html ("data-" + key) (string value)
   #endif
 
-let private renderSVGAttr (html:StringBuilder) (attr: SVGAttr) =
+let private renderSVGAttr (html:TextWriter) (attr: SVGAttr) =
   match attr with
   | SVGAttr.ClipPath v -> objAttr html "clip-path" v
   | SVGAttr.Cx v -> objAttr html "cx" v
@@ -690,7 +687,7 @@ let private renderSVGAttr (html:StringBuilder) (attr: SVGAttr) =
   | SVGAttr.Custom (key, value) -> objAttr html (slugKey key) value
   #endif
 
-let private renderAttrs (html:StringBuilder) (attrs: IProp seq) tag =
+let private renderAttrs (html:TextWriter) (attrs: IProp seq) tag =
   let mutable childHtml = None
   for attr in attrs do
     match attr with
@@ -705,10 +702,10 @@ let private renderAttrs (html:StringBuilder) (attrs: IProp seq) tag =
       | "textarea", DefaultValue v ->
           childHtml <- Some v
       | _, _ ->
-        html.Append ' ' |> ignore
+        html.Write ' '
         renderHtmlAttr html attr
     | :? SVGAttr as attr ->
-      html.Append ' ' |> ignore
+      html.Write ' '
       renderSVGAttr html attr
     | _ -> ()
 
@@ -729,38 +726,37 @@ let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
   else
     htmlNode :?> HTMLNode
 
-let renderToString (htmlNode: ReactElement): string =
-  let htmlNode = addReactMark (castHTMLNode htmlNode)
-  let html = StringBuilder()
-
-  let rec render (htmlNode: HTMLNode) : unit =
+let rec writeTo (html: TextWriter) (htmlNode: HTMLNode) : unit =
     match htmlNode with
     | HTMLNode.Text str -> escapeHtml html str
-    | HTMLNode.RawText str -> html.Append str |> ignore
+    | HTMLNode.RawText str -> html.Write str
     | HTMLNode.Node (tag, attrs, children) ->
-      html.Append '<' |> ignore
-      html.Append tag |> ignore
+      html.Write '<'
+      html.Write tag
 
       let child = renderAttrs html attrs tag
 
       if voidTags.Contains tag then
-        html.Append "/>" |> ignore
+        html.Write "/>"
       else
-        html.Append '>' |> ignore
+        html.Write '>'
 
         match child with
-        | Some c -> html.Append c |> ignore
+        | Some c -> html.Write c
         | None ->
           for child in children do
-            render (castHTMLNode child)
+            writeTo html (castHTMLNode child)
 
-        html.Append "</" |> ignore
-        html.Append tag |> ignore
-        html.Append '>' |> ignore
+        html.Write "</"
+        html.Write tag
+        html.Write '>'
     | HTMLNode.List nodes ->
         for node in nodes do
-          render (castHTMLNode node)
+          writeTo html (castHTMLNode node)
     | HTMLNode.Empty -> ()
 
-  render htmlNode
+let renderToString (htmlNode: ReactElement): string =
+  let htmlNode = addReactMark (castHTMLNode htmlNode)
+  use html = new StringWriter()
+  htmlNode |> writeTo html 
   html.ToString()
