@@ -596,6 +596,12 @@ module Props =
 open Fable.Helpers.React
 open Props
 
+#if FABLE_REPL_LIB
+let [<Global>] Recharts = obj()
+let inline ofImport (importMember: string) (_importPath: string) (props: 'P) (children: React.ReactElement seq): React.ReactElement =
+    createElement(Recharts?(importMember), props, children)
+#endif
+
 // Charts
 let inline lineChart (props: IProp list) (children: React.ReactElement list): React.ReactElement =
     ofImport "LineChart" "recharts" (keyValueList CaseRules.LowerFirst props) children
