@@ -49,7 +49,7 @@ Program.mkProgram init update view
 |> Program.withHMR
 #endif
 |> Program.withReactHydrate "elmish-app"
-#if DEBUG
-|> Program.withDebugger
-#endif
+// #if DEBUG
+// |> Program.withDebugger
+// #endif
 |> Program.run

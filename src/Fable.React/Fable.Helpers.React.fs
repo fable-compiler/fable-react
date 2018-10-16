@@ -725,7 +725,7 @@ module rec Props =
         | [<Erase>] Custom of string * obj
 
 #if FABLE_COMPILER
-    let inline Style (css: CSSProp seq): HTMLAttr =
+    let inline Style (css: CSSProp list): HTMLAttr =
         !!("style", keyValueList CaseRules.LowerFirst css)
 
     let inline Data (key: string, value: obj): HTMLAttr =

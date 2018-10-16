@@ -55,9 +55,10 @@ type [<Pojo>] MyState = {
   text: string
 }
 
-type MyReactComp(initProps: MyProp) as self =
+type MyReactComp(initProps: MyProp) =
   inherit React.Component<MyProp, MyState>(initProps) with
-  do self.setInitState { text="my state" }
+
+  do base.setInitState({ text="my state" })
 
   override x.render() =
     div [ ClassName "class-comp children-comp" ]
@@ -195,7 +196,7 @@ let view (model: Model) (dispatch) =
         div
           [ HTMLAttr.Custom ("contentEditable", "true")
             HTMLAttr.Custom ("placeholder", "I'm editable!")
-            Style [ CSSProp.Custom ("WebkitTransform", "translateX(30px)"); CSSProp.Custom ("WebkitTransformOrigin", "0 0") ] ]
+            Style [ CSSProp.Custom ("-webkit-transform", "translateX(30px)"); CSSProp.Custom ("-webkit-transform-origin", "0 0") ] ]
           [ ]
       ]
     ]
