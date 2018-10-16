@@ -164,7 +164,7 @@ module rec Props =
 
     type HTMLAttr =
         | DefaultChecked of bool
-        | DefaultValue of string
+        | DefaultValue of obj
         | Accept of string
         | AcceptCharset of string
         | AccessKey of string
@@ -188,8 +188,8 @@ module rec Props =
         | ClassName of string
         /// Alias of ClassName
         | [<CompiledName("className")>] Class of string
-        | Cols of float
-        | ColSpan of float
+        | Cols of int
+        | ColSpan of int
         | Content of string
         | ContentEditable of bool
         | ContextMenu of string
@@ -259,8 +259,8 @@ module rec Props =
         | Rel of string
         | Required of bool
         | Role of string
-        | Rows of float
-        | RowSpan of float
+        | Rows of int
+        | RowSpan of int
         | Sandbox of string
         | Scope of string
         | Scoped of bool
@@ -279,12 +279,12 @@ module rec Props =
         | Start of float
         | Step of obj
         | Summary of string
-        | TabIndex of float
+        | TabIndex of int
         | Target of string
         | Title of string
         | Type of string
         | UseMap of string
-        | Value of string
+        | Value of obj
         | Width of obj
         | Wmode of string
         | Wrap of string
@@ -1096,9 +1096,14 @@ let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit
 
 type Fable.Import.React.FormEvent with
     /// Access the value from target
-    /// Equivalent to `unbox<string> this.target?value`
+    /// Equivalent to `(this.target :?> Browser.HTMLInputElement).value`
     member this.Value =
-        unbox<string> this.target?value
+        (this.target :?> Browser.HTMLInputElement).value
+
+    /// Access the checked property from target
+    /// Equivalent to `(this.target :?> Browser.HTMLInputElement).checked`
+    member this.Checked =
+        (this.target :?> Browser.HTMLInputElement).``checked``
 
 // Helpers for ReactiveComponents (see #44)
 module ReactiveComponents =
@@ -1133,7 +1138,7 @@ type ReactiveCom<'P, 'S, 'Msg>(initProps) =
               children = this.children }
         this.props.view model (fun msg ->
             let newState = this.props.update msg this.state.value
-            this.setState({ value = newState }))
+            this.setState(fun _ _ -> { value = newState }))
 
 /// Renders a stateful React component from functions similar to Elmish
 ///  * `init` - Initializes component state with given props

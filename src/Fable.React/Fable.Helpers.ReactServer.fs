@@ -1,6 +1,5 @@
 module Fable.Helpers.ReactServer
 
-open System
 open System.IO
 open System.Text.RegularExpressions
 
@@ -467,7 +466,7 @@ let inline objAttr (html:TextWriter) (key: string) (value: obj) = strAttr html k
 let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
   match attr with
   | DefaultChecked v | Checked v -> boolAttr html "checked" v
-  | DefaultValue v |  Value v -> strAttr html "value" v
+  | DefaultValue v |  Value v -> strAttr html "value" (string v)
   | Accept v -> strAttr html "accept" v
   | AcceptCharset v -> strAttr html "accept-charset" v
   | AccessKey v -> strAttr html "accesskey" v
@@ -700,7 +699,7 @@ let private renderAttrs (html:TextWriter) (attrs: IProp seq) tag =
       match tag, attr with
       | "textarea", Value v
       | "textarea", DefaultValue v ->
-          childHtml <- Some v
+          childHtml <- Some(string v)
       | _, _ ->
         html.Write ' '
         renderHtmlAttr html attr
@@ -726,37 +725,39 @@ let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
   else
     htmlNode :?> HTMLNode
 
-let rec writeTo (html: TextWriter) (htmlNode: HTMLNode) : unit =
-    match htmlNode with
-    | HTMLNode.Text str -> escapeHtml html str
-    | HTMLNode.RawText str -> html.Write str
-    | HTMLNode.Node (tag, attrs, children) ->
-      html.Write '<'
-      html.Write tag
-
-      let child = renderAttrs html attrs tag
-
-      if voidTags.Contains tag then
-        html.Write "/>"
-      else
-        html.Write '>'
-
-        match child with
-        | Some c -> html.Write c
-        | None ->
-          for child in children do
-            writeTo html (castHTMLNode child)
-
-        html.Write "</"
+module Raw =
+  /// Writes the nodes into a TextWriter. DOESN'T ADD `reactroot` attribute.
+  let rec writeTo (html: TextWriter) (htmlNode: HTMLNode) : unit =
+      match htmlNode with
+      | HTMLNode.Text str -> escapeHtml html str
+      | HTMLNode.RawText str -> html.Write str
+      | HTMLNode.Node (tag, attrs, children) ->
+        html.Write '<'
         html.Write tag
-        html.Write '>'
-    | HTMLNode.List nodes ->
-        for node in nodes do
-          writeTo html (castHTMLNode node)
-    | HTMLNode.Empty -> ()
+
+        let child = renderAttrs html attrs tag
+
+        if voidTags.Contains tag then
+          html.Write "/>"
+        else
+          html.Write '>'
+
+          match child with
+          | Some c -> html.Write c
+          | None ->
+            for child in children do
+              writeTo html (castHTMLNode child)
+
+          html.Write "</"
+          html.Write tag
+          html.Write '>'
+      | HTMLNode.List nodes ->
+          for node in nodes do
+            writeTo html (castHTMLNode node)
+      | HTMLNode.Empty -> ()
 
 let renderToString (htmlNode: ReactElement): string =
   let htmlNode = addReactMark (castHTMLNode htmlNode)
   use html = new StringWriter()
-  htmlNode |> writeTo html 
+  htmlNode |> Raw.writeTo html
   html.ToString()

@@ -19,8 +19,8 @@ module Components =
         inherit Component<HybridProps<'P>, HybridState>(initProps) with
         do this.setInitState { isClient=false }
 
-        override x.componentDidMount() =
-            this.setState { isClient=true }
+        override __.componentDidMount() =
+            this.setState(fun _ _ -> { isClient=true })
 
         override x.render() =
             if x.state.isClient

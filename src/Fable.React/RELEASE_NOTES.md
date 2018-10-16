@@ -1,3 +1,8 @@
+### 4.1.1
+
+* Mark `setState: 'S` as obsolete @SirUppyPancakes
+* Enable writing into a TextWritter in SSR @thinkbeforecoding
+
 ### 4.0.1
 
 * Update Fable 2 deps to stable version
