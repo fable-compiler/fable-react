@@ -25,14 +25,14 @@ console.log("Bundling for " + (isProduction ? "production" : "development") + ".
 
 module.exports = {
   devtool: "source-map",
-  entry: resolve('./Client.fsproj'),
+  entry: resolve('./src/Client/Client.fsproj'),
   output: {
-    path: resolve('./public'),
+    path: resolve('./src/Client/public'),
     publicPath: "/public",
     filename: "bundle.js"
   },
   resolve: {
-    modules: [ resolve("../../node_modules/")]
+    modules: [ resolve("./node_modules/")]
   },
   devServer: {
     proxy: {
@@ -42,7 +42,8 @@ module.exports = {
       }
     },
     hot: true,
-    inline: true
+    inline: true,
+    contentBase: './src/Client/',
   },
   module: {
     rules: [
