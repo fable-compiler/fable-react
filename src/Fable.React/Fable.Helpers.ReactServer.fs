@@ -719,11 +719,13 @@ let rec private addReactMark htmlNode =
     HTMLNode.List (nodes |> Seq.cast |> Seq.map addReactMark |> Seq.cast)
   | h -> h
 
-let inline private castHTMLNode (htmlNode: ReactElement): HTMLNode =
-  if isNull htmlNode then
-    HTMLNode.Empty
-  else
-    htmlNode :?> HTMLNode
+/// Cast a ReactElement safely to an HTMLNode.
+/// Returns an empty node if input is not an HTMLNode.
+let inline castHTMLNode (htmlNode: ReactElement): HTMLNode =
+  match htmlNode with
+  | :? HTMLNode as node -> node
+  | _ -> HTMLNode.Empty
+
 
 module Raw =
   /// Writes the nodes into a TextWriter. DOESN'T ADD `reactroot` attribute.
