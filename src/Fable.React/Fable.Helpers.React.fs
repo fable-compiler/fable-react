@@ -851,10 +851,8 @@ let inline fn<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement se
 let inline ofImport<'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement seq): ReactElement =
     createElement(import importMember importPath, props, children)
 
-[<Erase>]
 type ReactElementType<'props> = interface end
 
-[<Erase>]
 type ReactComponentType<'props> =
     inherit ReactElementType<'props>
     abstract displayName: string option with get, set
