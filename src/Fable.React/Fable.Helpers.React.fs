@@ -851,6 +851,14 @@ let inline fn<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement se
 let inline ofImport<'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement seq): ReactElement =
     createElement(import importMember importPath, props, children)
 
+[<Erase>]
+type ReactElementType<'props> = interface end
+
+[<Erase>]
+type ReactComponentType<'props> =
+    inherit ReactElementType<'props>
+    abstract displayName: string option with get, set
+
 #if FABLE_COMPILER
 /// Alias of `ofString`
 let inline str (s: string): ReactElement = unbox s
@@ -877,6 +885,40 @@ let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray el
 
 /// Returns an array **from .render() method**
 let inline ofArray (els: ReactElement array): ReactElement = unbox els
+
+[<RequireQualifiedAccess>]
+module ReactElementType =
+    let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactComponentType<'props> =
+        unbox jsConstructor<'comp>
+
+    let inline ofFunction<'props> (f: 'props -> ReactElement) : ReactComponentType<'props> =
+        unbox f
+
+    let inline ofHtmlElement<'props> (name: string): ReactElementType<'props> =
+        unbox name
+
+    /// Create a ReactElement to be rendered from an element type, props and children
+    let inline create<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
+        createElement(comp, props, children)
+
+type PropsEqualityComparison<'props> = 'props -> 'props -> bool
+
+/// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
+/// classes.
+///
+/// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
+/// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
+/// component, and reuse the last rendered result.
+///
+/// By default it will only shallowly compare complex objects in the props object. If you want control over the
+/// comparison, you can also provide a custom comparison function as the second argument.
+[<Import("memo", from="react")>]
+let memo<'props> (render: 'props -> ReactElement, areEqual: PropsEqualityComparison<'props> option) : ReactComponentType<'props> =
+    jsNative
+
+/// Create a ReactElement to be rendered from an element type, props and children
+let inline ofElementType<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
+    ReactElementType.create comp props children
 
 #else
 /// Alias of `ofString`
