@@ -901,6 +901,10 @@ module ReactElementType =
 
 type PropsEqualityComparison<'props> = 'props -> 'props -> bool
 
+[<Import("memo", from="react")>]
+let private reactMemo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
+    jsNative
+
 /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
 /// classes.
 ///
@@ -910,8 +914,12 @@ type PropsEqualityComparison<'props> = 'props -> 'props -> bool
 ///
 /// By default it will only shallowly compare complex objects in the props object. If you want control over the
 /// comparison, you can use `memoWith`.
+let memo<'props> (name: string) (render: 'props -> ReactElement) : ReactComponentType<'props> =
+    render?displayName <- name
+    reactMemo(render)
+
 [<Import("memo", from="react")>]
-let memo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
+let private reactMemoWith<'props> (render: 'props -> ReactElement, areEqual: PropsEqualityComparison<'props>) : ReactComponentType<'props> =
     jsNative
 
 /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
@@ -922,10 +930,10 @@ let memo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
 /// component, and reuse the last rendered result.
 ///
 /// This version allow you to control the comparison used instead of the default shallow one by provide a custom
-/// comparison function as the second argument.
-[<Import("memo", from="react")>]
-let memoWith<'props> (render: 'props -> ReactElement, areEqual: PropsEqualityComparison<'props>) : ReactComponentType<'props> =
-    jsNative
+/// comparison function.
+let memoWith<'props> (name: string) (areEqual: PropsEqualityComparison<'props>) (render: 'props -> ReactElement) : ReactComponentType<'props> =
+    render?displayName <- name
+    reactMemoWith(render, areEqual)
 
 /// Create a ReactElement to be rendered from an element type, props and children
 let inline ofElementType<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
