@@ -915,7 +915,7 @@ module ReactElementType =
     /// By default it will only shallowly compare complex objects in the props object. If you want control over the
     /// comparison, you can use `memoWith`.
     [<Import("memo", from="react")>]
-    let inline memo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
+    let memo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
         jsNative
 
     [<Import("memo", from="react")>]
