@@ -302,67 +302,12 @@ GROUP Build
 RESTRICTION: == net46
 NUGET
   remote: https://www.nuget.org/api/v2
-    FAKE (5.3)
-    Fake.Core.Context (5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.Core.Environment (5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.Core.FakeVar (5.7.2)
-      Fake.Core.Context (>= 5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.Core.Process (5.7.2)
-      Fake.Core.Environment (>= 5.7.2)
-      Fake.Core.FakeVar (>= 5.7.2)
-      Fake.Core.String (>= 5.7.2)
-      Fake.Core.Trace (>= 5.7.2)
-      Fake.IO.FileSystem (>= 5.7.2)
-      FSharp.Core (>= 4.3.4)
-      System.Diagnostics.Process (>= 4.3)
-    Fake.Core.ReleaseNotes (5.7.2)
-      Fake.Core.SemVer (>= 5.7.2)
-      Fake.Core.String (>= 5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.Core.SemVer (5.7.2)
-      FSharp.Core (>= 4.3.4)
-      System.Runtime.Numerics (>= 4.3)
-    Fake.Core.String (5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.Core.Trace (5.7.2)
-      Fake.Core.Environment (>= 5.7.2)
-      Fake.Core.FakeVar (>= 5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.Core.UserInput (5.7.2)
-      FSharp.Core (>= 4.3.4)
-    Fake.DotNet.Cli (5.7.2)
-    Fake.IO.FileSystem (5.7.2)
-      Fake.Core.String (>= 5.7.2)
-      FSharp.Core (>= 4.3.4)
-      System.Diagnostics.FileVersionInfo (>= 4.3)
-      System.IO.FileSystem.Watcher (>= 4.3)
-    Fake.Tools.Git (5.7.2)
-      Fake.Core.Environment (>= 5.7.2)
-      Fake.Core.Process (>= 5.7.2)
-      Fake.Core.SemVer (>= 5.7.2)
-      Fake.Core.String (>= 5.7.2)
-      Fake.Core.Trace (>= 5.7.2)
-      Fake.IO.FileSystem (>= 5.7.2)
-      FSharp.Core (>= 4.3.4)
+    FAKE (4.64.13)
     FSharp.Core (4.5.2) - content: none, redirects: force
     Octokit (0.32)
-    System.Diagnostics.FileVersionInfo (4.3)
-    System.Diagnostics.Process (4.3)
-    System.IO.FileSystem.Watcher (4.3)
-    System.Runtime.Numerics (4.3)
 GITHUB
   remote: fsharp/FAKE
-    modules/Octokit/Octokit.fsx (16fa0088b1cce2f04a126e2febeddd2b8b6e6048)
+    modules/Octokit/Octokit.fsx (3827f95ad533978ec14c29db92658f48b0609e05)
       Octokit (>= 0.20)
   remote: fable-compiler/fake-helpers
-    Fable.FakeHelpers.fs (1b26f2cd88aab4895b1d330edf30f3852ea81652)
-      Fake.Core.Process
-      Fake.Core.ReleaseNotes
-      Fake.Core.String
-      Fake.Core.UserInput
-      Fake.DotNet.Cli
-      Fake.IO.FileSystem
-      Fake.Tools.Git
+    Fable.FakeHelpers.fs (46b48de9f1b532b63b015a9e2e2b22d150734728)

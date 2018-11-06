@@ -1,3 +1,8 @@
+### 4.1.3
+
+* Add bindings for `React.memo`
+* Add `nothing` helper
+
 ### 4.1.1
 
 * Mark `setState: 'S` as obsolete @SirUppyPancakes

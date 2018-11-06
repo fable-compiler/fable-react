@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>0.1.0-beta-001</Version>
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
   <ItemGroup>

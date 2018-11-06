@@ -13,6 +13,6 @@ framework: net46
 
     source https://nuget.org/api/v2
     nuget FSharp.Core  redirects:force, content:none
-    nuget FAKE
+    nuget FAKE ~> 4
     github fsharp/FAKE modules/Octokit/Octokit.fsx
-    github fable-compiler/fake-helpers Fable.FakeHelpers.fs
+    github fable-compiler/fake-helpers:fake_legacy Fable.FakeHelpers.fs
