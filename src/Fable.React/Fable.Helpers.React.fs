@@ -884,6 +884,10 @@ let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray el
 /// Returns an array **from .render() method**
 let inline ofArray (els: ReactElement array): ReactElement = unbox els
 
+/// A ReactElement when you don't want to render anything (null in javascript)
+[<Emit("null")>]
+let nothing: ReactElement = jsNative
+
 [<RequireQualifiedAccess>]
 module ReactElementType =
     let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactComponentType<'props> =
@@ -965,6 +969,9 @@ let inline ofList (els: ReactElement list): ReactElement = HTMLNode.List els :> 
 
 /// Returns an array **from .render() method**
 let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :> ReactElement
+
+/// A ReactElement when you don't want to render anything (null in javascript)
+let nothing: ReactElement = HTMLNode.Empty :> ReactElement
 
 #endif
 
