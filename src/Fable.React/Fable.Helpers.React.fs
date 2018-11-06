@@ -888,6 +888,8 @@ let inline ofArray (els: ReactElement array): ReactElement = unbox els
 [<Emit("null")>]
 let nothing: ReactElement = jsNative
 
+type PropsEqualityComparison<'props> = 'props -> 'props -> bool
+
 [<RequireQualifiedAccess>]
 module ReactElementType =
     let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactComponentType<'props> =
@@ -903,45 +905,82 @@ module ReactElementType =
     let inline create<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
         createElement(comp, props, children)
 
-type PropsEqualityComparison<'props> = 'props -> 'props -> bool
+    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
+    /// classes.
+    ///
+    /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
+    /// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
+    /// component, and reuse the last rendered result.
+    ///
+    /// By default it will only shallowly compare complex objects in the props object. If you want control over the
+    /// comparison, you can use `memoWith`.
+    [<Import("memo", from="react")>]
+    let inline memo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
+        jsNative
 
-[<Import("memo", from="react")>]
-let private reactMemo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
-    jsNative
+    [<Import("memo", from="react")>]
+    let private reactMemoWith<'props> (render: 'props -> ReactElement, areEqual: PropsEqualityComparison<'props>) : ReactComponentType<'props> =
+        jsNative
 
-/// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
-/// classes.
+    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
+    /// classes.
+    ///
+    /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
+    /// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
+    /// component, and reuse the last rendered result.
+    ///
+    /// This version allow you to control the comparison used instead of the default shallow one by provide a custom
+    /// comparison function.
+    let memoWith<'props> (areEqual: PropsEqualityComparison<'props>) (render: 'props -> ReactElement) : ReactComponentType<'props> =
+        reactMemoWith(render, areEqual)
+
+/// memo is similar to React.PureComponent but is built from only a render function.
 ///
-/// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
-/// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
-/// component, and reuse the last rendered result.
+///
+/// If your function renders the same result given the same props, you can wrap it in a call to memo for a performance
+/// boost in some cases by memoizing the result. This means that React will skip rendering the component, and reuse the
+/// last rendered result.
+///
+/// The resulting function shouldn't be used directly in a render but should be stored to be reused :
+///
+/// ```
+/// type HelloProps = { Name: string }
+/// let hello = memo "Hello" (fun { Name = name } -> span [str "Hello "; str name])
+///
+/// let view model =
+///     hello { Name = model.Name }
+/// ```
 ///
 /// By default it will only shallowly compare complex objects in the props object. If you want control over the
 /// comparison, you can use `memoWith`.
-let memo<'props> (name: string) (render: 'props -> ReactElement) : ReactComponentType<'props> =
+let memo<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
     render?displayName <- name
-    reactMemo(render)
+    let memoType = ReactElementType.memo render
+    fun props ->
+        ReactElementType.create memoType props []
 
-[<Import("memo", from="react")>]
-let private reactMemoWith<'props> (render: 'props -> ReactElement, areEqual: PropsEqualityComparison<'props>) : ReactComponentType<'props> =
-    jsNative
-
-/// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
-/// classes.
+/// memoWith is similar to React.Component but is built from a render function and an equality
+/// (Inverse of shouldComponentUpdate) function.
 ///
-/// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
-/// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
-/// component, and reuse the last rendered result.
+/// If your function renders the same result given the "same" props (According to areEqual), you can wrap it in a call
+/// to memoWith for a performance boost in some cases by memoizing the result. This means that React will skip rendering
+/// the component, and reuse the last rendered result.
 ///
-/// This version allow you to control the comparison used instead of the default shallow one by provide a custom
-/// comparison function.
-let memoWith<'props> (name: string) (areEqual: PropsEqualityComparison<'props>) (render: 'props -> ReactElement) : ReactComponentType<'props> =
+/// The resulting function shouldn't be used directly in a render but should be stored to be reused :
+///
+/// ```
+/// type HelloProps = { Name: string }
+/// let helloEquals p1 p2 = p1.Name = p2.Name
+/// let hello = memoWith "Hello" helloEquals (fun { Name = name } -> span [str "Hello "; str name])
+///
+/// let view model =
+///     hello { Name = model.Name }
+/// ```
+let memoWith<'props> (name: string) (areEqual: PropsEqualityComparison<'props>) (render: 'props -> ReactElement) : 'props -> ReactElement =
     render?displayName <- name
-    reactMemoWith(render, areEqual)
-
-/// Create a ReactElement to be rendered from an element type, props and children
-let inline ofElementType<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
-    ReactElementType.create comp props children
+    let memoType = ReactElementType.memoWith areEqual render
+    fun props ->
+        ReactElementType.create memoType props []
 
 #else
 /// Alias of `ofString`
