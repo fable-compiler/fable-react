@@ -26,7 +26,7 @@ In your css add the following:
 and in your F# code you can create the map like this:
 
 ```fs
-let defaultCenter:Position = Coordinates.newPos 40.6892494 -74.0445004
+let defaultCenter:Fable.Import.GoogleMaps.LatLngLiteral = Fable.Helpers.GoogleMaps.Literal.createLatLng 40.6892494 -74.0445004
 
 let myMap =
     googleMap [ 
@@ -34,8 +34,8 @@ let myMap =
         MapProperties.MapLoadingContainer "maploadercontainer"
         MapProperties.MapContainer "mapcontainer"
         MapProperties.DefaultZoom 9
-        MapProperties.DefaultCenter defaultCenter
-        MapProperties.Center defaultCenter ]
+        MapProperties.DefaultCenter !^ defaultCenter
+        MapProperties.Center !^ defaultCenter ]
 ```
 
 ### Traffic Layer
