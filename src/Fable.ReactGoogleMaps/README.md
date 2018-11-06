@@ -75,7 +75,7 @@ let markers =
     |> Array.map (fun location ->
         marker [
             MarkerProperties.Key location.ID
-            MarkerProperties.Position (Coordinates.newPos location.X location.Y)
+            MarkerProperties.Position !^ (Fable.Helpers.GoogleMaps.Literal.createLatLng location.X location.Y)
             MarkerProperties.Icon (sprintf "Images/markers/%s.png" location.Color)
             MarkerProperties.Title location.Title] []))
 
