@@ -26,17 +26,18 @@ const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
     var searchBox =
         React.createElement(SearchBox,
             { ref : props.onSearchBoxMounted,
-            bounds : props.bounds,
-            controlPosition : google.maps.ControlPosition.TOP_LEFT,
-            onPlacesChanged : props.onPlacesChanged },
-            inputBox
+              key: "googlemaps-searchBox",
+              bounds : props.bounds,
+              controlPosition : google.maps.ControlPosition.TOP_LEFT,
+              onPlacesChanged : props.onPlacesChanged },
+              inputBox
         );
 
     childs = [ searchBox, ...childs ];
   };
 
   if(props.showTrafficLayer) {
-      var traffic = React.createElement(TrafficLayer, {  });
+      var traffic = React.createElement(TrafficLayer, { key: "googlemaps-traffic-layer" });
       childs = [ traffic, ...childs ]
   };
 
@@ -44,6 +45,7 @@ const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
     React.createElement(
         GoogleMap,
         { defaultZoom : props.defaultZoom,
+          key: "googlemaps-map",
           onZoomChanged : props.onZoomChanged,
           onIdle : props.onIdle,
           defaultCenter : props.defaultCenter,
