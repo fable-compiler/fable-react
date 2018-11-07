@@ -1,3 +1,7 @@
+### 0.6.0
+
+* Add key properties by @forki
+
 ### 0.5.0
 
 * Update to Fable 2
