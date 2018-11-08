@@ -4,6 +4,7 @@
 #load "paket-files/build/fsharp/FAKE/modules/Octokit/Octokit.fsx"
 #load "paket-files/build/fable-compiler/fake-helpers/Fable.FakeHelpers.fs"
 
+open System.IO
 open Fake
 open Fable.FakeHelpers
 open Octokit
@@ -23,13 +24,26 @@ let packages =
       "src/Fable.Recharts/Fable.Recharts.fsproj"
     ]
 
-let dotnetcliVersion = "2.1.402"
+let addToPath newPath =
+    let path = environVarOrDefault "PATH" ""
+    let separator = if isWindows then ";" else ":"
+    setEnvironVar "PATH" (newPath + separator + path)
+
 let mutable dotnetExePath = environVarOrDefault "DOTNET" "dotnet"
+let installDotnetSdk () =
+    let dotnetcliVersion =
+        Path.Combine(__SOURCE_DIRECTORY__, "global.json")
+        |> findLineAndGetGroupValue "\"version\": \"(.*?)\"" 1
+
+    dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
+    if Path.IsPathRooted(dotnetExePath) then
+        Path.GetDirectoryName(dotnetExePath) |> addToPath
+    run __SOURCE_DIRECTORY__ dotnetExePath "--version"
 
 // Clean and install dotnet SDK
 Target "Bootstrap" (fun () ->
     !! "src/**/bin" ++ "src/**/obj" |> CleanDirs
-    dotnetExePath <- DotNetCli.InstallDotNetSDK dotnetcliVersion
+    installDotnetSdk ()
 )
 
 Target "PublishPackages" (fun () ->

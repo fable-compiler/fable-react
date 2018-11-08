@@ -809,7 +809,8 @@ module ServerRenderingInternal =
 
 open ServerRenderingInternal
 
-/// Instantiate an imported React component
+/// OBSOLETE: Use `ReactElementType.create`
+[<System.Obsolete("Use ReactElementType.create")>]
 let inline from<'P> (com: ComponentClass<'P>) (props: 'P) (children: ReactElement seq): ReactElement =
     createElement(com, props, children)
 
@@ -857,6 +858,121 @@ type ReactComponentType<'props> =
     inherit ReactElementType<'props>
     abstract displayName: string option with get, set
 
+[<Erase>]
+type ReactElementTypeWrapper<'P> =
+    | Comp of obj
+    | Fn of ('P -> ReactElement)
+    | HtmlTag of string
+    interface ReactElementType<'P>
+
+[<RequireQualifiedAccess>]
+module ReactElementType =
+    let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> =
+        #if FABLE_COMPILER
+        unbox<ReactComponentType<'props>> jsConstructor<'comp>
+        #else
+        Comp (typeof<'comp>) :> ReactElementType<'props>
+        #endif
+
+    let inline ofFunction<'props> (f: 'props -> ReactElement) =
+        #if FABLE_COMPILER
+        unbox<ReactComponentType<'props>> f
+        #else
+        Fn f :> ReactElementType<'props>
+        #endif
+
+    let inline ofHtmlElement<'props> (name: string): ReactElementType<'props> =
+        #if FABLE_COMPILER
+        unbox name
+        #else
+        HtmlTag name :> ReactElementType<'props>
+        #endif
+
+    /// Create a ReactElement to be rendered from an element type, props and children
+    let inline create<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
+        #if FABLE_COMPILER
+        createElement(comp, props, children)
+        #else
+        match (comp :?> ReactElementTypeWrapper<'props>) with
+        | Comp obj -> createServerElement(obj, props, children, ServerElementType.Component)
+        | Fn f -> createServerElementByFn(f, props, children)
+        | HtmlTag obj -> createServerElement(obj, props, children, ServerElementType.Tag)
+        #endif
+
+    #if FABLE_COMPILER
+    [<Import("memo", from="react")>]
+    let private reactMemo<'props> (render: 'props -> ReactElement, areEqual: 'props -> 'props -> bool) : ReactComponentType<'props> =
+        jsNative
+    #endif
+
+    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of classes.
+    /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo.
+    /// React will skip rendering the component, and reuse the last rendered result.
+    /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, you can use `memoWith`.
+    let memo<'props> (render: 'props -> ReactElement) =
+        #if FABLE_COMPILER
+        reactMemo(render, unbox null)
+        #else
+        ofFunction render
+        #endif
+
+    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of classes.
+    /// If your function renders the same result given the "same" props (according to `areEqual`), you can wrap it in a call to React.memo.
+    /// React will skip rendering the component, and reuse the last rendered result.
+    /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, you can use `memoWith`.
+    /// This version allow you to control the comparison used instead of the default shallow one by provide a custom comparison function.
+    let memoWith<'props> (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) =
+        #if FABLE_COMPILER
+        reactMemo(render, areEqual)
+        #else
+        ofFunction render
+        #endif
+
+/// `memoBuilder` is similar to React.PureComponent but is built from only a render function.
+/// If your function renders the same result given the same props, you can wrap it in a call to memoBuilder.
+/// React will skip rendering the component, and reuse the last rendered result.
+/// The resulting function shouldn't be used directly in a render but should be stored to be reused:
+///
+/// ```
+/// type HelloProps = { Name: string }
+/// let hello = memoBuilder "Hello" (fun p ->
+///     span [str "Hello "; str p.Name])
+///
+/// let view model =
+///     hello { Name = model.Name }
+/// ```
+///
+/// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, use `memoBuilderWith`.
+let memoBuilder<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
+    #if FABLE_COMPILER
+    render?displayName <- name
+    #endif
+    let memoType = ReactElementType.memo render
+    fun props ->
+        ReactElementType.create memoType props []
+
+/// `memoBuilderWith` is similar to React.Component but is built from render and equality functions.
+/// If your function renders the same result given the "same" props (according to `areEqual`), you can wrap it in a call to memoBuilder.
+/// React will skip rendering the component, and reuse the last rendered result.
+/// The resulting function shouldn't be used directly in a render but should be stored to be reused:
+///
+/// ```
+/// type HelloProps = { Name: string }
+/// let helloEquals p1 p2 = p1.Name = p2.Name
+/// let hello = memoBuilderWith "Hello" helloEquals (fun p ->
+///     span [str "Hello "; str p.Name])
+///
+/// let view model =
+///     hello { Name = model.Name }
+/// ```
+let memoBuilderWith<'props> (name: string) (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) : 'props -> ReactElement =
+    #if FABLE_COMPILER
+    render?displayName <- name
+    #endif
+    let memoType = ReactElementType.memoWith areEqual render
+    fun props ->
+        ReactElementType.create memoType props []
+
 #if FABLE_COMPILER
 /// Alias of `ofString`
 let inline str (s: string): ReactElement = unbox s
@@ -887,100 +1003,6 @@ let inline ofArray (els: ReactElement array): ReactElement = unbox els
 /// A ReactElement when you don't want to render anything (null in javascript)
 [<Emit("null")>]
 let nothing: ReactElement = jsNative
-
-type PropsEqualityComparison<'props> = 'props -> 'props -> bool
-
-[<RequireQualifiedAccess>]
-module ReactElementType =
-    let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactComponentType<'props> =
-        unbox jsConstructor<'comp>
-
-    let inline ofFunction<'props> (f: 'props -> ReactElement) : ReactComponentType<'props> =
-        unbox f
-
-    let inline ofHtmlElement<'props> (name: string): ReactElementType<'props> =
-        unbox name
-
-    /// Create a ReactElement to be rendered from an element type, props and children
-    let inline create<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
-        createElement(comp, props, children)
-
-    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
-    /// classes.
-    ///
-    /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
-    /// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
-    /// component, and reuse the last rendered result.
-    ///
-    /// By default it will only shallowly compare complex objects in the props object. If you want control over the
-    /// comparison, you can use `memoWith`.
-    [<Import("memo", from="react")>]
-    let memo<'props> (render: 'props -> ReactElement) : ReactComponentType<'props> =
-        jsNative
-
-    [<Import("memo", from="react")>]
-    let private reactMemoWith<'props> (render: 'props -> ReactElement, areEqual: PropsEqualityComparison<'props>) : ReactComponentType<'props> =
-        jsNative
-
-    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of
-    /// classes.
-    ///
-    /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo
-    /// for a performance boost in some cases by memoizing the result. This means that React will skip rendering the
-    /// component, and reuse the last rendered result.
-    ///
-    /// This version allow you to control the comparison used instead of the default shallow one by provide a custom
-    /// comparison function.
-    let memoWith<'props> (areEqual: PropsEqualityComparison<'props>) (render: 'props -> ReactElement) : ReactComponentType<'props> =
-        reactMemoWith(render, areEqual)
-
-/// memo is similar to React.PureComponent but is built from only a render function.
-///
-///
-/// If your function renders the same result given the same props, you can wrap it in a call to memo for a performance
-/// boost in some cases by memoizing the result. This means that React will skip rendering the component, and reuse the
-/// last rendered result.
-///
-/// The resulting function shouldn't be used directly in a render but should be stored to be reused :
-///
-/// ```
-/// type HelloProps = { Name: string }
-/// let hello = memo "Hello" (fun { Name = name } -> span [str "Hello "; str name])
-///
-/// let view model =
-///     hello { Name = model.Name }
-/// ```
-///
-/// By default it will only shallowly compare complex objects in the props object. If you want control over the
-/// comparison, you can use `memoWith`.
-let memo<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
-    render?displayName <- name
-    let memoType = ReactElementType.memo render
-    fun props ->
-        ReactElementType.create memoType props []
-
-/// memoWith is similar to React.Component but is built from a render function and an equality
-/// (Inverse of shouldComponentUpdate) function.
-///
-/// If your function renders the same result given the "same" props (According to areEqual), you can wrap it in a call
-/// to memoWith for a performance boost in some cases by memoizing the result. This means that React will skip rendering
-/// the component, and reuse the last rendered result.
-///
-/// The resulting function shouldn't be used directly in a render but should be stored to be reused :
-///
-/// ```
-/// type HelloProps = { Name: string }
-/// let helloEquals p1 p2 = p1.Name = p2.Name
-/// let hello = memoWith "Hello" helloEquals (fun { Name = name } -> span [str "Hello "; str name])
-///
-/// let view model =
-///     hello { Name = model.Name }
-/// ```
-let memoWith<'props> (name: string) (areEqual: PropsEqualityComparison<'props>) (render: 'props -> ReactElement) : 'props -> ReactElement =
-    render?displayName <- name
-    let memoType = ReactElementType.memoWith areEqual render
-    fun props ->
-        ReactElementType.create memoType props []
 
 #else
 /// Alias of `ofString`
@@ -1048,142 +1070,142 @@ let inline fragment (props: IFragmentProp seq) (children: ReactElement seq): Rea
 #endif
 
 // Standard elements
-let inline a b c = domEl "a" b c
-let inline abbr b c = domEl "abbr" b c
-let inline address b c = domEl "address" b c
-let inline article b c = domEl "article" b c
-let inline aside b c = domEl "aside" b c
-let inline audio b c = domEl "audio" b c
-let inline b b' c = domEl "b" b' c
-let inline bdi b c = domEl "bdi" b c
-let inline bdo b c = domEl "bdo" b c
-let inline big b c = domEl "big" b c
-let inline blockquote b c = domEl "blockquote" b c
-let inline body b c = domEl "body" b c
-let inline button b c = domEl "button" b c
-let inline canvas b c = domEl "canvas" b c
-let inline caption b c = domEl "caption" b c
-let inline cite b c = domEl "cite" b c
-let inline code b c = domEl "code" b c
-let inline colgroup b c = domEl "colgroup" b c
-let inline data b c = domEl "data" b c
-let inline datalist b c = domEl "datalist" b c
-let inline dd b c = domEl "dd" b c
-let inline del b c = domEl "del" b c
-let inline details b c = domEl "details" b c
-let inline dfn b c = domEl "dfn" b c
-let inline dialog b c = domEl "dialog" b c
-let inline div b c = domEl "div" b c
-let inline dl b c = domEl "dl" b c
-let inline dt b c = domEl "dt" b c
-let inline em b c = domEl "em" b c
-let inline fieldset b c = domEl "fieldset" b c
-let inline figcaption b c = domEl "figcaption" b c
-let inline figure b c = domEl "figure" b c
-let inline footer b c = domEl "footer" b c
-let inline form b c = domEl "form" b c
-let inline h1 b c = domEl "h1" b c
-let inline h2 b c = domEl "h2" b c
-let inline h3 b c = domEl "h3" b c
-let inline h4 b c = domEl "h4" b c
-let inline h5 b c = domEl "h5" b c
-let inline h6 b c = domEl "h6" b c
-let inline head b c = domEl "head" b c
-let inline header b c = domEl "header" b c
-let inline hgroup b c = domEl "hgroup" b c
-let inline html b c = domEl "html" b c
-let inline i b c = domEl "i" b c
-let inline iframe b c = domEl "iframe" b c
-let inline ins b c = domEl "ins" b c
-let inline kbd b c = domEl "kbd" b c
-let inline label b c = domEl "label" b c
-let inline legend b c = domEl "legend" b c
-let inline li b c = domEl "li" b c
-let inline main b c = domEl "main" b c
-let inline map b c = domEl "map" b c
-let inline mark b c = domEl "mark" b c
-let inline menu b c = domEl "menu" b c
-let inline meter b c = domEl "meter" b c
-let inline nav b c = domEl "nav" b c
-let inline noscript b c = domEl "noscript" b c
-let inline ``object`` b c = domEl "object" b c
-let inline ol b c = domEl "ol" b c
-let inline optgroup b c = domEl "optgroup" b c
-let inline option b c = domEl "option" b c
-let inline output b c = domEl "output" b c
-let inline p b c = domEl "p" b c
-let inline picture b c = domEl "picture" b c
-let inline pre b c = domEl "pre" b c
-let inline progress b c = domEl "progress" b c
-let inline q b c = domEl "q" b c
-let inline rp b c = domEl "rp" b c
-let inline rt b c = domEl "rt" b c
-let inline ruby b c = domEl "ruby" b c
-let inline s b c = domEl "s" b c
-let inline samp b c = domEl "samp" b c
-let inline script b c = domEl "script" b c
-let inline section b c = domEl "section" b c
-let inline select b c = domEl "select" b c
-let inline small b c = domEl "small" b c
-let inline span b c = domEl "span" b c
-let inline strong b c = domEl "strong" b c
-let inline style b c = domEl "style" b c
-let inline sub b c = domEl "sub" b c
-let inline summary b c = domEl "summary" b c
-let inline sup b c = domEl "sup" b c
-let inline table b c = domEl "table" b c
-let inline tbody b c = domEl "tbody" b c
-let inline td b c = domEl "td" b c
-let inline textarea b c = domEl "textarea" b c
-let inline tfoot b c = domEl "tfoot" b c
-let inline th b c = domEl "th" b c
-let inline thead b c = domEl "thead" b c
-let inline time b c = domEl "time" b c
-let inline title b c = domEl "title" b c
-let inline tr b c = domEl "tr" b c
-let inline u b c = domEl "u" b c
-let inline ul b c = domEl "ul" b c
-let inline var b c = domEl "var" b c
-let inline video b c = domEl "video" b c
+let inline a props children = domEl "a" props children
+let inline abbr props children = domEl "abbr" props children
+let inline address props children = domEl "address" props children
+let inline article props children = domEl "article" props children
+let inline aside props children = domEl "aside" props children
+let inline audio props children = domEl "audio" props children
+let inline b props children c = domEl "b" props children
+let inline bdi props children = domEl "bdi" props children
+let inline bdo props children = domEl "bdo" props children
+let inline big props children = domEl "big" props children
+let inline blockquote props children = domEl "blockquote" props children
+let inline body props children = domEl "body" props children
+let inline button props children = domEl "button" props children
+let inline canvas props children = domEl "canvas" props children
+let inline caption props children = domEl "caption" props children
+let inline cite props children = domEl "cite" props children
+let inline code props children = domEl "code" props children
+let inline colgroup props children = domEl "colgroup" props children
+let inline data props children = domEl "data" props children
+let inline datalist props children = domEl "datalist" props children
+let inline dd props children = domEl "dd" props children
+let inline del props children = domEl "del" props children
+let inline details props children = domEl "details" props children
+let inline dfn props children = domEl "dfn" props children
+let inline dialog props children = domEl "dialog" props children
+let inline div props children = domEl "div" props children
+let inline dl props children = domEl "dl" props children
+let inline dt props children = domEl "dt" props children
+let inline em props children = domEl "em" props children
+let inline fieldset props children = domEl "fieldset" props children
+let inline figcaption props children = domEl "figcaption" props children
+let inline figure props children = domEl "figure" props children
+let inline footer props children = domEl "footer" props children
+let inline form props children = domEl "form" props children
+let inline h1 props children = domEl "h1" props children
+let inline h2 props children = domEl "h2" props children
+let inline h3 props children = domEl "h3" props children
+let inline h4 props children = domEl "h4" props children
+let inline h5 props children = domEl "h5" props children
+let inline h6 props children = domEl "h6" props children
+let inline head props children = domEl "head" props children
+let inline header props children = domEl "header" props children
+let inline hgroup props children = domEl "hgroup" props children
+let inline html props children = domEl "html" props children
+let inline i props children = domEl "i" props children
+let inline iframe props children = domEl "iframe" props children
+let inline ins props children = domEl "ins" props children
+let inline kbd props children = domEl "kbd" props children
+let inline label props children = domEl "label" props children
+let inline legend props children = domEl "legend" props children
+let inline li props children = domEl "li" props children
+let inline main props children = domEl "main" props children
+let inline map props children = domEl "map" props children
+let inline mark props children = domEl "mark" props children
+let inline menu props children = domEl "menu" props children
+let inline meter props children = domEl "meter" props children
+let inline nav props children = domEl "nav" props children
+let inline noscript props children = domEl "noscript" props children
+let inline ``object`` props children b c = domEl "object" props children
+let inline ol props children = domEl "ol" props children
+let inline optgroup props children = domEl "optgroup" props children
+let inline option props children = domEl "option" props children
+let inline output props children = domEl "output" props children
+let inline p props children = domEl "p" props children
+let inline picture props children = domEl "picture" props children
+let inline pre props children = domEl "pre" props children
+let inline progress props children = domEl "progress" props children
+let inline q props children = domEl "q" props children
+let inline rp props children = domEl "rp" props children
+let inline rt props children = domEl "rt" props children
+let inline ruby props children = domEl "ruby" props children
+let inline s props children = domEl "s" props children
+let inline samp props children = domEl "samp" props children
+let inline script props children = domEl "script" props children
+let inline section props children = domEl "section" props children
+let inline select props children = domEl "select" props children
+let inline small props children = domEl "small" props children
+let inline span props children = domEl "span" props children
+let inline strong props children = domEl "strong" props children
+let inline style props children = domEl "style" props children
+let inline sub props children = domEl "sub" props children
+let inline summary props children = domEl "summary" props children
+let inline sup props children = domEl "sup" props children
+let inline table props children = domEl "table" props children
+let inline tbody props children = domEl "tbody" props children
+let inline td props children = domEl "td" props children
+let inline textarea props children = domEl "textarea" props children
+let inline tfoot props children = domEl "tfoot" props children
+let inline th props children = domEl "th" props children
+let inline thead props children = domEl "thead" props children
+let inline time props children = domEl "time" props children
+let inline title props children = domEl "title" props children
+let inline tr props children = domEl "tr" props children
+let inline u props children = domEl "u" props children
+let inline ul props children = domEl "ul" props children
+let inline var props children = domEl "var" props children
+let inline video props children = domEl "video" props children
 
 // Void element
-let inline area b = voidEl "area" b
-let inline ``base`` b = voidEl "base" b
-let inline br b = voidEl "br" b
-let inline col b = voidEl "col" b
-let inline embed b = voidEl "embed" b
-let inline hr b = voidEl "hr" b
-let inline img b = voidEl "img" b
-let inline input b = voidEl "input" b
-let inline keygen b = voidEl "keygen" b
-let inline link b = voidEl "link" b
-let inline menuitem b = voidEl "menuitem" b
-let inline meta b = voidEl "meta" b
-let inline param b = voidEl "param" b
-let inline source b = voidEl "source" b
-let inline track b = voidEl "track" b
-let inline wbr b = voidEl "wbr" b
+let inline area props = voidEl "area" props
+let inline ``base`` props = voidEl "base" props
+let inline br props = voidEl "br" props
+let inline col props = voidEl "col" props
+let inline embed props = voidEl "embed" props
+let inline hr props = voidEl "hr" props
+let inline img props = voidEl "img" props
+let inline input props = voidEl "input" props
+let inline keygen props = voidEl "keygen" props
+let inline link props = voidEl "link" props
+let inline menuitem props = voidEl "menuitem" props
+let inline meta props = voidEl "meta" props
+let inline param props = voidEl "param" props
+let inline source props = voidEl "source" props
+let inline track props = voidEl "track" props
+let inline wbr props = voidEl "wbr" props
 
 // SVG elements
-let inline svg b c = svgEl "svg" b c
-let inline circle b c = svgEl "circle" b c
-let inline clipPath b c = svgEl "clipPath" b c
-let inline defs b c = svgEl "defs" b c
-let inline ellipse b c = svgEl "ellipse" b c
-let inline g b c = svgEl "g" b c
-let inline image b c = svgEl "image" b c
-let inline line b c = svgEl "line" b c
-let inline linearGradient b c = svgEl "linearGradient" b c
-let inline mask b c = svgEl "mask" b c
-let inline path b c = svgEl "path" b c
-let inline pattern b c = svgEl "pattern" b c
-let inline polygon b c = svgEl "polygon" b c
-let inline polyline b c = svgEl "polyline" b c
-let inline radialGradient b c = svgEl "radialGradient" b c
-let inline rect b c = svgEl "rect" b c
-let inline stop b c = svgEl "stop" b c
-let inline text b c = svgEl "text" b c
-let inline tspan b c = svgEl "tspan" b c
+let inline svg props children = svgEl "svg" props children
+let inline circle props children = svgEl "circle" props children
+let inline clipPath props children = svgEl "clipPath" props children
+let inline defs props children = svgEl "defs" props children
+let inline ellipse props children = svgEl "ellipse" props children
+let inline g props children = svgEl "g" props children
+let inline image props children = svgEl "image" props children
+let inline line props children = svgEl "line" props children
+let inline linearGradient props children = svgEl "linearGradient" props children
+let inline mask props children = svgEl "mask" props children
+let inline path props children = svgEl "path" props children
+let inline pattern props children = svgEl "pattern" props children
+let inline polygon props children = svgEl "polygon" props children
+let inline polyline props children = svgEl "polyline" props children
+let inline radialGradient props children = svgEl "radialGradient" props children
+let inline rect props children = svgEl "rect" props children
+let inline stop props children = svgEl "stop" props children
+let inline text props children = svgEl "text" props children
+let inline tspan props children = svgEl "tspan" props children
 
 // Class list helpers
 let classBaseList std classes =
