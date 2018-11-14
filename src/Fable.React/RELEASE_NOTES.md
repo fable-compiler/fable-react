@@ -1,3 +1,7 @@
+### 5.0.0-alpha-002
+
+* Fix typos in doc comment of `memoBuilderWith` and `memoBuilder`
+
 ### 5.0.0-alpha-001
 
 * Add bindings for `React.memo`

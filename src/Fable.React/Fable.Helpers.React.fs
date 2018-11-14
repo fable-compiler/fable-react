@@ -936,7 +936,8 @@ module ReactElementType =
 /// ```
 /// type HelloProps = { Name: string }
 /// let hello = memoBuilder "Hello" (fun p ->
-///     span [str "Hello "; str p.Name])
+///     span [ ]
+///         [ str "Hello "; str p.Name ])
 ///
 /// let view model =
 ///     hello { Name = model.Name }
@@ -960,7 +961,8 @@ let memoBuilder<'props> (name: string) (render: 'props -> ReactElement) : 'props
 /// type HelloProps = { Name: string }
 /// let helloEquals p1 p2 = p1.Name = p2.Name
 /// let hello = memoBuilderWith "Hello" helloEquals (fun p ->
-///     span [str "Hello "; str p.Name])
+///     span [ ]
+///         [ str "Hello "; str p.Name ])
 ///
 /// let view model =
 ///     hello { Name = model.Name }
