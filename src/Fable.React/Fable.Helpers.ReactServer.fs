@@ -1,5 +1,5 @@
 module Fable.Helpers.ReactServer
-
+#if !FABLE_COMPILER
 open System.IO
 open System.Text.RegularExpressions
 
@@ -763,3 +763,4 @@ let renderToString (htmlNode: ReactElement): string =
   use html = new StringWriter()
   htmlNode |> Raw.writeTo html
   html.ToString()
+#endif
