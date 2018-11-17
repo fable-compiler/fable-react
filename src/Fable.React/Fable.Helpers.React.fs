@@ -285,6 +285,9 @@ module rec Props =
         | Type of string
         | UseMap of string
         | Value of obj
+        /// Compiles to same prop as `Value`. Intended for `select` elements
+        /// with `Multiple` prop set to `true`.
+        | [<CompiledName("value")>] ValueMultiple of string[]
         | Width of obj
         | Wmode of string
         | Wrap of string

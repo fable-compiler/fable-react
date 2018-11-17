@@ -453,7 +453,8 @@ let private renderCssProp (html:TextWriter) (prop: CSSProp) =
   | CSSProp.Custom (key, value) -> cssProp html (slugKey key) value
   #endif
 
-let inline boolAttr (html:TextWriter) (key: string) (value: bool) = if value then html.Write key
+let inline boolAttr (html:TextWriter) (key: string) (value: bool) =
+  if value then html.Write key
 
 let inline strAttr (html:TextWriter) (key: string) (value: string) =
   html.Write key
@@ -466,7 +467,10 @@ let inline objAttr (html:TextWriter) (key: string) (value: obj) = strAttr html k
 let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
   match attr with
   | DefaultChecked v | Checked v -> boolAttr html "checked" v
-  | DefaultValue v |  Value v -> strAttr html "value" (string v)
+  | DefaultValue v | Value v -> strAttr html "value" (string v)
+  // TODO: Not sure if it's possible/easy to set multiple selected
+  // options with an attribute in SSR, so do nothing for now
+  | ValueMultiple _ -> ()
   | Accept v -> strAttr html "accept" v
   | AcceptCharset v -> strAttr html "accept-charset" v
   | AccessKey v -> strAttr html "accesskey" v
