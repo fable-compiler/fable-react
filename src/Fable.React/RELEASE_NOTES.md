@@ -1,3 +1,8 @@
+### 5.0.0-alpha-003
+
+- Fix compilation with fable-splitter and `allFiles` #122 @nojaf
+- Add `ValueMultiple` prop for `select` elements with `Multiple` prop #123
+
 ### 5.0.0-alpha-002
 
 * Fix typos in doc comment of `memoBuilderWith` and `memoBuilder`
