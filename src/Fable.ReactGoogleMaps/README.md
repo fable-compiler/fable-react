@@ -7,11 +7,20 @@ Fable bindings and helpers for [react-google-map](https://github.com/tomchentw/r
 ```
 npm install --save react-google-maps # or
 yarn add react-google-maps
+yarn add @babel/plugin-proposal-class-properties
 
 paket add Fable.ReactGoogleMaps --project [yourproject]
 ```
 
 ## Usage
+
+In your webpack, add the following:
+
+```
+plugins: [
+    // other plugins...
+   "@babel/plugin-proposal-class-properties" ]
+```
 
 In your css add the following:
 
@@ -26,6 +35,10 @@ In your css add the following:
 and in your F# code you can create the map like this:
 
 ```fs
+open Fable.Core.JsInterop
+open Fable.Helpers.ReactGoogleMaps
+open Fable.Helpers.ReactGoogleMaps.Props
+
 let defaultCenter:Fable.Import.GoogleMaps.LatLngLiteral = Fable.Helpers.GoogleMaps.Literal.createLatLng 40.6892494 -74.0445004
 
 let myMap =
