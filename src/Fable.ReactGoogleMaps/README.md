@@ -8,7 +8,7 @@ Fable bindings and helpers for [react-google-map](https://github.com/tomchentw/r
 npm install --save react-google-maps # or
 yarn add react-google-maps
 
-paket add Fable.ReactGoogleMap --project [yourproject]
+paket add Fable.ReactGoogleMaps --project [yourproject]
 ```
 
 ## Usage
