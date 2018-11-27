@@ -34,7 +34,7 @@ module TransitionGroup =
         | OnExit of (Browser.HTMLElement -> unit)
         | OnExiting of (Browser.HTMLElement -> unit)
         | OnExited of (Browser.HTMLElement -> unit)
-        | Children of U2<React.ReactNode, (TransitionStatus -> React.ReactNode)>
+        | Children of U2<React.ReactElement, (TransitionStatus -> React.ReactElement)>
         | Class of string
         | Ref of (obj -> obj)
         | Key of string
@@ -68,7 +68,7 @@ module TransitionGroup =
         | OnExit of (Browser.HTMLElement -> unit)
         | OnExiting of (Browser.HTMLElement -> unit)
         | OnExited of (Browser.HTMLElement -> unit)
-        | Children of U2<React.ReactNode, TransitionStatus -> React.ReactNode>
+        | Children of U2<React.ReactElement, TransitionStatus -> React.ReactElement>
         | ClassNames of U2<string, CSSTransitionClassNames>
         | Class of string
         | Ref of (obj -> obj)
@@ -86,22 +86,19 @@ module TransitionGroup =
         static member Custom(key: string, value: obj): TransitionGroupProp =
             unbox(key, value)
 
-    let private asNode (el: React.ReactElement): React.ReactNode =
-        !^(!^el: React.ReactChild)
-
     let transition (props: TransitionProp list) (child: React.ReactElement): React.ReactElement =
-        let props = (TransitionProp.Children !^(asNode child))::props
+        let props = (TransitionProp.Children !^child)::props
         ofImport "Transition" "react-transition-group" (keyValueList CaseRules.LowerFirst props) []
 
-    let transitionWithRender (props: TransitionProp list) (render: TransitionStatus -> React.ReactNode): React.ReactElement =
+    let transitionWithRender (props: TransitionProp list) (render: TransitionStatus -> React.ReactElement): React.ReactElement =
         let props = (TransitionProp.Children !^render)::props
         ofImport "Transition" "react-transition-group" (keyValueList CaseRules.LowerFirst props) []
 
     let cssTransition (props: CSSTransitionProp list) (child: React.ReactElement): React.ReactElement =
-        let props = (CSSTransitionProp.Children !^(asNode child))::props
+        let props = (CSSTransitionProp.Children !^child)::props
         ofImport "CSSTransition" "react-transition-group" (keyValueList CaseRules.LowerFirst props) []
 
-    let cssTransitionWithRender (props: CSSTransitionProp list) (render: TransitionStatus -> React.ReactNode): React.ReactElement =
+    let cssTransitionWithRender (props: CSSTransitionProp list) (render: TransitionStatus -> React.ReactElement): React.ReactElement =
         let props = (CSSTransitionProp.Children !^render)::props
         ofImport "CSSTransition" "react-transition-group" (keyValueList CaseRules.LowerFirst props) []
 
