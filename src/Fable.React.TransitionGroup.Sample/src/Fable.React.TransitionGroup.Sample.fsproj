@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Fable.React.TransitionGroup/Fable.Helpers.React.TransitionGroup.fs" />
+    <Compile Include="App.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="../../Fable.React/Fable.React.fsproj" />
+  </ItemGroup>
+  <Import Project="..\..\..\.paket\Paket.Restore.targets" />
+</Project>
