@@ -18,6 +18,7 @@ module TransitionGroup =
         | [<CompiledName("exited")>] Exited
         | [<CompiledName("unmounted")>] Unmounted
 
+    [<RequireQualifiedAccess>]
     type TransitionProps =
         | In of bool
         | Appear of bool
@@ -34,6 +35,7 @@ module TransitionGroup =
         | OnExiting of (Browser.HTMLElement -> unit)
         | OnExited of (Browser.HTMLElement -> unit)
         | Children of U2<React.ReactNode, (TransitionStatus -> React.ReactNode)>
+        | Class of string
         | Ref of (obj -> obj)
         | Key of string
         static member Custom(key: string, value: obj): TransitionProps =
@@ -50,6 +52,7 @@ module TransitionGroup =
         exitDone: string option
     }
 
+    [<RequireQualifiedAccess>]
     type CSSTransitionProps =
         | In of bool
         | Appear of bool
@@ -67,14 +70,17 @@ module TransitionGroup =
         | OnExited of (Browser.HTMLElement -> unit)
         | Children of U2<React.ReactNode, TransitionStatus -> React.ReactNode>
         | ClassNames of U2<string, CSSTransitionClassNames>
+        | Class of string
         | Ref of (obj -> obj)
         | Key of string
         static member Custom(key: string, value: obj): CSSTransitionProps =
             unbox(key, value)
 
+    [<RequireQualifiedAccess>]
     type TransitionGroupProps =
         | Component of React.ReactType
         | ChildFactory of (React.ReactElement -> React.ReactElement)
+        | Class of string
         | Ref of (obj -> obj)
         | Key of string
         static member Custom(key: string, value: obj): TransitionGroupProps =
