@@ -35,7 +35,7 @@ module TransitionGroup =
         | OnExiting of (Browser.HTMLElement -> unit)
         | OnExited of (Browser.HTMLElement -> unit)
         | Children of U2<React.ReactElement, (TransitionStatus -> React.ReactElement)>
-        | Class of string
+        | [<CompiledName "className">] Class of string
         | Ref of (obj -> obj)
         | Key of string
         static member Custom(key: string, value: obj): TransitionProp =
@@ -70,7 +70,7 @@ module TransitionGroup =
         | OnExited of (Browser.HTMLElement -> unit)
         | Children of U2<React.ReactElement, TransitionStatus -> React.ReactElement>
         | ClassNames of U2<string, CSSTransitionClassNames>
-        | Class of string
+        | [<CompiledName "className">] Class of string
         | Ref of (obj -> obj)
         | Key of string
         static member Custom(key: string, value: obj): CSSTransitionProp =
@@ -80,7 +80,7 @@ module TransitionGroup =
     type TransitionGroupProp =
         | Component of React.ReactType
         | ChildFactory of (React.ReactElement -> React.ReactElement)
-        | Class of string
+        | [<CompiledName "className">] Class of string
         | Ref of (obj -> obj)
         | Key of string
         static member Custom(key: string, value: obj): TransitionGroupProp =
