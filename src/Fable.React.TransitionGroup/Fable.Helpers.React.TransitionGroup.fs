@@ -141,6 +141,15 @@ module TransitionGroup =
         /// If you use React v16+ and would like to avoid a wrapping <div> element you can pass in `Component null`.
         /// This is useful if the wrapping div borks your css styles.
         | Component of React.ReactType
+        /// A convenience prop that enables or disables appear animations for all children.
+        /// Note that specifying this will override any defaults set on individual children Transitions.
+        | Appear of bool
+        /// A convenience prop that enables or disables enter animations for all children.
+        /// Note that specifying this will override any defaults set on individual children Transitions.
+        | Enter of bool
+        /// A convenience prop that enables or disables exit animations for all children.
+        /// Note that specifying this will override any defaults set on individual children Transitions.
+        | Exit of bool
         /// You may need to apply reactive updates to a child as it is exiting.
         /// This is generally done by using cloneElement however in the case of an
         /// exiting child the element has already been removed and not accessible to the consumer.
