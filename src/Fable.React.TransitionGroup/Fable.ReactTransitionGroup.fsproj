@@ -7,7 +7,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Fable.Helpers.React.TransitionGroup.fs" />
+    <Compile Include="Fable.Helpers.ReactTransitionGroup.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="../Fable.React/Fable.React.fsproj" />
