@@ -14,7 +14,12 @@ Some components have a [Typescript](https://www.typescriptlang.org/) definition 
   - [1. Install the react component](#1-install-the-react-component)
   - [2. Define the props type](#2-define-the-props-type)
   - [3. Define the React component creation function](#3-define-the-react-component-creation-function)
+    - [Member Import](#member-import)
+    - [Default Import](#default-import)
+    - [Fields of imported items](#fields-of-imported-items)
+    - [Directly creating the element](#directly-creating-the-element)
   - [4. Use the creation function in your view code](#4-use-the-creation-function-in-your-view-code)
+  - [5. Get component state back into your code](#5-get-component-state-back-into-your-code)
 - [Importing using a Pojo (plain old JS object) record](#importing-using-a-pojo-plain-old-js-object-record)
 - [Passing in props as tuples (without a type declaration of the props)](#passing-in-props-as-tuples-without-a-type-declaration-of-the-props)
 - [Edgecases](#edgecases)
@@ -152,6 +157,48 @@ let view (model : Model) (dispatch : Msg -> unit) =
   div
     []
     [ progressLine [ Percent model.currentProgress; StrokeColor "red" ] [] ]
+```
+
+### 5. Get component state back into your code
+
+If you want to get from your component state back in F# code, you need to follow react documentation :
+https://reactjs.org/docs/lifting-state-up.html to propagate component state to upper components.
+
+Insert a function in your props to get state back.
+```fsharp
+// Define function in props
+type ComponentProps =
+  | GetState of (DateTime -> unit)
+  | ...
+
+// sample function matching props signature
+let logDateTimeSelected (d : DateTime) =
+  Fable.Import.Browser.console.log (sprintf "Date : %A" d)
+
+// Component definition (here a calendar)
+let inline Calendar (props : ComponentProps list) : Fable.Import.React.ReactElement =
+    ofImport "default" "./CalendarComponent.tsx" (keyValueList CaseRules.LowerFirst props) []
+
+// Component initialization with props
+div [] [
+  Calendar [ GetState logDateTimeSelected ]
+]
+```
+
+On Javascript/TypeScript side, you need to use this props within your component
+```js
+// Define component props
+export interface IComponentProps {
+  // new props matching F# ComponentProps definition
+  getState : ((date : Date) => void)
+  ...
+}
+
+// within JS/TS event handler use your props function
+  private _onSelectDate(date: Date): void {
+    this.props.getState(date)
+    ...
+  }
 ```
 
 ## Importing using a Pojo (plain old JS object) record
