@@ -22,6 +22,7 @@ let packages =
       "src/Fable.ReactLeaflet/Fable.ReactLeaflet.fsproj"
       "src/Fable.ReactGoogleMaps/Fable.ReactGoogleMaps.fsproj"
       "src/Fable.Recharts/Fable.Recharts.fsproj"
+      "src/Fable.ReactTransitionGroup/Fable.ReactTransitionGroup.fsproj"
     ]
 
 let addToPath newPath =
