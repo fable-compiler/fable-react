@@ -1,3 +1,7 @@
+### 5.0.0-alpha-004
+
+- Fix `b`
+
 ### 5.0.0-alpha-003
 
 - Fix compilation with fable-splitter and `allFiles` #122 @nojaf
