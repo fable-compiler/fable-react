@@ -873,12 +873,14 @@ type ReactElementTypeWrapper<'P> =
 
 [<RequireQualifiedAccess>]
 module ReactElementType =
+#if !FABLE_REPL_LIB
     let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> =
         #if FABLE_COMPILER
         unbox<ReactComponentType<'props>> jsConstructor<'comp>
         #else
         Comp (typeof<'comp>) :> ReactElementType<'props>
         #endif
+#endif
 
     let inline ofFunction<'props> (f: 'props -> ReactElement) =
         #if FABLE_COMPILER
