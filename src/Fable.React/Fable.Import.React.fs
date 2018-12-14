@@ -28,7 +28,11 @@ module React =
 
     and ReactSVGElement =
         inherit DOMElement<SVGProps>
+        #if !FABLE_REPL_LIB
         abstract ref: U2<string, Func<SVGElement, obj>> with get, set
+        #else
+        abstract ref: U2<string, Func<Element, obj>> with get, set
+        #endif
 
     and Factory<'P> =
         [<Emit("$0($1...)")>] abstract Invoke: ?props: 'P * [<ParamArray>] children: ReactNode[] -> ReactElement
@@ -418,7 +422,11 @@ module React =
 
     and SVGProps =
         inherit SVGAttributes
+        #if !FABLE_REPL_LIB
         inherit Props<SVGElement>
+        #else
+        inherit Props<Element>
+        #endif
 
     and DOMAttributes =
         abstract dangerouslySetInnerHTML: obj option with get, set
