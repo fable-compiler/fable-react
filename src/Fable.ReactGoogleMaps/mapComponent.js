@@ -57,17 +57,21 @@ const TrafficMapComponent = withScriptjs(withGoogleMap((props) => {
 }));
 
 export class GoogleMapComponent extends React.PureComponent {
-    refs = {}
-    searchBoxRef = {}
-    state = {
-      isMarkerShown: false,
+
+    constructor(props) {
+        super(props);
+        this.searchBoxRef = {};
+        this.state = {
+            isMarkerShown: false,
+        };
+        this.delayedShowMarker = this.delayedShowMarker.bind(this);
     }
 
     componentDidMount() {
       this.delayedShowMarker()
     }
 
-    delayedShowMarker = () => {
+    delayedShowMarker() {
       setTimeout(() => {
         this.setState({ isMarkerShown: true })
       }, 3000)
