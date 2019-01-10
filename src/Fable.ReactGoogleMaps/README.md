@@ -14,14 +14,6 @@ paket add Fable.ReactGoogleMaps --project [yourproject]
 
 ## Usage
 
-In your webpack, add the following:
-
-```
-plugins: [
-    // other plugins...
-   "@babel/plugin-proposal-class-properties" ]
-```
-
 In your css add the following:
 
 ```css
