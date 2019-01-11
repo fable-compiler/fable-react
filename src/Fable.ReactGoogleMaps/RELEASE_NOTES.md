@@ -1,3 +1,7 @@
+### 0.7.0
+
+* Update component to remove need for babel plugin
+
 ### 0.6.0
 
 * Add key properties by @forki
