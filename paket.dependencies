@@ -1,9 +1,9 @@
 source https://www.nuget.org/api/v2
 storage: none
 
-clitool dotnet-Fable
-nuget Fable.Core
+nuget Fable.Core prerelease
 nuget Fable.Geojson
+nuget Fable.Browser.Dom
 nuget Fable.Import.Browser
 nuget Fable.Import.GoogleMaps
 nuget Fable.Leaflet

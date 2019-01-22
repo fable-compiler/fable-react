@@ -1,16 +1,17 @@
-module Fable.Helpers.ReactServer
+module Fable.ReactServer
+
 #if !FABLE_COMPILER
 open System.IO
 open System.Text.RegularExpressions
+open System.Collections.Generic
 
-open Fable.Import.React
-open Fable.Helpers.React
-open Fable.Helpers.React.Props
+open Fable.React
+open Fable.React.Props
 
 // Adapted from https://github.com/emotion-js/emotion/blob/182e34bab2b2028c96d513b67ed86faee1b642b2/packages/emotion-utils/src/index.js#L13
-let private unitlessCssProps = System.Collections.Generic.HashSet<_>([ "animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width" ])
+let private unitlessCssProps = HashSet ["animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width"]
 
-let private voidTags = System.Collections.Generic.HashSet<_>(["area"; "base"; "br"; "col"; "embed"; "hr"; "img"; "input"; "keygen"; "link"; "menuitem"; "meta"; "param"; "source"; "track"; "wbr"])
+let private voidTags = HashSet ["area"; "base"; "br"; "col"; "embed"; "hr"; "img"; "input"; "keygen"; "link"; "menuitem"; "meta"; "param"; "source"; "track"; "wbr"]
 
 // Adapted from https://github.com/facebook/react/blob/37e4329bc81def4695211d6e3795a654ef4d84f5/packages/react-dom/src/server/escapeTextForBrowser.js#L49
 let escapeHtml (sb:TextWriter) (str: string) =
@@ -714,7 +715,6 @@ let private renderAttrs (html:TextWriter) (attrs: IProp seq) tag =
 
   childHtml
 
-
 let rec private addReactMark htmlNode =
   match htmlNode with
   | HTMLNode.Node (tag, attrs, children) ->
@@ -729,7 +729,6 @@ let inline castHTMLNode (htmlNode: ReactElement): HTMLNode =
   match htmlNode with
   | :? HTMLNode as node -> node
   | _ -> HTMLNode.Empty
-
 
 module Raw =
   /// Writes the nodes into a TextWriter. DOESN'T ADD `reactroot` attribute.

@@ -7,10 +7,14 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Fable.Import.React.fs" />
-    <Compile Include="Fable.Helpers.React.fs" />
-    <Compile Include="Fable.Helpers.Isomorphic.fs" />
-    <Compile Include="Fable.Helpers.ReactServer.fs" />
+    <Compile Include="Fable.React.fs" />
+    <Compile Include="Fable.ReactDom.fs" />
+    <Compile Include="Fable.React.Props.fs" />
+    <Compile Include="Fable.React.Helpers.fs" />
+    <Compile Include="Fable.React.Standard.fs" />
+    <Compile Include="Fable.React.ReactiveComponents.fs" />
+    <Compile Include="Fable.React.Isomorphic.fs" />
+    <Compile Include="Fable.ReactServer.fs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
