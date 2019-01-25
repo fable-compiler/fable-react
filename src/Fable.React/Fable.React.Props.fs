@@ -169,8 +169,10 @@ type HTMLAttr =
     | AllowFullScreen of bool
     | AllowTransparency of bool
     | Alt of string
-    | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
+    | [<CompiledName("aria-controls")>] AriaControls of string
     | [<CompiledName("aria-expanded")>] AriaExpanded of bool
+    | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
+    | [<CompiledName("aria-pressed")>] AriaPressed of bool
     | Async of bool
     | AutoComplete of string
     | AutoFocus of bool

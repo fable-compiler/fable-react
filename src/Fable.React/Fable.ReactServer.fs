@@ -479,8 +479,10 @@ let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
   | AllowFullScreen v -> boolAttr html "allowfullscreen" v
   | AllowTransparency v -> boolAttr html "allowtransparency" v
   | Alt v -> strAttr html "alt" v
-  | AriaHasPopup v -> boolAttr html "aria-haspopup" v
+  | AriaControls v -> strAttr html "aria-controls" v
   | AriaExpanded v -> boolAttr html "aria-expanded" v
+  | AriaHasPopup v -> boolAttr html "aria-haspopup" v
+  | AriaPressed v -> boolAttr html "aria-pressed" v
   | Async v -> boolAttr html "async" v
   | AutoComplete v -> strAttr html "autocomplete" v
   | AutoFocus v -> boolAttr html "autofocus" v
