@@ -1,7 +1,20 @@
 STORAGE: NONE
 NUGET
   remote: https://www.nuget.org/api/v2
-    Fable.Browser.Dom (1.0.0-alpha-002)
+    Fable.Browser.Blob (1.0.0-alpha-001) - restriction: >= netstandard2.0
+      Fable.Core (>= 2.1.0-alpha-002) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Browser.Dom (1.0.0-alpha-003)
+      Fable.Browser.Blob (>= 1.0.0-alpha-001) - restriction: >= netstandard2.0
+      Fable.Browser.Event (>= 1.0.0-alpha-001) - restriction: >= netstandard2.0
+      Fable.Browser.WebStorage (>= 1.0.0-alpha-001) - restriction: >= netstandard2.0
+      Fable.Core (>= 2.1.0-alpha-002) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Browser.Event (1.0.0-alpha-001) - restriction: >= netstandard2.0
+      Fable.Core (>= 2.1.0-alpha-002) - restriction: >= netstandard2.0
+      FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
+    Fable.Browser.WebStorage (1.0.0-alpha-001) - restriction: >= netstandard2.0
+      Fable.Browser.Event (>= 1.0.0-alpha-001) - restriction: >= netstandard2.0
       Fable.Core (>= 2.1.0-alpha-002) - restriction: >= netstandard2.0
       FSharp.Core (>= 4.5.2) - restriction: >= netstandard2.0
     Fable.Core (2.1.0-alpha-002)

@@ -6,7 +6,7 @@ module Helpers =
     open FSharp.Reflection
     open Fable.Core
     open Fable.Core.JsInterop
-    open Fable.Browser
+    open Browser
     open Props
 
     [<Erase>]
@@ -354,22 +354,22 @@ module Helpers =
 
     /// Finds a DOM element by its ID and mounts the React element there
     let inline mountById (domElId: string) (reactEl: ReactElement): unit =
-        Fable.ReactDom.render(reactEl, Dom.document.getElementById(domElId))
+        Fable.ReactDom.render(reactEl, document.getElementById(domElId))
 
     /// Finds the first DOM element matching a CSS selector and mounts the React element there
     let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit =
-        Fable.ReactDom.render(reactEl, Dom.document.querySelector(domElSelector))
+        Fable.ReactDom.render(reactEl, document.querySelector(domElSelector))
 
-    type Dom.Event with
+    type Browser.Types.Event with
         /// Access the value from target
-        /// Equivalent to `(this.target :?> Dom.HTMLInputElement).value`
+        /// Equivalent to `(this.target :?> HTMLInputElement).value`
         member this.Value =
-            (this.target :?> Dom.HTMLInputElement).value
+            (this.target :?> Browser.Types.HTMLInputElement).value
 
         /// Access the checked property from target
-        /// Equivalent to `(this.target :?> Dom.HTMLInputElement).checked`
+        /// Equivalent to `(this.target :?> HTMLInputElement).checked`
         member this.Checked =
-            (this.target :?> Dom.HTMLInputElement).``checked``
+            (this.target :?> Browser.Types.HTMLInputElement).``checked``
 
 namespace Fable.Helpers
 

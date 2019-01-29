@@ -2,26 +2,26 @@ namespace Fable
 
 open Fable.Core
 open Fable.React
-open Fable.Browser
+open Browser.Types
 
 type ReactDom =
     /// Render a React element into the DOM in the supplied container.
     /// If the React element was previously rendered into container, this will perform an update on it and only mutate the DOM as necessary to reflect the latest React element.
     /// If the optional callback is provided, it will be executed after the component is rendered or updated.
     [<Import("render", "react-dom")>]
-    static member render(element: ReactElement, container: Dom.Element, ?callback: unit->unit): unit = jsNative
+    static member render(element: ReactElement, container: Element, ?callback: unit->unit): unit = jsNative
 
     /// Same as render(), but is used to hydrate a container whose HTML contents were rendered by ReactDOMServer. React will attempt to attach event listeners to the existing markup.
     [<Import("hydrate", "react-dom")>]
-    static member hydrate(element: ReactElement, container: Dom.Element, ?callback: unit->unit): unit = jsNative
+    static member hydrate(element: ReactElement, container: Element, ?callback: unit->unit): unit = jsNative
 
     /// Remove a mounted React component from the DOM and clean up its event handlers and state. If no component was mounted in the container, calling this function does nothing. Returns true if a component was unmounted and false if there was no component to unmount.
     [<Import("unmountComponentAtNode", "react-dom")>]
-    static member unmountComponentAtNode(container: Dom.Element): bool = jsNative
+    static member unmountComponentAtNode(container: Element): bool = jsNative
 
     /// Creates a portal. Portals provide a way to render children into a DOM node that exists outside the hierarchy of the DOM component.
     [<Import("createPortal", "react-dom")>]
-    static member createPortal(child: ReactElement, container: Dom.Element): ReactElement = jsNative
+    static member createPortal(child: ReactElement, container: Element): ReactElement = jsNative
 
 [<Import("default", "react-dom/server")>]
 module ReactDomServer =
