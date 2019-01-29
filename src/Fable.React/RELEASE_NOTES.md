@@ -1,3 +1,9 @@
+### 5.0.0-alpha-005
+
+- Change dependency to Fable.Browser.Dom
+- Rename namespace to Fable.React
+- Add Hooks' support
+
 ### 5.0.0-alpha-004
 
 - Fix `b`
