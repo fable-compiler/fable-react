@@ -1,6 +1,7 @@
 module rec Fable.React.Props
 
 open Fable.Core
+open Fable.Core.JsInterop
 open Browser.Types
 
 type IProp =

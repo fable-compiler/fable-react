@@ -450,9 +450,7 @@ let private renderCssProp (html:TextWriter) (prop: CSSProp) =
   | WritingMode v -> cssProp html "writing-mode" v
   | ZIndex v -> cssProp html "z-index" v
   | Zoom v -> cssProp html "zoom" v
-  #if !FABLE_COMPILER
   | CSSProp.Custom (key, value) -> cssProp html (slugKey key) value
-  #endif
 
 let inline boolAttr (html:TextWriter) (key: string) (value: bool) =
   if value then html.Write key
@@ -615,7 +613,6 @@ let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
   | Results v -> strAttr html "results" (string v)
   | Security v -> strAttr html "security" v
   | Unselectable v -> boolAttr html "unselectable" v
-  #if !FABLE_COMPILER
   | Style cssList ->
     html.Write "style"
     html.Write "=\""
@@ -628,7 +625,6 @@ let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
 
   | HTMLAttr.Custom (key, value) -> strAttr html (key.ToLower()) (string value)
   | Data (key, value) -> strAttr html ("data-" + key) (string value)
-  #endif
 
 let private renderSVGAttr (html:TextWriter) (attr: SVGAttr) =
   match attr with
@@ -689,9 +685,7 @@ let private renderSVGAttr (html:TextWriter) (attr: SVGAttr) =
   | SVGAttr.Y1 v -> objAttr html "y1" v
   | SVGAttr.Y2 v -> objAttr html "y2" v
   | SVGAttr.Y v -> objAttr html "y" v
-  #if !FABLE_COMPILER
   | SVGAttr.Custom (key, value) -> objAttr html (slugKey key) value
-  #endif
 
 let private renderAttrs (html:TextWriter) (attrs: IProp seq) tag =
   let mutable childHtml = None
