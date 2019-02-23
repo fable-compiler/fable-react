@@ -82,7 +82,7 @@ let markers =
             MarkerProperties.Key location.ID
             MarkerProperties.Position !^ (Fable.Helpers.GoogleMaps.Literal.createLatLng location.X location.Y)
             MarkerProperties.Icon (sprintf "Images/markers/%s.png" location.Color)
-            MarkerProperties.Title location.Title] []))
+            MarkerProperties.Title location.Title] [])
 
 
 let myMap =
