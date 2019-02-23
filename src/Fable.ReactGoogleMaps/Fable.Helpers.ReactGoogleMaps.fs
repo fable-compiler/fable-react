@@ -62,6 +62,7 @@ module Props =
     | Key of obj
     | Title of string
     | Icon of string
+    | Label of obj
     | OnClick of (unit -> unit)
     | Position of U2<LatLng, LatLngLiteral>
         interface IMarkerProperties
