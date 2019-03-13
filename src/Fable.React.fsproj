@@ -19,5 +19,7 @@
   <ItemGroup>
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <ItemGroup>
+    <PackageReference Include="Fable.Browser.Dom" Version="1.0.0-alpha-004" />
+  </ItemGroup>
 </Project>
