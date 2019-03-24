@@ -318,10 +318,151 @@ type HTMLAttr =
 #endif
     interface IHTMLProp
 
+[<StringEnum; RequireQualifiedAccess>]
+/// Specifies the display behavior (the type of rendering box) of an element.
+type Display = 
+    /// The element is completely removed
+    | None 
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// Displays an element as an inline element (like `<span>`). Any height and width properties will have no effect.
+    | Inline 
+    /// Displays an element as a block element (like `<p>`). It starts on a new line, and takes up the whole width.
+    | Block
+    /// Makes the container disappear, making the child elements children of the element the next level up in the DOM.
+    | Contents 
+    /// Displays an element as a block-level flex container.
+    | Flex
+    /// Displays an element as a block-level grid container.
+    | Grid 
+    /// Let the element behave like a `<table>` element
+    | Table
+    /// Displays an element as an inline-level block container. The element itself is formatted as an inline element, but you can apply height and width values
+    | [<CompiledName "inline-block">] InlineBlock
+    /// Displays an element as an inline-level flex container.
+    | [<CompiledName "inline-flex">] InlineFlex
+    /// Displays an element as an inline-level grid container.
+    | [<CompiledName "inline-grid">] InlineGrid 
+    /// The element is displayed as an inline-level table.
+    | [<CompiledName "inline-table">] InlineTable 
+    /// Let the element behave like a `<li>` element.
+    | [<CompiledName "list-item">] ListItem 
+    /// Let the element behave like a `<caption>` element
+    | [<CompiledName "table-caption">] TableCaption 
+    /// Let the element behave like a `<colgroup>` element.
+    | [<CompiledName "table-column-group">] TableColumnGroup 
+    /// Let the element behave like a `<thead>` element.
+    | [<CompiledName "table-header-group">] TableHeaderGroup 
+    /// Let the element behave like a `<tfoot>` element.
+    | [<CompiledName "table-footer-group">] TableFooterGroup 
+    /// Let the element behave like a `<tbody>` element.
+    | [<CompiledName "table-row-group">] TableRowGroup 
+    /// Let the element behave like a `<td>` element.
+    | [<CompiledName "table-cell">] TableCell 
+    /// Let the element behave like a `<col>` element.
+    | [<CompiledName "table-column">] TableColumn 
+    /// Let the element behave like a `<tr>` element.
+    | [<CompiledName "table-row">] TableRow 
+
+[<StringEnum; RequireQualifiedAccess>]
+/// Modifies the behavior of the [flex-wrap](https://www.w3schools.com/CSSref/css3_pr_flex-wrap.asp) property. It is similar to [align-items](https://www.w3schools.com/CSSref/css3_pr_align-items.asp), but instead of aligning flex items, it aligns flex lines.
+type AlignContent = 
+    /// Default value. Lines stretch to take up the remaining space.
+    | Stretch    
+    /// Lines are packed toward the center of the flex container.
+    | Center
+    /// /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// Lines are packed toward the start of the flex container.
+    | [<CompiledName "flex-start">] FlexStart 
+    /// Lines are packed toward the end of the flex container.
+    | [<CompiledName "flex-end">] FlexEnd 
+    /// Lines are evenly distributed in the flex container.
+    | [<CompiledName "space-between">] SpaceBetween
+    /// Lines are evenly distributed in the flex container, with half-size spaces on either end.
+    | [<CompiledName "space-around">] SpaceAround 
+
+[<StringEnum; RequireQualifiedAccess>]
+/// Specifies the default alignment for items inside the flexible container.
+type AlignItems = 
+    /// Items are positioned at the baseline of the container
+    | Baseline 
+    /// Default. Items are stretched to fit the container.
+    | Stretch    
+    /// Items are positioned at the center of the container.
+    | Center
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// Items are positioned at the beginning of the container.
+    | [<CompiledName "flex-start">] FlexStart 
+    /// Items are positioned at the end of the container.
+    | [<CompiledName "flex-end">] FlexEnd 
+
+[<StringEnum; RequireQualifiedAccess>]
+/// Specifies the default alignment for items inside the flexible container.
+type AlignSelf = 
+    /// Default. The element inherits its parent container's align-items property, or "stretch" if it has no parent container.
+    | Auto 
+    /// The element is positioned at the baseline of the container.
+    | Baseline 
+    /// The element is positioned to fit the container.
+    | Stretch    
+    /// The element is positioned at the center of the container.
+    | Center
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// The element is positioned at the beginning of the container.
+    | [<CompiledName "flex-start">] FlexStart 
+    /// The element is positioned at the end of the container.
+    | [<CompiledName "flex-end">] FlexEnd 
+
+[<StringEnum; RequireQualifiedAccess>]
+type TextAlign = 
+    /// Aligns the text to the left.
+    | Left
+    /// Aligns the text to the right.
+    | Right
+    /// Centers the text.
+    | Center 
+    /// Stretches the lines so that each line has equal width (like in newspapers and magazines).
+    | Justify 
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+
+[<StringEnum; RequireQualifiedAccess>]
+/// Specifies the type of positioning method used for an element (static, relative, absolute, fixed, or sticky).
+type Position = 
+    /// Default value. Elements render in order, as they appear in the document flow.
+    | Static 
+    /// The element is positioned relative to its first positioned (not static) ancestor element.
+    | Absolute 
+    /// The element is positioned relative to the browser window.
+    | Fixed 
+    /// The element is positioned relative to its normal position, so "left:20px" adds 20 pixels to the element's LEFT position.
+    | Relative 
+    /// The element is positioned based on the user's scroll position.
+    /// 
+    /// A sticky element toggles between relative and fixed, depending on the scroll position. It is positioned relative until a given offset position is met in the viewport - then it "sticks" in place (like position:fixed).
+    | Sticky 
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+
 type CSSProp =
-    | AlignContent of obj
-    | AlignItems of obj
-    | AlignSelf of obj
+    | AlignContent of AlignContent
+    | AlignItems of AlignItems
+    | AlignSelf of AlignSelf
     | AlignmentAdjust of obj
     | AlignmentBaseline of obj
     | All of obj
@@ -444,7 +585,7 @@ type CSSProp =
     | CueAfter of obj
     | Cursor of obj
     | Direction of obj
-    | Display of obj
+    | Display of Display
     | DominantBaseline of obj
     | EmptyCells of obj
     | EnableBackground of obj
@@ -610,7 +751,7 @@ type CSSProp =
     | Perspective of obj
     | PerspectiveOrigin of obj
     | PointerEvents of obj
-    | Position of obj
+    | Position of Position
     | PunctuationTrim of obj
     | Quotes of obj
     | RegionFragment of obj
@@ -644,7 +785,7 @@ type CSSProp =
     | StrokeWidth of obj
     | TabSize of obj
     | TableLayout of obj
-    | TextAlign of obj
+    | TextAlign of TextAlign
     | TextAlignLast of obj
     | TextAnchor of obj
     | TextCombineUpright of obj
