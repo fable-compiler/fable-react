@@ -1,3 +1,7 @@
+### 5.0.0-beta-001
+
+- Add type-safe css properties @Zaid-Ajaj
+
 ### 5.0.0-alpha-005
 
 - Change dependency to Fable.Browser.Dom
