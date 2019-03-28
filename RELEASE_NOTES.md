@@ -1,3 +1,8 @@
+### 5.0.0-beta-002
+
+- Fix `object` tag
+- Fix effect hook
+
 ### 5.0.0-beta-001
 
 - Add type-safe css properties @Zaid-Ajaj
