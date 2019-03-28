@@ -388,7 +388,9 @@ type AlignContent =
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Specifies the default alignment for items inside the flexible container.
-type AlignItems = 
+type AlignItems =
+    /// The effect of this keyword is dependent of the layout mode we are in. [Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items#Values)
+    | Normal
     /// Items are positioned at the baseline of the container
     | Baseline 
     /// Default. Items are stretched to fit the container.
