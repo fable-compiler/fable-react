@@ -46,7 +46,12 @@ type Hooks =
 
     /// More info at https://reactjs.org/docs/hooks-effect
     [<Import("useEffect", from="react")>]
-    static member useEffect<'T> (effect: unit -> (unit->unit) option, ?checkValues: obj[]): unit = jsNative
+    static member useEffect<'T> (effect: unit -> unit, ?checkValues: obj[]): unit = jsNative
+
+    /// More info at https://reactjs.org/docs/hooks-effect
+    [<Import("useEffect", from="react")>]
+    [<Emit("$0(() => { $1(); return $2 }{{,$3}})")>]
+    static member useEffectDisposable<'T> (effect: unit -> unit, dispose: unit->unit, ?checkValues: obj[]): unit = jsNative
 
 [<AutoOpen>]
 module Extensions =
