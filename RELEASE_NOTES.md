@@ -1,3 +1,7 @@
+### 5.0.0-beta-003
+
+- Add `equalsButFunctions` @vbfox
+
 ### 5.0.0-beta-002
 
 - Fix `object` tag

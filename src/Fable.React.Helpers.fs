@@ -222,6 +222,28 @@ module Helpers =
             ofFunction render
 #endif
 
+#if FABLE_COMPILER
+    [<Emit("typeof $0 === 'function'")>]
+    let private isFunction (x: obj): bool = jsNative
+
+    [<Emit("typeof $0 === 'object' && !$0[Symbol.iterator]")>]
+    let private isNonEnumerableObject (x: obj): bool = jsNative
+#endif
+
+    /// Same as F# equality but ignores functions in the first level of an object
+    /// Useful in combination with memoBuilderWith for most cases (ignore Elmish dispatch, etc)
+    let equalsButFunctions (x: 'a) (y: 'a) =
+#if FABLE_COMPILER
+        if obj.ReferenceEquals(x, y) then
+            true
+        elif isNonEnumerableObject x && not(isNull(box y)) then
+            (true, JS.Object.keys (x)) ||> Seq.fold (fun eq k ->
+                eq && (isFunction x?(k) || x?(k) = y?(k)))
+        else (box x) = (box y)
+#else
+        x = y // Server rendering, won't be actually used
+#endif
+
     /// `memoBuilder` is similar to React.PureComponent but is built from only a render function.
     /// If your function renders the same result given the same props, you can wrap it in a call to memoBuilder.
     /// React will skip rendering the component, and reuse the last rendered result.
