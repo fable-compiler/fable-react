@@ -1,3 +1,7 @@
+### 5.0.0-beta-004
+
+- Fix `Hooks.useEffectDisposable` and `equalsButFunctions`
+
 ### 5.0.0-beta-003
 
 - Add `equalsButFunctions` @vbfox

@@ -50,8 +50,8 @@ type Hooks =
 
     /// More info at https://reactjs.org/docs/hooks-effect
     [<Import("useEffect", from="react")>]
-    [<Emit("$0(() => { $1(); return $2 }{{,$3}})")>]
-    static member useEffectDisposable<'T> (effect: unit -> unit, dispose: unit->unit, ?checkValues: obj[]): unit = jsNative
+    [<Emit("$0(() => $1().Dispose{{,$2}})")>]
+    static member useEffectDisposable<'T> (effect: unit -> System.IDisposable, ?checkValues: obj[]): unit = jsNative
 
 [<AutoOpen>]
 module Extensions =
@@ -241,7 +241,9 @@ module Helpers =
                 eq && (isFunction x?(k) || x?(k) = y?(k)))
         else (box x) = (box y)
 #else
-        x = y // Server rendering, won't be actually used
+        // Server rendering, won't be actually used
+        // Avoid `x = y` because it will force 'a to implement structural equality
+        false
 #endif
 
     /// `memoBuilder` is similar to React.PureComponent but is built from only a render function.
