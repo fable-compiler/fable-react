@@ -148,3 +148,6 @@ and FragmentProps = { key: string }
 
 and [<Import("Fragment", "react")>] Fragment(props: FragmentProps) =
     interface ReactElement
+
+type IRefHook<'T> =
+    abstract current: 'T with get, set

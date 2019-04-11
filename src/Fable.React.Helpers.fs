@@ -39,19 +39,58 @@ type ReactElementTypeWrapper<'P> =
     interface ReactElementType<'P>
 #endif
 
+type IState<'T> =
+    [<Emit("$0[0]")>]
+    abstract current: 'T
+    [<Emit("$0[1]($1)")>]
+    abstract update: 'T -> unit
+    [<Emit("$0[1]($1)")>]
+    abstract update: ('T -> 'T) -> unit
+
 type Hooks =
-    /// More info at https://reactjs.org/docs/hooks-state
+    /// Returns the current state with a function to update it.
+    /// https://reactjs.org/docs/hooks-reference.html#usestate
     [<Import("useState", from="react")>]
-    static member useState<'T> (initialState: 'T): 'T * ('T->unit) = jsNative
+    static member useState<'T> (initialState: 'T): IState<'T> = jsNative
 
-    /// More info at https://reactjs.org/docs/hooks-effect
+    /// Returns the current state with a function to update it.
+    /// https://reactjs.org/docs/hooks-reference.html#usestate
+    [<Import("useState", from="react")>]
+    static member useStateLazy<'T> (initialState: unit->'T): IState<'T> = jsNative
+
+    /// Accepts a function that contains imperative, possibly effectful code
+    /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
     [<Import("useEffect", from="react")>]
-    static member useEffect<'T> (effect: unit -> unit, ?checkValues: obj[]): unit = jsNative
+    static member useEffect<'T> (effect: unit -> unit, ?dependencies: obj[]): unit = jsNative
 
-    /// More info at https://reactjs.org/docs/hooks-effect
+    /// Accepts a function that contains effectful code and returns a disposable for clean-up
+    /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
     [<Import("useEffect", from="react")>]
     [<Emit("$0(() => $1().Dispose{{,$2}})")>]
-    static member useEffectDisposable<'T> (effect: unit -> System.IDisposable, ?checkValues: obj[]): unit = jsNative
+    static member useEffectDisposable<'T> (effect: unit -> System.IDisposable, ?dependencies: obj[]): unit = jsNative
+
+    // [<Import("useCallback", from="react")>]
+    // static member useCallback<'T> (callback: unit -> unit, dependencies: obj[]): unit -> unit = jsNative
+
+    /// Accepts a "create" function and an array of dependencies and returns a memoized value
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usememo
+    [<Import("useMemo", from="react")>]
+    static member useMemo<'T> (callback: unit -> 'T, dependencies: obj[]): 'T = jsNative
+
+    /// The returned object will persist for the full lifetime of the component.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
+    [<Import("useRef", from="react")>]
+    static member useRef(initialValue: 'T): IRefHook<'T> = jsNative
+
+    /// Display a label for custom hooks in React DevTools.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
+    [<Import("useDebugValue", from="react")>]
+    static member useDebugValue(label: string): unit = jsNative
+
+    /// Defers formatting of debug value until the Hook is actually inspected
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
+    [<Import("useDebugValue", from="react")>]
+    static member useDebugValue(value: 'T, format: 'T->string): unit = jsNative
 
 [<AutoOpen>]
 module Extensions =

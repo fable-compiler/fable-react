@@ -1,3 +1,7 @@
+### 5.0.0-beta-006
+
+- Add some additional hooks
+
 ### 5.0.0-beta-004
 
 - Fix `Hooks.useEffectDisposable` and `equalsButFunctions`
