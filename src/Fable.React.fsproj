@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Version>5.0.0</Version>
-    <PackageVersion>5.0.0-beta-006</PackageVersion>
+    <PackageVersion>5.0.0-beta-007</PackageVersion>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
@@ -12,6 +12,7 @@
     <Compile Include="Fable.React.Props.fs" />
     <Compile Include="Fable.React.Helpers.fs" />
     <Compile Include="Fable.React.Standard.fs" />
+    <Compile Include="Fable.React.Lazy.fs" />
     <Compile Include="Fable.React.ReactiveComponents.fs" />
     <Compile Include="Fable.React.Isomorphic.fs" />
     <Compile Include="Fable.ReactServer.fs" />
@@ -20,6 +21,7 @@
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Fable.Core" Version="3.0.0-beta-006" />
     <PackageReference Include="Fable.Browser.Dom" Version="1.0.0-alpha-004" />
   </ItemGroup>
 </Project>

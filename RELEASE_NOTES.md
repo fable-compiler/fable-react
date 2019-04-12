@@ -1,3 +1,7 @@
+### 5.0.0-beta-007
+
+- Add `LazyComponent.FromExternalFunction`
+
 ### 5.0.0-beta-006
 
 - Add some additional hooks

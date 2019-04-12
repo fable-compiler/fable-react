@@ -1,6 +1,6 @@
-/// Helpers for ReactiveComponents (see #44)
 namespace Fable.React
 
+/// Helpers for ReactiveComponents (see #44)
 module ReactiveComponents =
 
     type Props<'P, 'S, 'Msg> =
