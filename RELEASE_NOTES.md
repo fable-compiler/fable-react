@@ -1,3 +1,7 @@
+### 5.0.0-beta-009
+
+- Add `FunctionComponent`
+
 ### 5.0.0-beta-007
 
 - Add `LazyComponent.FromExternalFunction`

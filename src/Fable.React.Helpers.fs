@@ -1,22 +1,9 @@
-namespace Fable.Helpers
-
-[<System.Obsolete("Use Fable.React")>]
-module React =
-    /// Use Fable.React
-    let obsolete<'T> : 'T = failwith "Use Fable.React"
-
 namespace Fable.React
 
 open Fable.Core
 open Fable.Core.JsInterop
 open Browser
 open Props
-
-type ReactElementType<'props> = interface end
-
-type ReactComponentType<'props> =
-    inherit ReactElementType<'props>
-    abstract displayName: string option with get, set
 
 #if !FABLE_COMPILER
 type HTMLNode =
@@ -37,228 +24,147 @@ type ReactElementTypeWrapper<'P> =
     | Fn of ('P -> ReactElement)
     | HtmlTag of string
     interface ReactElementType<'P>
+
+[<RequireQualifiedAccess>]
+module ServerRendering =
+    let [<Literal>] private ChildrenName = "children"
+
+    let private createServerElementPrivate(tag: obj, props: obj, children: ReactElement seq, elementType: ServerElementType) =
+        match elementType with
+        | ServerElementType.Tag ->
+            HTMLNode.Node (string tag, props :?> IProp seq, children) :> ReactElement
+        | ServerElementType.Fragment ->
+            HTMLNode.List children :> ReactElement
+        | ServerElementType.Component ->
+            let tag = tag :?> System.Type
+            let comp = System.Activator.CreateInstance(tag, props)
+            let childrenProp = tag.GetProperty(ChildrenName)
+            childrenProp.SetValue(comp, children |> Seq.toArray)
+            let render = tag.GetMethod("render")
+            render.Invoke(comp, null) :?> ReactElement
+
+    let private createServerElementByFnPrivate(f, props, children) =
+        let propsType = props.GetType()
+        let props =
+            if propsType.GetProperty (ChildrenName) |> isNull then
+                props
+            else
+                let values = ResizeArray<obj> ()
+                let properties = propsType.GetProperties()
+                for p in properties do
+                    if p.Name = ChildrenName then
+                        values.Add (children |> Seq.toArray)
+                    else
+                        values.Add (FSharp.Reflection.FSharpValue.GetRecordField(props, p))
+                FSharp.Reflection.FSharpValue.MakeRecord(propsType, values.ToArray()) :?> 'P
+        f props
+
+    // In most cases these functions are inlined (mainly for Fable optimizations)
+    // so we create a proxy to avoid inlining big functions every time
+
+    let createServerElement(tag: obj, props: obj, children: ReactElement seq, elementType: ServerElementType) =
+        createServerElementPrivate(tag, props, children, elementType)
+
+    let createServerElementByFn(f, props, children) =
+        createServerElementByFnPrivate(f, props, children)
 #endif
 
-type IState<'T> =
-    [<Emit("$0[0]")>]
-    abstract current: 'T
-    [<Emit("$0[1]($1)")>]
-    abstract update: 'T -> unit
-    [<Emit("$0[1]($1)")>]
-    abstract update: ('T -> 'T) -> unit
+[<RequireQualifiedAccess>]
+module ReactElementType =
+    let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactElementType<'props> =
+#if FABLE_REPL_LIB
+        failwith "Cannot create React components from types in Fable REPL"
+#else
+#if FABLE_COMPILER
+        jsConstructor<'comp> |> unbox
+#else
+        Comp (typeof<'comp>) :> _
+#endif
+#endif
 
-type Hooks =
-    /// Returns the current state with a function to update it.
-    /// https://reactjs.org/docs/hooks-reference.html#usestate
-    [<Import("useState", from="react")>]
-    static member useState<'T> (initialState: 'T): IState<'T> = jsNative
+    let inline ofFunction<'props> (f: 'props -> ReactElement): ReactElementType<'props> =
+#if FABLE_COMPILER
+        f |> unbox
+#else
+        Fn f :> _
+#endif
 
-    /// Returns the current state with a function to update it.
-    /// https://reactjs.org/docs/hooks-reference.html#usestate
-    [<Import("useState", from="react")>]
-    static member useStateLazy<'T> (initialState: unit->'T): IState<'T> = jsNative
+    let inline ofHtmlElement<'props> (name: string): ReactElementType<'props> =
+#if FABLE_COMPILER
+        unbox name
+#else
+        HtmlTag name :> ReactElementType<'props>
+#endif
 
-    /// Accepts a function that contains imperative, possibly effectful code
-    /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
-    [<Import("useEffect", from="react")>]
-    static member useEffect<'T> (effect: unit -> unit, ?dependencies: obj[]): unit = jsNative
+    /// Create a ReactElement to be rendered from an element type, props and children
+    let inline create<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
+#if FABLE_COMPILER
+        ReactBindings.React.createElement(comp, props, children)
+#else
+        match (comp :?> ReactElementTypeWrapper<'props>) with
+        | Comp obj -> ServerRendering.createServerElement(obj, props, children, ServerElementType.Component)
+        | Fn f -> ServerRendering.createServerElementByFn(f, props, children)
+        | HtmlTag obj -> ServerRendering.createServerElement(obj, props, children, ServerElementType.Tag)
+#endif
 
-    /// Accepts a function that contains effectful code and returns a disposable for clean-up
-    /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
-    [<Import("useEffect", from="react")>]
-    [<Emit("$0(() => $1().Dispose{{,$2}})")>]
-    static member useEffectDisposable<'T> (effect: unit -> System.IDisposable, ?dependencies: obj[]): unit = jsNative
+    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of classes.
+    /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo.
+    /// React will skip rendering the component, and reuse the last rendered result.
+    /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, you can use `memoWith`.
+    let memo<'props> (render: 'props -> ReactElement) =
+#if FABLE_COMPILER
+        ReactBindings.React.memo(render, unbox null)
+#else
+        ofFunction render
+#endif
 
-    // [<Import("useCallback", from="react")>]
-    // static member useCallback<'T> (callback: unit -> unit, dependencies: obj[]): unit -> unit = jsNative
+    /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of classes.
+    /// If your function renders the same result given the "same" props (according to `areEqual`), you can wrap it in a call to React.memo.
+    /// React will skip rendering the component, and reuse the last rendered result.
+    /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, you can use `memoWith`.
+    /// This version allow you to control the comparison used instead of the default shallow one by provide a custom comparison function.
+    let memoWith<'props> (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) =
+#if FABLE_COMPILER
+        ReactBindings.React.memo(render, areEqual)
+#else
+        ofFunction render
+#endif
 
-    /// Accepts a "create" function and an array of dependencies and returns a memoized value
-    /// More info at https://reactjs.org/docs/hooks-reference.html#usememo
-    [<Import("useMemo", from="react")>]
-    static member useMemo<'T> (callback: unit -> 'T, dependencies: obj[]): 'T = jsNative
-
-    /// The returned object will persist for the full lifetime of the component.
-    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    [<Import("useRef", from="react")>]
-    static member useRef(initialValue: 'T): IRefHook<'T> = jsNative
-
-    /// Display a label for custom hooks in React DevTools.
-    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    [<Import("useDebugValue", from="react")>]
-    static member useDebugValue(label: string): unit = jsNative
-
-    /// Defers formatting of debug value until the Hook is actually inspected
-    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    [<Import("useDebugValue", from="react")>]
-    static member useDebugValue(value: 'T, format: 'T->string): unit = jsNative
-
-[<AutoOpen>]
-module Extensions =
-    type Browser.Types.Event with
-        /// Access the value from target
-        /// Equivalent to `(this.target :?> HTMLInputElement).value`
-        member this.Value =
-            (this.target :?> Browser.Types.HTMLInputElement).value
-
-        /// Access the checked property from target
-        /// Equivalent to `(this.target :?> HTMLInputElement).checked`
-        member this.Checked =
-            (this.target :?> Browser.Types.HTMLInputElement).``checked``
 
 [<AutoOpen>]
 module Helpers =
-
-    [<Import("createElement", from="react")>]
-    let createElement(comp: obj, props: obj, [<ParamList>] children: obj): ReactElement =
+    [<System.Obsolete("Use ReactBindings.React.createElement")>]
+    let inline createElement(comp: obj, props: obj, [<ParamList>] children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
-        jsNative
+        ReactBindings.React.createElement(comp, props, children)
 #else
         HTMLNode.Empty :> _
-#endif
-
-#if !FABLE_COMPILER
-    [<RequireQualifiedAccess>]
-    module ServerRendering =
-        let [<Literal>] private ChildrenName = "children"
-
-        let private createServerElementPrivate(tag: obj, props: obj, children: ReactElement seq, elementType: ServerElementType) =
-            match elementType with
-            | ServerElementType.Tag ->
-                HTMLNode.Node (string tag, props :?> IProp seq, children) :> ReactElement
-            | ServerElementType.Fragment ->
-                HTMLNode.List children :> ReactElement
-            | ServerElementType.Component ->
-                let tag = tag :?> System.Type
-                let comp = System.Activator.CreateInstance(tag, props)
-                let childrenProp = tag.GetProperty(ChildrenName)
-                childrenProp.SetValue(comp, children |> Seq.toArray)
-                let render = tag.GetMethod("render")
-                render.Invoke(comp, null) :?> ReactElement
-
-        let private createServerElementByFnPrivate(f, props, children) =
-            let propsType = props.GetType()
-            let props =
-                if propsType.GetProperty (ChildrenName) |> isNull then
-                    props
-                else
-                    let values = ResizeArray<obj> ()
-                    let properties = propsType.GetProperties()
-                    for p in properties do
-                        if p.Name = ChildrenName then
-                            values.Add (children |> Seq.toArray)
-                        else
-                            values.Add (FSharp.Reflection.FSharpValue.GetRecordField(props, p))
-                    FSharp.Reflection.FSharpValue.MakeRecord(propsType, values.ToArray()) :?> 'P
-            f props
-
-        // In most cases these functions are inlined (mainly for Fable optimizations)
-        // so we create a proxy to avoid inlining big functions every time
-
-        let createServerElement(tag: obj, props: obj, children: ReactElement seq, elementType: ServerElementType) =
-            createServerElementPrivate(tag, props, children, elementType)
-
-        let createServerElementByFn(f, props, children) =
-            createServerElementByFnPrivate(f, props, children)
 #endif
 
     /// Instantiate a component from a type inheriting React.Component
     /// Example: `ofType<MyComponent,_,_> { myProps = 5 } []`
     let inline ofType<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement seq): ReactElement =
-#if FABLE_COMPILER
-        createElement(jsConstructor<'T>, props, children)
-#else
-        ServerRendering.createServerElement(typeof<'T>, props, children, ServerElementType.Component)
-#endif
+        ReactElementType.create ReactElementType.ofComponent<'T,_,_> props children
 
-    /// OBSOLETE: Use `ofType`
     [<System.Obsolete("Use ofType")>]
     let inline com<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement seq): ReactElement =
         ofType<'T, 'P, 'S> props children
 
-    /// Instantiate a stateless component from a function
-    /// Example:
-    /// ```
-    /// let Hello (p: MyProps) = div [] [ofString ("Hello " + p.name)]
-    /// ofFunction Hello { name = "Maxime" } []
-    /// ```
+    [<System.Obsolete("Use FunctionComponent.Of to build a function component")>]
     let inline ofFunction<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement seq): ReactElement =
-#if FABLE_COMPILER
-        createElement(f, props, children)
-#else
-        ServerRendering.createServerElementByFn(f, props, children)
-#endif
-
-    /// OBSOLETE: Use `ofFunction`
-    [<System.Obsolete("Use ofFunction")>]
-    let inline fn<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement seq): ReactElement =
-        ofFunction f props children
+        ReactElementType.create (ReactElementType.ofFunction f) props children
 
     /// Instantiate an imported React component. The first two arguments must be string literals, "default" can be used for the first one.
     /// Example: `ofImport "Map" "leaflet" { x = 10; y = 50 } []`
     let inline ofImport<'P> (importMember: string) (importPath: string) (props: 'P) (children: ReactElement seq): ReactElement =
-        createElement(import importMember importPath, props, children)
-
-    [<RequireQualifiedAccess>]
-    module ReactElementType =
-        let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactElementType<'props> =
-#if FABLE_COMPILER
-            jsConstructor<'comp> |> unbox
+#if FABLE_REPL_LIB
+        failwith "Cannot import React components in Fable REPL"
 #else
-            Comp (typeof<'comp>) :> _
-#endif
-
-        let inline ofFunction<'props> (f: 'props -> ReactElement): ReactElementType<'props> =
 #if FABLE_COMPILER
-            f |> unbox
+        ReactBindings.React.createElement(import importMember importPath, props, children)
 #else
-            Fn f :> _
+        failwith "Cannot import React components in .NET"
 #endif
-
-        let inline ofHtmlElement<'props> (name: string): ReactElementType<'props> =
-#if FABLE_COMPILER
-            unbox name
-#else
-            HtmlTag name :> ReactElementType<'props>
-#endif
-
-        /// Create a ReactElement to be rendered from an element type, props and children
-        let inline create<'props> (comp: ReactElementType<'props>) (props: 'props) (children: ReactElement seq): ReactElement =
-#if FABLE_COMPILER
-            createElement(comp, props, children)
-#else
-            match (comp :?> ReactElementTypeWrapper<'props>) with
-            | Comp obj -> ServerRendering.createServerElement(obj, props, children, ServerElementType.Component)
-            | Fn f -> ServerRendering.createServerElementByFn(f, props, children)
-            | HtmlTag obj -> ServerRendering.createServerElement(obj, props, children, ServerElementType.Tag)
-#endif
-
-#if FABLE_COMPILER
-        [<Import("memo", from="react")>]
-        let private reactMemo<'props> (render: 'props -> ReactElement, areEqual: 'props -> 'props -> bool) : ReactElementType<'props> =
-            jsNative
-#endif
-
-        /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of classes.
-        /// If your function component renders the same result given the same props, you can wrap it in a call to React.memo.
-        /// React will skip rendering the component, and reuse the last rendered result.
-        /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, you can use `memoWith`.
-        let memo<'props> (render: 'props -> ReactElement) =
-#if FABLE_COMPILER
-            reactMemo(render, unbox null)
-#else
-            ofFunction render
-#endif
-
-        /// React.memo is a higher order component. It’s similar to React.PureComponent but for function components instead of classes.
-        /// If your function renders the same result given the "same" props (according to `areEqual`), you can wrap it in a call to React.memo.
-        /// React will skip rendering the component, and reuse the last rendered result.
-        /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, you can use `memoWith`.
-        /// This version allow you to control the comparison used instead of the default shallow one by provide a custom comparison function.
-        let memoWith<'props> (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) =
-#if FABLE_COMPILER
-            reactMemo(render, areEqual)
-#else
-            ofFunction render
 #endif
 
 #if FABLE_COMPILER
@@ -285,22 +191,7 @@ module Helpers =
         false
 #endif
 
-    /// `memoBuilder` is similar to React.PureComponent but is built from only a render function.
-    /// If your function renders the same result given the same props, you can wrap it in a call to memoBuilder.
-    /// React will skip rendering the component, and reuse the last rendered result.
-    /// The resulting function shouldn't be used directly in a render but should be stored to be reused:
-    ///
-    /// ```
-    /// type HelloProps = { Name: string }
-    /// let hello = memoBuilder "Hello" (fun p ->
-    ///     span [ ]
-    ///         [ str "Hello "; str p.Name ])
-    ///
-    /// let view model =
-    ///     hello { Name = model.Name }
-    /// ```
-    ///
-    /// By default it will only shallowly compare complex objects in the props object. If you want control over the comparison, use `memoBuilderWith`.
+    [<System.Obsolete("Use FunctionComponent.Of with memoizedWith")>]
     let memoBuilder<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
         render?displayName <- name
@@ -309,21 +200,7 @@ module Helpers =
         fun props ->
             ReactElementType.create memoType props []
 
-    /// `memoBuilderWith` is similar to React.Component but is built from render and equality functions.
-    /// If your function renders the same result given the "same" props (according to `areEqual`), you can wrap it in a call to memoBuilder.
-    /// React will skip rendering the component, and reuse the last rendered result.
-    /// The resulting function shouldn't be used directly in a render but should be stored to be reused:
-    ///
-    /// ```
-    /// type HelloProps = { Name: string }
-    /// let helloEquals p1 p2 = p1.Name = p2.Name
-    /// let hello = memoBuilderWith "Hello" helloEquals (fun p ->
-    ///     span [ ]
-    ///         [ str "Hello "; str p.Name ])
-    ///
-    /// let view model =
-    ///     hello { Name = model.Name }
-    /// ```
+    [<System.Obsolete("Use FunctionComponent.Of with memoizedWith")>]
     let memoBuilderWith<'props> (name: string) (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
         render?displayName <- name
@@ -332,77 +209,74 @@ module Helpers =
         fun props ->
             ReactElementType.create memoType props []
 
-// TODO: Move conditional compilation to the body of the functions?
-#if FABLE_COMPILER
-    /// OBSOLETE: Use `ReactElementType.create`
     [<System.Obsolete("Use ReactElementType.create")>]
     let inline from<'P> (com: ReactElementType<'P>) (props: 'P) (children: ReactElement seq): ReactElement =
-        createElement(com, props, children)
+        ReactElementType.create com props children
 
     /// Alias of `ofString`
-    let inline str (s: string): ReactElement = unbox s
-
-    /// Cast a string to a React element (erased in runtime)
-    let inline ofString (s: string): ReactElement = unbox s
-
-    /// Cast an option value to a React element (erased in runtime)
-    let inline ofOption (o: ReactElement option): ReactElement =
-        match o with Some o -> o | None -> null // Option.toObj(o)
-
-    /// OBSOLETE: Use `ofOption`
-    [<System.Obsolete("Use ofOption")>]
-    let inline opt (o: ReactElement option): ReactElement = ofOption o
-
-    /// Cast an int to a React element (erased in runtime)
-    let inline ofInt (i: int): ReactElement = unbox i
-
-    /// Cast a float to a React element (erased in runtime)
-    let inline ofFloat (f: float): ReactElement = unbox f
-
-    /// Returns a list **from .render() method**
-    let inline ofList (els: ReactElement list): ReactElement = unbox(List.toArray els)
-
-    /// Returns an array **from .render() method**
-    let inline ofArray (els: ReactElement array): ReactElement = unbox els
-
-    /// A ReactElement when you don't want to render anything (null in javascript)
-    [<Emit("null")>]
-    let nothing: ReactElement = jsNative
+    let inline str (s: string): ReactElement =
+#if FABLE_COMPILER
+        unbox s
 #else
-    /// Alias of `ofString`
-    let inline str (s: string): ReactElement = HTMLNode.Text s :> ReactElement
+        HTMLNode.Text s :> ReactElement
+#endif
 
     /// Cast a string to a React element (erased in runtime)
-    let inline ofString (s: string): ReactElement = str s
+    let inline ofString (s: string): ReactElement =
+        str s
 
     /// Cast an option value to a React element (erased in runtime)
     let inline ofOption (o: ReactElement option): ReactElement =
         match o with Some o -> o | None -> null // Option.toObj(o)
 
-    /// OBSOLETE: Use `ofOption`
     [<System.Obsolete("Use ofOption")>]
-    let inline opt (o: ReactElement option): ReactElement = ofOption o
+    let opt (o: ReactElement option): ReactElement =
+        ofOption o
 
     /// Cast an int to a React element (erased in runtime)
-    let inline ofInt (i: int): ReactElement = HTMLNode.RawText (string i) :> ReactElement
+    let inline ofInt (i: int): ReactElement =
+#if FABLE_COMPILER
+        unbox i
+#else
+        HTMLNode.RawText (string i) :> ReactElement
+#endif
 
     /// Cast a float to a React element (erased in runtime)
-    let inline ofFloat (f: float): ReactElement = HTMLNode.RawText (string f) :> ReactElement
+    let inline ofFloat (f: float): ReactElement =
+#if FABLE_COMPILER
+        unbox f
+#else
+        HTMLNode.RawText (string f) :> ReactElement
+#endif
 
     /// Returns a list **from .render() method**
-    let inline ofList (els: ReactElement list): ReactElement = HTMLNode.List els :> ReactElement
+    let inline ofList (els: ReactElement list): ReactElement =
+#if FABLE_COMPILER
+        unbox(List.toArray els)
+#else
+        HTMLNode.List els :> ReactElement
+#endif
 
     /// Returns an array **from .render() method**
-    let inline ofArray (els: ReactElement array): ReactElement = HTMLNode.List els :> ReactElement
+    let inline ofArray (els: ReactElement array): ReactElement =
+#if FABLE_COMPILER
+        unbox els
+#else
+        HTMLNode.List els :> ReactElement
+#endif
 
     /// A ReactElement when you don't want to render anything (null in javascript)
-    let nothing: ReactElement = HTMLNode.Empty :> ReactElement
+    let nothing: ReactElement =
+#if FABLE_COMPILER
+        null
+#else
+        HTMLNode.Empty :> ReactElement
 #endif
 
     /// Instantiate a DOM React element
     let inline domEl (tag: string) (props: IHTMLProp seq) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
-        createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+        ReactBindings.React.createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 #else
         ServerRendering.createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
 #endif
@@ -410,7 +284,7 @@ module Helpers =
     /// Instantiate a DOM React element (void)
     let inline voidEl (tag: string) (props: IHTMLProp seq) : ReactElement =
 #if FABLE_COMPILER
-        createElement(tag, keyValueList CaseRules.LowerFirst props, [])
+        ReactBindings.React.createElement(tag, keyValueList CaseRules.LowerFirst props, [])
 #else
         ServerRendering.createServerElement(tag, (props |> Seq.cast<IProp>), [], ServerElementType.Tag)
 #endif
@@ -418,7 +292,7 @@ module Helpers =
     /// Instantiate an SVG React element
     let inline svgEl (tag: string) (props: IProp seq) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
-        createElement(tag, keyValueList CaseRules.LowerFirst props, children)
+        ReactBindings.React.createElement(tag, keyValueList CaseRules.LowerFirst props, children)
 #else
         ServerRendering.createServerElement(tag, (props |> Seq.cast<IProp>), children, ServerElementType.Tag)
 #endif
@@ -426,7 +300,7 @@ module Helpers =
     /// Instantiate a React fragment
     let inline fragment (props: IFragmentProp seq) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
-        createElement(jsConstructor<Fragment>, keyValueList CaseRules.LowerFirst props, children)
+        ReactBindings.React.createElement(ReactBindings.React.Fragment, keyValueList CaseRules.LowerFirst props, children)
 #else
         ServerRendering.createServerElement(typeof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
 #endif
@@ -442,10 +316,12 @@ module Helpers =
 
     let classList classes = classBaseList "" classes
 
+#if FABLE_COMPILER
     /// Finds a DOM element by its ID and mounts the React element there
     let inline mountById (domElId: string) (reactEl: ReactElement): unit =
-        Fable.ReactDom.render(reactEl, document.getElementById(domElId))
+        ReactDom.render(reactEl, document.getElementById(domElId))
 
     /// Finds the first DOM element matching a CSS selector and mounts the React element there
     let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit =
-        Fable.ReactDom.render(reactEl, document.querySelector(domElSelector))
+        ReactDom.render(reactEl, document.querySelector(domElSelector))
+#endif

@@ -6,6 +6,30 @@ open Fable.Core
 type [<AllowNullLiteral>] ReactElement =
     interface end
 
+type ReactElementType<'props> =
+    interface end
+
+type IReactExports =
+    abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
+    abstract useState: initialState: obj -> obj
+    abstract useEffect: effect: obj * ?deps: obj[] -> unit
+    abstract useMemo: callback: obj * deps: obj -> obj
+    abstract useRef: initialValue: obj -> obj
+    abstract useDebugValue: label: obj * ?formal: obj -> unit
+    abstract memo: render: ('props -> ReactElement) * areEqual: ('props -> 'props -> bool) -> ReactElementType<'props>
+    abstract Fragment: ReactElementType<obj>
+    abstract Suspense: ReactElementType<obj>
+    abstract ``lazy``: f: (unit -> JS.Promise<'TIn>) -> 'TOut
+
+module ReactBindings =
+    #if FABLE_REPL_LIB
+    [<Global("React")>]
+    #else
+    [<Import("*", "react")>]
+    #endif
+    /// Mainly intended for internal use
+    let React: IReactExports = jsNative
+
 /// Create a React component by inheriting this class as follows
 ///
 /// ```
@@ -20,7 +44,7 @@ type [<AllowNullLiteral>] ReactElement =
 ///                     this.props.name this.state.value
 ///         div [] [ofString msg]
 /// ```
-and [<AbstractClass; Import("Component", "react")>] Component<'P,'S>(initProps: 'P) =
+type [<AbstractClass; Import("Component", "react")>] Component<'P,'S>(initProps: 'P) =
     [<Emit("$0.props")>]
     member __.props: 'P = initProps
 
@@ -127,7 +151,7 @@ and [<AbstractClass; Import("Component", "react")>] Component<'P,'S>(initProps: 
 ///                     this.props.name this.state.value
 ///         div [] [ofString msg]
 /// ```
-and [<AbstractClass; Import("PureComponent", "react")>] PureComponent<'P, 'S>(props: 'P) =
+type [<AbstractClass; Import("PureComponent", "react")>] PureComponent<'P, 'S>(props: 'P) =
     inherit Component<'P, 'S>(props)
 
 /// A react component that implements `shouldComponentUpdate()` with a shallow prop comparison.
@@ -141,13 +165,10 @@ and [<AbstractClass; Import("PureComponent", "react")>] PureComponent<'P, 'S>(pr
 ///                     this.props.name this.props.value
 ///         div [] [ofString msg]
 /// ```
-and [<AbstractClass; Import("PureComponent", "react")>] PureStatelessComponent<'P>(props: 'P) =
+type [<AbstractClass; Import("PureComponent", "react")>] PureStatelessComponent<'P>(props: 'P) =
     inherit Component<'P, obj>(props)
 
-and FragmentProps = { key: string }
+type FragmentProps = { key: string }
 
-and [<Import("Fragment", "react")>] Fragment(props: FragmentProps) =
+type [<Import("Fragment", "react")>] Fragment(props: FragmentProps) =
     interface ReactElement
-
-type IRefHook<'T> =
-    abstract current: 'T with get, set
