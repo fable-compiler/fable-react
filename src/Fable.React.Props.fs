@@ -322,7 +322,7 @@ type HTMLAttr =
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Specifies the display behavior (the type of rendering box) of an element.
-type Display =
+type DisplayOptions =
     /// The element is completely removed
     | None
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
@@ -370,7 +370,7 @@ type Display =
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Modifies the behavior of the [flex-wrap](https://www.w3schools.com/CSSref/css3_pr_flex-wrap.asp) property. It is similar to [align-items](https://www.w3schools.com/CSSref/css3_pr_align-items.asp), but instead of aligning flex items, it aligns flex lines.
-type AlignContent =
+type AlignContentOptions =
     /// Default value. Lines stretch to take up the remaining space.
     | Stretch
     /// Lines are packed toward the center of the flex container.
@@ -390,7 +390,7 @@ type AlignContent =
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Specifies the default alignment for items inside the flexible container.
-type AlignItems =
+type AlignItemsOptions =
     /// The effect of this keyword is dependent of the layout mode we are in. [Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items#Values)
     | Normal
     /// Items are positioned at the baseline of the container
@@ -410,7 +410,7 @@ type AlignItems =
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Specifies the default alignment for items inside the flexible container.
-type AlignSelf =
+type AlignSelfOptions =
     /// Default. The element inherits its parent container's align-items property, or "stretch" if it has no parent container.
     | Auto
     /// The element is positioned at the baseline of the container.
@@ -429,7 +429,7 @@ type AlignSelf =
     | [<CompiledName "flex-end">] FlexEnd
 
 [<StringEnum; RequireQualifiedAccess>]
-type TextAlign =
+type TextAlignOptions =
     /// Aligns the text to the left.
     | Left
     /// Aligns the text to the right.
@@ -445,7 +445,7 @@ type TextAlign =
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Specifies the type of positioning method used for an element (static, relative, absolute, fixed, or sticky).
-type Position =
+type PositionOptions =
     /// Default value. Elements render in order, as they appear in the document flow.
     | Static
     /// The element is positioned relative to its first positioned (not static) ancestor element.
@@ -464,9 +464,9 @@ type Position =
     | Inherit
 
 type CSSProp =
-    | AlignContent of AlignContent
-    | AlignItems of AlignItems
-    | AlignSelf of AlignSelf
+    | AlignContent of AlignContentOptions
+    | AlignItems of AlignItemsOptions
+    | AlignSelf of AlignSelfOptions
     | AlignmentAdjust of obj
     | AlignmentBaseline of obj
     | All of obj
@@ -589,7 +589,7 @@ type CSSProp =
     | CueAfter of obj
     | Cursor of obj
     | Direction of obj
-    | Display of Display
+    | Display of DisplayOptions
     | DominantBaseline of obj
     | EmptyCells of obj
     | EnableBackground of obj
@@ -755,7 +755,7 @@ type CSSProp =
     | Perspective of obj
     | PerspectiveOrigin of obj
     | PointerEvents of obj
-    | Position of Position
+    | Position of PositionOptions
     | PunctuationTrim of obj
     | Quotes of obj
     | RegionFragment of obj
@@ -789,7 +789,7 @@ type CSSProp =
     | StrokeWidth of obj
     | TabSize of obj
     | TableLayout of obj
-    | TextAlign of TextAlign
+    | TextAlign of TextAlignOptions
     | TextAlignLast of obj
     | TextAnchor of obj
     | TextCombineUpright of obj

@@ -1,3 +1,10 @@
+### 5.0.0
+
+- Function components
+- React hooks
+- Type-safe CSS props
+- Code splitting
+
 ### 5.0.0-beta-009
 
 - Add `FunctionComponent`

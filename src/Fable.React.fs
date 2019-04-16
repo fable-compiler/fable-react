@@ -11,11 +11,6 @@ type ReactElementType<'props> =
 
 type IReactExports =
     abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
-    abstract useState: initialState: obj -> obj
-    abstract useEffect: effect: obj * ?deps: obj[] -> unit
-    abstract useMemo: callback: obj * deps: obj -> obj
-    abstract useRef: initialValue: obj -> obj
-    abstract useDebugValue: label: obj * ?formal: obj -> unit
     abstract memo: render: ('props -> ReactElement) * areEqual: ('props -> 'props -> bool) -> ReactElementType<'props>
     abstract Fragment: ReactElementType<obj>
     abstract Suspense: ReactElementType<obj>

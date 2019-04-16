@@ -1,7 +1,6 @@
 namespace Fable.React
 
 open Fable.Core
-open ReactBindings
 
 type IStateHook<'T> =
     [<Emit("$0[0]")>]
@@ -14,45 +13,69 @@ type IStateHook<'T> =
 type IRefHook<'T> =
     abstract current: 'T with get, set
 
-type Hooks =
+type IHooks =
     /// Returns the current state with a function to update it.
     /// https://reactjs.org/docs/hooks-reference.html#usestate
-    static member inline useState<'T> (initialState: 'T): IStateHook<'T> =
-        React.useState(initialState) :?> _
+    abstract useState: initialState: 'T -> IStateHook<'T>
 
     /// Returns the current state with a function to update it.
     /// https://reactjs.org/docs/hooks-reference.html#usestate
-    static member inline useStateLazy<'T> (initialState: unit->'T): IStateHook<'T> =
-        React.useState(initialState) :?> _
+    [<Emit("$0.useState")>]
+    abstract useStateLazy: initialState: (unit->'T) -> IStateHook<'T>
 
     /// Accepts a function that contains imperative, possibly effectful code
     /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
-    static member inline useEffect<'T> (effect: unit -> unit, ?dependencies: obj[]): unit =
-        React.useEffect(effect, ?deps=dependencies)
+    abstract useEffect: effect: (unit->unit) * ?dependencies: obj[] -> unit
 
     /// Accepts a function that contains effectful code and returns a disposable for clean-up
     /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
-    static member inline useEffectDisposable<'T> (effect: unit -> System.IDisposable, ?dependencies: obj[]): unit =
-        React.useEffect((fun () -> effect().Dispose), ?deps=dependencies)
+    [<Emit("$0.useEffect(() => $1().Dispose{{, $2}})")>]
+    abstract useEffectDisposable: effect: (unit->System.IDisposable) * ?dependencies: obj[] -> unit
 
-    // static member useCallback<'T> (callback: unit -> unit, dependencies: obj[]): unit -> unit
+    // abstract useCallback (callback: unit -> unit, dependencies: obj[]): unit -> unit
 
     /// Accepts a "create" function and an array of dependencies and returns a memoized value
     /// More info at https://reactjs.org/docs/hooks-reference.html#usememo
-    static member inline useMemo<'T> (callback: unit -> 'T, dependencies: obj[]): 'T =
-        React.useMemo(callback, dependencies) :?> _
+    abstract useMemo: callback: (unit->'T) * dependencies: obj[] -> 'T
 
     /// The returned object will persist for the full lifetime of the component.
     /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    static member inline useRef(initialValue: 'T): IRefHook<'T> =
-        React.useRef(initialValue) :?> _
+    abstract useRef: initialValue: 'T -> IRefHook<'T>
 
     /// Display a label for custom hooks in React DevTools.
     /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    static member inline useDebugValue(label: string): unit =
-        React.useDebugValue(label)
+    abstract useDebugValue: label: string -> unit
 
     /// Defers formatting of debug value until the Hook is actually inspected
     /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    static member inline useDebugValue(value: 'T, format: 'T->string): unit =
-        React.useDebugValue(value, format)
+    abstract useDebugValue: value: 'T * format: ('T->string) -> unit
+
+[<AutoOpen>]
+module HookBindings =
+    let private makeDummyStateHook value =
+        { new IStateHook<'T> with
+            member __.current = value
+            member __.update(x: 'T) = ()
+            member __.update(f: 'T->'T) = () }
+
+    #if FABLE_REPL_LIB
+    [<Global("React")>]
+    #else
+    [<Import("*", "react")>]
+    #endif
+    let Hooks: IHooks =
+        // Placeholder for SSR
+        { new IHooks with
+            member __.useState(initialState: 'T) =
+                makeDummyStateHook initialState
+            member __.useStateLazy(initialState) =
+                makeDummyStateHook (initialState())
+            member __.useEffect(effect, dependencies) = ()
+            member __.useEffectDisposable(effect, dependencies) = ()
+            member __.useMemo(callback, dependencies) = callback()
+            member __.useRef(initialValue) =
+                { new IRefHook<_> with
+                    member __.current with get() = initialValue and set _ = () }
+            member __.useDebugValue(label): unit = ()
+            member __.useDebugValue(value, format): unit = ()
+        }
