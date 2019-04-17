@@ -204,6 +204,31 @@ module Helpers =
         false
 #endif
 
+    /// Same as the default `React.memo` equality but ignores functions.
+    /// Useful in combination with `FunctionComponent.Of` `memoizeWith` parameter when F# equality isn't required
+    let memoEqualsButFunctions (x: 'a) (y: 'a) =
+#if FABLE_COMPILER
+        if obj.ReferenceEquals(x, y) then
+            true
+        elif isNonEnumerableObject x && not(isNull(box y)) then
+            let keys = JS.Object.keys x
+            let length = jsArrayLength(keys)
+            let mutable i = 0
+            let mutable result = true
+            while i < length && result do
+                let key = keys.[i]
+                i <- i + 1
+                let xValue = x?(key)
+                result <- isFunction xValue || obj.ReferenceEquals(xValue, y?(key))
+            result
+        else
+            obj.ReferenceEquals(box x, box y)
+#else
+        // Server rendering, won't be actually used
+        // Avoid `x = y` because it will force 'a to implement structural equality
+        false
+#endif
+
     [<System.Obsolete("Use FunctionComponent.Of with memoizedWith")>]
     let memoBuilder<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
