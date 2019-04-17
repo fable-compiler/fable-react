@@ -173,18 +173,31 @@ module Helpers =
 
     [<Emit("typeof $0 === 'object' && !$0[Symbol.iterator]")>]
     let private isNonEnumerableObject (x: obj): bool = jsNative
+
+    [<Emit("$0.length")>]
+    let private jsArrayLength(arr: ResizeArray<_>): int = jsNative
 #endif
 
     /// Same as F# equality but ignores functions in the first level of an object
-    /// Useful in combination with memoBuilderWith for most cases (ignore Elmish dispatch, etc)
+    /// Useful in combination with `FunctionComponent.Of` `memoizeWith` parameter for most cases
+    /// (ignore Elmish dispatch, etc)
     let equalsButFunctions (x: 'a) (y: 'a) =
 #if FABLE_COMPILER
         if obj.ReferenceEquals(x, y) then
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
-            (true, JS.Object.keys (x)) ||> Seq.fold (fun eq k ->
-                eq && (isFunction x?(k) || x?(k) = y?(k)))
-        else (box x) = (box y)
+            let keys = JS.Object.keys x
+            let length = jsArrayLength(keys)
+            let mutable i = 0
+            let mutable result = true
+            while i < length && result do
+                let key = keys.[i]
+                i <- i + 1
+                let xValue = x?(key)
+                result <- isFunction xValue || xValue = y?(key)
+            result
+        else
+            (box x) = (box y)
 #else
         // Server rendering, won't be actually used
         // Avoid `x = y` because it will force 'a to implement structural equality
