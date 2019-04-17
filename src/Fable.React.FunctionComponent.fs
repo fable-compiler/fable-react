@@ -37,7 +37,14 @@ type FunctionComponent =
 #endif
         let elemType =
             match memoizeWith with
-            | Some areEqual -> ReactElementType.memoWith areEqual render
+            | Some areEqual ->
+                let memoElement = ReactElementType.memoWith areEqual render
+#if FABLE_COMPILER
+                match displayName with
+                | Some name -> memoElement?displayName <- "Memo(" + name + ")"
+                | None -> ()
+#endif
+                memoElement
             | None -> ReactElementType.ofFunction render
         fun props ->
             ReactElementType.create elemType props []
