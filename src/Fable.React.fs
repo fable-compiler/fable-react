@@ -6,8 +6,11 @@ open Fable.Core
 type [<AllowNullLiteral>] ReactElement =
     interface end
 
-type ReactElementType<'props> =
+type ReactElementType =
     interface end
+
+type ReactElementType<'props> =
+    inherit ReactElementType
 
 type IReactExports =
     abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement

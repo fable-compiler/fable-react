@@ -70,6 +70,7 @@ module ServerRendering =
 #endif
 
 [<RequireQualifiedAccess>]
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
 module ReactElementType =
     let inline ofComponent<'comp, 'props, 'state when 'comp :> Component<'props, 'state>> : ReactElementType<'props> =
 #if FABLE_REPL_LIB
@@ -173,12 +174,9 @@ module Helpers =
 
     [<Emit("typeof $0 === 'object' && !$0[Symbol.iterator]")>]
     let private isNonEnumerableObject (x: obj): bool = jsNative
-
-    [<Emit("$0.length")>]
-    let private jsArrayLength(arr: ResizeArray<_>): int = jsNative
 #endif
 
-    /// Same as F# equality but ignores functions in the first level of an object
+    /// Same as F# equality but ignores functions in the first level of an object.
     /// Useful in combination with `FunctionComponent.Of` `memoizeWith` parameter for most cases
     /// (ignore Elmish dispatch, etc)
     let equalsButFunctions (x: 'a) (y: 'a) =
@@ -187,7 +185,7 @@ module Helpers =
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
             let keys = JS.Object.keys x
-            let length = jsArrayLength(keys)
+            let length = keys.Count
             let mutable i = 0
             let mutable result = true
             while i < length && result do
@@ -212,7 +210,7 @@ module Helpers =
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
             let keys = JS.Object.keys x
-            let length = jsArrayLength(keys)
+            let length = keys.Count
             let mutable i = 0
             let mutable result = true
             while i < length && result do
@@ -222,7 +220,7 @@ module Helpers =
                 result <- isFunction xValue || obj.ReferenceEquals(xValue, y?(key))
             result
         else
-            obj.ReferenceEquals(box x, box y)
+            false
 #else
         // Server rendering, won't be actually used
         // Avoid `x = y` because it will force 'a to implement structural equality

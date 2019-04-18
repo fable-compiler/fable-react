@@ -48,31 +48,3 @@ type FunctionComponent =
             | None -> ReactElementType.ofFunction render
         fun props ->
             ReactElementType.create elemType props []
-
-// module Test =
-//     type Model = { foo: string }
-//     type Msg = Foo
-
-//     let view model (dispatch: Msg->unit) =
-//         div [] [str model.foo]
-
-//     let view2 (p: {| model: Model
-//                      dispatch: Msg->unit |}) =
-//         div [] [str p.model.foo]
-
-//     let MyComponent =
-//         FunctionComponent.Lazy(
-//             view2,
-//             fallback = div [] [])
-
-
-//     let MyComponent2 =
-//         FunctionComponent.Of<{| model: Model
-//                                 dispatch: Msg->unit |}>(
-//             (fun p -> view p.model p.dispatch),
-//             displayName = "Bar",
-//             memoizeWith = fun p1 p2 -> p1.model.foo = p2.model.foo
-//         )
-
-
-//     let f m d = MyComponent {| model = m; dispatch = d |}
