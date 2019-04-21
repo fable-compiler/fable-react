@@ -227,7 +227,7 @@ module Helpers =
         false
 #endif
 
-    [<System.Obsolete("Use FunctionComponent.Of with memoizedWith")>]
+    [<System.Obsolete("Use FunctionComponent.Of with memoizeWith")>]
     let memoBuilder<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
         render?displayName <- name
@@ -236,7 +236,7 @@ module Helpers =
         fun props ->
             ReactElementType.create memoType props []
 
-    [<System.Obsolete("Use FunctionComponent.Of with memoizedWith")>]
+    [<System.Obsolete("Use FunctionComponent.Of with memoizeWith")>]
     let memoBuilderWith<'props> (name: string) (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
         render?displayName <- name
