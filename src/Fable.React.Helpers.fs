@@ -176,9 +176,9 @@ module Helpers =
     let private isNonEnumerableObject (x: obj): bool = jsNative
 #endif
 
-    /// Same as F# equality but ignores functions in the first level of an object.
-    /// Useful in combination with `FunctionComponent.Of` `memoizeWith` parameter for most cases
-    /// (ignore Elmish dispatch, etc)
+    /// Memberwise structural comparison (same as default F#) that ignores top-level
+    /// functions (e.g. Elmish dispatch).
+    /// Can be used e.g. with the `FunctionComponent.Of` `memoizeWith` parameter.
     let equalsButFunctions (x: 'a) (y: 'a) =
 #if FABLE_COMPILER
         if obj.ReferenceEquals(x, y) then
@@ -202,8 +202,9 @@ module Helpers =
         false
 #endif
 
-    /// Same as the default `React.memo` equality but ignores functions.
-    /// Useful in combination with `FunctionComponent.Of` `memoizeWith` parameter when F# equality isn't required
+    /// Memberwise referential comparison (same as default React.memo) that ignores
+    /// top-level functions (e.g. Elmish dispatch).
+    /// Can be used e.g. with the `FunctionComponent.Of` `memoizeWith` parameter.
     let memoEqualsButFunctions (x: 'a) (y: 'a) =
 #if FABLE_COMPILER
         if obj.ReferenceEquals(x, y) then
