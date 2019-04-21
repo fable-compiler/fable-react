@@ -26,6 +26,7 @@ type FunctionComponent =
             div [] [] // React.lazy is not compatible with SSR, so just use an empty div
 #endif
 
+    /// Creates a functional React component. Uses React.memo if `memoizeWith` is specified.
     static member Of(render: 'Props->ReactElement,
                        ?displayName: string,
                        ?memoizeWith: 'Props -> 'Props -> bool)
