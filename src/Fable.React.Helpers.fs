@@ -342,6 +342,36 @@ module Helpers =
         ServerRendering.createServerElement(typeof<Fragment>, (props |> Seq.cast<IProp>), children, ServerElementType.Fragment)
 #endif
 
+    /// Accepts a context value to be passed to consuming components that are descendants of this Provider.
+    /// One Provider can be connected to many consumers. Providers can be nested to override values deeper within the tree.
+    /// More info at https://reactjs.org/docs/context.html#contextprovider
+    let inline contextProvider (ctx: IContext<'T>) (value: 'T) (children: ReactElement seq): ReactElement =
+#if FABLE_COMPILER
+        ReactBindings.React.createElement(ctx?Provider, createObj ["value" ==> value], children)
+#else
+        fragment [] children
+#endif
+
+    /// Creates a Context object. When React renders a component that subscribes to this Context
+    /// object it will read the current context value from the closest matching Provider above it
+    /// in the tree. More info at https://reactjs.org/docs/context.html#reactcreatecontext
+    let inline createContext (defaultValue: 'T): IContext<'T> =
+#if FABLE_COMPILER
+        ReactBindings.React.createContext(defaultValue)
+#else
+        upcast { new ISSRContext<_> with member __.DefaultValue = defaultValue }
+#endif
+
+    /// To be used in constructors of class components
+    /// (for function components use `useRef` hook)
+    let inline createRef (initialValue: 'T): IRefValue<'T> =
+#if FABLE_COMPILER
+        ReactBindings.React.createRef(initialValue)
+#else
+        { new IRefValue<_> with
+            member __.current with get() = initialValue and set _ = () }
+#endif
+
     // Class list helpers
     let classBaseList baseClass classes =
         classes

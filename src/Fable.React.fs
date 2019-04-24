@@ -12,8 +12,20 @@ type ReactElementType =
 type ReactElementType<'props> =
     inherit ReactElementType
 
+type IRefValue<'T> =
+    abstract current: 'T with get, set
+
+type IContext<'T> =
+    interface end
+
+type ISSRContext<'T> =
+    inherit IContext<'T>
+    abstract DefaultValue: 'T
+
 type IReactExports =
     abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
+    abstract createContext: defaultValue: 'T -> IContext<'T>
+    abstract createRef: initialValue: 'T -> IRefValue<'T>
     abstract memo: render: ('props -> ReactElement) * areEqual: ('props -> 'props -> bool) -> ReactElementType<'props>
     abstract Fragment: ReactElementType<obj>
     abstract Suspense: ReactElementType<obj>

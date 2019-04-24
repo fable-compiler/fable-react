@@ -79,6 +79,8 @@ let [<Literal>] ALL_TODOS = "all"
 let [<Literal>] ACTIVE_TODOS = "active"
 let [<Literal>] COMPLETED_TODOS = "completed"
 
+let TodoItemLabelStyleContext = createContext (fun s -> str s)
+
 let todoItemView (props: {| key: Guid
                             todo: Todo
                             editing: bool
@@ -89,6 +91,8 @@ let todoItemView (props: {| key: Guid
                             onToggle: unit->unit |}) =
     let state = Hooks.useState(props.todo.title)
     let editField: IRefHook<Element option> = Hooks.useRef None
+    let labelStyle = Hooks.useContext TodoItemLabelStyleContext
+
     Hooks.useEffect((fun () ->
         let editField = editField.current.Value :?> HTMLInputElement
         editField.focus()
@@ -130,7 +134,7 @@ let todoItemView (props: {| key: Guid
                 OnChange (fun _ -> props.onToggle())
             ]
             label [ OnDoubleClick handleEdit ]
-                  [ str props.todo.title ]
+                  [ labelStyle props.todo.title ]
             button [
                 Class "destroy"
                 OnClick (fun _ -> props.onDestroy()) ] [ ]
@@ -294,7 +298,9 @@ let todoAppView (props: {| model: TodoModel |}) =
                 AutoFocus true
             ]
         ]
-        main
+        contextProvider TodoItemLabelStyleContext (fun title ->
+            str title // strong [] [str title]
+        ) [main]
         footer
     ]
 

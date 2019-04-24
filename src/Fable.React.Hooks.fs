@@ -10,16 +10,16 @@ type IStateHook<'T> =
     [<Emit("$0[1]($1)")>]
     abstract update: ('T -> 'T) -> unit
 
-type IRefHook<'T> =
-    abstract current: 'T with get, set
+// Alias kept for backwards compatibility
+type IRefHook<'T> = IRefValue<'T>
 
 type IHooks =
     /// Returns the current state with a function to update it.
-    /// https://reactjs.org/docs/hooks-reference.html#usestate
+    /// More info at  https://reactjs.org/docs/hooks-reference.html#usestate
     abstract useState: initialState: 'T -> IStateHook<'T>
 
     /// Returns the current state with a function to update it.
-    /// https://reactjs.org/docs/hooks-reference.html#usestate
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usestate
     [<Emit("$0.useState")>]
     abstract useStateLazy: initialState: (unit->'T) -> IStateHook<'T>
 
@@ -39,8 +39,15 @@ type IHooks =
     abstract useMemo: callback: (unit->'T) * dependencies: obj[] -> 'T
 
     /// The returned object will persist for the full lifetime of the component.
-    /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
-    abstract useRef: initialValue: 'T -> IRefHook<'T>
+    /// More info at https://reactjs.org/docs/hooks-reference.html#useref
+    abstract useRef: initialValue: 'T -> IRefValue<'T>
+
+    /// Accepts a context object (the value returned from createContext) and
+    /// returns the current context value for that context. The current context
+    /// value is determined by the value prop of the nearest <MyContext.Provider>
+    /// above the calling component in the tree.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usecontext
+    abstract useContext: ctx: IContext<'T> -> 'T
 
     /// Display a label for custom hooks in React DevTools.
     /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
@@ -74,8 +81,10 @@ module HookBindings =
             member __.useEffectDisposable(effect, dependencies) = ()
             member __.useMemo(callback, dependencies) = callback()
             member __.useRef(initialValue) =
-                { new IRefHook<_> with
+                { new IRefValue<_> with
                     member __.current with get() = initialValue and set _ = () }
+            member __.useContext ctx =
+                (ctx :?> ISSRContext<_>).DefaultValue
             member __.useDebugValue(label): unit = ()
             member __.useDebugValue(value, format): unit = ()
         }

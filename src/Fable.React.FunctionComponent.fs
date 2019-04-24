@@ -8,7 +8,8 @@ type LazyFunctionComponent<'Props> = 'Props -> ReactElement
 
 type FunctionComponent =
     /// Creates a lazy React component from a function in another file
-    /// ATTENTION: Requires fable-compiler 2.3, pass the external reference directly to the argument position (avoid pipes)
+    /// ATTENTION: Requires fable-compiler 2.3, pass the external reference
+    /// directly to the argument position (avoid pipes)
     static member inline Lazy(f: 'Props -> ReactElement,
                                 fallback: ReactElement)
                             : LazyFunctionComponent<'Props> =
@@ -26,7 +27,9 @@ type FunctionComponent =
             div [] [] // React.lazy is not compatible with SSR, so just use an empty div
 #endif
 
-    /// Creates a functional React component. Uses React.memo if `memoizeWith` is specified.
+    /// Creates a function React component that can use hooks to manage the component's life cycle,
+    /// and is displayed in React dev tools (use `displayName` to customize the name).
+    /// Uses React.memo if `memoizeWith` is specified (check `equalsButFunctions` and `memoEqualsButFunctions` helpers).
     static member Of(render: 'Props->ReactElement,
                        ?displayName: string,
                        ?memoizeWith: 'Props -> 'Props -> bool)

@@ -1,3 +1,7 @@
+### 5.2.1
+
+- Add React Context
+
 ### 5.1.0
 
 - Add non-generic `ReactElementType`

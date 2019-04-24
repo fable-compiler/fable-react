@@ -21,7 +21,8 @@ type Prop =
     | Key of string
     | Ref of (Element->unit)
     /// To be used in combination with `useRef` hook
-    | [<CompiledName("ref")>] RefHook of IRefHook<Element option>
+    | [<System.Obsolete("Use RefValue")>] [<CompiledName("ref")>] RefHook of IRefHook<Element option>
+    | [<CompiledName("ref")>] RefValue of IRefValue<Element option>
     interface IHTMLProp
 
 type DangerousHtml = {
