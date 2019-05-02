@@ -1,3 +1,7 @@
+### 5.2.3
+
+- Fix `Hooks.useStateLazy`
+
 ### 5.2.2
 
 - Undeprecate `ofFunction`

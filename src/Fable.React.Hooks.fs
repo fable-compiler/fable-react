@@ -20,7 +20,7 @@ type IHooks =
 
     /// Returns the current state with a function to update it.
     /// More info at https://reactjs.org/docs/hooks-reference.html#usestate
-    [<Emit("$0.useState")>]
+    [<Emit("$0.useState($1)")>]
     abstract useStateLazy: initialState: (unit->'T) -> IStateHook<'T>
 
     /// Accepts a function that contains imperative, possibly effectful code
