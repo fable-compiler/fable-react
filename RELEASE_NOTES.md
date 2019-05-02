@@ -1,3 +1,7 @@
+### 5.2.2
+
+- Undeprecate `ofFunction`
+
 ### 5.2.1
 
 - Add React Context

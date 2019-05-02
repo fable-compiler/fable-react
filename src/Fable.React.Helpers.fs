@@ -151,7 +151,6 @@ module Helpers =
     let inline com<'T,'P,'S when 'T :> Component<'P,'S>> (props: 'P) (children: ReactElement seq): ReactElement =
         ofType<'T, 'P, 'S> props children
 
-    [<System.Obsolete("Use FunctionComponent.Of to build a function component")>]
     let inline ofFunction<'P> (f: 'P -> ReactElement) (props: 'P) (children: ReactElement seq): ReactElement =
         ReactElementType.create (ReactElementType.ofFunction f) props children
 
