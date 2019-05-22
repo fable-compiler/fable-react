@@ -24,13 +24,11 @@ open Fable.Helpers.React
 type [<AllowNullLiteral>] InfoComponentObject =
     abstract componentStack: string with get
 
-[<Pojo>]
 type ErrorBoundaryProps =
     { Inner : React.ReactElement
       ErrorComponent : React.ReactElement
       OnError : exn * InfoComponentObject -> unit }
 
-[<Pojo>]
 type ErrorBoundaryState =
     { HasErrors : bool }
 
