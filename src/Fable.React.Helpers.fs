@@ -343,6 +343,7 @@ module Helpers =
 
     /// Accepts a context value to be passed to consuming components that are descendants of this Provider.
     /// One Provider can be connected to many consumers. Providers can be nested to override values deeper within the tree.
+    /// Important: In SSR, this is ignored, and the DEFAULT value is consumed!
     /// More info at https://reactjs.org/docs/context.html#contextprovider
     let inline contextProvider (ctx: IContext<'T>) (value: 'T) (children: ReactElement seq): ReactElement =
 #if FABLE_COMPILER
@@ -351,7 +352,7 @@ module Helpers =
         fragment [] children
 #endif
 
-    /// Consumes a context value either from the nearest parent in the tree, or from the default value.
+    /// Consumes a context value, either from the nearest parent in the tree, or from the default value.
     /// Important: in SSR, this will always consume the context DEFAULT value!
     /// More info at https://reactjs.org/docs/context.html#contextconsumer
     let inline contextConsumer (ctx: IContext<'T>) (children: 'T -> ReactElement): ReactElement = 
