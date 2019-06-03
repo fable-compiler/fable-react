@@ -14,13 +14,14 @@ type ReactElementType<'props> =
 
 type IRefValue<'T> =
     abstract current: 'T with get, set
-
+    
 type IContext<'T> =
     interface end
 
 type ISSRContext<'T> =
     inherit IContext<'T>
-    abstract DefaultValue: 'T
+    abstract Value: 'T
+    abstract Push: 'T -> IDisposable
 
 type IReactExports =
     abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
