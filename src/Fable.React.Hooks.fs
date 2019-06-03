@@ -84,8 +84,7 @@ module HookBindings =
                 { new IRefValue<_> with
                     member __.current with get() = initialValue and set _ = () }
             member __.useContext ctx =
-                let ctx = ctx :?> ISSRContext<_>
-                ctx.Value
+                (ctx :?> ISSRContext<_>).DefaultValue
             member __.useDebugValue(label): unit = ()
             member __.useDebugValue(value, format): unit = ()
         }
