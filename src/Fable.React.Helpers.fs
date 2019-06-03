@@ -348,7 +348,17 @@ module Helpers =
 #if FABLE_COMPILER
         ReactBindings.React.createElement(ctx?Provider, createObj ["value" ==> value], children)
 #else
+        let ctx = ctx :?> ISSRContext<_>
+        use __ = ctx.Push(value)
         fragment [] children
+#endif
+
+    let inline contextConsumer (ctx: IContext<'T>) (children: 'T -> ReactElement): ReactElement = 
+#if FABLE_COMPILER 
+        ReactBindings.React.createElement(ctx?Consumer, createObj [], [!!children]) 
+#else
+        let ctx = ctx :?> ISSRContext<_>
+        fragment [] [children(ctx.Value)]
 #endif
 
     /// Creates a Context object. When React renders a component that subscribes to this Context
@@ -358,7 +368,13 @@ module Helpers =
 #if FABLE_COMPILER
         ReactBindings.React.createContext(defaultValue)
 #else
-        upcast { new ISSRContext<_> with member __.DefaultValue = defaultValue }
+        let stack = System.Collections.Generic.Stack()
+        upcast { new ISSRContext<_> with
+                    member __.Value = if stack.Count = 0 then defaultValue else stack.Peek()
+                    member __.Push(newValue) =
+                        stack.Push(newValue)
+                        { new System.IDisposable with member __.Dispose() = stack.Pop() |> ignore<'T> }
+               }
 #endif
 
     /// To be used in constructors of class components
