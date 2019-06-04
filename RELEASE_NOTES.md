@@ -1,3 +1,7 @@
+### 5.2.4
+
+- Add `contextConsumer`
+
 ### 5.2.3
 
 - Fix `Hooks.useStateLazy`

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>5.2.3</Version>
-    <PackageVersion>5.2.3</PackageVersion>
+    <Version>5.2.4</Version>
+    <PackageVersion>5.2.4</PackageVersion>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->

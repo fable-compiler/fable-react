@@ -355,9 +355,9 @@ module Helpers =
     /// Consumes a context value, either from the nearest parent in the tree, or from the default value.
     /// Important: in SSR, this will always consume the context DEFAULT value!
     /// More info at https://reactjs.org/docs/context.html#contextconsumer
-    let inline contextConsumer (ctx: IContext<'T>) (children: 'T -> ReactElement): ReactElement = 
-#if FABLE_COMPILER 
-        ReactBindings.React.createElement(ctx?Consumer, createObj [], [!!children]) 
+    let inline contextConsumer (ctx: IContext<'T>) (children: 'T -> ReactElement): ReactElement =
+#if FABLE_COMPILER
+        ReactBindings.React.createElement(ctx?Consumer, null, [!!children])
 #else
         let ctx = ctx :?> ISSRContext<_>
         fragment [] [children(ctx.DefaultValue)]
