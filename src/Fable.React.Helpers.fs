@@ -394,12 +394,19 @@ module Helpers =
 
     let classList classes = classBaseList "" classes
 
-#if FABLE_COMPILER
     /// Finds a DOM element by its ID and mounts the React element there
+    /// Important: Not available in SSR
     let inline mountById (domElId: string) (reactEl: ReactElement): unit =
+#if FABLE_COMPILER
         ReactDom.render(reactEl, document.getElementById(domElId))
-
+#else
+        failwith "mountById is not available for SSR"
+#endif
     /// Finds the first DOM element matching a CSS selector and mounts the React element there
+    /// Important: Not available in SSR
     let inline mountBySelector (domElSelector: string) (reactEl: ReactElement): unit =
+#if FABLE_COMPILER
         ReactDom.render(reactEl, document.querySelector(domElSelector))
+#else
+        failwith "mountBySelector is not available for SSR"
 #endif

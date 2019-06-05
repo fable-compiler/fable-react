@@ -1,3 +1,7 @@
+### 5.2.5
+
+- Fix #166: Expose `mountById`/`mountBySelector` in .NET
+
 ### 5.2.4
 
 - Add `contextConsumer`
