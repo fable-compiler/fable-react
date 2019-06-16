@@ -1,3 +1,7 @@
+### 5.2.6
+
+- Fix #167: Add `withKey` argument to `FunctionComponent.Of`
+
 ### 5.2.5
 
 - Fix #166: Expose `mountById`/`mountBySelector` in .NET

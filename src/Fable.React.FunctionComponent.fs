@@ -32,9 +32,11 @@ type FunctionComponent =
     /// Creates a function React component that can use hooks to manage the component's life cycle,
     /// and is displayed in React dev tools (use `displayName` to customize the name).
     /// Uses React.memo if `memoizeWith` is specified (check `equalsButFunctions` and `memoEqualsButFunctions` helpers).
+    /// When you need a key to optimize collections in React you can use `withKey` argument or define a `key` field in the props object.
     static member Of(render: 'Props->ReactElement,
                        ?displayName: string,
-                       ?memoizeWith: 'Props -> 'Props -> bool)
+                       ?memoizeWith: 'Props -> 'Props -> bool,
+                       ?withKey: 'Props -> string)
                     : FunctionComponent<'Props> =
 #if FABLE_COMPILER
         match displayName with
@@ -53,4 +55,10 @@ type FunctionComponent =
                 memoElement
             | None -> ReactElementType.ofFunction render
         fun props ->
+#if FABLE_COMPILER
+            let props =
+                match withKey with
+                | Some f -> props?key <- f props; props
+                | None -> props
+#endif
             ReactElementType.create elemType props []
