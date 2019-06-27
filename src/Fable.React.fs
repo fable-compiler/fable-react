@@ -26,6 +26,7 @@ type IReactExports =
     abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
     abstract createContext: defaultValue: 'T -> IContext<'T>
     abstract createRef: initialValue: 'T -> IRefValue<'T>
+    abstract forwardRef: fn: ('props -> IRefValue<'T> option -> ReactElement) -> ReactElementType<'props>
     abstract memo: render: ('props -> ReactElement) * areEqual: ('props -> 'props -> bool) -> ReactElementType<'props>
     abstract Fragment: ReactElementType<obj>
     abstract Suspense: ReactElementType<obj>
