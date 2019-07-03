@@ -7,6 +7,12 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
   </PropertyGroup>
+  <PropertyGroup>
+    <NpmDependencies>
+        <NpmPackage Name="react" Version=">= 16.8.0" />
+        <NpmPackage Name="react-dom" Version=">= 16.8.0" />
+    </NpmDependencies>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Fable.React.fs" />
     <Compile Include="Fable.ReactDom.fs" />
