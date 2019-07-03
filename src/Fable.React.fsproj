@@ -10,7 +10,6 @@
   <PropertyGroup>
     <NpmDependencies>
         <NpmPackage Name="react" Version=">= 16.8.0" />
-        <NpmPackage Name="react-dom" Version=">= 16.8.0" />
     </NpmDependencies>
   </PropertyGroup>
   <ItemGroup>
