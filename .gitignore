@@ -258,3 +258,4 @@ packages/
 .idea/
 *.sln.iml
 *.orig
+.ionide
