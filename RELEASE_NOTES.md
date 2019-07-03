@@ -1,3 +1,7 @@
+### 5.3.0
+
+- Add npm dependency metadata to work with Femto
+
 ### 5.2.6
 
 - Fix #167: Add `withKey` argument to `FunctionComponent.Of`
