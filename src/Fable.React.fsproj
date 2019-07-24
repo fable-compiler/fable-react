@@ -1,30 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <Version>5.2.6</Version>
-    <PackageVersion>5.2.6</PackageVersion>
-    <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="Fable.React.fs" />
-    <Compile Include="Fable.ReactDom.fs" />
-    <Compile Include="Fable.React.Hooks.fs" />
-    <Compile Include="Fable.React.Props.fs" />
-    <Compile Include="Fable.React.Extensions.fs" />
-    <Compile Include="Fable.React.Helpers.fs" />
-    <Compile Include="Fable.React.Standard.fs" />
-    <Compile Include="Fable.React.FunctionComponent.fs" />
-    <Compile Include="Fable.React.ReactiveComponents.fs" />
-    <Compile Include="Fable.React.Isomorphic.fs" />
-    <Compile Include="Fable.ReactServer.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Fable.Core" Version="3.0.0" />
-    <PackageReference Include="Fable.Browser.Dom" Version="1.0.0" />
-  </ItemGroup>
+    <PropertyGroup>
+        <Version>6.0.0</Version>
+        <PackageVersion>6.0.0-beta-001</PackageVersion>
+        <TargetFrameworks>netstandard2.0</TargetFrameworks>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="Fable.React.fs" />
+        <Compile Include="Fable.ReactDom.fs" />
+        <Compile Include="Fable.React.Hooks.fs" />
+        <Compile Include="Fable.React.Props.fs" />
+        <Compile Include="Fable.React.Extensions.fs" />
+        <Compile Include="Fable.React.Helpers.fs" />
+        <Compile Include="Fable.React.Standard.fs" />
+        <Compile Include="Fable.React.FunctionComponent.fs" />
+        <Compile Include="Fable.React.ReactiveComponents.fs" />
+        <Compile Include="Fable.React.Isomorphic.fs" />
+        <Compile Include="Fable.ReactServer.fs" />
+    </ItemGroup>
+    <PropertyGroup>
+        <NpmDependencies>
+            <NpmPackage Name="react" Version=">= 16.8.0" />
+        </NpmDependencies>
+    </PropertyGroup>
+    <ItemGroup>
+        <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Fable.Core" Version="3.0.0" />
+        <PackageReference Include="Fable.Browser.Dom" Version="1.0.0" />
+    </ItemGroup>
 </Project>

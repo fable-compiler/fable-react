@@ -1,3 +1,9 @@
+### 6.0.0-beta-001
+
+- Add `forwardRef` to `IReactExports` (by @Luiz-Monad)
+- Remove `react-dom` API from this package
+- Add npm dependency metadata to work with Femto (by @Zaid-Ajaj)
+
 ### 5.2.6
 
 - Fix #167: Add `withKey` argument to `FunctionComponent.Of`
