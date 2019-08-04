@@ -1,5 +1,6 @@
 npm/
 .vscode/
+.ionide/
 .DS_Store
 
 src/plugins/Replacer.dll
