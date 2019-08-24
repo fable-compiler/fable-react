@@ -13,6 +13,12 @@ type IStateHook<'T> =
 // Alias kept for backwards compatibility
 type IRefHook<'T> = IRefValue<'T>
 
+type IReducerHook<'State,'Msg> =
+    [<Emit("$0[0]")>]
+    abstract current: 'State
+    [<Emit("$0[1]($1)")>]
+    abstract update: 'Msg -> unit
+
 type IHooks =
     /// Returns the current state with a function to update it.
     /// More info at  https://reactjs.org/docs/hooks-reference.html#usestate
@@ -57,6 +63,14 @@ type IHooks =
     /// More info at https://reactjs.org/docs/hooks-reference.html#usedebugvalue
     abstract useDebugValue: value: 'T * format: ('T->string) -> unit
 
+    /// An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usereducer
+    abstract useReducer: reducer: ('State -> 'Msg -> 'State) * initialState: 'State -> IReducerHook<'State, 'Msg>
+
+    /// An alternative to useState. Accepts a reducer of type (state, action) => newState, and returns the current state paired with a dispatch method.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usereducer
+    abstract useReducer: reducer: ('State -> 'Msg -> 'State) * initialArg: 'I * init: ('I -> 'State) -> IReducerHook<'State, 'Msg>
+
 [<AutoOpen>]
 module HookBindings =
     let private makeDummyStateHook value =
@@ -64,6 +78,11 @@ module HookBindings =
             member __.current = value
             member __.update(x: 'T) = ()
             member __.update(f: 'T->'T) = () }
+
+    let private makeDummyReducerHook state =
+        { new IReducerHook<'State,'Msg> with
+            member __.current = state
+            member __.update(msg: 'Msg) = () }
 
     #if FABLE_REPL_LIB
     [<Global("React")>]
@@ -87,4 +106,6 @@ module HookBindings =
                 (ctx :?> ISSRContext<_>).DefaultValue
             member __.useDebugValue(label): unit = ()
             member __.useDebugValue(value, format): unit = ()
+            member __.useReducer(reducer,initialState) = makeDummyReducerHook initialState
+            member __.useReducer(reducer, initialArgument, init) = makeDummyReducerHook (init initialArgument)
         }
