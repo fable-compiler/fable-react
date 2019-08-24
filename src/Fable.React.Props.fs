@@ -464,6 +464,20 @@ type PositionOptions =
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
 
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-overflow-3/#propdef-overflow
+type OverflowOptions =
+    /// There is no special handling of overflow, that is, the box’s content is rendered outside the box if positioned there. The box is not a scroll container.
+    | Visible
+    /// This value indicates that the box’s content is clipped to its padding box and that the UA must not provide any scrolling user interface to view the content outside the clipping region, nor allow scrolling by direct intervention of the user, such as dragging on a touch screen or using the scrolling wheel on a mouse. However, the content must still be scrollable programatically, for example using the mechanisms defined in  [CSSOM-VIEW], and the box is therefore still a scroll container.
+    | Hidden
+    /// Like hidden, this value indicates that the box’s content is clipped to its padding box and that no scrolling user interface should be provided by the UA to view the content outside the clipping region. In addition, unlike overflow: hidden which still allows programmatic scrolling, overflow: clip forbids scrolling entirely, through any mechanism, and therefore the box is not a scroll container.
+    | Clip
+    /// This value indicates that the content is clipped to the padding box, but can be scrolled into view (and therefore the box is a scroll container). Furthermore, if the user agent uses a scrolling mechanism that is visible on the screen (such as a scroll bar or a panner), that mechanism should be displayed whether or not any of its content is clipped. This avoids any problem with scrollbars appearing and disappearing in a dynamic environment. When the target medium is print, overflowing content may be printed; it is not defined where it may be printed.
+    | Scroll
+    /// Like scroll when the box has scrollable overflow; like hidden otherwise. Thus, if the user agent uses a scrolling mechanism that is visible on the screen (such as a scroll bar or a panner), that mechanism will only be displayed if there is overflow.
+    | Auto
+
 type CSSProp =
     | AlignContent of AlignContentOptions
     | AlignItems of AlignItemsOptions
@@ -733,11 +747,11 @@ type CSSProp =
     | OutlineOffset of obj
     | OutlineStyle of obj
     | OutlineWidth of obj
-    | Overflow of obj
+    | Overflow of OverflowOptions
     | OverflowStyle of obj
     | OverflowWrap of obj
-    | OverflowX of obj
-    | OverflowY of obj
+    | OverflowX of OverflowOptions
+    | OverflowY of OverflowOptions
     | Padding of obj
     | PaddingBlockEnd of obj
     | PaddingBlockStart of obj
