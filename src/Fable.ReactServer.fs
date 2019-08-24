@@ -313,7 +313,6 @@ let private renderCssProp (html:TextWriter) (prop: CSSProp) =
   | OutlineOffset v -> cssProp html "outline-offset" v
   | OutlineStyle v -> cssProp html "outline-style" v
   | OutlineWidth v -> cssProp html "outline-width" v
-  | Overflow v -> cssProp html "overflow" v
   | OverflowStyle v -> cssProp html "overflow-style" v
   | OverflowWrap v -> cssProp html "overflow-wrap" v
   | OverflowX v -> cssProp html "overflow-x" v

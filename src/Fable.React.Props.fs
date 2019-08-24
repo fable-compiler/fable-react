@@ -747,7 +747,6 @@ type CSSProp =
     | OutlineOffset of obj
     | OutlineStyle of obj
     | OutlineWidth of obj
-    | Overflow of OverflowOptions
     | OverflowStyle of obj
     | OverflowWrap of obj
     | OverflowX of OverflowOptions
@@ -886,6 +885,8 @@ type CSSProp =
     | Zoom of obj
     /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
     | [<Erase>] Custom of string * obj
+    static member Overflow (overflow: OverflowOptions, ?overflowY: OverflowOptions) =
+        CSSProp.Custom ("overflow",  unbox overflow + " " + unbox overflowY)
 
 #if FABLE_COMPILER
 let inline Style (css: CSSProp list): HTMLAttr =
