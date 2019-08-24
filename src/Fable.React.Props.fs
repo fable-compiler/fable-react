@@ -886,7 +886,10 @@ type CSSProp =
     /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
     | [<Erase>] Custom of string * obj
     static member Overflow (overflow: OverflowOptions, ?overflowY: OverflowOptions) =
-        CSSProp.Custom ("overflow",  unbox overflow + " " + unbox overflowY)
+        match overflowY with
+        | Some value -> CSSProp.Custom ("overflow",  unbox overflow + " " + unbox value)
+        | None -> CSSProp.Custom ("overflow",  unbox overflow)
+        
 
 #if FABLE_COMPILER
 let inline Style (css: CSSProp list): HTMLAttr =
