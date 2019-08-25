@@ -665,6 +665,20 @@ type AppearanceOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
     
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-transforms-2/#propdef-backface-visibility
+type BackfaceVisibilityOptions =
+    /// 
+    | Visible
+    /// 
+    | Hidden
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
 
 type CSSProp =
     | AlignContent of AlignContentOptions
@@ -683,7 +697,7 @@ type CSSProp =
     | AnimationPlayState of obj
     | AnimationTimingFunction of obj
     | Appearance of AppearanceOptions
-    | BackfaceVisibility of obj
+    | BackfaceVisibility of BackfaceVisibilityOptions
     | Background of obj
     | BackgroundAttachment of obj
     | BackgroundBlendMode of obj
