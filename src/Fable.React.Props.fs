@@ -657,6 +657,14 @@ type AppearanceOptions =
     | MenulistButton
     /// These values exist for compatibility of content developed for earlier non standard versions of this property. They all have the same effect as auto.
     | CompatAuto
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
 
 type CSSProp =
     | AlignContent of AlignContentOptions
