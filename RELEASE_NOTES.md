@@ -1,3 +1,8 @@
+### 5.2.7
+
+- Add `forwardRef` @Luiz-Monad
+- Add `useReducer` @nojaf
+
 ### 5.2.6
 
 - Fix #167: Add `withKey` argument to `FunctionComponent.Of`
