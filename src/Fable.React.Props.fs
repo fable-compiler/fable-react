@@ -464,24 +464,398 @@ type PositionOptions =
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
 
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-overflow-3/#propdef-overflow
+type OverflowOptions =
+    /// There is no special handling of overflow, that is, the box’s content is rendered outside the box if positioned there. The box is not a scroll container.
+    | Visible
+    /// This value indicates that the box’s content is clipped to its padding box and that the UA must not provide any scrolling user interface to view the content outside the clipping region, nor allow scrolling by direct intervention of the user, such as dragging on a touch screen or using the scrolling wheel on a mouse. However, the content must still be scrollable programatically, for example using the mechanisms defined in  [CSSOM-VIEW], and the box is therefore still a scroll container.
+    | Hidden
+    /// Like hidden, this value indicates that the box’s content is clipped to its padding box and that no scrolling user interface should be provided by the UA to view the content outside the clipping region. In addition, unlike overflow: hidden which still allows programmatic scrolling, overflow: clip forbids scrolling entirely, through any mechanism, and therefore the box is not a scroll container.
+    | Clip
+    /// This value indicates that the content is clipped to the padding box, but can be scrolled into view (and therefore the box is a scroll container). Furthermore, if the user agent uses a scrolling mechanism that is visible on the screen (such as a scroll bar or a panner), that mechanism should be displayed whether or not any of its content is clipped. This avoids any problem with scrollbars appearing and disappearing in a dynamic environment. When the target medium is print, overflowing content may be printed; it is not defined where it may be printed.
+    | Scroll
+    /// Like scroll when the box has scrollable overflow; like hidden otherwise. Thus, if the user agent uses a scrolling mechanism that is visible on the screen (such as a scroll bar or a panner), that mechanism will only be displayed if there is overflow.
+    | Auto
+
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-text-3/#propdef-white-space
+type WhiteSpaceOptions = 
+    /// This value directs user agents to collapse sequences of white space into a single character (or in some cases, no character). Lines may wrap at allowed soft wrap opportunities, as determined by the line-breaking rules in effect, in order to minimize inline-axis overflow.
+    | Normal
+    /// This value prevents user agents from collapsing sequences of white space. Segment breaks such as line feeds are preserved as forced line breaks. Lines only break at forced line breaks; content that does not fit within the block container overflows it.
+    | Pre
+    /// Like normal, this value collapses white space; but like pre, it does not allow wrapping.
+    | Nowrap
+    /// Like pre, this value preserves white space; but like normal, it allows wrapping.
+    | PreWrap
+    /// The behavior is identical to that of pre-wrap, except that: 1. Any sequence of preserved white space always takes up space, including at the end of the line. 2. A line breaking opportunity exists after every preserved white space character, including between white space characters.
+    | BreakSpaces
+    /// Like normal, this value collapses consecutive spaces and allows wrapping, but preserves segment breaks in the source as forced line breaks.
+    | PreLine
+
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-ui-3/#box-sizing
+type BoxSizingOptions =
+    /// This is the behavior of width and height as specified by CSS2.1. The specified width and height (and respective min/max properties) apply to the width and height respectively of the content box of the element. The padding and border of the element are laid out and drawn outside the specified width and height.
+    | ContentBox
+    /// Length and percentages values for width and height (and respective min/max properties) on this element determine the border box of the element. That is, any padding or border specified on the element is laid out and drawn inside this specified width and height. The content width and height are calculated by subtracting the border and padding widths of the respective sides from the specified width and height properties. As the content width and height cannot be negative ([CSS2], section 10.2), this computation is floored at 0. Used values, as exposed for instance through getComputedStyle(), also refer to the border box.
+    | BorderBox
+
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-images-3/#the-image-rendering
+type ImageRenderingOptions =
+    /// The scaling algorithm is UA dependent.
+    | Auto
+    /// The image should be scaled with an algorithm that maximizes the appearance of the image. In particular, scaling algorithms that "smooth" colors are acceptable, such as bilinear interpolation. This is intended for images such as photos.
+    | Smooth
+    /// Identical to smooth, but with a preference for higher-quality scaling. If system resources are constrained, images with high-quality should be prioritized over those with any other value, when considering which images to degrade the quality of and to what degree.
+    | HighQuality
+    /// The image must be scaled with an algorithm that preserves contrast and edges in the image, and which does not smooth colors or introduce blur to the image in the process. This is intended for images such as pixel art or line drawings.
+    | CrispEdges
+    /// The image must be scaled with the "nearest neighbor" or similar algorithm, to preserve a "pixelated" look as the image changes in size.
+    | Pixelated
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://www.w3.org/TR/CSS2/visuren.html#float-position
+type FloatOptions =
+    /// The element generates a block box that is floated to the left. Content flows on the right side of the box, starting at the top (subject to the 'clear' property).
+    | Left
+    /// Similar to 'left', except the box is floated to the right, and content flows on the left side of the box, starting at the top.
+    | Right
+    /// The box is not floated.
+    | None
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://www.w3.org/TR/css-inline-3/#propdef-alignment-baseline
+type AlignmentBaselineOptions =
+    /// Use the dominant baseline choice of the parent. Match the box’s corresponding baseline to that of its parent.
+    | Baseline
+    /// Match the bottom of the box to the bottom of the parent’s content area.
+    | TextBottom
+    /// Match the box’s alphabetic baseline to that of its parent.
+    | Alphabetic
+    /// Match the box’s ideographic character face under-side baseline to that of its parent.
+    | Ideographic
+    /// Align the vertical midpoint of the box with the baseline of the parent box plus half the x-height of the parent.
+    | Middle
+    /// Match the box’s central baseline to the central baseline of its parent.
+    | Central
+    /// Match the box’s mathematical baseline to that of its parent.
+    | Mathematical
+    /// Match the top of the box to the top of the parent’s content area.
+    | TextTop
+    /// Align the top of the aligned subtree with the top of the line box.
+    | Top
+    /// Align the center of the aligned subtree with the center of the line box.
+    | Center
+    /// Align the bottom of the aligned subtree with the bottom of the line box.
+    | Bottom
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://www.w3.org/TR/css3-values/#common-keywords
+type AllOptions =
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-animations/#animation-direction
+type SingleAnimationDirection =
+    /// All iterations of the animation are played as specified.
+    | Normal
+    /// All iterations of the animation are played in the reverse direction from the way they were specified.
+    | Reverse
+    /// The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
+    | Alternate
+    /// The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
+    | AlternateReverse
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-animations/#animation-fill-mode
+type SingleAnimationFillMode =
+    /// The animation has no effect when it is applied but not executing.
+    | None
+    /// After the animation ends (as determined by its animation-iteration-count), the animation will apply the property values for the time the animation ended. When animation-iteration-count is an integer greater than zero, the values applied will be those for the end of the last completed iteration of the animation (rather than the values for the start of the iteration that would be next). When animation-iteration-count is zero, the values applied will be those that would start the first iteration (just as when animation-fill-mode is backwards).
+    | Forwards
+    /// During the period defined by animation-delay, the animation will apply the property values defined in the keyframe that will start the first iteration of the animation. These are either the values of the from keyframe (when animation-direction is normal or alternate) or those of the to keyframe (when animation-direction is reverse or alternate-reverse).
+    | Backwards
+    /// The effects of both forwards and backwards fill apply.
+    | Both
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-ui-4/#appearance-switching
+type AppearanceOptions =
+    /// The element is rendered following the usual rules of CSS. Replaced elements other than controls are not affected by this, and remain replaced elements. Controls are not made to look like native controls of the host operating system. See § 7.1.1 Effects of appearance on Decorative Aspects of Elements and § 7.1.2 Effects of appearance on Semantic Aspects of Elements for details.
+    | None
+    /// UAs may render controls using native controls of the host operating system or with a look and feel not otherwise expressible in CSS. Elements other than controls must be rendered as if none had been specified.
+    | Auto
+    /// The element is rendered with the look and feel of a push button, similar to the appearance: auto rendering of the [HTML] button element. UAs must treat this value as auto on input elements, textarea elements, list box select elements, meter elements, and progress elements.
+    | Button
+    /// For input elements where the type attribute is in the Search state, the element is rendered as a "normal" text entry widget, similar to an input element where the type attribute is in the Text state. For all other elements, this value has the same effect as auto.
+    | Textfield
+    /// For drop-down box select elements, the element is rendered as a drop-down box, including a "drop-down button", but not necessarily using a native control of the host operating system. For such elements, CSS properties such as color, background-color, and border (that can be disregarded for auto) should not be disregarded. For all other elements, this value has the same effect as auto.
+    | MenulistButton
+    /// These values exist for compatibility of content developed for earlier non standard versions of this property. They all have the same effect as auto.
+    | CompatAuto
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-transforms-2/#propdef-backface-visibility
+type BackfaceVisibilityOptions =
+    /// 
+    | Visible
+    /// 
+    | Hidden
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
+[<StringEnum; RequireQualifiedAccess>]
+/// https://developer.mozilla.org/en-US/docs/Web/CSS/box-align
+type BoxAlignOptions =
+    | Start
+    | Center
+    | End
+    | Baseline
+    | Stretch
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
+[<StringEnum; RequireQualifiedAccess>]
+type BoxDecorationBreakOptions =
+    /// Each box fragment is independently wrapped with the border, padding, and margin. The border-radius and border-image and box-shadow, if any, are applied to each fragment independently. The background is drawn independently in each fragment of the element. A no-repeat background image will thus be rendered once in each fragment of the element.
+    | Clone
+    /// The effect is as though the element were rendered with no breaks present, and then sliced by the breaks afterward: no border and no padding are inserted at a break; no box-shadow is drawn at a broken edge; and backgrounds, border-radius, and the border-image are applied to the geometry of the whole box as if it were unbroken.
+    | Slice
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://developer.mozilla.org/en-US/docs/Web/CSS/box-direction
+type BoxDirectionOptions =
+    /// The box lays out its contents from the start (the left or top edge).
+    | Normal
+    /// The box lays out its contents from the end (the right or bottom edge).
+    | Reverse
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-break-3/#break-between
+type BreakOptions =
+    /// Allows, but does not force, any break (page, column, or region) to be inserted right after the principal box.
+    | Auto
+    /// Avoids any break (page, column, or region) from being inserted right after the principal box.
+    | Avoid
+    /// Forces a page break right after the principal box. The type of this break is that of the immediately-containing fragmentation context. If we are inside a multicol container then it would force a column break, inside paged media (but not inside a multicol container) a page break.
+    | Always
+    /// Forces a page break right after the principal box. Breaking through all possible fragmentation contexts. So a break inside a multicol container, which was inside a page container would force a column and page break.
+    | All
+    /// Avoids any page break right after the principal box.
+    | AvoidPage
+    /// Forces a page break right after the principal box.
+    | Page
+    /// Forces one or two page breaks right after the principal box, whichever will make the next page into a left page.
+    | Left
+    /// Forces one or two page breaks right after the principal box, whichever will make the next page into a right page.
+    | Right
+    /// Forces one or two page breaks right after the principal box, whichever will make the next page into a recto page. (A recto page is a right page in a left-to-right spread or a left page in a right-to-left spread.)
+    | Recto
+    /// Forces one or two page breaks right after the principal box, whichever will make the next page into a verso page. (A verso page is a left page in a left-to-right spread or a left right in a right-to-left spread.)
+    | Verso
+    /// Avoids any column break right after the principal box.
+    | AvoidColumn
+    /// Forces a column break right after the principal box.
+    | Column
+    /// Avoids any region break right after the principal box.
+    | AvoidRegion
+    /// Forces a region break right after the principal box.
+    | Region
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://drafts.csswg.org/css-break-3/#break-within
+type BreakInsideOptions =
+    /// Impose no additional breaking constraints within the box.
+    | Auto
+    /// Avoid breaks within the box.
+    | Avoid
+    /// Avoid a page break within the box.
+    | AvoidPage
+    /// Avoid a column break within the box.
+    | AvoidColumn
+    /// Avoid a region break within the box.
+    | AvoidRegion
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://developer.mozilla.org/en-US/docs/Web/CSS/caption-side#Specifications
+type CaptionSideOptions =
+    | Top
+    | Bottom
+    | BlockStart
+    | BlockEnd
+    | InlineStart
+    | InlineEnd
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+    
+[<StringEnum; RequireQualifiedAccess>]
+/// https://www.w3.org/TR/CSS2/visuren.html#flow-control
+type ClearOptions =
+    /// Requires that the top border edge of the box be below the bottom outer edge of any left-floating boxes that resulted from elements earlier in the source document.
+    | Left
+    /// Requires that the top border edge of the box be below the bottom outer edge of any right-floating boxes that resulted from elements earlier in the source document.
+    | Right
+    /// Requires that the top border edge of the box be below the bottom outer edge of any right-floating and left-floating boxes that resulted from elements earlier in the source document.
+    | Both
+    /// No constraint on the box's position with respect to floats.
+    | None
+    | InlineStart
+    | InlineEnd
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
+[<StringEnum; RequireQualifiedAccess>]
+/// https://www.w3.org/TR/CSS2/visuren.html#direction
+type DirectionOptions =
+    /// Left-to-right direction.
+    | Ltr
+    /// Right-to-left direction.
+    | Rtl
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
 type CSSProp =
     | AlignContent of AlignContentOptions
     | AlignItems of AlignItemsOptions
     | AlignSelf of AlignSelfOptions
     | AlignmentAdjust of obj
-    | AlignmentBaseline of obj
-    | All of obj
+    | AlignmentBaseline of AlignmentBaselineOptions
+    | All of AllOptions
     | Animation of obj
     | AnimationDelay of obj
-    | AnimationDirection of obj
+    | AnimationDirection of SingleAnimationDirection
     | AnimationDuration of obj
-    | AnimationFillMode of obj
+    | AnimationFillMode of SingleAnimationFillMode
     | AnimationIterationCount of obj
     | AnimationName of obj
     | AnimationPlayState of obj
     | AnimationTimingFunction of obj
-    | Appearance of obj
-    | BackfaceVisibility of obj
+    | Appearance of AppearanceOptions
+    | BackfaceVisibility of BackfaceVisibilityOptions
     | Background of obj
     | BackgroundAttachment of obj
     | BackgroundBlendMode of obj
@@ -549,22 +923,22 @@ type CSSProp =
     | BorderTopWidth of obj
     | BorderWidth of obj
     | Bottom of obj
-    | BoxAlign of obj
-    | BoxDecorationBreak of obj
-    | BoxDirection of obj
+    | BoxAlign of BoxAlignOptions
+    | BoxDecorationBreak of BoxDecorationBreakOptions
+    | BoxDirection of BoxDirectionOptions
     | BoxFlex of obj
     | BoxFlexGroup of obj
     | BoxLineProgression of obj
     | BoxLines of obj
     | BoxOrdinalGroup of obj
     | BoxShadow of obj
-    | BoxSizing of obj
-    | BreakAfter of obj
-    | BreakBefore of obj
-    | BreakInside of obj
-    | CaptionSide of obj
+    | BoxSizing of BoxSizingOptions
+    | BreakAfter of BreakOptions
+    | BreakBefore of BreakOptions
+    | BreakInside of BreakInsideOptions
+    | CaptionSide of CaptionSideOptions
     | CaretColor of obj
-    | Clear of obj
+    | Clear of ClearOptions
     | Clip of obj
     | ClipPath of obj
     | ClipRule of obj
@@ -589,7 +963,7 @@ type CSSProp =
     | Cue of obj
     | CueAfter of obj
     | Cursor of obj
-    | Direction of obj
+    | Direction of DirectionOptions
     | Display of DisplayOptions
     | DominantBaseline of obj
     | EmptyCells of obj
@@ -609,7 +983,7 @@ type CSSProp =
     | FlexOrder of obj
     | FlexShrink of obj
     | FlexWrap of obj
-    | Float of obj
+    | Float of FloatOptions
     | FloodColor of obj
     | FloodOpacity of obj
     | FlowFrom of obj
@@ -659,8 +1033,8 @@ type CSSProp =
     | HyphenateLimitLines of obj
     | HyphenateLimitZone of obj
     | Hyphens of obj
-    | ImageOrientation of obj
-    | ImageRendering of obj
+    | ImageOrientation of obj // Likely to be deprecated in the near future
+    | ImageRendering of ImageRenderingOptions
     | ImageResolution of obj
     | ImeMode of obj
     | InlineSize of obj
@@ -733,11 +1107,10 @@ type CSSProp =
     | OutlineOffset of obj
     | OutlineStyle of obj
     | OutlineWidth of obj
-    | Overflow of obj
     | OverflowStyle of obj
     | OverflowWrap of obj
-    | OverflowX of obj
-    | OverflowY of obj
+    | OverflowX of OverflowOptions
+    | OverflowY of OverflowOptions
     | Padding of obj
     | PaddingBlockEnd of obj
     | PaddingBlockStart of obj
@@ -856,7 +1229,7 @@ type CSSProp =
     | VoiceRate of obj
     | VoiceStress of obj
     | VoiceVolume of obj
-    | WhiteSpace of obj
+    | WhiteSpace of WhiteSpaceOptions
     | WhiteSpaceTreatment of obj
     | Widows of obj
     | Width of obj
@@ -872,6 +1245,11 @@ type CSSProp =
     | Zoom of obj
     /// If you are searching for a way to provide a value not supported by this DSL then use something like: CSSProp.Custom ("align-content", "center")
     | [<Erase>] Custom of string * obj
+    static member Overflow (overflow: OverflowOptions, ?overflowY: OverflowOptions) =
+        match overflowY with
+        | Some value -> CSSProp.Custom ("overflow",  unbox overflow + " " + unbox value)
+        | None -> CSSProp.Custom ("overflow",  unbox overflow)
+        
 
 #if FABLE_COMPILER
 let inline Style (css: CSSProp list): HTMLAttr =
