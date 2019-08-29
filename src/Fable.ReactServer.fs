@@ -37,7 +37,15 @@ let private cssProp (html:TextWriter) (key: string) (value: obj) =
   match value with
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
-  | _ -> escapeHtml html (value.ToString())
+  | _ ->
+    // TODO: Cache this check?
+    let isStringEnum =
+        value.GetType().GetCustomAttributes(false) |> Seq.exists (function
+            | :? Fable.Core.StringEnumAttribute -> true
+            | _ -> false)
+    if isStringEnum then stringEnum value
+    else value.ToString()
+    |> escapeHtml html
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
 let inline private slugKey key =

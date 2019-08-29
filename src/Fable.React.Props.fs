@@ -1,8 +1,28 @@
 module rec Fable.React.Props
 
+open System
 open Fable.Core
 open Fable.Core.JsInterop
 open Browser.Types
+
+#if !FABLE_COMPILER
+open FSharp.Reflection
+#endif
+
+/// Helper to convert Fable StringEnum to string, compatible with .NET
+let stringEnum (case: obj): string =
+#if FABLE_COMPILER
+    string case
+#else
+    let (caseInfo, _args) = FSharpValue.GetUnionFields(case, case.GetType())
+    caseInfo.GetCustomAttributes()
+    |> Seq.tryPick (function
+                    | :? CompiledNameAttribute as att -> Some att.CompiledName
+                    | _ -> None)
+    |> Option.defaultWith (fun () ->
+        let name = caseInfo.Name
+        Char.ToLower(name.[0]).ToString() + name.Substring(1))
+#endif
 
 type IProp =
     interface end
@@ -320,6 +340,14 @@ type HTMLAttr =
     | Data of string * obj
 #endif
     interface IHTMLProp
+
+#if FABLE_COMPILER
+let inline Style (css: CSSProp list): HTMLAttr =
+    !!("style", keyValueList CaseRules.LowerFirst css)
+
+let inline Data (key: string, value: obj): HTMLAttr =
+    !!("data-" + key, value)
+#endif
 
 [<StringEnum; RequireQualifiedAccess>]
 /// Specifies the display behavior (the type of rendering box) of an element.
@@ -1247,14 +1275,5 @@ type CSSProp =
     | [<Erase>] Custom of string * obj
     static member Overflow (overflow: OverflowOptions, ?overflowY: OverflowOptions) =
         match overflowY with
-        | Some value -> CSSProp.Custom ("overflow",  unbox overflow + " " + unbox value)
-        | None -> CSSProp.Custom ("overflow",  unbox overflow)
-        
-
-#if FABLE_COMPILER
-let inline Style (css: CSSProp list): HTMLAttr =
-    !!("style", keyValueList CaseRules.LowerFirst css)
-
-let inline Data (key: string, value: obj): HTMLAttr =
-    !!("data-" + key, value)
-#endif
+        | Some value -> CSSProp.Custom ("overflow",  stringEnum overflow + " " + stringEnum value)
+        | None -> CSSProp.Custom ("overflow",  stringEnum overflow)
