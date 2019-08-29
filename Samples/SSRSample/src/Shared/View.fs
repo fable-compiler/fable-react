@@ -1,14 +1,13 @@
 
-module Client.View
+module Shared.View
 
 
-open Fable.Import
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.Helpers.React
-open Fable.Helpers.Isomorphic
-open Fable.Helpers.React.Props
-open Client.Types
+open Fable.React
+open Fable.React.Props
+open Fable.React.Isomorphic
+open Shared.Types
 open Shared
 
 
@@ -37,7 +36,7 @@ let safeComponents =
       str " powered by: "
       components ]
 
-type [<Pojo>] JsCompProps = {
+type JsCompProps = {
   text: string
 }
 
@@ -48,15 +47,15 @@ let jsCompServer (props: JsCompProps) =
   div [] [ str "loading" ]
 
 
-type [<Pojo>] MyProp = {
+type MyProp = {
   text: string
 }
-type [<Pojo>] MyState = {
+type MyState = {
   text: string
 }
 
 type MyReactComp(initProps: MyProp) =
-  inherit React.Component<MyProp, MyState>(initProps) with
+  inherit Component<MyProp, MyState>(initProps) with
 
   do base.setInitState({ text="my state" })
 
@@ -67,7 +66,7 @@ type MyReactComp(initProps: MyProp) =
 
 
 
-type [<Pojo>] FnCompProps = {
+type FnCompProps = {
   text: string
 }
 
@@ -75,8 +74,8 @@ let fnComp (props: FnCompProps) =
   div [ ClassName "fn-comp" ]
       [ span [] [ str (sprintf "prop: %s" props.text) ] ]
 
-type [<Pojo>] FnCompWithChildrenProps = {
-  children: React.ReactElement array
+type FnCompWithChildrenProps = {
+  children: ReactElement array
   text: string
 }
 
@@ -118,7 +117,8 @@ let view (model: Model) (dispatch) =
       ]
       div [ ClassName "test-case" ] [
         span [ ClassName "label" ] [ str "Test CSS prop:" ]
-        div [ Style [ Display "block"; CSSProp.Custom ("color", "red") ] ] [ str "Custom CSSProp" ]
+        div [ Style [ Display DisplayOptions.Block
+                      CSSProp.Color "red" ] ] [ str "Custom CSSProp" ]
       ]
       div [ ClassName "test-case" ] [
         span [ ClassName "label" ] [ str "Test checkbox:" ]
@@ -158,7 +158,7 @@ let view (model: Model) (dispatch) =
         fragment []
           [ span
               [ Data ("value", "<div>\"\'&</div>");
-                Style [ Display "<div>\"\'&</div>"]
+                // Style [ Display "<div>\"\'&</div>"]
               ]
               [ str "<div>\"\'&</div>" ]
           ]

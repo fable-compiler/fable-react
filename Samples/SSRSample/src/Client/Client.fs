@@ -5,21 +5,23 @@ open Elmish.React
 
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.PowerPack.Fetch
-open Client.Types
-open Client.View
-open Fable.Import.React
-open Fable.Import.Browser
-open Shared
+open Thoth.Json
+open Shared.Types
+open Shared.View
+open Browser
 
 // let div = document.getElementById("elmish-app")
 // div.innerHTML <- ""
 // console.log("root", div)
 
-
 let init () =
   // Init model by server side state
-  let model = ofJson<Model> !!window?__INIT_STATE__
+  let model =
+    match Decode.Auto.fromString<Model> window?__INIT_STATE__ with
+    | Ok model -> model
+    | Error er ->
+        JS.console.error("Cannot decode init state", er, window?__INIT_STATE__)
+        Model.Empty
   // let cmd =
   //   Cmd.ofPromise
   //     (fetchAs<int> "/api/init")
@@ -38,18 +40,6 @@ let update msg (model : Model) =
   model', Cmd.none
 
 
-#if DEBUG
-open Elmish.Debug
-open Elmish.HMR
-#endif
-
 Program.mkProgram init update view
-#if DEBUG
-|> Program.withConsoleTrace
-|> Program.withHMR
-#endif
 |> Program.withReactHydrate "elmish-app"
-// #if DEBUG
-// |> Program.withDebugger
-// #endif
 |> Program.run

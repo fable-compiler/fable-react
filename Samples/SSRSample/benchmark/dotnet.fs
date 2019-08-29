@@ -1,12 +1,11 @@
 
 open System
-open System.IO
 open System.Threading
-open System.Threading.Tasks
 open System.Diagnostics
-open Shared
-open Fable.Helpers.ReactServer
+open Shared.Types
+open Fable.ReactServer
 open FSharp.Core
+
 let initState: Model = {
   counter = Some 42
   someString = "Some String"
@@ -29,7 +28,7 @@ let render times () =
   let watch = Stopwatch()
   watch.Start()
   for i = 1 to times do
-    renderToString(Client.View.view initState ignore) |> ignore
+    renderToString(Shared.View.view initState ignore) |> ignore
   watch.Stop()
   totalms <- totalms + watch.ElapsedMilliseconds
   printfn "Thread %i render %d times used %dms" tid times watch.ElapsedMilliseconds

@@ -3,9 +3,7 @@ group Server
   Giraffe
   Microsoft.AspNetCore
   Microsoft.AspNetCore.StaticFiles
-  Microsoft.DotNet.Watcher.Tools
-  Fable.JsonConverter
+  Thoth.Json.Giraffe
 
 group Client
   Fable.Core
-  Fable.Import.Browser

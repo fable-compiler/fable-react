@@ -1,74 +1,66 @@
-var path = require("path");
-var webpack = require("webpack");
-var fableUtils = require("fable-utils");
+var path = require('path');
+var webpack = require('webpack');
 
-function resolve(filePath) {
-  return path.join(__dirname, filePath)
+var CONFIG = {
+    fsharpEntry: './src/Client/Client.fsproj',
+    outputDir: './src/Client/public',
+    assetsDir: './src/Client',
+    devServerPort: 8080,
+    devServerProxy: {
+        '/api/*': {
+          target: 'http://localhost:8085',
+        }
+    },
+    // Use babel-preset-env to generate JS compatible with most-used browsers.
+    // More info at https://babeljs.io/docs/en/next/babel-preset-env.html
+    babel: {
+        presets: [
+            ['@babel/preset-env', {
+                modules: false,
+                useBuiltIns: 'usage',
+                corejs: 3
+            }]
+        ],
+    }
 }
 
-var babelOptions = fableUtils.resolveBabelOptions({
-  presets: [
-    ["env", {
-      "targets": {
-        "browsers": ["last 2 versions"]
-      },
-      "modules": false
-    }]
-  ],
-  plugins: ["transform-runtime"]
-});
-
-
-var isProduction = process.argv.indexOf("-p") >= 0;
-var port = process.env.SUAVE_FABLE_PORT || "8085";
-console.log("Bundling for " + (isProduction ? "production" : "development") + "...");
+// If we're running the webpack-dev-server, assume we're in development mode
+var isProduction = !process.argv.find(v => v.indexOf('webpack-dev-server') !== -1);
+console.log('Bundling for ' + (isProduction ? 'production' : 'development') + '...');
 
 module.exports = {
-  devtool: "source-map",
-  entry: resolve('./src/Client/Client.fsproj'),
-  output: {
-    path: resolve('./src/Client/public'),
-    publicPath: "/public",
-    filename: "bundle.js"
-  },
-  resolve: {
-    modules: [ resolve("./node_modules/")]
-  },
-  devServer: {
-    proxy: {
-      '/api/*': {
-        target: 'http://localhost:' + port,
-        changeOrigin: true
-      }
+    entry: resolve(CONFIG.fsharpEntry),
+    output: {
+        path: resolve(CONFIG.outputDir),
+        filename: 'bundle.js'
     },
-    hot: true,
-    inline: true,
-    contentBase: './src/Client/',
-  },
-  module: {
-    rules: [
-      {
-        test: /\.fs(x|proj)?$/,
-        use: {
-          loader: "fable-loader",
-          options: {
-            babel: babelOptions,
-            define: isProduction ? [] : ["DEBUG"]
-          }
-        }
-      },
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-          options: babelOptions
-        },
-      }
-    ]
-  },
-  plugins : isProduction ? [] : [
-      new webpack.HotModuleReplacementPlugin(),
-      new webpack.NamedModulesPlugin()
-  ]
+    mode: isProduction ? 'production' : 'development',
+    devtool: isProduction ? 'source-map' : 'eval-source-map',
+    plugins: isProduction ? [] : [new webpack.HotModuleReplacementPlugin()],
+    devServer: {
+        publicPath: '/public',
+        contentBase: resolve(CONFIG.assetsDir),
+        host: '0.0.0.0',
+        port: CONFIG.devServerPort,
+        proxy: CONFIG.devServerProxy,
+        hot: true,
+        inline: true
+    },
+    module: {
+        rules: [
+            {
+                test: /\.fs(x|proj)?$/,
+                use: {
+                    loader: 'fable-loader',
+                    options: {
+                        babel: CONFIG.babel
+                    }
+                }
+            },
+        ]
+    }
 };
+
+function resolve(filePath) {
+    return path.isAbsolute(filePath) ? filePath : path.join(__dirname, filePath);
+}

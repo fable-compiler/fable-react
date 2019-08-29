@@ -16,9 +16,8 @@ let platformTool tool winTool =
   |> function Some t -> t | _ -> failwithf "%s not found" tool
 
 let nodeTool = platformTool "node" "node.exe"
-let yarnTool = platformTool "yarn" "yarn.cmd"
+let npmTool = platformTool "npm" "npm.cmd"
 
-let dotnetcliVersion = DotNetCli.GetDotNetSDKVersionFromGlobalJson()
 let mutable dotnetCli = "dotnet"
 
 let runWithEnv cmd args workingDir (env: (string * string) list) =
@@ -38,32 +37,29 @@ Target "Clean" (fun _ ->
   CleanDirs [deployDir]
 )
 
-Target "InstallDotNetCore" (fun _ ->
-  dotnetCli <- DotNetCli.InstallDotNetSDK dotnetcliVersion
+// We'll have problems with npm dependencies if we reference files outside the package.json dir
+// so copy Fable.React files here first
+Target "CopyFableReact" (fun _ ->
+    FileUtils.cp_r "../../src/" "src/Fable.React/"
 )
 
 Target "InstallClient" (fun _ ->
   printfn "Node version:"
   run nodeTool "--version" __SOURCE_DIRECTORY__
-  printfn "Yarn version:"
-  run yarnTool "--version" __SOURCE_DIRECTORY__
-  run yarnTool "install" __SOURCE_DIRECTORY__
-  run dotnetCli "restore" clientPath
-)
-
-Target "RestoreServer" (fun () ->
-  run dotnetCli "restore" serverPath
+  printfn "Npm version:"
+  run npmTool "--version" __SOURCE_DIRECTORY__
+  run npmTool "install" __SOURCE_DIRECTORY__
 )
 
 Target "Build" (fun () ->
   run dotnetCli "build" serverPath
-  run dotnetCli "fable webpack -- -p" clientPath
+  run npmTool "run build" __SOURCE_DIRECTORY__
 )
 
 Target "BuildBench" (fun () ->
   run dotnetCli "build --configuration Release" serverPath
   run dotnetCli "build --configuration Release" benchmarkPath
-  run dotnetCli "fable npm-run buildClientLib" clientPath
+  run npmTool "run build-lib" __SOURCE_DIRECTORY__
 )
 
 Target "Bench" (fun () ->
@@ -76,7 +72,7 @@ Target "Run" (fun () ->
     run dotnetCli "watch run" serverPath
   }
   let client = async {
-    run dotnetCli "fable webpack-dev-server" clientPath
+    run npmTool "start" __SOURCE_DIRECTORY__
   }
   let browser = async {
     Threading.Thread.Sleep 10000
@@ -91,18 +87,15 @@ Target "Run" (fun () ->
 
 
 "Clean"
-  ==> "InstallDotNetCore"
+  ==> "CopyFableReact"
   ==> "InstallClient"
   ==> "Build"
 
 "InstallClient"
-  ==> "RestoreServer"
   ==> "Run"
 
-
 "InstallClient"
-  ==> "RestoreServer"
-  ==>"BuildBench"
+  ==> "BuildBench"
   ==> "Bench"
 
 RunTargetOrDefault "Build"

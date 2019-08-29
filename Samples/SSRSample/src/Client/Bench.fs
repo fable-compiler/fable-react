@@ -2,12 +2,10 @@ module Client.Bench
 
 open Fable.Core
 open Fable.Core.JsInterop
-open Fable.PowerPack.Fetch
-open Client.Types
-open Client.View
-open Fable.Import.React
-open Fable.Import.Browser
-open Shared
+open Shared.Types
+open Shared.View
+open Fable.React
+open Browser
 
 let initState: Model = {
   counter = Some 42

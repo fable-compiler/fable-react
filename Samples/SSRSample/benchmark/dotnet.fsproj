@@ -5,12 +5,10 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Shared">
-      <HintPath>../src/Server/bin/Release/netcoreapp2.0/Server.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="./dotnet.fs" />
   </ItemGroup>
-  <Import Project="../.paket/Paket.Restore.targets" />
+  <ItemGroup>
+    <ProjectReference Include="..\src\Shared\Shared.fsproj" />
+  </ItemGroup>
+  <Import Project="..\.paket\Paket.Restore.targets" />
 </Project>

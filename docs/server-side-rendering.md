@@ -45,7 +45,7 @@ Here is a list of Fable.Helpers.React API that support server-side rendering:
 * ofType
 * ofFunction
 
-These don't support, but you can wrap it by `Fable.Helpers.Isomorphic.isomorphicView` to skip or render a placeholder on the server:
+These don't support, but you can wrap it by `Fable.React.Isomorphic.isomorphicView` to skip or render a placeholder on the server:
 
 * ofImport
 
@@ -115,9 +115,9 @@ Full example:
 
 ```diff
 open Fable.Core
-open Fable.Import.JS
-open Fable.Helpers.Isomorphic
-open Fable.Import.Browser
+open Fable.Core.JS
+open Fable.React.Isomorphic
+open Browser
 
 // example code to add marquee effect to your document's title
 -window.setInterval(
@@ -139,19 +139,18 @@ open Fable.Import.Browser
 
 ### 3. Add a placeholder for components that cannot been rendered on the server side, like js native components.
 
-In `Fable.Helpers.Isomorphic` we also implemented a help function (`isomorphicView`) to render a placeholder element for components that cannot be rendered on the server side, this function will also help [React.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) to understand the differences between htmls rendered by client and server, so React won't treat it as a mistake and warn about it.
+In `Fable.React.Isomorphic` we also implemented a help function (`isomorphicView`) to render a placeholder element for components that cannot be rendered on the server side, this function will also help [React.hydrate](https://reactjs.org/docs/react-dom.html#hydrate) to understand the differences between htmls rendered by client and server, so React won't treat it as a mistake and warn about it.
 
 ```diff
 open Fable.Core
-open Fable.Import.JS
-open Fable.Helpers.React
-open Fable.Helpers.Isomorphic
-open Fable.Import.Browser
+open Fable.Core.JS
+open Fable.React
+open Fable.React.Isomorphic
+open Browser
 
-type [<Pojo>] JsCompProps = {
+type JsCompProps = {
   text: string
 }
-
 
 let jsComp (props: JsCompProps) =
   ofImport "default" "./jsComp" props []

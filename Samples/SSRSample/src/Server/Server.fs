@@ -12,12 +12,13 @@ open Giraffe
 open Giraffe.GiraffeViewEngine
 open Giraffe.Serialization.Json
 
-open Newtonsoft.Json
+open Thoth.Json.Net
+open Thoth.Json.Giraffe
 
-open Shared
-open System.Diagnostics
+open Shared.Types
 
-let clientPath = Path.Combine("..","Client") |> Path.GetFullPath
+
+let clientPath = Path.Combine(__SOURCE_DIRECTORY__,"..","Client") |> Path.GetFullPath
 let port = 8085us
 let assetsBaseUrl = "http://localhost:8080"
 
@@ -30,8 +31,11 @@ let initState: Model = {
 let getInitCounter () : Task<Model> = task { return initState }
 
 let htmlTemplate =
-  let clientHtml = Fable.Helpers.ReactServer.renderToString(Client.View.view initState ignore)
-  let stateJson = toJson (toJson initState) // call toJson twice to output json as js string in html
+  let clientHtml = Fable.ReactServer.renderToString(Shared.View.view initState ignore)
+  
+  let stateJson = // Serialize twice to output json as js string in html
+    Encode.Auto.toString(0, initState)
+    |> Encode.string |> Encode.toString 0
   html []
     [ head []
         [ link
@@ -73,12 +77,7 @@ let configureApp  (app : IApplicationBuilder) =
 
 let configureServices (services : IServiceCollection) =
     services.AddGiraffe() |> ignore
-    // Configure JsonSerializer to use Fable.JsonConverter
-    let fableJsonSettings = JsonSerializerSettings()
-    fableJsonSettings.Converters.Add(Fable.JsonConverter())
-
-    services.AddSingleton<IJsonSerializer>(
-        NewtonsoftJsonSerializer(fableJsonSettings)) |> ignore
+    services.AddSingleton<IJsonSerializer, ThothSerializer>() |> ignore
 
 [<EntryPoint>]
 let main argv =
