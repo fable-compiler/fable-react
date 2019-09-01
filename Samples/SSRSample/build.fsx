@@ -8,6 +8,7 @@ let serverPath = "./src/Server" |> FullName
 let benchmarkPath = "./benchmark" |> FullName
 let clientPath = "./src/Client" |> FullName
 let deployDir = "./deploy" |> FullName
+let packageJsonDir = "../../" |> FullName
 
 let platformTool tool winTool =
   let tool = if isUnix then tool else winTool
@@ -37,29 +38,23 @@ Target "Clean" (fun _ ->
   CleanDirs [deployDir]
 )
 
-// We'll have problems with npm dependencies if we reference files outside the package.json dir
-// so copy Fable.React files here first
-Target "CopyFableReact" (fun _ ->
-    FileUtils.cp_r "../../src/" "src/Fable.React/"
-)
-
 Target "InstallClient" (fun _ ->
   printfn "Node version:"
-  run nodeTool "--version" __SOURCE_DIRECTORY__
+  run nodeTool "--version" packageJsonDir
   printfn "Npm version:"
-  run npmTool "--version" __SOURCE_DIRECTORY__
-  run npmTool "install" __SOURCE_DIRECTORY__
+  run npmTool "--version" packageJsonDir
+  run npmTool "install" packageJsonDir
 )
 
 Target "Build" (fun () ->
   run dotnetCli "build" serverPath
-  run npmTool "run build" __SOURCE_DIRECTORY__
+  run npmTool "run ssrsample-build" packageJsonDir
 )
 
 Target "BuildBench" (fun () ->
   run dotnetCli "build --configuration Release" serverPath
   run dotnetCli "build --configuration Release" benchmarkPath
-  run npmTool "run build-lib" __SOURCE_DIRECTORY__
+  run npmTool "run ssrsample-build-lib" packageJsonDir
 )
 
 Target "Bench" (fun () ->
@@ -72,7 +67,7 @@ Target "Run" (fun () ->
     run dotnetCli "watch run" serverPath
   }
   let client = async {
-    run npmTool "start" __SOURCE_DIRECTORY__
+    run npmTool "run ssrsample-start" packageJsonDir
   }
   let browser = async {
     Threading.Thread.Sleep 10000
@@ -87,7 +82,6 @@ Target "Run" (fun () ->
 
 
 "Clean"
-  ==> "CopyFableReact"
   ==> "InstallClient"
   ==> "Build"
 
@@ -98,4 +92,4 @@ Target "Run" (fun () ->
   ==> "BuildBench"
   ==> "Bench"
 
-RunTargetOrDefault "Build"
+RunTargetOrDefault "Run"

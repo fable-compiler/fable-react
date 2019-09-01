@@ -8,7 +8,7 @@
     <Compile Include="./View.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Fable.React\Fable.React.fsproj" />
+    <ProjectReference Include="..\..\..\..\src\Fable.React.fsproj " />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>

@@ -1,21 +1,27 @@
+var path = require("path");
+
 module.exports = {
-    entry: './src/TodoMVC.fsproj',
+    entry: resolve('./src/TodoMVC.fsproj'),
     mode: "development",
     devtool: "source-map",
     devServer: {
-        contentBase: "./public",
+        contentBase: resolve("./public"),
         port: 8080,
     },
     module: {
-      rules: [
-        {
-          test: /\.fs(x|proj)?$/,
-          use: "fable-loader"
-        }
-      ]
+        rules: [
+            {
+                test: /\.fs(x|proj)?$/,
+                use: "fable-loader"
+            }
+        ]
     },
     externals: {
-      "react": "React",
-      "react-dom": "ReactDOM",
+        "react": "React",
+        "react-dom": "ReactDOM",
     },
-  };
+};
+
+function resolve(filePath) {
+    return path.isAbsolute(filePath) ? filePath : path.join(__dirname, filePath);
+}
