@@ -1275,5 +1275,5 @@ type CSSProp =
     | [<Erase>] Custom of string * obj
     static member Overflow (overflow: OverflowOptions, ?overflowY: OverflowOptions) =
         match overflowY with
-        | Some value -> CSSProp.Custom ("overflow",  stringEnum overflow + " " + stringEnum value)
-        | None -> CSSProp.Custom ("overflow",  stringEnum overflow)
+        | Some value -> CSSProp.Custom ("overflow", stringEnum overflow + " " + stringEnum value)
+        | None -> CSSProp.Custom ("overflow", stringEnum overflow)

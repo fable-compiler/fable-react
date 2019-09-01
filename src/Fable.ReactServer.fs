@@ -30,6 +30,8 @@ let inline private addUnit (html:TextWriter) (key: string) (value: string) =
   if not (unitlessCssProps.Contains key) then
     html.Write "px"
 
+let private cssPropsCache = Dictionary<obj, string>()
+
 let private cssProp (html:TextWriter) (key: string) (value: obj) =
   html.Write key
   html.Write ':'
@@ -38,14 +40,18 @@ let private cssProp (html:TextWriter) (key: string) (value: obj) =
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
   | _ ->
-    // TODO: Cache this check?
-    let isStringEnum =
-        value.GetType().GetCustomAttributes(false) |> Seq.exists (function
-            | :? Fable.Core.StringEnumAttribute -> true
-            | _ -> false)
-    if isStringEnum then stringEnum value
-    else value.ToString()
-    |> escapeHtml html
+    match cssPropsCache.TryGetValue(value) with
+    | true, cssProp -> escapeHtml html cssProp
+    | false, _ ->
+        let cssProp = 
+            let isStringEnum =
+                value.GetType().GetCustomAttributes(false) |> Seq.exists (function
+                    | :? Fable.Core.StringEnumAttribute -> true
+                    | _ -> false)
+            if isStringEnum then stringEnum value
+            else value.ToString()
+        cssPropsCache.Add(value, cssProp)
+        escapeHtml html cssProp
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
 let inline private slugKey key =
