@@ -1,3 +1,10 @@
+### 5.3.0
+
+- Use typed options for remaining CSS props with untyped value @jannesiera
+- SSR: Void tags should contain a space @forki
+- SSR: Fix StringEnum CSS props
+- SSR: Cache CSS props
+
 ### 5.2.7
 
 - Add `forwardRef` @Luiz-Monad
