@@ -752,7 +752,7 @@ module Raw =
         let child = renderAttrs html attrs tag
 
         if voidTags.Contains tag then
-          html.Write "/>"
+          html.Write " />"
         else
           html.Write '>'
 
