@@ -437,6 +437,7 @@ let private renderCssProp (html:TextWriter) (prop: CSSProp) =
   | UnicodeRange v -> cssProp html "unicode-range" v
   | UserFocus v -> cssProp html "user-focus" v
   | UserInput v -> cssProp html "user-input" v
+  | UserSelect v -> cssProp html "user-select" v
   | VerticalAlign v -> cssProp html "vertical-align" v
   | Visibility v -> cssProp html "visibility" v
   | VoiceBalance v -> cssProp html "voice-balance" v

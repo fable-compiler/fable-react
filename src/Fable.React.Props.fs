@@ -866,6 +866,32 @@ type DirectionOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
+[<StringEnum; RequireQualifiedAccess>]
+/// https://developer.mozilla.org/en-US/docs/Web/CSS/user-select
+type UserSelectOptions =
+    /// The text of the element and its sub-elements is not selectable. Note that the Selection object can contain these elements.
+    | None
+    /// The computed value of auto is determined as follows:
+    /// - On the ::before and ::after pseudo elements, the computed value is none
+    /// - If the element is an editable element, the computed value is contain
+    /// - Otherwise, if the computed value of user-select on the parent of this element is all, the computed value is all
+    /// - Otherwise, if the computed value of user-select on the parent of this element is none, the computed value is none
+    /// - Otherwise, the computed value is text
+    | Auto
+    /// The text can be selected by the user.
+    | Text
+    /// Enables selection to start within the element; however, the selection will be contained by the bounds of that element.
+    | Contain
+    /// In an HTML editor, if a double-click or context-click occurred in sub-elements, the highest ancestor with this value will be selected.
+    | All
+    
+    /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
+    | Inherit
+    /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
+    | Unset
+
 type CSSProp =
     | AlignContent of AlignContentOptions
     | AlignItems of AlignItemsOptions
@@ -1247,6 +1273,7 @@ type CSSProp =
     | UnicodeRange of obj
     | UserFocus of obj
     | UserInput of obj
+    | UserSelect of UserSelectOptions
     | VerticalAlign of obj
     | Visibility of obj
     | VoiceBalance of obj
