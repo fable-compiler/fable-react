@@ -3,10 +3,10 @@ module Fable.ReactServer
 #if !FABLE_COMPILER
 open System.IO
 open System.Text.RegularExpressions
-open System.Collections.Generic
-
 open Fable.React
 open Fable.React.Props
+open System.Collections.Concurrent
+open System.Collections.Generic
 
 // Adapted from https://github.com/emotion-js/emotion/blob/182e34bab2b2028c96d513b67ed86faee1b642b2/packages/emotion-utils/src/index.js#L13
 let private unitlessCssProps = HashSet ["animation-iteration-count"; "border-image-outset"; "border-image-slice"; "border-image-width"; "box-flex"; "box-flex-group"; "box-ordinal-group"; "column-count"; "columns"; "flex"; "flex-grow"; "flex-positive"; "flex-shrink"; "flex-negative"; "flex-order"; "grid-row"; "grid-row-end"; "grid-row-span"; "grid-row-start"; "grid-column"; "grid-column-end"; "grid-column-span"; "grid-column-start"; "font-weight"; "line-height"; "opacity"; "order"; "orphans"; "tab-size"; "widows"; "z-index"; "zoom"; "-webkit-line-clamp"; "fill-opacity"; "flood-opacity"; "stop-opacity"; "stroke-dasharray"; "stroke-dashoffset"; "stroke-miterlimit"; "stroke-opacity"; "stroke-width"]
@@ -30,7 +30,7 @@ let inline private addUnit (html:TextWriter) (key: string) (value: string) =
   if not (unitlessCssProps.Contains key) then
     html.Write "px"
 
-let private cssPropsCache = Dictionary<obj, string>()
+let private cssPropsCache = ConcurrentDictionary<obj, string>()
 
 let private cssProp (html:TextWriter) (key: string) (value: obj) =
   html.Write key
@@ -40,18 +40,16 @@ let private cssProp (html:TextWriter) (key: string) (value: obj) =
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
   | _ ->
-    match cssPropsCache.TryGetValue(value) with
-    | true, cssProp -> escapeHtml html cssProp
-    | false, _ ->
-        let cssProp = 
+    let cssProp =
+        cssPropsCache.GetOrAdd(
+            value,
             let isStringEnum =
-                value.GetType().GetCustomAttributes(false) |> Seq.exists (function
-                    | :? Fable.Core.StringEnumAttribute -> true
+                value.GetType().GetCustomAttributes(false)
+                |> Seq.exists (function
+                    | :? Core.StringEnumAttribute -> true
                     | _ -> false)
-            if isStringEnum then stringEnum value
-            else value.ToString()
-        cssPropsCache.Add(value, cssProp)
-        escapeHtml html cssProp
+            if isStringEnum then stringEnum value else value.ToString())
+    escapeHtml html cssProp
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
 let inline private slugKey key =
