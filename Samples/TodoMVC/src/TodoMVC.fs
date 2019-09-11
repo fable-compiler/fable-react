@@ -141,7 +141,7 @@ let todoItemView (props: {| key: Guid
         ]
         input [
             Class "edit"
-            RefHook editField
+            RefValue editField
             Value state.current
             OnBlur handleSubmit
             OnChange handleChange

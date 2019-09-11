@@ -1,3 +1,7 @@
+### 5.3.2
+
+- Fix Hooks.useEffectDisposable closure @dbrattli
+
 ### 5.3.1
 
 - SSR: Fix race condition in CSS props cache @forki

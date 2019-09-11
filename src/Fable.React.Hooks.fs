@@ -35,7 +35,10 @@ type IHooks =
 
     /// Accepts a function that contains effectful code and returns a disposable for clean-up
     /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
-    [<Emit("$0.useEffect(() => $1().Dispose{{, $2}})")>]
+    [<Emit("""$0.useEffect(() => {
+        const disp = $1();
+        return () => disp.Dispose();
+    }{{, $2}})""")>]
     abstract useEffectDisposable: effect: (unit->System.IDisposable) * ?dependencies: obj[] -> unit
 
     // abstract useCallback (callback: unit -> unit, dependencies: obj[]): unit -> unit
