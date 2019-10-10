@@ -523,11 +523,11 @@ type WhiteSpaceOptions =
     /// Like normal, this value collapses white space; but like pre, it does not allow wrapping.
     | Nowrap
     /// Like pre, this value preserves white space; but like normal, it allows wrapping.
-    | PreWrap
+    | [<CompiledName "pre-wrap">] PreWrap
     /// The behavior is identical to that of pre-wrap, except that: 1. Any sequence of preserved white space always takes up space, including at the end of the line. 2. A line breaking opportunity exists after every preserved white space character, including between white space characters.
     | BreakSpaces
     /// Like normal, this value collapses consecutive spaces and allows wrapping, but preserves segment breaks in the source as forced line breaks.
-    | PreLine
+    | [<CompiledName "pre-line">] PreLine
 
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -540,9 +540,9 @@ type WhiteSpaceOptions =
 /// https://drafts.csswg.org/css-ui-3/#box-sizing
 type BoxSizingOptions =
     /// This is the behavior of width and height as specified by CSS2.1. The specified width and height (and respective min/max properties) apply to the width and height respectively of the content box of the element. The padding and border of the element are laid out and drawn outside the specified width and height.
-    | ContentBox
+    | [<CompiledName "content-box">] ContentBox
     /// Length and percentages values for width and height (and respective min/max properties) on this element determine the border box of the element. That is, any padding or border specified on the element is laid out and drawn inside this specified width and height. The content width and height are calculated by subtracting the border and padding widths of the respective sides from the specified width and height properties. As the content width and height cannot be negative ([CSS2], section 10.2), this computation is floored at 0. Used values, as exposed for instance through getComputedStyle(), also refer to the border box.
-    | BorderBox
+    | [<CompiledName "border-box">] BorderBox
 
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -893,9 +893,9 @@ type UserSelectOptions =
     | Unset
 
 type CSSProp =
-    | AlignContent of AlignContentOptions
-    | AlignItems of AlignItemsOptions
-    | AlignSelf of AlignSelfOptions
+    | [<CompiledName "align-content">] AlignContent of AlignContentOptions
+    | [<CompiledName "align-items">] AlignItems of AlignItemsOptions
+    | [<CompiledName "align-self">] AlignSelf of AlignSelfOptions
     | AlignmentAdjust of obj
     | AlignmentBaseline of AlignmentBaselineOptions
     | All of AllOptions
@@ -1284,7 +1284,7 @@ type CSSProp =
     | VoiceRate of obj
     | VoiceStress of obj
     | VoiceVolume of obj
-    | WhiteSpace of WhiteSpaceOptions
+    | [<CompiledName "white-space">] WhiteSpace of WhiteSpaceOptions
     | WhiteSpaceTreatment of obj
     | Widows of obj
     | Width of obj
