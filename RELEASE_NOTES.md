@@ -1,3 +1,7 @@
+### 5.3.3
+
+- Fix missing hyphens for some typed css props #181 @SCullman
+
 ### 5.3.2
 
 - Fix Hooks.useEffectDisposable closure @dbrattli
