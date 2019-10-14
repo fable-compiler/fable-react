@@ -893,9 +893,9 @@ type UserSelectOptions =
     | Unset
 
 type CSSProp =
-    | [<CompiledName "align-content">] AlignContent of AlignContentOptions
-    | [<CompiledName "align-items">] AlignItems of AlignItemsOptions
-    | [<CompiledName "align-self">] AlignSelf of AlignSelfOptions
+    | AlignContent of AlignContentOptions
+    | AlignItems of AlignItemsOptions
+    | AlignSelf of AlignSelfOptions
     | AlignmentAdjust of obj
     | AlignmentBaseline of AlignmentBaselineOptions
     | All of AllOptions
@@ -1284,7 +1284,7 @@ type CSSProp =
     | VoiceRate of obj
     | VoiceStress of obj
     | VoiceVolume of obj
-    | [<CompiledName "white-space">] WhiteSpace of WhiteSpaceOptions
+    | WhiteSpace of WhiteSpaceOptions
     | WhiteSpaceTreatment of obj
     | Widows of obj
     | Width of obj
