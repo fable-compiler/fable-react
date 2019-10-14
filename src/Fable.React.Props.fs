@@ -642,7 +642,7 @@ type SingleAnimationDirection =
     /// The animation cycle iterations that are odd counts are played in the normal direction, and the animation cycle iterations that are even counts are played in a reverse direction.
     | Alternate
     /// The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
-    | AlternateReverse
+    | [<CompiledName "alternate-reverse">] AlternateReverse
     
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -682,9 +682,9 @@ type AppearanceOptions =
     /// For input elements where the type attribute is in the Search state, the element is rendered as a "normal" text entry widget, similar to an input element where the type attribute is in the Text state. For all other elements, this value has the same effect as auto.
     | Textfield
     /// For drop-down box select elements, the element is rendered as a drop-down box, including a "drop-down button", but not necessarily using a native control of the host operating system. For such elements, CSS properties such as color, background-color, and border (that can be disregarded for auto) should not be disregarded. For all other elements, this value has the same effect as auto.
-    | MenulistButton
+    | [<CompiledName("menulist-button")>] MenulistButton
     /// These values exist for compatibility of content developed for earlier non standard versions of this property. They all have the same effect as auto.
-    | CompatAuto
+    | [<CompiledName("compat-auto")>] CompatAuto
     
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -696,9 +696,7 @@ type AppearanceOptions =
 [<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-transforms-2/#propdef-backface-visibility
 type BackfaceVisibilityOptions =
-    /// 
     | Visible
-    /// 
     | Hidden
     
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
@@ -765,7 +763,7 @@ type BreakOptions =
     /// Forces a page break right after the principal box. Breaking through all possible fragmentation contexts. So a break inside a multicol container, which was inside a page container would force a column and page break.
     | All
     /// Avoids any page break right after the principal box.
-    | AvoidPage
+    | [<CompiledName("avoid-page")>] AvoidPage
     /// Forces a page break right after the principal box.
     | Page
     /// Forces one or two page breaks right after the principal box, whichever will make the next page into a left page.
@@ -777,11 +775,11 @@ type BreakOptions =
     /// Forces one or two page breaks right after the principal box, whichever will make the next page into a verso page. (A verso page is a left page in a left-to-right spread or a left right in a right-to-left spread.)
     | Verso
     /// Avoids any column break right after the principal box.
-    | AvoidColumn
+    | [<CompiledName("avoid-column")>] AvoidColumn
     /// Forces a column break right after the principal box.
     | Column
     /// Avoids any region break right after the principal box.
-    | AvoidRegion
+    | [<CompiledName("avoid-region")>] AvoidRegion
     /// Forces a region break right after the principal box.
     | Region
     
@@ -800,11 +798,11 @@ type BreakInsideOptions =
     /// Avoid breaks within the box.
     | Avoid
     /// Avoid a page break within the box.
-    | AvoidPage
+    | [<CompiledName("avoid-page")>] AvoidPage
     /// Avoid a column break within the box.
-    | AvoidColumn
+    | [<CompiledName("avoid-column")>] AvoidColumn
     /// Avoid a region break within the box.
-    | AvoidRegion
+    | [<CompiledName("avoid-region")>] AvoidRegion
     
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -818,10 +816,10 @@ type BreakInsideOptions =
 type CaptionSideOptions =
     | Top
     | Bottom
-    | BlockStart
-    | BlockEnd
-    | InlineStart
-    | InlineEnd
+    | [<CompiledName("block-start")>] BlockStart
+    | [<CompiledName("block-end")>] BlockEnd
+    | [<CompiledName("inline-start")>] InlineStart
+    | [<CompiledName("inline-end")>] InlineEnd
     
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -841,8 +839,8 @@ type ClearOptions =
     | Both
     /// No constraint on the box's position with respect to floats.
     | None
-    | InlineStart
-    | InlineEnd
+    | [<CompiledName("inline-start")>] InlineStart
+    | [<CompiledName("inline-end")>] InlineEnd
     
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
