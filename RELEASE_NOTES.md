@@ -1,3 +1,7 @@
+### 5.3.4
+
+- Removed Hyphen from CssProp #183 @SCullman
+
 ### 5.3.3
 
 - Fix missing hyphens for some typed css props #181 @SCullman
