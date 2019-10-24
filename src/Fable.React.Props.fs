@@ -193,10 +193,50 @@ type HTMLAttr =
     | AllowFullScreen of bool
     | AllowTransparency of bool
     | Alt of string
+    | [<CompiledName("aria-atomic")>] AriaAtomic of bool
+    | [<CompiledName("aria-busy")>] AriaBusy of bool
+    | [<CompiledName("aria-checked")>] AriaChecked of bool
+    | [<CompiledName("aria-colcount")>] AriaColcount of int
+    | [<CompiledName("aria-colindex")>] AriaColindex of int
+    | [<CompiledName("aria-colspan")>] AriaColspan of int
     | [<CompiledName("aria-controls")>] AriaControls of string
+    | [<CompiledName("aria-current")>] AriaCurrent of string
+    | [<CompiledName("aria-describedby")>] AriaDescribedBy of string
+    | [<CompiledName("aria-details")>] AriaDetails of string
+    | [<CompiledName("aria-disabled")>] AriaDisabled of bool
+    | [<CompiledName("aria-errormessage")>] AriaErrormessage of string
     | [<CompiledName("aria-expanded")>] AriaExpanded of bool
+    | [<CompiledName("aria-flowto")>] AriaFlowto of string
     | [<CompiledName("aria-haspopup")>] AriaHasPopup of bool
+    | [<CompiledName("aria-hidden")>] AriaHidden of bool
+    | [<CompiledName("aria-invalid")>] AriaInvalid of string
+    | [<CompiledName("aria-keyshortcuts")>] AriaKeyshortcuts of string
+    | [<CompiledName("aria-label")>] AriaLabel of string
+    | [<CompiledName("aria-labelledby")>] AriaLabelledby of string
+    | [<CompiledName("aria-level")>] AriaLevel of int
+    | [<CompiledName("aria-live")>] AriaLive of string
+    | [<CompiledName("aria-modal")>] AriaModal of bool
+    | [<CompiledName("aria-multiline")>] AriaMultiline of bool
+    | [<CompiledName("aria-multiselectable")>] AriaMultiselectable of bool
+    | [<CompiledName("aria-orientation")>] AriaOrientation of string
+    | [<CompiledName("aria-owns")>] AriaOwns of string
+    | [<CompiledName("aria-placeholder")>] AriaPlaceholder of string
+    | [<CompiledName("aria-posinset")>] AriaPosinset of int
     | [<CompiledName("aria-pressed")>] AriaPressed of bool
+    | [<CompiledName("aria-readonly")>] AriaReadonly of bool
+    | [<CompiledName("aria-relevant")>] AriaRelevant of string
+    | [<CompiledName("aria-required")>] AriaRequired of bool
+    | [<CompiledName("aria-roledescription")>] AriaRoledescription of string
+    | [<CompiledName("aria-rowcount")>] AriaRowcount of int
+    | [<CompiledName("aria-rowindex")>] AriaRowindex of int
+    | [<CompiledName("aria-rowspan")>] AriaRowspan of int
+    | [<CompiledName("aria-selected")>] AriaSelected of bool
+    | [<CompiledName("aria-setsize")>] AriaSetsize of int
+    | [<CompiledName("aria-sort")>] AriaSort of string
+    | [<CompiledName("aria-valuemax")>] AriaValuemax of float
+    | [<CompiledName("aria-valuemin")>] AriaValuemin of float
+    | [<CompiledName("aria-valuenow")>] AriaValuenow of float
+    | [<CompiledName("aria-valuetext")>] AriaValuetext of string
     | Async of bool
     | AutoComplete of string
     | AutoFocus of bool
