@@ -1,3 +1,7 @@
+### 5.3.5
+
+- Complete aria props @Krzysztof-Cieslak
+
 ### 5.3.4
 
 - Removed Hyphen from CssProp #183 @SCullman
