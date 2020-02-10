@@ -154,6 +154,7 @@ type SVGAttr =
     | StopOpacity of obj
     | Stroke of string
     | StrokeDasharray of string
+    | StrokeDashoffset of string
     | StrokeLinecap of string
     | StrokeMiterlimit of string
     | StrokeOpacity of obj
@@ -496,6 +497,34 @@ type AlignSelfOptions =
     | [<CompiledName "flex-start">] FlexStart
     /// The element is positioned at the end of the container.
     | [<CompiledName "flex-end">] FlexEnd
+
+[<StringEnum; RequireQualifiedAccess>]
+/// Specifies the default alignment for items inside the grid container.
+type JustifySelfOptions =
+    /// Default. The element inherits its parent container's justify-items property, or "stretch" if it has no parent container.
+    | Auto
+    /// The element is positioned at the baseline of the cell.
+    | Baseline
+    /// The element is positioned to fit the cell.
+    | Stretch
+    /// The element is positioned at the center of the cell.
+    | Center
+    /// Sets this property to its default value. Read more about [CSS Initial](https://developer.mozilla.org/en-US/docs/Web/CSS/initial)
+    | Initial
+    /// Inherits this property from its parent element. Read about [CSS Inherit](https://developer.mozilla.org/en-US/docs/Web/CSS/inherit)
+    | Inherit
+    /// The element is positioned at the beginning of the cell.
+    | Start
+    /// The element is positioned at the end of the cell.
+    | End
+    /// The element is positioned at the beginning of the cell.
+    | [<CompiledName "self-start">] SelfStart
+    /// The element is positioned at the end of the cell.
+    | [<CompiledName "self-end">] SelfEnd
+    /// The element is positioned at the left of the cell.
+    | Left
+    /// The element is positioned at the right of the cell.
+    | Right
 
 [<StringEnum; RequireQualifiedAccess>]
 type TextAlignOptions =
@@ -1132,6 +1161,7 @@ type CSSProp =
     | InlineSize of obj
     | Isolation of obj
     | JustifyContent of obj
+    | JustifySelf of JustifySelfOptions
     | Kerning of obj
     | LayoutGrid of obj
     | LayoutGridChar of obj

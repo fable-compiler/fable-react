@@ -258,6 +258,7 @@ let private renderCssProp (html:TextWriter) (prop: CSSProp) =
   | InlineSize v -> cssProp html "inline-size" v
   | Isolation v -> cssProp html "isolation" v
   | JustifyContent v -> cssProp html "justify-content" v
+  | JustifySelf v -> cssProp html "justify-self" v
   | Kerning v -> cssProp html "kerning" v
   | LayoutGrid v -> cssProp html "layout-grid" v
   | LayoutGridChar v -> cssProp html "layout-grid-char" v
@@ -672,6 +673,7 @@ let private renderSVGAttr (html:TextWriter) (attr: SVGAttr) =
   | SVGAttr.StopOpacity v -> objAttr html "stop-opacity" v
   | SVGAttr.Stroke v -> objAttr html "stroke" v
   | SVGAttr.StrokeDasharray v -> objAttr html "stroke-dasharray" v
+  | SVGAttr.StrokeDashoffset v -> objAttr html "stroke-dashoffset" v
   | SVGAttr.StrokeLinecap v -> objAttr html "stroke-linecap" v
   | SVGAttr.StrokeMiterlimit v -> objAttr html "stroke-miterlimit" v
   | SVGAttr.StrokeOpacity v -> objAttr html "stroke-opacity" v
