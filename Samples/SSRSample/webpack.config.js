@@ -1,5 +1,6 @@
 var path = require('path');
 var webbpack = require('webpack');
+const execSync = require("child_process").execSync;
 
 var CONFIG = {
     fsharpEntry: './src/Client/Client.fsproj',
