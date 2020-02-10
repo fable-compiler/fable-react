@@ -154,6 +154,7 @@ type SVGAttr =
     | StopOpacity of obj
     | Stroke of string
     | StrokeDasharray of string
+    | StrokeDashoffset of string
     | StrokeLinecap of string
     | StrokeMiterlimit of string
     | StrokeOpacity of obj
