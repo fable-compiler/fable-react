@@ -1,3 +1,8 @@
+### 5.3.6
+
+- Add `JustifySelf` used in Grid containers @Luiz-Monad
+- Add `StrokeDashoffset` to `SVGAttr`
+
 ### 5.3.5
 
 - Complete aria props @Krzysztof-Cieslak
