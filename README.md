@@ -1,5 +1,8 @@
 # Fable.React
 
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/fable-compiler/fable-react)
+
+
 Fable bindings and helpers for React projects
 
 Run `npm install` to install dependencies and `npm run build publish` to publish a new version of the package.

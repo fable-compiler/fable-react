@@ -1,5 +1,5 @@
 var path = require('path');
-var webpack = require('webpack');
+var webbpack = require('webpack');
 
 var CONFIG = {
     fsharpEntry: './src/Client/Client.fsproj',
@@ -28,6 +28,18 @@ var CONFIG = {
 var isProduction = !process.argv.find(v => v.indexOf('webpack-dev-server') !== -1);
 console.log('Bundling for ' + (isProduction ? 'production' : 'development') + '...');
 
+
+var isGitPod = process.env.GITPOD_INSTANCE_ID !== undefined;
+
+function getDevServerUrl() {
+    if (isGitPod) {
+        const url = execSync(`gp url ${CONFIG.devServerPort}`);
+        return url.toString().trim();
+    } else {
+        return `http://localhost:${CONFIG.devServerPort}`;
+    }
+}
+
 module.exports = {
     entry: resolve(CONFIG.fsharpEntry),
     output: {
@@ -38,9 +50,11 @@ module.exports = {
     devtool: isProduction ? 'source-map' : 'eval-source-map',
     plugins: isProduction ? [] : [new webpack.HotModuleReplacementPlugin()],
     devServer: {
+        public: getDevServerUrl(),
         publicPath: '/public',
         contentBase: resolve(CONFIG.assetsDir),
         host: '0.0.0.0',
+        allowedHosts: ['localhost', '.gitpod.io'],
         port: CONFIG.devServerPort,
         proxy: CONFIG.devServerProxy,
         hot: true,
