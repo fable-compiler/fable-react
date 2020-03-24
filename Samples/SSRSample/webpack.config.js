@@ -1,5 +1,5 @@
 var path = require('path');
-var webbpack = require('webpack');
+var webpack = require('webpack');
 const execSync = require("child_process").execSync;
 
 var CONFIG = {
