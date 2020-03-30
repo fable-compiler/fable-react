@@ -81,14 +81,15 @@ let [<Literal>] COMPLETED_TODOS = "completed"
 
 let TodoItemLabelStyleContext = createContext (fun s -> str s)
 
-let todoItemView (props: {| key: Guid
-                            todo: Todo
-                            editing: bool
-                            onSave: string->unit
-                            onEdit: unit->unit
-                            onDestroy: unit->unit
-                            onCancel: unit->unit
-                            onToggle: unit->unit |}) =
+type TodoItem() =
+  inherit FunctionComponent<{| key: Guid
+                               todo: Todo
+                               editing: bool
+                               onSave: string->unit
+                               onEdit: unit->unit
+                               onDestroy: unit->unit
+                               onCancel: unit->unit
+                               onToggle: unit->unit |}>(fun props ->
     let state = Hooks.useState(props.todo.title)
     let editField: IRefHook<Element option> = Hooks.useRef None
     let labelStyle = Hooks.useContext TodoItemLabelStyleContext
@@ -148,13 +149,13 @@ let todoItemView (props: {| key: Guid
             OnKeyDown handleKeyDown
         ]
     ]
+)
 
-let TodoItem = FunctionComponent.Of todoItemView
-
-let todoFooterView (props: {| count: int
-                              completedCount: int
-                              onClearCompleted: unit->unit
-                              nowShowing: string |}) =
+type TodoFooter() =
+  inherit FunctionComponent<{| count: int
+                               completedCount: int
+                               onClearCompleted: unit->unit
+                               nowShowing: string |}>(fun props ->
     let activeTodoWord =
         "item" + (if props.count = 1 then "" else "s")
     let clearButton =
@@ -183,10 +184,10 @@ let todoFooterView (props: {| count: int
             clearButton
         ]
     ]
+)
 
-let TodoFooter = FunctionComponent.Of todoFooterView
-
-let todoAppView (props: {| model: TodoModel |}) =
+type TodoApp() =
+  inherit FunctionComponent<{| model: TodoModel |}>(fun props ->
     let state = Hooks.useState {| nowShowing = ALL_TODOS
                                   editing = Option<Guid>.None
                                   newTodo = "" |}
@@ -247,7 +248,7 @@ let todoAppView (props: {| model: TodoModel |}) =
             | COMPLETED_TODOS -> todo.completed
             | _ -> true)
         |> Seq.map (fun todo ->
-            TodoItem
+            FunctionComponent.Render<TodoItem,_>
                 {| key = todo.id
                    todo = todo
                    onToggle = fun _ -> toggle(todo)
@@ -268,7 +269,7 @@ let todoAppView (props: {| model: TodoModel |}) =
         todos.Length - activeTodoCount
     let footer =
         if activeTodoCount > 0 || completedCount > 0 then
-            TodoFooter
+            FunctionComponent.Render<TodoFooter,_>
                 {| count = activeTodoCount
                    completedCount = completedCount
                    nowShowing = state.current.nowShowing
@@ -303,14 +304,13 @@ let todoAppView (props: {| model: TodoModel |}) =
         ) [main]
         footer
     ]
-
-let TodoApp = FunctionComponent.Of todoAppView
+)
 
 let model = TodoModel("react-todos")
 
 let render() =
     ReactDom.render(
-        TodoApp {| model = model |},
+        FunctionComponent.Render<TodoApp,_> {| model = model |},
         document.getElementsByClassName("todoapp").[0])
 
 model.subscribe(render)

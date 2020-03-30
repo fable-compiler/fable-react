@@ -176,13 +176,13 @@ module Helpers =
 #endif
 
     /// Normal structural F# comparison, but ignores top-level functions (e.g. Elmish dispatch).
-    /// Can be used e.g. with the `FunctionComponent.Of` `memoizeWith` parameter.
+    /// Can be used e.g. with the `FunctionComponent` `memoizeWith` parameter.
     let equalsButFunctions (x: 'a) (y: 'a) =
 #if FABLE_COMPILER
         if obj.ReferenceEquals(x, y) then
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
-            let keys = JS.Object.keys x
+            let keys = JS.Constructors.Object.keys x
             let length = keys.Count
             let mutable i = 0
             let mutable result = true
@@ -203,13 +203,13 @@ module Helpers =
     /// Comparison similar to default React.memo, but ignores functions (e.g. Elmish dispatch).
     /// Performs a memberwise comparison where value types and strings are compared by value,
     /// and other types by reference.
-    /// Can be used e.g. with the `FunctionComponent.Of` `memoizeWith` parameter.
+    /// Can be used e.g. with the `FunctionComponent` `memoizeWith` parameter.
     let memoEqualsButFunctions (x: 'a) (y: 'a) =
 #if FABLE_COMPILER
         if obj.ReferenceEquals(x, y) then
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
-            let keys = JS.Object.keys x
+            let keys = JS.Constructors.Object.keys x
             let length = keys.Count
             let mutable i = 0
             let mutable result = true
@@ -227,7 +227,7 @@ module Helpers =
         false
 #endif
 
-    [<System.Obsolete("Use FunctionComponent.Of with memoizeWith")>]
+    [<System.Obsolete("Use FunctionComponent with memoizeWith")>]
     let memoBuilder<'props> (name: string) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
         render?displayName <- name
@@ -236,7 +236,7 @@ module Helpers =
         fun props ->
             ReactElementType.create memoType props []
 
-    [<System.Obsolete("Use FunctionComponent.Of with memoizeWith")>]
+    [<System.Obsolete("Use FunctionComponent with memoizeWith")>]
     let memoBuilderWith<'props> (name: string) (areEqual: 'props -> 'props -> bool) (render: 'props -> ReactElement) : 'props -> ReactElement =
 #if FABLE_COMPILER
         render?displayName <- name
