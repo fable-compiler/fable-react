@@ -84,3 +84,34 @@ type FunctionComponent =
             div [] [] // React.lazy is not compatible with SSR, so just use an empty div
 #endif
 #endif
+
+    [<Obsolete("See: https://github.com/fable-compiler/fable-react/pull/188")>]
+    static member Of(render: 'Props->ReactElement,
+                       ?displayName: string,
+                       ?memoizeWith: 'Props -> 'Props -> bool,
+                       ?withKey: 'Props -> string)
+                    : 'Props -> ReactElement =
+#if FABLE_COMPILER
+        match displayName with
+        | Some name -> render?displayName <- name
+        | None -> ()
+#endif
+        let elemType =
+            match memoizeWith with
+            | Some areEqual ->
+                let memoElement = ReactElementType.memoWith areEqual render
+#if FABLE_COMPILER
+                match displayName with
+                | Some name -> memoElement?displayName <- "Memo(" + name + ")"
+                | None -> ()
+#endif
+                memoElement
+            | None -> ReactElementType.ofFunction render
+        fun props ->
+#if FABLE_COMPILER
+            let props =
+                match withKey with
+                | Some f -> props?key <- f props; props
+                | None -> props
+#endif
+            ReactElementType.create elemType props []
