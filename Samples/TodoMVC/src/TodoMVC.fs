@@ -151,11 +151,19 @@ type TodoItem() =
     ]
 )
 
-type TodoFooter() =
-  inherit FunctionComponent<{| count: int
+let TodoFooter<'T> =
+ FunctionComponent.Of<{|       count: int
                                completedCount: int
                                onClearCompleted: unit->unit
-                               nowShowing: string |}>(fun props ->
+                               nowShowing: string
+                               genericProp: 'T |}>
+  (memoizeWith = (fun _p1 _p2 -> true),
+   render = (fun props ->
+    printfn "Rendering FOOTER"
+    Hooks.useEffect((fun () ->
+        printfn "This should be printed only once"
+    ), [||])
+
     let activeTodoWord =
         "item" + (if props.count = 1 then "" else "s")
     let clearButton =
@@ -184,7 +192,7 @@ type TodoFooter() =
             clearButton
         ]
     ]
-)
+))
 
 type TodoApp() =
   inherit FunctionComponent<{| model: TodoModel |}>(fun props ->
@@ -269,11 +277,12 @@ type TodoApp() =
         todos.Length - activeTodoCount
     let footer =
         if activeTodoCount > 0 || completedCount > 0 then
-            FunctionComponent.Render<TodoFooter,_>
+            TodoFooter
                 {| count = activeTodoCount
                    completedCount = completedCount
                    nowShowing = state.current.nowShowing
-                   onClearCompleted = clearCompleted |}
+                   onClearCompleted = clearCompleted
+                   genericProp = 1 |}
         else nothing
     let main =
         if todos.Length > 0 then
