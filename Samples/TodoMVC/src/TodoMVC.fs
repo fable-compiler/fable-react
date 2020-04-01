@@ -151,8 +151,8 @@ type TodoItem() =
     ]
 )
 
-let TodoFooter<'T> =
- FunctionComponent.Of<{|       count: int
+type TodoFooter<'T>() =
+ inherit FunctionComponent<{|  count: int
                                completedCount: int
                                onClearCompleted: unit->unit
                                nowShowing: string
@@ -277,7 +277,7 @@ type TodoApp() =
         todos.Length - activeTodoCount
     let footer =
         if activeTodoCount > 0 || completedCount > 0 then
-            TodoFooter
+            FunctionComponent.Render<TodoFooter<_>,_>
                 {| count = activeTodoCount
                    completedCount = completedCount
                    nowShowing = state.current.nowShowing
