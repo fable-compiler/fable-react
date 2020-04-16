@@ -7,6 +7,17 @@ open Fable.Core.JsInterop
 module private Cache =
 #if FABLE_COMPILER
     let private cache = JS.Constructors.Map.Create<obj, ReactElementType>()
+
+// Clear the cache when HMR is fired
+#if DEBUG
+    [<Emit("""try {
+module.hot.addStatusHandler(status =>
+    status === 'ready' ? $0.clear() : null);
+} catch {}""")>]
+    let clearOnHMRUpdates(cache: obj) = ()
+    clearOnHMRUpdates cache
+#endif    
+
     let getOrAdd<'P> (key: obj) (valueFactory: obj->ReactElementType<'P>): ReactElementType<'P> =
         if cache.has(key) then cache.get(key) :?> _
         else let v = valueFactory key in cache.set(key, v) |> ignore; v
