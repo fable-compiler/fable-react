@@ -1,81 +1,30 @@
 namespace Fable.React
 
 open System
+open System.Runtime.CompilerServices
 open Fable.Core
 open Fable.Core.JsInterop
 
-module private Cache =
 #if FABLE_COMPILER
-    let private cache = JS.Constructors.Map.Create<obj, ReactElementType>()
+type internal Cache() =
+    static let cache =
+        let cache = JS.Constructors.Map.Create<string, obj>()        
+        Cache.OnHMR(fun () -> cache.clear()) // Clear the cache when HMR is fired
+        cache
 
-// Clear the cache when HMR is fired
-#if DEBUG
+    static member GetOrAdd(key: string, valueFactory: string->'T): 'T =
+        if cache.has(key) then cache.get(key) :?> 'T
+        else let v = valueFactory key in cache.set(key, box v) |> ignore; v
+
+    [<System.Diagnostics.Conditional("DEBUG")>]
     [<Emit("""try {
 module.hot.addStatusHandler(status =>
-    status === 'ready' ? $0.clear() : null);
+    status === 'apply' ? $0() : null);
 } catch {}""")>]
-    let clearOnHMRUpdates(cache: obj) = ()
-    clearOnHMRUpdates cache
-#endif    
-
-    let getOrAdd<'P> (key: obj) (valueFactory: obj->ReactElementType<'P>): ReactElementType<'P> =
-        if cache.has(key) then cache.get(key) :?> _
-        else let v = valueFactory key in cache.set(key, v) |> ignore; v
-#else
-    let private cache = System.Collections.Concurrent.ConcurrentDictionary<Type, ReactElementType>()
-    let getOrAdd (key: Type) (valueFactory: Type->ReactElementType): ReactElementType =
-        cache.GetOrAdd(key, valueFactory)
+    static member OnHMR(callback: unit->unit): unit = jsNative
 #endif
-
-type FunctionComponentInfo<'P> =
-    { Render: 'P->ReactElement
-      MemoizeWith: ('P->'P->bool) option
-      WithKey: ('P->string) option }
-
-/// A React component that can use hooks to manage the life cycle and is displayed in React dev tools.
-/// Uses React.memo if `memoizeWith` is specified. To optimize collections, use `withKey` argument
-/// or define a `key` field in the props object.
-type FunctionComponent<'P>(render: 'P->ReactElement, ?memoizeWith: 'P->'P->bool, ?withKey: 'P->string) =
-    member __.Info =
-        { Render = render
-          MemoizeWith = memoizeWith
-          WithKey = withKey }
 
 type FunctionComponent =
-#if FABLE_COMPILER
-    static member createElement(constructor: obj, props: 'P) =
-        let getReactElementType (constructor: obj) =
-            let com = createNew constructor () :?> FunctionComponent<'P>
-            let render =
-                let render =
-                    match com.Info.WithKey with
-                    | None -> com.Info.Render
-                    | Some f ->
-                        fun props ->
-                            props?key <- f props
-                            com.Info.Render props
-#if DEBUG
-                render?displayName <- constructor?name
-#endif
-                render
-            match com.Info.MemoizeWith with
-            | Some areEqual -> ReactElementType.memoWith areEqual render
-            | None -> ReactElementType.ofFunction render
-
-        let elType = Cache.getOrAdd constructor getReactElementType
-        ReactElementType.create elType props []
-
-    static member inline Render<'T,'P when 'T :> FunctionComponent<'P> and 'T: (new : unit -> 'T)> (props: 'P): ReactElement =
-        FunctionComponent.createElement(jsConstructor<'T>, props)
-#else
-    static member Render<'T,'P when 'T :> FunctionComponent<'P> and 'T: (new : unit -> 'T)> (props: 'P): ReactElement =
-        let getReactElementType (t: Type) =
-            let com = Activator.CreateInstance(t) :?> FunctionComponent<'P>
-            ReactElementType.ofFunction com.Info.Render :> ReactElementType
-        let elType = Cache.getOrAdd typeof<'T> getReactElementType :?> ReactElementType<'P>
-        ReactElementType.create elType props []
-#endif
-
 #if !FABLE_REPL_LIB
     /// Creates a lazy React component from a function in another file
     /// ATTENTION: Requires fable-compiler 2.3 or above
@@ -96,33 +45,44 @@ type FunctionComponent =
 #endif
 #endif
 
-    [<Obsolete("See: https://github.com/fable-compiler/fable-react/pull/188")>]
+    /// Creates a function React component that can use hooks to manage the component's life cycle,
+    /// and is displayed in React dev tools (use `displayName` to customize the name).
+    /// Uses React.memo if `memoizeWith` is specified (check `equalsButFunctions` and `memoEqualsButFunctions` helpers).
+    /// When you need a key to optimize collections in React you can use `withKey` argument or define a `key` field in the props object.
     static member Of(render: 'Props->ReactElement,
-                       ?displayName: string,
-                       ?memoizeWith: 'Props -> 'Props -> bool,
-                       ?withKey: 'Props -> string)
-                    : 'Props -> ReactElement =
+                        ?displayName: string,
+                        ?memoizeWith: 'Props -> 'Props -> bool,
+                        ?withKey: 'Props -> string
 #if FABLE_COMPILER
-        match displayName with
-        | Some name -> render?displayName <- name
-        | None -> ()
+                        ,[<CallerMemberName>] ?__callingMemberName: string
+                        ,[<CallerFilePath>] ?__callingSourceFile: string
+                        ,[<CallerLineNumber>] ?__callingSourceLine: int
 #endif
-        let elemType =
-            match memoizeWith with
-            | Some areEqual ->
-                let memoElement = ReactElementType.memoWith areEqual render
+                    ): 'Props -> ReactElement =
 #if FABLE_COMPILER
-                match displayName with
-                | Some name -> memoElement?displayName <- "Memo(" + name + ")"
-                | None -> ()
-#endif
-                memoElement
-            | None -> ReactElementType.ofFunction render
+        let prepareRenderFunction _ =
+            let displayName = defaultArg displayName __callingMemberName.Value
+            render?displayName <- displayName
+            let elemType =
+                match memoizeWith with
+                | Some areEqual ->
+                    let memoElement = ReactElementType.memoWith areEqual render
+                    memoElement?displayName <- "Memo(" + displayName + ")"
+                    memoElement
+                | None -> ReactElementType.ofFunction render
+            fun props ->
+                let props =
+                    match withKey with
+                    | Some f -> props?key <- f props; props
+                    | None -> props
+                ReactElementType.create elemType props []
+
+        // Cache the render function to prevent recreating the component every time when FunctionComponent.Of
+        // is called inside another function (including generic values: let MyCom<'T> = ...)
+        let cacheKey = __callingSourceFile.Value + "#L" + (string __callingSourceLine.Value)
+        Cache.GetOrAdd(cacheKey, prepareRenderFunction)
+#else
+        let elemType = ReactElementType.ofFunction render
         fun props ->
-#if FABLE_COMPILER
-            let props =
-                match withKey with
-                | Some f -> props?key <- f props; props
-                | None -> props
-#endif
             ReactElementType.create elemType props []
+#endif
