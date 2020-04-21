@@ -8,20 +8,26 @@ open Fable.Core.JsInterop
 #if FABLE_COMPILER
 type internal Cache() =
     static let cache =
-        let cache = JS.Constructors.Map.Create<string, obj>()        
-        Cache.OnHMR(fun () -> cache.clear()) // Clear the cache when HMR is fired
+        let cache = JS.Constructors.Map.Create<string, obj>()
+#if DEBUG
+        // Clear the cache when HMR is fired
+        Cache.OnHMR(fun () -> cache.clear())
+#endif
         cache
 
     static member GetOrAdd(key: string, valueFactory: string->'T): 'T =
         if cache.has(key) then cache.get(key) :?> 'T
         else let v = valueFactory key in cache.set(key, box v) |> ignore; v
 
-    [<System.Diagnostics.Conditional("DEBUG")>]
-    [<Emit("""try {
-module.hot.addStatusHandler(status =>
-    status === 'apply' ? $0() : null);
-} catch {}""")>]
+    [<Emit("""if (typeof module === 'object' && module.hot) {
+        module.hot.addStatusHandler(status => {
+            if (status === 'apply') $0();
+        });
+    }""")>]
     static member OnHMR(callback: unit->unit): unit = jsNative
+
+    [<Emit("""typeof module === 'object' && module.hot && module.hot.status() === 'apply'""")>]
+    static member IsHMRApplied: bool = jsNative
 #endif
 
 type FunctionComponent =
@@ -66,6 +72,11 @@ type FunctionComponent =
             let elemType =
                 match memoizeWith with
                 | Some areEqual ->
+#if DEBUG
+                    // In development mode, force rerenders always when HMR is fired
+                    let areEqual x y =
+                        not Cache.IsHMRApplied && areEqual x y
+#endif
                     let memoElement = ReactElementType.memoWith areEqual render
                     memoElement?displayName <- "Memo(" + displayName + ")"
                     memoElement
