@@ -182,7 +182,7 @@ module Helpers =
         if obj.ReferenceEquals(x, y) then
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
-            let keys = JS.Object.keys x
+            let keys = JS.Constructors.Object.keys x
             let length = keys.Count
             let mutable i = 0
             let mutable result = true
@@ -209,7 +209,7 @@ module Helpers =
         if obj.ReferenceEquals(x, y) then
             true
         elif isNonEnumerableObject x && not(isNull(box y)) then
-            let keys = JS.Object.keys x
+            let keys = JS.Constructors.Object.keys x
             let length = keys.Count
             let mutable i = 0
             let mutable result = true

@@ -20,7 +20,9 @@ module.exports = {
         contentBase: resolve("./public"),
         port: 8080,
         host: '0.0.0.0',
-        allowedHosts: ['localhost', '.gitpod.io']
+        allowedHosts: ['localhost', '.gitpod.io'],
+        hot: true,
+        inline: true        
     },
     module: {
         rules: [
