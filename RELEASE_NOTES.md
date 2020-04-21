@@ -1,3 +1,7 @@
+### 6.0.0
+
+- Rework FunctionComponent to make it easier to use, it is also supporting HMR out of the box
+
 ### 5.3.6
 
 - Add `JustifySelf` used in Grid containers @Luiz-Monad
