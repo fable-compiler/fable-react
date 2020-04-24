@@ -1,3 +1,7 @@
+### 6.1.0
+
+- FunctionComponent: Suspend memoize during HMR
+
 ### 6.0.0
 
 - Rework FunctionComponent to make it easier to use, it is also supporting HMR out of the box
