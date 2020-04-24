@@ -653,22 +653,22 @@ let private renderSVGAttr (html:TextWriter) (attr: SVGAttr) =
   | SVGAttr.FontSize v -> objAttr html "font-size" v
   | SVGAttr.Fx v -> objAttr html "fx" v
   | SVGAttr.Fy v -> objAttr html "fy" v
-  | SVGAttr.GradientTransform v -> objAttr html "gradient-transform" v
-  | SVGAttr.GradientUnits v -> objAttr html "gradient-units" v
+  | SVGAttr.GradientTransform v -> objAttr html "gradientTransform" v
+  | SVGAttr.GradientUnits v -> objAttr html "gradientUnits" v
   | SVGAttr.Height v -> objAttr html "height" v
   | SVGAttr.MarkerEnd v -> objAttr html "marker-end" v
   | SVGAttr.MarkerMid v -> objAttr html "marker-mid" v
   | SVGAttr.MarkerStart v -> objAttr html "marker-start" v
   | SVGAttr.Offset v -> objAttr html "offset" v
   | SVGAttr.Opacity v -> objAttr html "opacity" v
-  | SVGAttr.PatternContentUnits v -> objAttr html "pattern-content-units" v
-  | SVGAttr.PatternUnits v -> objAttr html "pattern-units" v
+  | SVGAttr.PatternContentUnits v -> objAttr html "patternContentUnits" v
+  | SVGAttr.PatternUnits v -> objAttr html "patternUnits" v
   | SVGAttr.Points v -> objAttr html "points" v
-  | SVGAttr.PreserveAspectRatio v -> objAttr html "preserve-aspect-ratio" v
+  | SVGAttr.PreserveAspectRatio v -> objAttr html "preserveAspectRatio" v
   | SVGAttr.R v -> objAttr html "r" v
   | SVGAttr.Rx v -> objAttr html "rx" v
   | SVGAttr.Ry v -> objAttr html "ry" v
-  | SVGAttr.SpreadMethod v -> objAttr html "spread-method" v
+  | SVGAttr.SpreadMethod v -> objAttr html "spreadMethod" v
   | SVGAttr.StopColor v -> objAttr html "stop-color" v
   | SVGAttr.StopOpacity v -> objAttr html "stop-opacity" v
   | SVGAttr.Stroke v -> objAttr html "stroke" v
@@ -681,7 +681,7 @@ let private renderSVGAttr (html:TextWriter) (attr: SVGAttr) =
   | SVGAttr.TextAnchor v -> objAttr html "text-anchor" v
   | SVGAttr.Transform v -> objAttr html "transform" v
   | SVGAttr.Version v -> objAttr html "version" v
-  | SVGAttr.ViewBox v -> objAttr html "view-box" v
+  | SVGAttr.ViewBox v -> objAttr html "viewBox" v
   | SVGAttr.Width v -> objAttr html "width" v
   | SVGAttr.X1 v -> objAttr html "x1" v
   | SVGAttr.X2 v -> objAttr html "x2" v
