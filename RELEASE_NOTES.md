@@ -1,3 +1,7 @@
+### 6.2.0
+
+- Fix notation for SVG attributes SSR (by @mvsmal)
+
 ### 6.1.0
 
 - FunctionComponent: Suspend memoize during HMR
