@@ -1,3 +1,7 @@
+### 5.4.0
+
+- Fix notation for SVG attributes SSR (by @mvsmal). The commit has been cherry picked from 6.2.0 release
+
 ### 5.3.6
 
 - Add `JustifySelf` used in Grid containers @Luiz-Monad
