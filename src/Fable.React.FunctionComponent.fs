@@ -64,6 +64,7 @@ type FunctionComponent =
     /// and is displayed in React dev tools (use `displayName` to customize the name).
     /// Uses React.memo if `memoizeWith` is specified (check `equalsButFunctions` and `memoEqualsButFunctions` helpers).
     /// When you need a key to optimize collections in React you can use `withKey` argument or define a `key` field in the props object.
+    /// ATTENTION: The render function is cached, pass always an anonymous lambda
     static member Of(render: 'Props->ReactElement,
                         ?displayName: string,
                         ?memoizeWith: 'Props -> 'Props -> bool,
@@ -100,7 +101,18 @@ type FunctionComponent =
         // Cache the render function to prevent recreating the component every time when FunctionComponent.Of
         // is called inside another function (including generic values: let MyCom<'T> = ...)
         let cacheKey = __callingSourceFile.Value + "#L" + (string __callingSourceLine.Value)
+
+#if DEBUG
+        let stringifiedRender = render.ToString()
+        let prepareRenderFunction _ =
+            let render = prepareRenderFunction()
+            (render, stringifiedRender)
+        let (render, stringifiedRender2) = Cache.GetOrAdd(cacheKey, prepareRenderFunction)
+        if stringifiedRender = stringifiedRender2 then render
+        else failwithf "FunctionComponent.Of caches the render function on first call, pass always an anonymous lambda: %s" cacheKey
+#else
         Cache.GetOrAdd(cacheKey, prepareRenderFunction)
+#endif
 #else
         let elemType = ReactElementType.ofFunction render
         fun props ->
