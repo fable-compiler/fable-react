@@ -6,6 +6,11 @@ open Fable.Core
 open Fable.Core.JsInterop
 
 #if FABLE_COMPILER
+[<AllowNullLiteral>]
+type HMR =
+    abstract addStatusHandler: (string -> unit) -> unit
+    abstract status: unit -> string
+
 type internal Cache() =
     static let cache =
         let cache = JS.Constructors.Map.Create<string, obj>()
@@ -19,15 +24,19 @@ type internal Cache() =
         if cache.has(key) then cache.get(key) :?> 'T
         else let v = valueFactory key in cache.set(key, box v) |> ignore; v
 
-    [<Emit("""if (typeof module === 'object' && module.hot) {
-        module.hot.addStatusHandler(status => {
-            if (status === 'apply') $0();
-        });
-    }""")>]
-    static member OnHMR(callback: unit->unit): unit = jsNative
+    [<Emit("typeof module === 'object' ? module.hot : null")>]
+    static member HMR: HMR = jsNative
 
-    [<Emit("""typeof module === 'object' && module.hot && module.hot.status() === 'apply'""")>]
-    static member IsHMRApplied: bool = jsNative
+    static member OnHMR(callback: unit->unit): unit =
+        let hmr = Cache.HMR
+        if not(isNull hmr) then
+            hmr.addStatusHandler(function
+                | "apply" -> callback()
+                | _ -> ())
+
+    static member IsHMRApplied: bool =
+        let hmr = Cache.HMR
+        if isNull hmr then false else hmr.status() = "apply"
 #endif
 
 type FunctionComponent =
