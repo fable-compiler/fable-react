@@ -4,6 +4,36 @@ open System
 open System.Runtime.CompilerServices
 open Fable.Core
 open Fable.Core.JsInterop
+open Fable.SimpleAst
+
+type ReactComponentAttribute() =
+    inherit System.Attribute()
+    interface TransformDeclaration with
+        member _.TransformDeclaration(logger, decl) =
+            match decl.Args with
+            | None ->
+                logger.LogWarning("Expecing a function for ReactComponent")
+                decl
+            | Some args ->
+                let propsArg: Ident = NonMangledIdent("$props") :> _
+                let renderIdent: Ident = NonMangledIdent(decl.FullDisplayName) :> _
+                let renderBody =
+                    (decl.Body, args) ||> List.fold (fun body arg ->
+                        Let(arg, GetField(IdentExpr propsArg, arg.DisplayName), body) :> Expr)
+                let propsObj =
+                    args
+                    |> List.map (fun arg -> arg.DisplayName, IdentExpr arg :> Expr)
+                    |> ObjectExpr
+                let body =
+                    Let(renderIdent, Function([propsArg], renderBody),
+                        Function(args, Apply(Import("createElement", "react"),
+                                             [IdentExpr renderIdent; propsObj])))
+                { new Declaration with
+                    member _.CompiledName = decl.CompiledName
+                    member _.DisplayName = decl.DisplayName
+                    member _.FullDisplayName = decl.FullDisplayName
+                    member _.Args = None
+                    member _.Body = body :> Expr }
 
 #if FABLE_COMPILER
 type internal Cache() =

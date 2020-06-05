@@ -28,7 +28,12 @@ module.exports = {
         rules: [
             {
                 test: /\.fs(x|proj)?$/,
-                use: "fable-loader"
+                use: {
+                    loader: 'fable-loader',
+                    options: {
+                        cli: { path: resolve("../../../fable/src/Fable.Cli/") }
+                    }
+                }
             }
         ]
     },
