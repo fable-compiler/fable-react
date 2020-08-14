@@ -79,7 +79,7 @@ In the example of rc-progress, to declare a `progressLine` creation function tha
 
 ```fsharp
 open Fable.Core
-open Fable.Helpers.React
+open Fable.React.Helpers
 open Fable.Import.React
 open Fable.Core.JsInterop
 
