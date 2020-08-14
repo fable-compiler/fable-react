@@ -201,14 +201,11 @@ export interface IComponentProps {
   }
 ```
 
-## Importing using a Pojo (plain old JS object) record
+## Importing using a record
 
-The Pojo import is similar to the approach above, but instead of declaring a DU you create a [Pojo record](http://fable.io/docs/interacting.html#plain-old-javascript-objects). Using a record with the Pojo attribute to express the props looks more like idiomatic F# code but it can be unwieldy if you have a lot of optional props. Since this is common with React components, using the DU approach above can often be more convenient.
-
-The Pojo attribute is required on such record types because record definitions without the Pojo attribute get compiled to Javascript classes which cannot be used for props in React; using the Pojo attribute instead instructs the Fable compiler to generate a plain old Js object.
+This is similar to the approach above, but instead of declaring a DU you create a record. Using a record to express the props looks more like idiomatic F# code but it can be unwieldy if you have a lot of optional props. Since this is common with React components, using the DU approach above can often be more convenient.
 
 ```fsharp
-[<Pojo>]
 type ProgressProps =
   { percent : int
     strokeWidth : int
@@ -219,16 +216,19 @@ let inline progressLine (props : ProgressProps) (elems : ReactElement list) : Re
     ofImport "Line" "rc-progress" props elems
 ```
 
-## Passing in props as tuples (without a type declaration of the props)
+## Untyped props
 
-The third way of using a React component is to not give an F# type to the Props at all and simply pass a list of `(string * obj)` tuples to the `createObj` helper function which turns the list into a Javascript object and passes it as the props of the React component. This of course has the least level of type safety but it can be convenient for prototyping. The `==>` operator is defined in the [Fable.Core.JsInterop](http://fable.io/docs/interacting.html#plain-old-javascript-objects) module to make `(string * obj)` tuple creation easier to read.
+The third way of using a React component is to not give an F# type to the Props at all and simply pass a list of `(string * obj)` tuples to the `createObj` helper function which turns the list into a Javascript object and passes it as the props of the React component. This of course has the least level of type safety but it can be convenient for prototyping. The `==>` operator is defined in the [Fable.Core.JsInterop](https://fable.io/docs/communicate/js-from-fable.html#Plain-Old-JavaScript-Objects) module to make `(string * obj)` tuple creation easier to read.
 
 ```fsharp
 open Fable.Core.JsInterop
 
 ofImport "Line" "rc-progress" (createObj ["strokeWidth" ==> 5]) []
+
+// You can also use anonymous records
+ofImport "Line" "rc-progress" {| strokeWidth = 5 |} []
 ```
 
-## Edgecases
+## Edge cases
 
 This documentation needs to be extended to cover [Higher Order Components](https://reactjs.org/docs/higher-order-components.html) and maybe [Context](https://reactjs.org/docs/context.html), [Fragments](https://reactjs.org/docs/fragments.html) etc. Contributions are welcome!
