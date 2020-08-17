@@ -79,9 +79,9 @@ In the example of rc-progress, to declare a `progressLine` creation function tha
 
 ```fsharp
 open Fable.Core
-open Fable.React.Helpers
-open Fable.Import.React
 open Fable.Core.JsInterop
+open Fable.React
+open Fable.React.Props
 
 let inline progressLine (props : ProgressProps list) (elems : ReactElement list) : ReactElement =
     ofImport "Line" "rc-progress" (keyValueList CaseRules.LowerFirst props) elems
