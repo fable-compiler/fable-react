@@ -1,3 +1,11 @@
+### 7.0.1
+
+- Re-release version 7.0.0 because I unlisted it (I forgot to pull the latest changes from the master branch...)
+
+### 7.0.0
+
+- Upgrade Fable.Browser.Dom to 2.0.1 making it easier for package dependant on Fable.React to use the new version of Fable.Browser.Dom
+
 ### 6.2.0
 
 - Fix notation for SVG attributes SSR (by @mvsmal)
