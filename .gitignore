@@ -1,3 +1,4 @@
+*.fs.js
 npm/
 .vscode/
 .DS_Store

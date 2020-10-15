@@ -12,7 +12,7 @@ function getDevServerUrl() {
 }
 
 module.exports = {
-    entry: resolve('./src/TodoMVC.fsproj'),
+    entry: resolve('./src/TodoMVC.fs.js'),
     mode: "development",
     devtool: "source-map",
     devServer: {
@@ -23,14 +23,6 @@ module.exports = {
         allowedHosts: ['localhost', '.gitpod.io'],
         hot: true,
         inline: true        
-    },
-    module: {
-        rules: [
-            {
-                test: /\.fs(x|proj)?$/,
-                use: "fable-loader"
-            }
-        ]
     },
     externals: {
         "react": "React",

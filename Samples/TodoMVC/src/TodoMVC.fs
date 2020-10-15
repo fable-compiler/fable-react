@@ -81,16 +81,17 @@ let [<Literal>] COMPLETED_TODOS = "completed"
 
 let TodoItemLabelStyleContext = createContext (fun s -> str s)
 
-let TodoItem =
-  FunctionComponent.Of<{| key: Guid
-                          todo: Todo
-                          editing: bool
-                          onSave: string->unit
-                          onEdit: unit->unit
-                          onDestroy: unit->unit
-                          onCancel: unit->unit
-                          onToggle: unit->unit |}>(fun props ->
-    let state = Hooks.useState(props.todo.title)
+type TodoComponent =
+ [<ReactComponent>]
+  static member Item(key: Guid,
+                     todo: Todo,
+                     editing: bool,
+                     onSave: string->unit,
+                     onEdit: unit->unit,
+                     onDestroy: unit->unit,
+                     onCancel: unit->unit,
+                     onToggle: unit->unit) =
+    let state = Hooks.useState(todo.title)
     let editField: IRefHook<Element option> = Hooks.useRef None
     let labelStyle = Hooks.useContext TodoItemLabelStyleContext
 
@@ -98,47 +99,47 @@ let TodoItem =
         let editField = editField.current.Value :?> HTMLInputElement
         editField.focus()
         editField.setSelectionRange(editField.value.Length, editField.value.Length)
-    ), [|props.editing|])
+    ), [|editing|])
 
     let handleSubmit _ =
         match state.current.Trim() with
         | value when value.Length > 0 ->
-            props.onSave(value)
+            onSave(value)
             state.update value
         | _ ->
-            props.onDestroy()
+            onDestroy()
 
     let handleEdit _ =
-        props.onEdit()
-        state.update props.todo.title
+        onEdit()
+        state.update todo.title
 
     let handleKeyDown (ev: KeyboardEvent) =
         match ev.which with
         | ESCAPE_KEY ->
-            state.update props.todo.title
-            props.onCancel()
+            state.update todo.title
+            onCancel()
         | ENTER_KEY ->
             handleSubmit(ev)
         | _ -> ()
 
     let handleChange (ev: Event) =
-        if props.editing then
+        if editing then
             state.update ev.Value
 
-    li [ classList ["completed", props.todo.completed
-                    "editing", props.editing] ] [
+    li [ classList ["completed", todo.completed
+                    "editing", editing] ] [
         div [ Class "view" ] [
             input [
                 Class "toggle"
                 Type "checkbox"
-                Checked props.todo.completed
-                OnChange (fun _ -> props.onToggle())
+                Checked todo.completed
+                OnChange (fun _ -> onToggle())
             ]
             label [ OnDoubleClick handleEdit ]
-                  [ labelStyle props.todo.title ]
+                  [ labelStyle todo.title ]
             button [
                 Class "destroy"
-                OnClick (fun _ -> props.onDestroy()) ] [ ]
+                OnClick (fun _ -> onDestroy()) ] [ ]
         ]
         input [
             Class "edit"
@@ -149,30 +150,29 @@ let TodoItem =
             OnKeyDown handleKeyDown
         ]
     ]
-)
 
-let TodoFooter =
-  FunctionComponent.Of<{| count: int
-                          completedCount: int
-                          onClearCompleted: unit->unit
-                          nowShowing: string |}>(fun props ->
+  [<ReactComponent>]
+  static member Footer (count: int,
+                        completedCount: int,
+                        onClearCompleted: unit->unit,
+                        nowShowing: string) =
     let activeTodoWord =
-        "item" + (if props.count = 1 then "" else "s")
+        "item" + (if count = 1 then "" else "s")
     let clearButton =
-        if props.completedCount > 0 then
+        if completedCount > 0 then
             button [
                 Class "clear-completed"
-                OnClick (fun _ -> props.onClearCompleted())
+                OnClick (fun _ -> onClearCompleted())
             ] [ str "Clear completed" ]
         else nothing
     let filter href name category =
         li [] [
             a [ Href href
-                classList ["selected", (props.nowShowing = category)] ]
+                classList ["selected", (nowShowing = category)] ]
               [ str name ] ]
     footer [ Class "footer" ] [
         span [ Class "todo-count" ] [
-            strong [] [ props.count |> string |> str ]
+            strong [] [ count |> string |> str ]
             str (" " + activeTodoWord + " left")
         ]
         ul [ Class "filters" ] [
@@ -184,10 +184,9 @@ let TodoFooter =
             clearButton
         ]
     ]
-)
 
-let TodoApp =
- FunctionComponent.Of<{| model: TodoModel |}>(fun props ->
+[<ReactComponent>]
+let TodoApp (model: TodoModel) =
     let state = Hooks.useState {| nowShowing = ALL_TODOS
                                   editing = Option<Guid>.None
                                   newTodo = "" |}
@@ -214,32 +213,32 @@ let TodoApp =
             ev.preventDefault()
             let v = state.current.newTodo.Trim()
             if v.Length > 0 then
-                props.model.addTodo(v)
+                model.addTodo(v)
                 state.update(fun s -> {| s with newTodo = "" |})
 
     let toggleAll (ev: Event) =
-        props.model.toggleAll(ev.Checked)
+        model.toggleAll(ev.Checked)
 
     let toggle (todoToToggle) =
-        props.model.toggle(todoToToggle)
+        model.toggle(todoToToggle)
 
     let destroy (todo) =
-        props.model.destroy(todo)
+        model.destroy(todo)
 
     let edit (todo: Todo) =
         state.update(fun s -> {| s with editing = Some todo.id |})
 
     let save (todoToSave, text) =
-        props.model.save(todoToSave, text)
+        model.save(todoToSave, text)
         state.update(fun s -> {| s with editing = None |})
 
     let cancel () =
         state.update(fun s -> {| s with editing = None |})
 
     let clearCompleted () =
-        props.model.clearCompleted()
+        model.clearCompleted()
 
-    let todos = props.model.todos
+    let todos = model.todos
     let todoItems =
         todos
         |> Seq.filter (fun todo ->
@@ -248,19 +247,18 @@ let TodoApp =
             | COMPLETED_TODOS -> todo.completed
             | _ -> true)
         |> Seq.map (fun todo ->
-            TodoItem
-                {| key = todo.id
-                   todo = todo
-                   onToggle = fun _ -> toggle(todo)
-                   onDestroy = fun _ -> destroy(todo)
-                   onEdit = fun _ -> edit(todo)
-                   editing =
-                     match state.current.editing with
-                     | Some editing -> editing = todo.id
-                     | None -> false
-                   onSave = fun text -> save(todo, string text)
-                   onCancel = fun _ -> cancel() |})
-            |> Seq.toList
+            TodoComponent.Item(
+                key = todo.id,
+                todo = todo,
+                editing = (match state.current.editing with
+                           | Some editing -> editing = todo.id
+                           | None -> false),
+                onSave = (fun text -> save(todo, string text)),
+                onEdit = (fun _ -> edit(todo)),
+                onDestroy = (fun _ -> destroy(todo)),
+                onCancel = (fun _ -> cancel()),
+                onToggle = (fun _ -> toggle(todo)))
+        ) |> Seq.toList
     let activeTodoCount =
         todos |> Array.fold (fun accum todo ->
             if todo.completed then accum else accum + 1
@@ -269,11 +267,11 @@ let TodoApp =
         todos.Length - activeTodoCount
     let footer =
         if activeTodoCount > 0 || completedCount > 0 then
-            TodoFooter
-                {| count = activeTodoCount
-                   completedCount = completedCount
-                   nowShowing = state.current.nowShowing
-                   onClearCompleted = clearCompleted |}
+            TodoComponent.Footer(
+                activeTodoCount,
+                completedCount,
+                clearCompleted,
+                state.current.nowShowing)
         else nothing
     let main =
         if todos.Length > 0 then
@@ -304,13 +302,12 @@ let TodoApp =
         ) [main]
         footer
     ]
-)
 
 let model = TodoModel("react-todos")
 
 let render() =
     ReactDom.render(
-        TodoApp {| model = model |},
+        TodoApp model,
         document.getElementsByClassName("todoapp").[0])
 
 model.subscribe(render)
