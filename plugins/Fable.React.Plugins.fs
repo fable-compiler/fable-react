@@ -12,9 +12,7 @@ module internal AstUtil =
     let makeIdent name: Fable.Ident =
         { Name = name
           Type = Fable.Any
-          // It's important to set this to false
-          // so Fable doesn't optimize the binding
-          IsCompilerGenerated = false
+          IsCompilerGenerated = true
           IsThisArgument = false
           IsMutable = false
           Range = None }
@@ -82,27 +80,33 @@ module internal AstUtil =
 type ReactComponentAttribute() =
     inherit MemberDeclarationPluginAttribute()
     override _.FableMinimumVersion = "3.0"
+
+    override _.TransformCall(helper, memb, expr) =
+        let membArgs = memb.CurriedParameterGroups |> List.concat
+        match expr with
+        | Fable.Call(callee, info, t, r) when List.length membArgs = List.length info.Args ->
+            let propsObj =
+                List.zip membArgs info.Args
+                |> List.choose (fun (arg, expr) -> arg.Name |> Option.map (fun k -> k, expr))
+                |> AstUtil.objExpr
+            // TODO: Detect `children` arg
+            AstUtil.makeCall (AstUtil.makeImport "createElement" "react") [callee; propsObj]
+        | _ -> expr
+
     override _.Transform(logger, decl) =
         if decl.Info.IsValue || decl.Info.IsGetter || decl.Info.IsSetter then
             logger.LogWarning("Expecting a function for ReactComponent")
             decl
         else
             let propsArg = AstUtil.makeIdent "$props"
-            let renderIdent = AstUtil.cleanFullDisplayName decl.FullDisplayName |> AstUtil.makeIdent
-            let renderBody =
+            let body =
                 ([], decl.Args) ||> List.fold (fun bindings arg ->
+                    // TODO: Skip getter if arg is `key`
                     let getterKind = Fable.ByKey(Fable.ExprKey(AstUtil.makeStrConst arg.DisplayName))
                     let getter = Fable.Get(Fable.IdentExpr propsArg, getterKind, Fable.Any, None)
                     (arg, getter)::bindings)
                 |> List.rev
                 |> fun bindings -> Fable.Let(bindings, decl.Body)
 
-            let propsObj =
-                decl.Args
-                |> List.map (fun arg -> arg.DisplayName, Fable.IdentExpr arg)
-                |> AstUtil.objExpr
-            let body =
-                let createEl = AstUtil.makeCall (AstUtil.makeImport "createElement" "react") [Fable.IdentExpr renderIdent; propsObj]
-                Fable.Let([renderIdent, Fable.Delegate([propsArg], renderBody, None)],
-                    Fable.Delegate(decl.Args, createEl, None))
-            { decl with Args = []; Body = body; Info = AstUtil.MemberInfo(decl.Info, isValue=true) }
+            // TODO: check if decl.Name is uppercase
+            { decl with Args = [propsArg]; Body = body }
