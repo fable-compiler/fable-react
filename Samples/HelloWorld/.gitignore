@@ -1,0 +1,4 @@
+*.fs.js
+dist/
+.cache
+.fable

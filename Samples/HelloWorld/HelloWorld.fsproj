@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Fable.React.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Fable.Browser.Dom" Version="2.1.2" />
   </ItemGroup>
 
