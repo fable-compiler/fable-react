@@ -185,7 +185,7 @@ type TodoComponent =
         ]
     ]
 
-[<ReactComponent>]
+[<ReactComponent(exportDefault=true)>]
 let TodoApp (model: TodoModel) =
     let state = Hooks.useState {| nowShowing = ALL_TODOS
                                   editing = Option<Guid>.None

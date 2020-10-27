@@ -24,8 +24,8 @@ module internal AstUtil =
         Fable.StringConstant x |> makeValue None
 
     let makeImport selector path =
-        Fable.Import({ Selector = makeStrConst selector
-                       Path = makeStrConst path
+        Fable.Import({ Selector = selector
+                       Path = path
                        IsCompilerGenerated = true }, Fable.Any, None)        
 
     let makeCall callee args =
@@ -33,6 +33,7 @@ module internal AstUtil =
             { ThisArg = None
               Args = args
               SignatureArgTypes = []
+              CallMemberInfo = None
               HasSpread = false
               IsJsConstructor = false }
         Fable.Call(callee, callInfo, Fable.Any, None)
@@ -71,14 +72,18 @@ module internal AstUtil =
             Body = v
             UsedNames = Set.empty
             Info = MemberInfo(isValue=true)
+            ExportDefault = false
         }
 
     let objExpr kvs =
         Fable.ObjectExpr(List.map objValue kvs, Fable.Any, None)
 
 
-type ReactComponentAttribute() =
+type ReactComponentAttribute(exportDefault: bool) =
     inherit MemberDeclarationPluginAttribute()
+
+    new() = ReactComponentAttribute(exportDefault=false)
+
     override _.FableMinimumVersion = "3.0"
 
     override _.TransformCall(helper, memb, expr) =
@@ -109,4 +114,4 @@ type ReactComponentAttribute() =
                 |> fun bindings -> Fable.Let(bindings, decl.Body)
 
             // TODO: check if decl.Name is uppercase
-            { decl with Args = [propsArg]; Body = body }
+            { decl with Args = [propsArg]; Body = body; ExportDefault = exportDefault }
