@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Fable.React.fsproj" />
+    <ProjectReference Include="..\..\..\src\Fable.React\Fable.React.fsproj" />
   </ItemGroup>
 
   <ItemGroup>
