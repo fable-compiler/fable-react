@@ -8,6 +8,6 @@
     <Compile Include="Fable.React.Plugins.fs" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Fable.AST" Version="3.0.0-nagareyama-beta-002" />
+    <PackageReference Include="Fable.AST" Version="3.0.0-nagareyama-rc-001" />
   </ItemGroup>
 </Project>

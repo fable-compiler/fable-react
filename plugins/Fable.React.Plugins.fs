@@ -79,6 +79,9 @@ module internal AstUtil =
         Fable.ObjectExpr(List.map objValue kvs, Fable.Any, None)
 
 
+[<assembly:ScanForPlugins>]
+do()
+
 type ReactComponentAttribute(exportDefault: bool) =
     inherit MemberDeclarationPluginAttribute()
 
@@ -98,7 +101,7 @@ type ReactComponentAttribute(exportDefault: bool) =
             AstUtil.makeCall (AstUtil.makeImport "createElement" "react") [callee; propsObj]
         | _ -> expr
 
-    override _.Transform(logger, decl) =
+    override _.Transform(logger, _file, decl) =
         if decl.Info.IsValue || decl.Info.IsGetter || decl.Info.IsSetter then
             logger.LogWarning("Expecting a function for ReactComponent")
             decl
@@ -110,8 +113,7 @@ type ReactComponentAttribute(exportDefault: bool) =
                     let getterKind = Fable.ByKey(Fable.ExprKey(AstUtil.makeStrConst arg.DisplayName))
                     let getter = Fable.Get(Fable.IdentExpr propsArg, getterKind, Fable.Any, None)
                     (arg, getter)::bindings)
-                |> List.rev
-                |> fun bindings -> Fable.Let(bindings, decl.Body)
+                |> List.fold (fun body (k,v) -> Fable.Let(k, v, body)) decl.Body
 
             // TODO: check if decl.Name is uppercase
             { decl with Args = [propsArg]; Body = body; ExportDefault = exportDefault }
