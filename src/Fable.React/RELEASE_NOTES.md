@@ -1,3 +1,8 @@
+### 7.1.0
+
+- Split shared interfaces with Feliz into a separate package: Fable.React.Types
+- Fix #210: defend hmr code
+
 ### 7.0.1
 
 - Re-release version 7.0.0 because I unlisted it (I forgot to pull the latest changes from the master branch...)
