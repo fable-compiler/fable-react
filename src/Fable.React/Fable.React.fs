@@ -3,6 +3,25 @@ namespace Fable.React
 open System
 open Fable.Core
 
+type [<AllowNullLiteral>] ReactElement =
+    interface end
+
+type ReactElementType =
+    interface end
+
+type ReactElementType<'props> =
+    inherit ReactElementType
+
+type IRefValue<'T> =
+    abstract current: 'T with get, set
+
+type IContext<'T> =
+    interface end
+
+type ISSRContext<'T> =
+    inherit IContext<'T>
+    abstract DefaultValue: 'T
+
 type IReactExports =
     abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
     abstract createContext: defaultValue: 'T -> IContext<'T>

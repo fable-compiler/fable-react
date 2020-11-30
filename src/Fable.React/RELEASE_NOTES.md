@@ -1,3 +1,7 @@
+### 7.2.0
+
+- Put interfaces back to avoid errors from libraries depending on previous Fable.React versions #210
+
 ### 7.1.0
 
 - Split shared interfaces with Feliz into a separate package: Fable.React.Types

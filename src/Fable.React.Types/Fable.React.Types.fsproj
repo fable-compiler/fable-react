@@ -4,10 +4,14 @@
     <Version>1.0.0</Version>
     <PackageVersion>1.0.0</PackageVersion>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
+    <DisableImplicitFSharpCoreReference>true</DisableImplicitFSharpCoreReference>
     <!-- <GenerateDocumentationFile>true</GenerateDocumentationFile> -->
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Fable.React.Types.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FSharp.Core" Version="4.7.2" />
+  </ItemGroup>  
 </Project>
