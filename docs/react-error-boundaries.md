@@ -18,8 +18,7 @@ Just copy the following code to your project:
 module ReactErrorBoundary
 
 open Fable.Core
-open Fable.Import
-open Fable.Helpers.React
+open Fable.React
 
 type [<AllowNullLiteral>] InfoComponentObject =
     abstract componentStack: string with get
