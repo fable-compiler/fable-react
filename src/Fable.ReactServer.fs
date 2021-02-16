@@ -40,15 +40,14 @@ let private cssProp (html:TextWriter) (key: string) (value: obj) =
   | :? int as v -> addUnit html key (string v)
   | :? float as v -> addUnit html key (string v)
   | _ ->
-    let cssProp =
-        cssPropsCache.GetOrAdd(
-            value,
-            let isStringEnum =
-                value.GetType().GetCustomAttributes(false)
-                |> Seq.exists (function
-                    | :? Core.StringEnumAttribute -> true
-                    | _ -> false)
-            if isStringEnum then stringEnum value else value.ToString())
+    let getStringFromObj(v)=
+        let isStringEnum = v.GetType().GetCustomAttributes(false)
+                          |> Seq.exists (function
+                              | :? Core.StringEnumAttribute -> true
+                              | _ -> false)
+        if isStringEnum then stringEnum v else v.ToString()
+    
+    let cssProp = cssPropsCache.GetOrAdd(value,System.Func<obj,string>(getStringFromObj))
     escapeHtml html cssProp
 
 let private slugRegex = Regex("([A-Z])", RegexOptions.Compiled)
