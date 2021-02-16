@@ -173,10 +173,10 @@ type ComponentProps =
 
 // sample function matching props signature
 let logDateTimeSelected (d : DateTime) =
-  Fable.Import.Browser.console.log (sprintf "Date : %A" d)
+  printfn "Date : %A" d
 
 // Component definition (here a calendar)
-let inline Calendar (props : ComponentProps list) : Fable.Import.React.ReactElement =
+let inline Calendar (props : ComponentProps list) : Fable.React.ReactElement =
     ofImport "default" "./CalendarComponent.tsx" (keyValueList CaseRules.LowerFirst props) []
 
 // Component initialization with props
