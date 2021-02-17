@@ -1,3 +1,7 @@
+### 7.0.2
+
+- ReactServer: Optimize cssProps cache @medigor @delneg
+
 ### 7.0.1
 
 - Re-release version 7.0.0 because I unlisted it (I forgot to pull the latest changes from the master branch...)
