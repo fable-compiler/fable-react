@@ -1,3 +1,8 @@
+### 7.3.0
+
+- Supersede 7.1/7.2 from PR #208
+- Fix #210: defend hmr code
+
 ### 7.0.3
 
 - Fix FunctionComponent HMR, see Fable #2414
