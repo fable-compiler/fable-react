@@ -1,3 +1,7 @@
+### 7.0.3
+
+- Fix FunctionComponent HMR, see Fable #2414
+
 ### 7.0.2
 
 - ReactServer: Optimize cssProps cache @medigor @delneg

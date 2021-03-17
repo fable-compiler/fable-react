@@ -19,11 +19,7 @@ type internal Cache() =
         if cache.has(key) then cache.get(key) :?> 'T
         else let v = valueFactory key in cache.set(key, box v) |> ignore; v
 
-    [<Emit("""if (typeof module === 'object' && module.hot) {
-        module.hot.addStatusHandler(status => {
-            if (status === 'apply') $0();
-        });
-    }""")>]
+    [<Emit("""typeof module === 'object' && module.hot ? module.hot.addStatusHandler(status => { if (status === 'apply') $0(); }) : void 0""")>]
     static member OnHMR(callback: unit->unit): unit = jsNative
 
     [<Emit("""typeof module === 'object' && module.hot && module.hot.status() === 'apply'""")>]
