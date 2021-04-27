@@ -1,3 +1,7 @@
+### 7.4.0
+
+- Lower FSharp.Core requirements
+
 ### 7.3.0
 
 - Supersede 7.1/7.2 from PR #208
