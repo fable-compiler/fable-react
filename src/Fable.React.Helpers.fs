@@ -260,6 +260,10 @@ module Helpers =
     /// Cast a string to a React element (erased in runtime)
     let inline ofString (s: string): ReactElement =
         str s
+        
+    /// The equivalent of `sprintf (...) |> str`
+    let inline strf format =
+        Printf.kprintf str format
 
     /// Cast an option value to a React element (erased in runtime)
     let inline ofOption (o: ReactElement option): ReactElement =
