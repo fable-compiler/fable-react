@@ -1,0 +1,25 @@
+<Project>
+    <!-- NuGet Metadata -->
+    <PropertyGroup>
+        <PackageProjectUrl>https://fable.io</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/fable-compiler/fable-react</RepositoryUrl>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageIcon>fable_logo.png</PackageIcon>
+        <PackageTags>fsharp;fable;javascript;f#;js;react</PackageTags>
+        <Authors>Fable contributors</Authors>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
+
+        <!-- For SourceLink. See: https://github.com/dotnet/sourcelink#using-source-link-in-net-projects -->
+        <PublishRepositoryUrl>true</PublishRepositoryUrl>
+        <EmbedUntrackedSources>true</EmbedUntrackedSources>
+        <IncludeSymbols>true</IncludeSymbols>
+        <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    </PropertyGroup>
+    <ItemGroup>
+        <None Include="$(MSBuildThisFileDirectory)\fable_logo.png" Pack="true" Visible="false" PackagePath="" />
+        <None Include="$(MSBuildThisFileDirectory)\LICENSE" Visible="false" Pack="true" PackagePath="" />
+    </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+    </ItemGroup>
+</Project>
