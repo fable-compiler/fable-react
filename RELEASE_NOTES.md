@@ -1,3 +1,7 @@
+### 7.4.1
+
+- Add license meta data (by @nojaf)
+
 ### 7.4.0
 
 - Lower FSharp.Core requirements
