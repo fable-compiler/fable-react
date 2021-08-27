@@ -1,3 +1,7 @@
+### 7.4.2
+
+- Add DOMAttr.Custom
+
 ### 7.4.1
 
 - Add license meta data (by @nojaf)

@@ -119,6 +119,7 @@ type DOMAttr =
     | OnAnimationEnd of (AnimationEvent -> unit)
     | OnAnimationIteration of (AnimationEvent -> unit)
     | OnTransitionEnd of (TransitionEvent -> unit)
+    | [<Erase>] Custom of string * obj
     interface IHTMLProp
 
 type SVGAttr =

@@ -3,5 +3,5 @@ open PublishUtils
 
 match args with
 | IgnoreCase "publish"::_ ->
-    pushNuget "src/Fable.React.fsproj" doNothing
+    pushFableNuget "src/Fable.React.fsproj" [] doNothing
 | _ -> ()
