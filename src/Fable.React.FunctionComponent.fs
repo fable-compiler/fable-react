@@ -49,8 +49,7 @@ type FunctionComponent =
                 (createObj ["fallback" ==> fallback])
                 [ReactElementType.create elemType props []]
 #else
-        fun _ ->
-            div [] [] // React.lazy is not compatible with SSR, so just use an empty div
+        f // No React.lazy for SSR, just return component as is
 #endif
 #endif
 
