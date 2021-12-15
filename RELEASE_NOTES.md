@@ -1,3 +1,7 @@
+### 7.4.3
+
+- Fix FunctionComponent.Lazy for SSR @mvsmal
+
 ### 7.4.2
 
 - Add DOMAttr.Custom

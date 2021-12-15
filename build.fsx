@@ -1,5 +1,11 @@
-#load "node_modules/fable-publish-utils/PublishUtils.fs"
+#r "nuget: Fable.PublishUtils, 2.4.0"
+
 open PublishUtils
+
+let args =
+    fsi.CommandLineArgs
+    |> Array.skip 1
+    |> List.ofArray
 
 match args with
 | IgnoreCase "publish"::_ ->

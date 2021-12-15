@@ -2,10 +2,9 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/fable-compiler/fable-react)
 
-
 Fable bindings and helpers for React projects. For more recent bindings that improve on type-safety and development experience, please check [Feliz](https://zaid-ajaj.github.io/Feliz/).
 
-Run `npm install` to install dependencies and `npm run build publish` to publish a new version of the package.
+Run `npm run publish` to publish a new version of the package.
 
 ## Documents
 
