@@ -29,9 +29,17 @@ type IHooks =
     [<Emit("$0.useState($1)")>]
     abstract useStateLazy: initialState: (unit->'T) -> IStateHook<'T>
 
-    /// Accepts a function that contains imperative, possibly effectful code
+    /// Accepts a function that contains imperative, possibly effectful code.
     /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
     abstract useEffect: effect: (unit->unit) * ?dependencies: obj[] -> unit
+
+    /// Accepts a function that contains imperative, possibly effectful code.
+    /// The signature is identical to useEffect, but it fires synchronously after 
+    /// all DOM mutations. Use this to read layout from the DOM and synchronously 
+    /// re-render. Updates scheduled inside useLayoutEffect will be flushed 
+    /// synchronously, before the browser has a chance to paint.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#uselayouteffect
+    abstract useLayoutEffect: effect: (unit->unit) * ?dependencies: obj[] -> unit
 
     /// Accepts a function that contains effectful code and returns a disposable for clean-up
     /// More info at https://reactjs.org/docs/hooks-reference.html#useeffect
