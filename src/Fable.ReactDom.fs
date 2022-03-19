@@ -4,6 +4,11 @@ open Fable.Core
 open Fable.React
 open Browser.Types
 
+type IReactRoot =
+    abstract render: element: ReactElement -> unit
+
+    abstract unmount: unit -> unit
+
 type IReactDom =
     /// Render a React element into the DOM in the supplied container.
     /// If the React element was previously rendered into container, this will perform an update on it and only mutate the DOM as necessary to reflect the latest React element.
@@ -18,6 +23,11 @@ type IReactDom =
 
     /// Creates a portal. Portals provide a way to render children into a DOM node that exists outside the hierarchy of the DOM component.
     abstract createPortal: child: ReactElement * container: Element -> ReactElement
+
+type IReactDomClient =
+    abstract createRoot: container: Element -> IReactRoot
+
+    abstract hydrateRoot: container: Element * element: ReactElement -> unit
 
 type IReactDomServer =
     /// Render a React element to its initial HTML. This should only be used on the server. React will return an HTML string. You can use this method to generate HTML on the server and send the markup down on the initial request for faster page loads and to allow search engines to crawl your pages for SEO purposes.
@@ -35,6 +45,13 @@ module ReactDomBindings =
     [<Import("*", "react-dom")>]
     #endif
     let ReactDom: IReactDom = jsNative
+
+    #if FABLE_REPL_LIB
+    [<Global("ReactDOM")>]
+    #else
+    [<Import("*", "react-dom/client")>]
+    #endif
+    let ReactDomClient: IReactDomClient = jsNative
 
     #if !FABLE_REPL_LIB
     [<Import("default", "react-dom/server")>]
