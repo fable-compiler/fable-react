@@ -5,8 +5,10 @@ open Fable.React
 open Browser.Types
 
 type IReactRoot =
+    /// Render a React element into the root
     abstract render: element: ReactElement -> unit
 
+    /// Remove the root from the DOM
     abstract unmount: unit -> unit
 
 type IReactDom =
@@ -25,8 +27,10 @@ type IReactDom =
     abstract createPortal: child: ReactElement * container: Element -> ReactElement
 
 type IReactDomClient =
+    /// Create a React root for the supplied container and return the root. The root can be used to render a React element into the DOM with render.
     abstract createRoot: container: Element -> IReactRoot
 
+    /// Same as createRoot(), but is used to hydrate a container whose HTML contents were rendered by ReactDOMServer. React will attempt to attach event listeners to the existing markup.
     abstract hydrateRoot: container: Element * element: ReactElement -> unit
 
 type IReactDomServer =
