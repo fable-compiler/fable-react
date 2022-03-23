@@ -6,6 +6,12 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
   </PropertyGroup>
+  <PropertyGroup>
+    <NpmDependencies>
+      <NpmPackage Name="react" Version="gte 18.0.0 lt 19.0.0" ResolutionStrategy="Max" />
+      <NpmPackage Name="react-dom" Version="gte 18.0.0 lt 19.0.0" ResolutionStrategy="Max" />
+    </NpmDependencies>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Fable.React.fs" />
     <Compile Include="Fable.ReactDom.fs" />
