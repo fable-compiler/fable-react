@@ -8,8 +8,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <NpmDependencies>
-      <NpmPackage Name="react" Version="gte 18.0.0 lt 19.0.0" ResolutionStrategy="Max" />
-      <NpmPackage Name="react-dom" Version="gte 18.0.0 lt 19.0.0" ResolutionStrategy="Max" />
+      <NpmPackage Name="react" Version="gte 18.0.0-beta-24dd07bd2-20211208 lt 19.0.0" ResolutionStrategy="Max" />
+      <NpmPackage Name="react-dom" Version="gte 18.0.0-beta-24dd07bd2-20211208 lt 19.0.0" ResolutionStrategy="Max" />
     </NpmDependencies>
   </PropertyGroup>
   <ItemGroup>
