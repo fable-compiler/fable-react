@@ -146,4 +146,7 @@ module HookBindings =
             member __.useReducer(reducer,initialState) = makeDummyReducerHook initialState
             member __.useReducer(reducer, initialArgument, init) = makeDummyReducerHook (init initialArgument)
             member __.useTransition() = makeDummyTransitionHook()
+            member __.useDeferredValue value = value
+            member __.useId() = ""
+            member __.useLayoutEffect(effect, dependencies) = ()
         }
