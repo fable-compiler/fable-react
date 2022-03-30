@@ -19,6 +19,12 @@ type IReducerHook<'State,'Msg> =
     [<Emit("$0[1]($1)")>]
     abstract update: 'Msg -> unit
 
+type ITransitionHook =
+    [<Emit("$0[0]")>]
+    abstract isPending: bool
+    [<Emit("$0[1]($1)")>]
+    abstract startTransition: callback: (unit -> unit) -> unit
+
 type IHooks =
     /// Returns the current state with a function to update it.
     /// More info at  https://reactjs.org/docs/hooks-reference.html#usestate
@@ -82,6 +88,21 @@ type IHooks =
     /// More info at https://reactjs.org/docs/hooks-reference.html#usereducer
     abstract useReducer: reducer: ('State -> 'Msg -> 'State) * initialArg: 'I * init: ('I -> 'State) -> IReducerHook<'State, 'Msg>
 
+    /// Returns a stateful value for the pending state of the transition, and a function to start it.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usetransition
+    /// Requires React 18.
+    abstract useTransition: unit -> ITransitionHook
+
+    /// useId is a hook for generating unique IDs that are stable across the server and client, while avoiding hydration mismatches.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#useid
+    /// Requires React 18.
+    abstract useId: unit -> string
+
+    /// useDeferredValue accepts a value and returns a new copy of the value that will defer to more urgent updates. If the current render is the result of an urgent update, like user input, React will return the previous value and then render the new value after the urgent render has completed.
+    /// More info at https://reactjs.org/docs/hooks-reference.html#usedeferredvalue
+    /// Requires React 18.
+    abstract useDeferredValue: 'T -> 'T
+
 [<AutoOpen>]
 module HookBindings =
     let private makeDummyStateHook value =
@@ -94,6 +115,11 @@ module HookBindings =
         { new IReducerHook<'State,'Msg> with
             member __.current = state
             member __.update(msg: 'Msg) = () }
+
+    let private makeDummyTransitionHook () =
+        { new ITransitionHook with
+            member __.isPending = false
+            member __.startTransition callback = () }
 
     #if FABLE_REPL_LIB
     [<Global("React")>]
@@ -119,4 +145,5 @@ module HookBindings =
             member __.useDebugValue(value, format): unit = ()
             member __.useReducer(reducer,initialState) = makeDummyReducerHook initialState
             member __.useReducer(reducer, initialArgument, init) = makeDummyReducerHook (init initialArgument)
+            member __.useTransition() = makeDummyTransitionHook()
         }
