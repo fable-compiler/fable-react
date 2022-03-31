@@ -1,3 +1,8 @@
+### 8.0.0
+
+- Add React 18 new APIs @kerams
+- Add Femto metadata @kerams
+
 ### 7.4.3
 
 - Fix FunctionComponent.Lazy for SSR @mvsmal

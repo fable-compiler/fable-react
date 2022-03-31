@@ -489,10 +489,50 @@ let private renderHtmlAttr (html:TextWriter) (attr: HTMLAttr) =
   | AllowFullScreen v -> boolAttr html "allowfullscreen" v
   | AllowTransparency v -> boolAttr html "allowtransparency" v
   | Alt v -> strAttr html "alt" v
+  | AriaAtomic v -> boolAttr html "aria-atomic" v
+  | AriaBusy v -> boolAttr html "aria-busy" v
+  | AriaChecked v -> boolAttr html "aria-checked" v
+  | AriaColcount v -> strAttr html "aria-colcount" (string v)
+  | AriaColindex v -> strAttr html "aria-colindex" (string v)
+  | AriaColspan v -> strAttr html "aria-colspan" (string v)
   | AriaControls v -> strAttr html "aria-controls" v
+  | AriaCurrent v -> strAttr html "aria-current" v
+  | AriaDescribedBy v -> strAttr html "aria-describedby" v
+  | AriaDetails v -> strAttr html "aria-details" v
+  | AriaDisabled v -> boolAttr html "aria-disabled" v
+  | AriaErrormessage v -> strAttr html "aria-errormessage" v
   | AriaExpanded v -> boolAttr html "aria-expanded" v
-  | AriaHasPopup v -> boolAttr html "aria-haspopup" v
+  | AriaFlowto v -> strAttr html "aria-flowto" v
+  | AriaHasPopup v -> boolAttr html "aria-hasPopup" v
+  | AriaHidden v -> boolAttr html "aria-hidden" v
+  | AriaInvalid v -> strAttr html "aria-invalid" v
+  | AriaKeyshortcuts v -> strAttr html "aria-keyshortcuts" v
+  | AriaLabel v -> strAttr html "aria-label" v
+  | AriaLabelledby v -> strAttr html "aria-labelledby" v
+  | AriaLevel v -> strAttr html "aria-level" (string v)
+  | AriaLive v -> strAttr html "aria-live" v
+  | AriaModal v -> boolAttr html "aria-modal" v
+  | AriaMultiline v -> boolAttr html "aria-multiline" v
+  | AriaMultiselectable v -> boolAttr html "aria-multiselectable" v
+  | AriaOrientation v -> strAttr html "aria-orientation" v
+  | AriaOwns v -> strAttr html "aria-owns" v
+  | AriaPlaceholder v -> strAttr html "aria-placeholder" v
+  | AriaPosinset v -> strAttr html "aria-posinset" (string v)
   | AriaPressed v -> boolAttr html "aria-pressed" v
+  | AriaReadonly v -> boolAttr html "aria-readonly" v
+  | AriaRelevant v -> strAttr html "aria-relevant" v
+  | AriaRequired v -> boolAttr html "aria-required" v
+  | AriaRoledescription v -> strAttr html "aria-roledescription" v
+  | AriaRowcount v -> strAttr html "aria-rowcount" (string v)
+  | AriaRowindex v -> strAttr html "aria-rowindex" (string v)
+  | AriaRowspan v -> strAttr html "aria-rowspan" (string v)
+  | AriaSelected v -> boolAttr html "aria-selected" v
+  | AriaSetsize v -> strAttr html "aria-setsize" (string v)
+  | AriaSort v -> strAttr html "aria-sort" v
+  | AriaValuemax v -> strAttr html "aria-valuemax" (string v)
+  | AriaValuemin v -> strAttr html "aria-valuemin" (string v)
+  | AriaValuenow v -> strAttr html "aria-valuenow" (string v)
+  | AriaValuetext v -> strAttr html "aria-valuetext" v
   | Async v -> boolAttr html "async" v
   | AutoComplete v -> strAttr html "autocomplete" v
   | AutoFocus v -> boolAttr html "autofocus" v
