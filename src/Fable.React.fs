@@ -51,6 +51,9 @@ type IReactExports =
     /// Requires React 18.
     abstract startTransition: callback: (unit -> unit) -> unit
 
+    /// The React version.
+    abstract version: string
+
 module ReactBindings =
     /// Mainly intended for internal use
     #if FABLE_REPL_LIB
