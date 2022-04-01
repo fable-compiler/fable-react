@@ -1,3 +1,7 @@
+### 8.0.1
+
+- Fix hydrateRoot @kerams
+
 ### 8.0.0
 
 - Add React 18 new APIs @kerams
