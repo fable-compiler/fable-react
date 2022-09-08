@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>8.0.1</Version>
-    <PackageVersion>8.0.1</PackageVersion>
+    <Version>9.0.0</Version>
+    <PackageVersion>9.0.0-beta-002</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
   </PropertyGroup>
-  <PropertyGroup>
-    <NpmDependencies>
-      <NpmPackage Name="react" Version="gte 18.0.0 lt 19.0.0" ResolutionStrategy="Max" />
-      <NpmPackage Name="react-dom" Version="gte 18.0.0 lt 19.0.0" ResolutionStrategy="Max" />
-    </NpmDependencies>
-  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Fable.React.fs" />
-    <Compile Include="Fable.ReactDom.fs" />
-    <Compile Include="Fable.React.Hooks.fs" />
     <Compile Include="Fable.React.Props.fs" />
     <Compile Include="Fable.React.Extensions.fs" />
     <Compile Include="Fable.React.Helpers.fs" />
@@ -30,7 +21,9 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Fable.Core" Version="3.2.7" />
-    <PackageReference Include="Fable.Browser.Dom" Version="2.4.4" />
     <PackageReference Update="FSharp.Core" Version="4.7.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Fable.React.Types\Fable.React.Types.fsproj" />
   </ItemGroup>
 </Project>

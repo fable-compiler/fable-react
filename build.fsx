@@ -9,5 +9,6 @@ let args =
 
 match args with
 | IgnoreCase "publish"::_ ->
-    pushFableNuget "src/Fable.React.fsproj" [] doNothing
+    pushFableNuget "src/Fable.React.Types/Fable.React.Types.fsproj" [] doNothing
+    pushFableNuget "src/Fable.React/Fable.React.fsproj" [] doNothing
 | _ -> ()

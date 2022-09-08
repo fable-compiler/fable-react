@@ -1,0 +1,4 @@
+group Client
+  Fable.Core
+  Fable.Elmish
+  Thoth.Json

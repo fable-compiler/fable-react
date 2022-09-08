@@ -2,9 +2,13 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/fable-compiler/fable-react)
 
-Fable bindings and helpers for React projects. For more recent bindings that improve on type-safety and development experience, please check [Feliz](https://zaid-ajaj.github.io/Feliz/).
+> **ATTENTION**: This package is less well maintained, for new Fable projects using React we recommend [Feliz](https://zaid-ajaj.github.io/Feliz/).
 
-Run `npm run publish` to publish a new version of the package.
+`Fable.React.Types` package contains bindings for [React](https://reactjs.org/).
+
+`Fable.React` package contains helpers for writing for React projects using Fable.
+
+When updating a package, edit the RELEASE_NOTES.md of the corresponding project and run `dotnet fsi build.fsx publish` to publish a new version.
 
 ## Documents
 

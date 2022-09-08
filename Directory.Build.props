@@ -4,6 +4,7 @@
         <PackageProjectUrl>https://fable.io</PackageProjectUrl>
         <RepositoryUrl>https://github.com/fable-compiler/fable-react</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>        
         <PackageIcon>fable_logo.png</PackageIcon>
         <PackageTags>fsharp;fable;javascript;f#;js;react</PackageTags>
         <Authors>Fable contributors</Authors>
@@ -18,6 +19,7 @@
     <ItemGroup>
         <None Include="$(MSBuildThisFileDirectory)\fable_logo.png" Pack="true" Visible="false" PackagePath="" />
         <None Include="$(MSBuildThisFileDirectory)\LICENSE" Visible="false" Pack="true" PackagePath="" />
+        <None Include="$(MSBuildThisFileDirectory)\README.md" Pack="true" PackagePath="\"/>
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />

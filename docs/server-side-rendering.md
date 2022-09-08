@@ -1,6 +1,6 @@
 # Five steps to enable Server-Side Rendering in your [Elmish](https://github.com/fable-elmish/elmish) + [DotNet Core](https://github.com/dotnet/core) App!
 
-> [SSR Sample App](https://github.com/fable-compiler/fable-react/tree/master/Samples/SSRSample) based on [SAFE-Stack](https://github.com/SAFE-Stack/SAFE-BookStore) template is available!
+> [SSR Sample App](https://github.com/fable-compiler/fable-react/tree/master/SSRSample) based on [SAFE-Stack](https://github.com/SAFE-Stack/SAFE-BookStore) template is available!
 
 ## Introduction
 
@@ -252,7 +252,7 @@ Now enjoy! If you find bugs or just need some help, please create an issue and l
 
 ```sh
 git clone https://github.com/fable-compiler/fable-react.git
-cd ./fable-react/Samples/SSRSample/
+cd ./fable-react/SSRSample/
 ./build.sh run # or ./build.cmd run on windows
 ```
 
@@ -262,7 +262,7 @@ The SSRSample project also contains a simple benchmark test, you can try it in y
 
 ```sh
 
-cd ./Samples/SSRSample
+cd ./SSRSample
 ./build.sh bench # or ./build.cmd bench on windows
 
 ```

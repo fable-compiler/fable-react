@@ -1,3 +1,7 @@
+### 9.0.0-beta-002
+
+- Move React types to Fable.React.Types package
+
 ### 8.0.1
 
 - Fix hydrateRoot @kerams

@@ -1,9 +1,0 @@
-group Server
-  FSharp.Core
-  Giraffe
-  Microsoft.AspNetCore
-  Microsoft.AspNetCore.StaticFiles
-  Thoth.Json.Giraffe
-
-group Client
-  Fable.Core
