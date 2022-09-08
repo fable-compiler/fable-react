@@ -205,3 +205,14 @@ type FragmentProps = { key: string }
 
 type [<Import("Fragment", "react")>] Fragment(props: FragmentProps) =
     interface ReactElement
+
+// These are not React interfaces but we add them here in case other Fable libraries need them
+
+type IProp =
+    interface end
+
+type IHTMLProp =
+    inherit IProp
+
+type IFragmentProp =
+    inherit IProp

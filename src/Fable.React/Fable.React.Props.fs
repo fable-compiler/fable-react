@@ -2,7 +2,6 @@ module rec Fable.React.Props
 
 open System
 open Fable.Core
-open Fable.Core.JsInterop
 open Browser.Types
 
 #if !FABLE_COMPILER
@@ -23,15 +22,6 @@ let stringEnum (case: obj): string =
         let name = caseInfo.Name
         Char.ToLower(name.[0]).ToString() + name.Substring(1))
 #endif
-
-type IProp =
-    interface end
-
-type IHTMLProp =
-    inherit IProp
-
-type IFragmentProp =
-    inherit IProp
 
 type FragmentProp =
     | Key of string
@@ -391,8 +381,8 @@ let inline Data (key: string, value: obj): HTMLAttr =
     !!("data-" + key, value)
 #endif
 
-[<StringEnum; RequireQualifiedAccess>]
 /// Specifies the display behavior (the type of rendering box) of an element.
+[<StringEnum; RequireQualifiedAccess>]
 type DisplayOptions =
     /// The element is completely removed
     | None
@@ -439,8 +429,8 @@ type DisplayOptions =
     /// Let the element behave like a `<tr>` element.
     | [<CompiledName "table-row">] TableRow
 
-[<StringEnum; RequireQualifiedAccess>]
 /// Modifies the behavior of the [flex-wrap](https://www.w3schools.com/CSSref/css3_pr_flex-wrap.asp) property. It is similar to [align-items](https://www.w3schools.com/CSSref/css3_pr_align-items.asp), but instead of aligning flex items, it aligns flex lines.
+[<StringEnum; RequireQualifiedAccess>]
 type AlignContentOptions =
     /// Default value. Lines stretch to take up the remaining space.
     | Stretch
@@ -459,8 +449,8 @@ type AlignContentOptions =
     /// Lines are evenly distributed in the flex container, with half-size spaces on either end.
     | [<CompiledName "space-around">] SpaceAround
 
-[<StringEnum; RequireQualifiedAccess>]
 /// Specifies the default alignment for items inside the flexible container.
+[<StringEnum; RequireQualifiedAccess>]
 type AlignItemsOptions =
     /// The effect of this keyword is dependent of the layout mode we are in. [Read more](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items#Values)
     | Normal
@@ -479,8 +469,8 @@ type AlignItemsOptions =
     /// Items are positioned at the end of the container.
     | [<CompiledName "flex-end">] FlexEnd
 
-[<StringEnum; RequireQualifiedAccess>]
 /// Specifies the default alignment for items inside the flexible container.
+[<StringEnum; RequireQualifiedAccess>]
 type AlignSelfOptions =
     /// Default. The element inherits its parent container's align-items property, or "stretch" if it has no parent container.
     | Auto
@@ -499,8 +489,8 @@ type AlignSelfOptions =
     /// The element is positioned at the end of the container.
     | [<CompiledName "flex-end">] FlexEnd
 
-[<StringEnum; RequireQualifiedAccess>]
 /// Specifies the default alignment for items inside the grid container.
+[<StringEnum; RequireQualifiedAccess>]
 type JustifySelfOptions =
     /// Default. The element inherits its parent container's justify-items property, or "stretch" if it has no parent container.
     | Auto
@@ -542,8 +532,8 @@ type TextAlignOptions =
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
 
-[<StringEnum; RequireQualifiedAccess>]
 /// Specifies the type of positioning method used for an element (static, relative, absolute, fixed, or sticky).
+[<StringEnum; RequireQualifiedAccess>]
 type PositionOptions =
     /// Default value. Elements render in order, as they appear in the document flow.
     | Static
@@ -562,8 +552,8 @@ type PositionOptions =
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-overflow-3/#propdef-overflow
+[<StringEnum; RequireQualifiedAccess>]
 type OverflowOptions =
     /// There is no special handling of overflow, that is, the box’s content is rendered outside the box if positioned there. The box is not a scroll container.
     | Visible
@@ -583,9 +573,9 @@ type OverflowOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-text-3/#propdef-white-space
-type WhiteSpaceOptions = 
+[<StringEnum; RequireQualifiedAccess>]
+type WhiteSpaceOptions =
     /// This value directs user agents to collapse sequences of white space into a single character (or in some cases, no character). Lines may wrap at allowed soft wrap opportunities, as determined by the line-breaking rules in effect, in order to minimize inline-axis overflow.
     | Normal
     /// This value prevents user agents from collapsing sequences of white space. Segment breaks such as line feeds are preserved as forced line breaks. Lines only break at forced line breaks; content that does not fit within the block container overflows it.
@@ -606,8 +596,8 @@ type WhiteSpaceOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-ui-3/#box-sizing
+[<StringEnum; RequireQualifiedAccess>]
 type BoxSizingOptions =
     /// This is the behavior of width and height as specified by CSS2.1. The specified width and height (and respective min/max properties) apply to the width and height respectively of the content box of the element. The padding and border of the element are laid out and drawn outside the specified width and height.
     | [<CompiledName "content-box">] ContentBox
@@ -621,8 +611,8 @@ type BoxSizingOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-images-3/#the-image-rendering
+[<StringEnum; RequireQualifiedAccess>]
 type ImageRenderingOptions =
     /// The scaling algorithm is UA dependent.
     | Auto
@@ -634,7 +624,7 @@ type ImageRenderingOptions =
     | CrispEdges
     /// The image must be scaled with the "nearest neighbor" or similar algorithm, to preserve a "pixelated" look as the image changes in size.
     | Pixelated
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -642,8 +632,8 @@ type ImageRenderingOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://www.w3.org/TR/CSS2/visuren.html#float-position
+[<StringEnum; RequireQualifiedAccess>]
 type FloatOptions =
     /// The element generates a block box that is floated to the left. Content flows on the right side of the box, starting at the top (subject to the 'clear' property).
     | Left
@@ -651,7 +641,7 @@ type FloatOptions =
     | Right
     /// The box is not floated.
     | None
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -659,8 +649,8 @@ type FloatOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://www.w3.org/TR/css-inline-3/#propdef-alignment-baseline
+[<StringEnum; RequireQualifiedAccess>]
 type AlignmentBaselineOptions =
     /// Use the dominant baseline choice of the parent. Match the box’s corresponding baseline to that of its parent.
     | Baseline
@@ -684,7 +674,7 @@ type AlignmentBaselineOptions =
     | Center
     /// Align the bottom of the aligned subtree with the bottom of the line box.
     | Bottom
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -692,8 +682,8 @@ type AlignmentBaselineOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://www.w3.org/TR/css3-values/#common-keywords
+[<StringEnum; RequireQualifiedAccess>]
 type AllOptions =
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
@@ -701,9 +691,9 @@ type AllOptions =
     | Inherit
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
-    
-[<StringEnum; RequireQualifiedAccess>]
+
 /// https://drafts.csswg.org/css-animations/#animation-direction
+[<StringEnum; RequireQualifiedAccess>]
 type SingleAnimationDirection =
     /// All iterations of the animation are played as specified.
     | Normal
@@ -713,7 +703,7 @@ type SingleAnimationDirection =
     | Alternate
     /// The animation cycle iterations that are odd counts are played in the reverse direction, and the animation cycle iterations that are even counts are played in a normal direction.
     | [<CompiledName "alternate-reverse">] AlternateReverse
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -721,8 +711,8 @@ type SingleAnimationDirection =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-animations/#animation-fill-mode
+[<StringEnum; RequireQualifiedAccess>]
 type SingleAnimationFillMode =
     /// The animation has no effect when it is applied but not executing.
     | None
@@ -732,16 +722,16 @@ type SingleAnimationFillMode =
     | Backwards
     /// The effects of both forwards and backwards fill apply.
     | Both
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
-    
-[<StringEnum; RequireQualifiedAccess>]
+
 /// https://drafts.csswg.org/css-ui-4/#appearance-switching
+[<StringEnum; RequireQualifiedAccess>]
 type AppearanceOptions =
     /// The element is rendered following the usual rules of CSS. Replaced elements other than controls are not affected by this, and remain replaced elements. Controls are not made to look like native controls of the host operating system. See § 7.1.1 Effects of appearance on Decorative Aspects of Elements and § 7.1.2 Effects of appearance on Semantic Aspects of Elements for details.
     | None
@@ -755,50 +745,50 @@ type AppearanceOptions =
     | [<CompiledName("menulist-button")>] MenulistButton
     /// These values exist for compatibility of content developed for earlier non standard versions of this property. They all have the same effect as auto.
     | [<CompiledName("compat-auto")>] CompatAuto
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
-    
-[<StringEnum; RequireQualifiedAccess>]
+
 /// https://drafts.csswg.org/css-transforms-2/#propdef-backface-visibility
+[<StringEnum; RequireQualifiedAccess>]
 type BackfaceVisibilityOptions =
     | Visible
     | Hidden
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
-    
-[<StringEnum; RequireQualifiedAccess>]
+
 /// https://developer.mozilla.org/en-US/docs/Web/CSS/box-align
+[<StringEnum; RequireQualifiedAccess>]
 type BoxAlignOptions =
     | Start
     | Center
     | End
     | Baseline
     | Stretch
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
-    
+
 [<StringEnum; RequireQualifiedAccess>]
 type BoxDecorationBreakOptions =
     /// Each box fragment is independently wrapped with the border, padding, and margin. The border-radius and border-image and box-shadow, if any, are applied to each fragment independently. The background is drawn independently in each fragment of the element. A no-repeat background image will thus be rendered once in each fragment of the element.
     | Clone
     /// The effect is as though the element were rendered with no breaks present, and then sliced by the breaks afterward: no border and no padding are inserted at a break; no box-shadow is drawn at a broken edge; and backgrounds, border-radius, and the border-image are applied to the geometry of the whole box as if it were unbroken.
     | Slice
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -806,14 +796,14 @@ type BoxDecorationBreakOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://developer.mozilla.org/en-US/docs/Web/CSS/box-direction
+[<StringEnum; RequireQualifiedAccess>]
 type BoxDirectionOptions =
     /// The box lays out its contents from the start (the left or top edge).
     | Normal
     /// The box lays out its contents from the end (the right or bottom edge).
     | Reverse
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -821,8 +811,8 @@ type BoxDirectionOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-break-3/#break-between
+[<StringEnum; RequireQualifiedAccess>]
 type BreakOptions =
     /// Allows, but does not force, any break (page, column, or region) to be inserted right after the principal box.
     | Auto
@@ -852,7 +842,7 @@ type BreakOptions =
     | [<CompiledName("avoid-region")>] AvoidRegion
     /// Forces a region break right after the principal box.
     | Region
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -860,8 +850,8 @@ type BreakOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://drafts.csswg.org/css-break-3/#break-within
+[<StringEnum; RequireQualifiedAccess>]
 type BreakInsideOptions =
     /// Impose no additional breaking constraints within the box.
     | Auto
@@ -873,7 +863,7 @@ type BreakInsideOptions =
     | [<CompiledName("avoid-column")>] AvoidColumn
     /// Avoid a region break within the box.
     | [<CompiledName("avoid-region")>] AvoidRegion
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -881,8 +871,8 @@ type BreakInsideOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://developer.mozilla.org/en-US/docs/Web/CSS/caption-side#Specifications
+[<StringEnum; RequireQualifiedAccess>]
 type CaptionSideOptions =
     | Top
     | Bottom
@@ -890,16 +880,16 @@ type CaptionSideOptions =
     | [<CompiledName("block-end")>] BlockEnd
     | [<CompiledName("inline-start")>] InlineStart
     | [<CompiledName("inline-end")>] InlineEnd
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
     | Inherit
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
-    
-[<StringEnum; RequireQualifiedAccess>]
+
 /// https://www.w3.org/TR/CSS2/visuren.html#flow-control
+[<StringEnum; RequireQualifiedAccess>]
 type ClearOptions =
     /// Requires that the top border edge of the box be below the bottom outer edge of any left-floating boxes that resulted from elements earlier in the source document.
     | Left
@@ -911,7 +901,7 @@ type ClearOptions =
     | None
     | [<CompiledName("inline-start")>] InlineStart
     | [<CompiledName("inline-end")>] InlineEnd
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -919,14 +909,14 @@ type ClearOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://www.w3.org/TR/CSS2/visuren.html#direction
+[<StringEnum; RequireQualifiedAccess>]
 type DirectionOptions =
     /// Left-to-right direction.
     | Ltr
     /// Right-to-left direction.
     | Rtl
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)
@@ -934,8 +924,8 @@ type DirectionOptions =
     /// If the cascaded value of a property is the unset keyword, then if it is an inherited property, this is treated as inherit, and if it is not, this is treated as initial. This keyword effectively erases all declared values occurring earlier in the cascade, correctly inheriting or not as appropriate for the property (or all longhands of a shorthand).
     | Unset
 
-[<StringEnum; RequireQualifiedAccess>]
 /// https://developer.mozilla.org/en-US/docs/Web/CSS/user-select
+[<StringEnum; RequireQualifiedAccess>]
 type UserSelectOptions =
     /// The text of the element and its sub-elements is not selectable. Note that the Selection object can contain these elements.
     | None
@@ -952,7 +942,7 @@ type UserSelectOptions =
     | Contain
     /// In an HTML editor, if a double-click or context-click occurred in sub-elements, the highest ancestor with this value will be selected.
     | All
-    
+
     /// Sets this property to its default value. Read more about [CSS Initial value](https://www.w3schools.com/CSSref/css_initial.asp)
     | Initial
     /// Inherits this property from its parent element. Read about [CSS Inherit](https://www.w3schools.com/CSSref/css_inherit.asp)

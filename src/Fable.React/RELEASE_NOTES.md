@@ -1,3 +1,7 @@
+### 9.0.0-beta-003
+
+- Move IProp and extensions to Fable.React.Types
+
 ### 9.0.0-beta-002
 
 - Move React types to Fable.React.Types package

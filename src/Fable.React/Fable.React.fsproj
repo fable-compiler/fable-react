@@ -2,13 +2,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <Version>9.0.0</Version>
-    <PackageVersion>9.0.0-beta-002</PackageVersion>
+    <PackageVersion>9.0.0-beta-003</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Fable.React.Props.fs" />
-    <Compile Include="Fable.React.Extensions.fs" />
     <Compile Include="Fable.React.Helpers.fs" />
     <Compile Include="Fable.React.Standard.fs" />
     <Compile Include="Fable.React.FunctionComponent.fs" />

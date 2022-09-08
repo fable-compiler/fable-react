@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{1E4287BE-D16A-4BE4-B83C-6517DFF40321}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fable.React.Types", "src\Fable.React.Types\Fable.React.Types.fsproj", "{FB949797-DF35-49CC-B94F-1D50127448F4}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Fable.React", "src\Fable.React\Fable.React.fsproj", "{E53327BA-B69D-4720-ACD7-3C1CC413F0EA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FB949797-DF35-49CC-B94F-1D50127448F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB949797-DF35-49CC-B94F-1D50127448F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB949797-DF35-49CC-B94F-1D50127448F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB949797-DF35-49CC-B94F-1D50127448F4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E53327BA-B69D-4720-ACD7-3C1CC413F0EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E53327BA-B69D-4720-ACD7-3C1CC413F0EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E53327BA-B69D-4720-ACD7-3C1CC413F0EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E53327BA-B69D-4720-ACD7-3C1CC413F0EA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FB949797-DF35-49CC-B94F-1D50127448F4} = {1E4287BE-D16A-4BE4-B83C-6517DFF40321}
+		{E53327BA-B69D-4720-ACD7-3C1CC413F0EA} = {1E4287BE-D16A-4BE4-B83C-6517DFF40321}
+	EndGlobalSection
+EndGlobal
