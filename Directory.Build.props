@@ -4,7 +4,7 @@
         <PackageProjectUrl>https://fable.io</PackageProjectUrl>
         <RepositoryUrl>https://github.com/fable-compiler/fable-react</RepositoryUrl>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <PackageReadmeFile>README.md</PackageReadmeFile>        
+        <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>fable_logo.png</PackageIcon>
         <PackageTags>fsharp;fable;javascript;f#;js;react</PackageTags>
         <Authors>Fable contributors</Authors>
