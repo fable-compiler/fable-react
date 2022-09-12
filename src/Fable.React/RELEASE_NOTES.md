@@ -1,3 +1,7 @@
+### 9.0.1
+
+- Fix compilation error
+
 ### 9.0.0
 
 - Move React types to Fable.React.Types package
