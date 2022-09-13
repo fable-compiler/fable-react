@@ -38,6 +38,9 @@ type IReactDom =
 
     /// Creates a portal. Portals provide a way to render children into a DOM node that exists outside the hierarchy of the DOM component.
     abstract createPortal: child: ReactElement * container: Element -> ReactElement
+    
+    /// Force React to flush any updates inside the provided callback synchronously. This ensures that the DOM is updated immediately.
+    abstract flushSync: callback: (unit -> unit) -> unit
 
 type IReactDomClient =
     /// Create a React root for the supplied container and return the root. The root can be used to render a React element into the DOM with render.
