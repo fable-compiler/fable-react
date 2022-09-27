@@ -1,3 +1,7 @@
+### 9.1.0
+
+- Add Fable.ReactDom.Types dependency
+
 ### 9.0.1
 
 - Fix compilation error
