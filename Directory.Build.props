@@ -6,7 +6,6 @@
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageIcon>fable_logo.png</PackageIcon>
-        <PackageTags>fsharp;fable;javascript;f#;js;react</PackageTags>
         <Authors>Fable contributors</Authors>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
 

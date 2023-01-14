@@ -1,3 +1,7 @@
+### 9.2.0
+
+- Add tags for indexing in Fable packages project
+
 ### 9.1.0
 
 - Add Fable.ReactDom.Types dependency
