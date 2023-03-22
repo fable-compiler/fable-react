@@ -1,3 +1,7 @@
+### 9.3.0
+
+- Add pointer events to `DOMAttr`
+
 ### 9.2.0
 
 - Add tags for indexing in Fable packages project
