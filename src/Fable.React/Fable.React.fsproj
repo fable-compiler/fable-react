@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>9.2.0</Version>
-    <PackageVersion>9.2.0</PackageVersion>
+    <Version>9.3.0</Version>
+    <PackageVersion>9.3.0</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
     <PackageTags>fsharp;fable;javascript;f#;js;react;fable-library;fable-javascript;fable-dotnet</PackageTags>
