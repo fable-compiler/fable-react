@@ -110,6 +110,16 @@ type DOMAttr =
     | OnAnimationEnd of (AnimationEvent -> unit)
     | OnAnimationIteration of (AnimationEvent -> unit)
     | OnTransitionEnd of (TransitionEvent -> unit)
+    | OnPointerDown of (PointerEvent -> unit)
+    | OnPointerMove of (PointerEvent -> unit)
+    | OnPointerUp of (PointerEvent -> unit)
+    | OnPointerCancel of (PointerEvent -> unit)
+    | OnPointerEnter of (PointerEvent -> unit)
+    | OnPointerLeave of (PointerEvent -> unit)
+    | OnPointerOver of (PointerEvent -> unit)
+    | OnPointerOut of (PointerEvent -> unit)
+    | OnGotPointerCapture of (PointerEvent -> unit)
+    | OnLostPointerCapture of (PointerEvent -> unit)
     | [<Erase>] Custom of string * obj
     interface IHTMLProp
 
