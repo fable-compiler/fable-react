@@ -6,12 +6,12 @@ open Fable.Core
 open Fable.Core.JsInterop
 
 #if FABLE_COMPILER
-type internal Cache() =
+type FunctionComponentPreparedRenderFunctionCache() =
     static let cache =
         let cache = JS.Constructors.Map.Create<string, obj>()
 #if DEBUG
         // Clear the cache when HMR is fired
-        Cache.OnHMR(fun () -> cache.clear())
+        FunctionComponentPreparedRenderFunctionCache.OnHMR(fun () -> cache.clear())
 #endif
         cache
 
@@ -57,7 +57,7 @@ type FunctionComponent =
     /// and is displayed in React dev tools (use `displayName` to customize the name).
     /// Uses React.memo if `memoizeWith` is specified (check `equalsButFunctions` and `memoEqualsButFunctions` helpers).
     /// When you need a key to optimize collections in React you can use `withKey` argument or define a `key` field in the props object.
-    static member Of(render: 'Props->ReactElement,
+    static member inline Of(render: 'Props->ReactElement,
                         ?displayName: string,
                         ?memoizeWith: 'Props -> 'Props -> bool,
                         ?withKey: 'Props -> string
@@ -68,7 +68,7 @@ type FunctionComponent =
 #endif
                     ): 'Props -> ReactElement =
 #if FABLE_COMPILER
-        let prepareRenderFunction _ =
+        let prepareRenderFunction (_: string) =
             let displayName = defaultArg displayName __callingMemberName.Value
             render?displayName <- displayName
             let elemType =
@@ -77,7 +77,7 @@ type FunctionComponent =
 #if DEBUG
                     // In development mode, force rerenders always when HMR is fired
                     let areEqual x y =
-                        not Cache.IsHMRApplied && areEqual x y
+                        not FunctionComponentPreparedRenderFunctionCache.IsHMRApplied && areEqual x y
 #endif
                     let memoElement = ReactElementType.memoWith areEqual render
                     memoElement?displayName <- "Memo(" + displayName + ")"
@@ -92,8 +92,13 @@ type FunctionComponent =
 
         // Cache the render function to prevent recreating the component every time when FunctionComponent.Of
         // is called inside another function (including generic values: let MyCom<'T> = ...)
-        let cacheKey = __callingSourceFile.Value + "#L" + (string __callingSourceLine.Value)
-        Cache.GetOrAdd(cacheKey, prepareRenderFunction)
+        let cacheKey =
+            __callingSourceFile.Value +
+            "#L" + (string __callingSourceLine.Value) +
+            // direct caller can also be generic, need separate cached func per 'Props argument
+            ";" + typeof<'Props>.FullName
+
+        FunctionComponentPreparedRenderFunctionCache.GetOrAdd(cacheKey, prepareRenderFunction)
 #else
         let elemType = ReactElementType.ofFunction render
         fun props ->
