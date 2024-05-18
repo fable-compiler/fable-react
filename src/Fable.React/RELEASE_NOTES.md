@@ -1,3 +1,7 @@
+### 9.4.0
+
+- Fix FunctionComponent's render func caching for generic usages
+
 ### 9.3.0
 
 - Add pointer events to `DOMAttr`
