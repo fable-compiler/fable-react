@@ -1,3 +1,7 @@
+### 18.4.0
+
+- Add `Import` attribute to the React type definition allowing better type system when targeting TypeScript
+
 ### 18.3.0
 
 - Add tags for indexing in Fable packages project

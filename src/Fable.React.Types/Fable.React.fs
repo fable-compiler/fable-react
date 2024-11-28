@@ -3,12 +3,19 @@ namespace Fable.React
 open System
 open Fable.Core
 
+// The import statement on the type interface are here so
+// people using Fable => TypeScript can get the correct types in the output
+// without having to use hack via `unbox` in their code
+
+[<Import("ReactElement", "react")>]
 type [<AllowNullLiteral>] ReactElement =
     interface end
 
+[<Import("ElementType", "react")>]
 type ReactElementType =
     interface end
 
+[<Import("ElementType", "react")>]
 type ReactElementType<'props> =
     inherit ReactElementType
 
