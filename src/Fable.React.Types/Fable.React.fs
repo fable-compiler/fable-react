@@ -31,7 +31,7 @@ type ISSRContext<'T> =
 
 type IReactExports =
     /// Create and return a new React element of the given type. The type argument can be either a tag name string (such as 'div' or 'span'), a React component type (a class or a function), or a React fragment type.
-    abstract createElement: comp: obj * props: obj * [<ParamList>] children: ReactElement seq -> ReactElement
+    abstract createElement: comp: obj * props: objnull * [<ParamList>] children: ReactElement seq -> ReactElement
 
     /// Creates a Context object. When React renders a component that subscribes to this Context object it will read the current context value from the closest matching Provider above it in the tree.
     abstract createContext: defaultValue: 'T -> IContext<'T>

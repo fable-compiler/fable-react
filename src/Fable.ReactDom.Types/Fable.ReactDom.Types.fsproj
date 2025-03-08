@@ -4,6 +4,7 @@
     <Version>18.2.0</Version>
     <PackageVersion>18.2.0</PackageVersion>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Nullable>enable</Nullable>
     <!-- <DefineConstants>$(DefineConstants);FABLE_COMPILER</DefineConstants> -->
     <PackageTags>fsharp;fable;javascript;f#;js;react;fable-binding;fable-javascript</PackageTags>
   </PropertyGroup>
@@ -14,9 +15,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Fable.ReactDom.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.7.2" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Fable.React.Types\Fable.React.Types.fsproj" />

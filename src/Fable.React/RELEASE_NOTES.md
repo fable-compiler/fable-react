@@ -1,3 +1,7 @@
+### 10.0.0-alpha.1
+
+- Upgrade `FSharp.Core` to 9.0.100 to support F# nullness
+
 ### 9.4.0
 
 - Fix FunctionComponent's render func caching for generic usages

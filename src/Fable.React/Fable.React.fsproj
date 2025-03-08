@@ -20,9 +20,6 @@
     <Content Include="*.fsproj; *.fs" PackagePath="fable\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="4.7.2" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Fable.React.Types\Fable.React.Types.fsproj" />
     <ProjectReference Include="..\Fable.ReactDom.Types\Fable.ReactDom.Types.fsproj" />
   </ItemGroup>

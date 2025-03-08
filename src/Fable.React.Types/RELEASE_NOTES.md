@@ -1,3 +1,9 @@
+### 19.0.0-alpha.1
+
+- Upgrade `FSharp.Core` to 9.0.100 to support F# nullness
+- Make minimal adaptation to support F# nullness (`createElement` `props` become `objnull` instead of `obj`)
+- Compile will Nullable enabled
+
 ### 18.4.0
 
 - Add `Import` attribute to the React type definition allowing better type system when targeting TypeScript

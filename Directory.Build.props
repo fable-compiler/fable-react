@@ -22,5 +22,6 @@
     </ItemGroup>
     <ItemGroup>
         <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All" />
+        <PackageReference Update="FSharp.Core" Version="9.0.100" />
     </ItemGroup>
 </Project>
