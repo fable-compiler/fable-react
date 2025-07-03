@@ -2,7 +2,7 @@
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/fable-compiler/fable-react)
 
-> **ATTENTION**: This package is less well maintained, for new Fable projects using React we recommend [Feliz](https://zaid-ajaj.github.io/Feliz/).
+> **ATTENTION**: This package is less well maintained, for new Fable projects using React we recommend [Feliz](https://github.com/fable-hub/Feliz).
 
 `Fable.React.Types` package contains bindings for [React](https://reactjs.org/).
 
